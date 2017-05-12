@@ -354,7 +354,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 				setup_postdata( $post ); 
 				?>
 				
-				<div class="post <?php echo esc_attr( $grid_selector ); ?> mme-col-md-6 mme-col-xs-12">
+				<div class="post <?php echo esc_attr( $grid_selector ); ?> mme-col-xs-12">
 				
 					<div class="inner-wrap">
 					

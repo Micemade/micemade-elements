@@ -31,7 +31,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		 
 		 
 		$this->add_control(
-			'single_product',
+			'post_name',
 			[
 				'label'		=> esc_html__( 'Select a product', 'micemade-elements' ),
 				'type'		=> Controls_Manager::SELECT2,
@@ -217,11 +217,15 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		$settings			= $this->get_settings();
 		
 		
-		$single_product		= ! empty( $settings['single_product'] )	? (int)$settings['single_product'] : '';
-		$layout				= ! empty( $settings['layout'] )			? $settings['layout'] : 'images_left';
-		$img_format			= ! empty( $settings['img_format'] )		? $settings['img_format'] : 'thumbnail';
+		$post_name		= ! empty( $settings['post_name'] )		? $settings['post_name'] : '';
+		$layout			= ! empty( $settings['layout'] )		? $settings['layout'] : 'images_left';
+		$img_format		= ! empty( $settings['img_format'] )	? $settings['img_format'] : 'thumbnail';
 		
-		
+		if( is_array($post_name) ) {
+			$post_name = $post_name;
+		}else{
+			$post_name = array( $post_name );
+		}
 		
 		global $post, $woocommerce_loop;
 		
@@ -233,7 +237,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 			'post_parent'		=> 0,
 			'suppress_filters'	=> false,
 			'numberposts'		=> 1,
-			'include'			=> $single_product
+			'post_name__in'		=> $post_name
 		);
 		
 		$woocommerce_loop['columns'] = $product_per_row;
@@ -243,19 +247,24 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		if( ! empty( $product ) ) { ?>
 		
 			<div class="woocommerce woocommerce-page micemade-elements_single-product">	
-			
+
 			<?php foreach ( $product as $post ) { ?>
 			
 			<?php setup_postdata( $post ); ?>
 			
 			<div <?php post_class( esc_attr( $layout . ' single-product-container') ); ?>>
 			
-				<?php 
-				$post_thumb_id = get_post_thumbnail_id( $post_id );
-				$thum_src = wp_get_attachment_image_src( $post_thumb_id , $img_format );
-				$img_url = $thum_src[0]; 
+				<?php
+				$post_id		= get_the_ID();
 				
-				echo '<div class="product-thumb" style="background-image: url( '.esc_url( $img_url) .' );"></div>';
+				if( has_post_thumbnail( $post_id ) ) {
+					
+					$post_thumb_id	= get_post_thumbnail_id( $post_id );
+					$img_src		= wp_get_attachment_image_src( $post_thumb_id , $img_format );
+					$img_url		= $img_src[0]; 
+					
+					echo '<div class="product-thumb" style="background-image: url( '.esc_url( $img_url) .' );"></div>';
+				}
 				?>
 				
 				<?php remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_meta' , 40 ); ?>

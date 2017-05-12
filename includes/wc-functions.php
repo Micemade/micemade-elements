@@ -5,8 +5,6 @@ function micemade_elements_wc_query_args_func( $filters = 'latest', $categories 
 	
 	// Fallback / default variables
 	$args_filters		= array();
-	$tax_query_featured = array();
-	$tax_query_cats		= array();
 	
 	$args_filters['orderby'] = 'menu_order date';
 		

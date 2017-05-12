@@ -9,7 +9,7 @@ function micemade_posts_array_func( $post_type = "post") {
 	$args = array(
 		'post_type'			=> $post_type,
 		'posts_per_page'	=> -1,
-		'suppress_filters'	=> true
+		'suppress_filters'	=> true,
 	);
 	
 	$posts_arr	= array();
@@ -17,12 +17,13 @@ function micemade_posts_array_func( $post_type = "post") {
 	if ( $posts_obj ) {
 		foreach( $posts_obj as $single_post ) {
 			
-			$posts_arr[$single_post->ID] = strip_tags( $single_post->post_title )  ;
+			$posts_arr[$single_post->post_name] = strip_tags( $single_post->post_title )  ;
 		}
 	}else{
-		$posts_arr[0] = '';
+		$posts_arr[] = '';
 	}
-		
+	
+	
 	return $posts_arr; 
 	
 }
