@@ -165,6 +165,18 @@ class Micemade_Posts_Grid extends Widget_Base {
 			]
 		);
 		
+		$this->add_responsive_control(
+			'post_text_padding',
+			[
+				'label' => esc_html__( 'Post text padding', 'micemade-elements' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'em', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .post-text' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+		
 		$this->end_controls_section();
 
 		
@@ -368,8 +380,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 							<div class="meta">
 							
 								<?php echo apply_filters( 'micemade_elements_date','' ); ?>
-								<?php echo apply_filters( 'micemade_elements_author','' ); ?>
-								<br>
+								<?php echo apply_filters( 'micemade_elements_author','' ); ?><br>
 								<?php echo apply_filters( 'micemade_elements_posted_in','category' ); ?>
 							
 							</div>

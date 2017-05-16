@@ -1,7 +1,7 @@
+@import "breakpoint";
 @import "mixins";
 @import "partials";
 @import "flex-grid";
-
 
 
 .micemade-elements {
@@ -141,6 +141,7 @@
 					width: 100%;
 					height: auto;
 				}
+				
 			}
 			
 			.post-text {
@@ -175,8 +176,11 @@
 				p {
 					font-size: 14px;
 				}
+
 				
 			} //.post-text
+			
+			
 		
 		} // .post
 		
@@ -190,7 +194,21 @@
 					flex-grow: 1;
 					flex-basis: 50%;
 					align-self: center;
+					
+					
 				}
+				
+				@include breakpoint(mobileonly){
+				
+					flex-direction: column;
+					
+					> div {
+						width: 100%;
+						flex-basis: 50%;
+					}
+					
+				}
+				
 			}
 		
 		}
