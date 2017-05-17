@@ -3,7 +3,7 @@
  * Plugin Name: Micemade Elements
  * Description: Custom elements for Elementor, created by Micemade
  * Plugin URI: https://github.com/Micemade/micemade-elements/
- * Version: 0.0.2
+ * Version: 0.0.3
  * Author: micemade
  * Author URI: http://micemade.com
  * Text Domain: micemade-elements

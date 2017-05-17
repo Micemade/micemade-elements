@@ -80,10 +80,10 @@ function micemade_elements_posted_in_f( $taxonomy ) {
 			$term_color		= micemade_elements_get_term_color( $term->term_id, true );
 			$text_color		= $term_color ? micemade_elements_contrast( $term_color ) : '#333333';
 			$back_color		= $term_color ? $term_color : '#ffffff';
-			$style			= ' style="background-color: '. $back_color .'; color: '.$text_color.'"'; 
+			$style			= ' style="background-color: '. $back_color .'; color: '.$text_color.'"'; // insert in <a href ...
 			 */
 			$separator = ( $term == $lastTerm ) ? '' : ', ';
-			$posted_in .= '<a href="' . esc_url( get_term_link( $term->slug, $taxonomy ) ) . '" rel="tag" tabindex="0"'.$style.'>' . esc_html( $term->name .' ' . $term->ID ) . '</a>' . wp_kses_post( $separator );
+			$posted_in .= '<a href="' . esc_url( get_term_link( $term->slug, $taxonomy ) ) . '" rel="tag" tabindex="0">' . esc_html( $term->name .' ' . $term->ID ) . '</a>' . wp_kses_post( $separator );
 			
 		}
 		

@@ -95,7 +95,7 @@ class Micemade_WC_Products extends Widget_Base {
 		$posts_per_page		= ! empty( $settings['posts_per_page'] )	? (int)$settings['posts_per_page'] : 6;
 		$products_per_row	= ! empty( $settings['products_per_row'] )	? (int)$settings['products_per_row'] : 3;
 		$categories			= ! empty( $settings['categories'] )		? $settings['categories'] : array();
-		$filters			= ! empty( $settings[filters] )				? $settings[filters] : 'latest';
+		$filters			= ! empty( $settings['filters'] )			? $settings['filters'] : 'latest';
 		
 		global $post, $woocommerce_loop;
 		

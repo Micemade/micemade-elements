@@ -239,9 +239,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 			'numberposts'		=> 1,
 			'post_name__in'		=> $post_name
 		);
-		
-		$woocommerce_loop['columns'] = $product_per_row;
-		
+				
 		$product = get_posts( $args );
 		
 		if( ! empty( $product ) ) { ?>
