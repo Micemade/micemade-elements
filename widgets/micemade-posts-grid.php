@@ -326,6 +326,27 @@ class Micemade_Posts_Grid extends Widget_Base {
 		
 		$this->end_controls_section();
 		
+		// Add custom css style selector
+		$this->start_controls_section(
+			'section_css_class',
+			[
+				'label' => __( 'Custom css class', 'elementor' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+			]
+		);
+		
+		$this->add_control(
+			'css_class',
+			[
+				'label'		=> __( 'Enter css class(es)', 'micemade-elements' ),
+				'type'		=> Controls_Manager::TEXT,
+				'default'	=> '',
+				'title'		=> __( 'Enter css classes defined in your theme, plugin or customizer', 'micemade-elements' ),
+			]
+		);
+		
+		$this->end_controls_section();
+		
 
 	}
 
@@ -343,6 +364,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$excerpt			= ! empty( $settings['excerpt'] )			? $settings['excerpt'] : '';
 		$meta				= ! empty( $settings['meta'] )				? $settings['meta'] : '';
 		$sticky				= ! empty( $settings['sticky'] )			? $settings['sticky'] : '';
+		$css_class			= ! empty( $settings['css_class'] )			? $settings['css_class'] : '';
 		
 		global $post;
 		
@@ -388,8 +410,10 @@ class Micemade_Posts_Grid extends Widget_Base {
 
 							<?php 
 							if( $excerpt ) {
+								
 								the_excerpt(); 
-								echo '<a href="'. get_permalink() .'" title="'.the_title_attribute("echo=0").'">'.esc_html__( 'Read more','micemade-elements' ) .'</a>';
+								
+								echo '<a href="'. get_permalink() .'" title="'.the_title_attribute("echo=0").'" class="'. esc_attr( $css_class ) .' micemade-elements-buton">'.esc_html__( 'Read more','micemade-elements' ) .'</a>';
 							}
 							?>
 							 

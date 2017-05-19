@@ -130,12 +130,44 @@ function micemade_elements_image_sizes_arr( $size = '' ) {
 
 	return $sizes;
 }
-function micemade_titleIt( $slug ) {
+if( ! function_exists('micemade_titleIt') ) {
+	function micemade_titleIt( $slug ) {
+		
+		$title = ucfirst( $slug );
+		$title = str_replace("_"," ", $title);
+		$title = str_replace("-"," ", $title);
+		
+		return $title;
+	}	
+}
+/**
+ *  GET LIST OF REVOLUTION SLIDERS
+ *  
+ *  @param [in] 10 hook priority
+ *  @return [array] $slider_arr
+ *  
+ */
+add_filter('micemade_elements_rev_sliders','micemade_elements_rev_sliders_f',100 );
+function micemade_elements_rev_sliders_f() {
 	
-	$title = ucfirst( $slug );
-	$title = str_replace("_"," ", $title);
-	$title = str_replace("-"," ", $title);
+	$slider_arr = array();
 	
-	return $title;
+	if ( class_exists( 'RevSlider' ) ) {
+
+		// get slider aliases array
+		$slider = new RevSlider();
+		$arrSliders = $slider->getAllSliderAliases();
+		
+		// has slides
+		if ( ! empty( $arrSliders ) ) {
+			 
+			foreach ( $arrSliders as $id => $alias ) {
+				$slider_arr[$alias] =  micemade_titleIt( $alias ) ;
+			}
+		
+		}
+	}
+	
+	return $slider_arr;
 }
 ?>

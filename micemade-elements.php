@@ -3,7 +3,7 @@
  * Plugin Name: Micemade Elements
  * Description: Custom elements for Elementor, created by Micemade
  * Plugin URI: https://github.com/Micemade/micemade-elements/
- * Version: 0.0.3
+ * Version: 0.0.4
  * Author: micemade
  * Author URI: http://micemade.com
  * Text Domain: micemade-elements
@@ -98,6 +98,13 @@ class MM_Elements {
 			define('MICEMADE_ELEMENTS_WPML_ON',false );	
 		}
 		
+		// if REV. SLIDER activated:
+		if ( in_array( 'revslider/revslider.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) )  {
+			define('MICEMADE_ELEMENTS_REVSLIDER_ON',true );										
+		}else{
+			define('MICEMADE_ELEMENTS_REVSLIDER_ON',false );	
+		}
+		
 
 	}
 	
@@ -148,10 +155,19 @@ class MM_Elements {
 	public function widgets_list() {
 		
 		$widgets_list = array(
-			'micemade-wc-products'			=> 'Micemade_WC_Products',
-			'micemade-wc-single-product'	=> 'Micemade_WC_Single_Product',
-			'micemade-posts-grid'			=> 'Micemade_Posts_Grid',
+			'micemade-posts-grid'			=> 'Micemade_Posts_Grid'
 		);
+		
+		if( MICEMADE_ELEMENTS_WOO_ACTIVE ) {
+			$widgets_list['micemade-wc-products']		= 'Micemade_WC_Products';
+			$widgets_list['micemade-wc-single-product']	= 'Micemade_WC_Single_Product';
+		}
+		
+		if( MICEMADE_ELEMENTS_REVSLIDER_ON ) {
+			$widgets_list['micemade-rev-slider']		= 'Micemade_Rev_Slider';
+		}
+		
+		
 		
 		return $widgets_list;
 		
