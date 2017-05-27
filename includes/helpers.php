@@ -177,4 +177,89 @@ function micemade_elements_gallery_ids_f() {
 	return $ids;	
 }
 add_filter( 'micemade_elements_gallery_ids', 'micemade_elements_gallery_ids_f' );
-?>
+/**
+ *  POSTS QUERY ARGS
+ *  
+ *  @return (array) $args 
+ *  
+ *  arguments for get_posts() - DRY effort, mostly because of ajax posts.
+ */
+function micemade_elements_query_args_func( $posts_per_page = 3, $categories = array(), $sticky = false, $offset = 0 ) {
+		
+	// Defaults:
+	$args		= array(
+		'posts_per_page'	=> $posts_per_page,
+		'post_type'			=> 'post',
+		'offset'			=> $offset,
+	);
+	
+	$args['orderby'] = 'menu_order date';
+	
+	if( !empty( $categories ) ) {
+		$args['tax_query'][] = array(
+			'taxonomy'	=> 'category',
+			'field'		=> 'slug',
+			'operator'	=> 'IN',
+			'terms'		=> $categories,
+			'include_children' => true
+		);
+	}
+	
+	if( $sticky ) {
+		$sticky_array = get_option( 'sticky_posts' );
+		if( !empty( $sticky_array ) ) {
+			$args['post__in'] = $sticky_array;
+		}
+		
+	}
+
+	return $args;
+	
+}
+add_filter( 'micemade_elements_query_args','micemade_elements_query_args_func', 10, 4 );
+/**
+ *  POST FOR LOOP
+ *  
+ *  @return (html)
+ *  
+ *  DRY effort, mostly because of ajax posts.
+ */
+function micemade_elements_loop_post_func( $grid = '', $img_format = 'thumbnail', $meta = true, $excerpt = true, $css_class = '' ) {
+	?>
+	<div class="post <?php echo esc_attr( $grid ); ?> mme-col-xs-12">
+				
+		<div class="inner-wrap">
+		
+			<?php do_action( 'micemade_elements_thumb', $img_format );  ?>
+
+			<div class="post-text">
+				
+				<h4><a href="<?php the_permalink();?>" title="<?php the_title_attribute(); ?>"><?php the_title();?></a></h4>
+			
+				<?php if( $meta ) { ?>
+				<div class="meta">
+				
+					<?php echo apply_filters( 'micemade_elements_date','' ); ?>
+					<?php echo apply_filters( 'micemade_elements_author','' ); ?><br>
+					<?php echo apply_filters( 'micemade_elements_posted_in','category' ); ?>
+				
+				</div>
+				<?php } ?>
+
+				<?php 
+				if( $excerpt ) {
+					
+					the_excerpt(); 
+					
+					echo '<a href="'. get_permalink() .'" title="'.the_title_attribute("echo=0").'" class="'. esc_attr( $css_class ) .' micemade-elements-buton">'.esc_html__( 'Read more','micemade-elements' ) .'</a>';
+				}
+				?>
+				 
+			</div>
+		
+		</div>
+	
+	</div>
+	<?php 
+}
+add_filter( 'micemade_elements_loop_post','micemade_elements_loop_post_func', 10, 5 );

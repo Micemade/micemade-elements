@@ -1,6 +1,14 @@
 <?php
+/**
+ *  WOOCOMMERCE QUERY ARGUMENTS
+ *  
+ *  @return (array) $args_filters
+ *  
+ *  for filtering WooCommerce posts
+ * 	with a little help from: https://github.com/woocommerce/woocommerce/blob/master/includes/widgets/class-wc-widget-products.php
+ */
 function micemade_elements_wc_query_args_func( $filters = 'latest', $categories = array() ) {
-	
+
 	if( !'MICEMADE_ELEMENTS_WOO_ACTIVE' ) return; // if WooCommerce is not active
 	
 	// Fallback / default variables

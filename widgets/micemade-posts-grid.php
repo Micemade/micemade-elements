@@ -338,10 +338,10 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_control(
 			'css_class',
 			[
-				'label'		=> __( 'Enter css class(es)', 'micemade-elements' ),
+				'label'		=> __( 'Enter css class(es) for "Read more"', 'micemade-elements' ),
 				'type'		=> Controls_Manager::TEXT,
 				'default'	=> '',
-				'title'		=> __( 'Enter css classes defined in your theme, plugin or customizer', 'micemade-elements' ),
+				'title'		=> __( 'Style the "Read more" with css class(es) defined in your theme, plugin or customizer', 'micemade-elements' ),
 			]
 		);
 		
@@ -368,68 +368,31 @@ class Micemade_Posts_Grid extends Widget_Base {
 		
 		global $post;
 		
-		$grid_selector = micemade_elemets_grid_class( intval( $posts_per_row ), intval( $posts_per_row_mob ) );
+		$grid = micemade_elemets_grid_class( intval( $posts_per_row ), intval( $posts_per_row_mob ) );
 		
 		// Query posts:
-		$base_args = array( 
-			'posts_per_page'	=> $posts_per_page,
-			'post_type'			=> 'post',
-		);
-		$filter_args	= apply_filters( 'micemade_elements_query_args', $categories, $sticky ); // hook in includes/admin.php
-		$args			= array_merge( $base_args, $filter_args );
-		$posts			= get_posts( $args );
+		$offset	= 0;
+		$args	= apply_filters( 'micemade_elements_query_args', $posts_per_page, $categories, $sticky, $offset ); // hook in includes/helpers.php
+		$posts	= get_posts( $args );
 		
 		if( ! empty( $posts ) ) {
 			
 			echo '<div class="micemade-elements_posts-grid mme-row '.esc_attr( $style ) .'">';
+			
+			echo '<input type="hidden" data-ppp="'. esc_attr($posts_per_page).'" data-categories="'. esc_js( json_encode($categories)) .'" data-img_format="'.  esc_attr($img_format) .'" data-excerpt="'.  esc_attr($excerpt) .'" data-meta="'.  esc_attr($meta) .'" data-css_class="'.  esc_attr($css_class) .'" data-grid="'.  esc_attr($grid) .'" class="posts-grid-settings">';
 						
 			foreach ( $posts as $post ) {
 				
 				setup_postdata( $post ); 
-				?>
 				
-				<div class="post <?php echo esc_attr( $grid_selector ); ?> mme-col-xs-12">
+				apply_filters( 'micemade_elements_loop_post', $grid , $img_format , $meta , $excerpt, $css_class );// hook in includes/helpers.php
 				
-					<div class="inner-wrap">
-					
-						<?php do_action( 'micemade_elements_thumb', $img_format );  ?>
-
-						<div class="post-text">
-							
-							<h4><a href="<?php the_permalink();?>" title="<?php the_title_attribute(); ?>"><?php the_title();?></a></h4>
-						
-							<?php if( $meta ) { ?>
-							<div class="meta">
-							
-								<?php echo apply_filters( 'micemade_elements_date','' ); ?>
-								<?php echo apply_filters( 'micemade_elements_author','' ); ?><br>
-								<?php echo apply_filters( 'micemade_elements_posted_in','category' ); ?>
-							
-							</div>
-							<?php } ?>
-
-							<?php 
-							if( $excerpt ) {
-								
-								the_excerpt(); 
-								
-								echo '<a href="'. get_permalink() .'" title="'.the_title_attribute("echo=0").'" class="'. esc_attr( $css_class ) .' micemade-elements-buton">'.esc_html__( 'Read more','micemade-elements' ) .'</a>';
-							}
-							?>
-							 
-							
-						
-						</div>
-					
-					</div>
-				
-				</div>
-				
-				<?php 
-			}
+			} // end foreach
 			
 			echo '</div>';
 		}
+		
+		echo '<a href="#" class="micemade-elements_button more_posts button">'. __('Load More', 'micemade-elements') .'</a>';
 		
 		wp_reset_postdata(); 
 

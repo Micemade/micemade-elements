@@ -68,43 +68,6 @@ function micemade_elements_terms_func( $taxonomy ) {
 
 }
 add_filter('micemade_elements_terms','micemade_elements_terms_func', 10, 1);
-/**
- *  POSTS QUERY ARGS
- *  
- *  @return (array) posts 
- *  
- *  @details Details
- */
-function micemade_elements_query_args_func( $categories = array(), $sticky = false ) {
-		
-	// Fallback / default variables
-	$args		= array();
-	
-	$args['orderby'] = 'menu_order date';
-	
-	
-	if( !empty( $categories ) ) {
-		$args['tax_query'][] = array(
-			'taxonomy'	=> 'category',
-			'field'		=> 'slug',
-			'operator'	=> 'IN',
-			'terms'		=> $categories,
-			'include_children' => true
-		);
-	}
-	
-	if( $sticky ) {
-		$sticky_array = get_option( 'sticky_posts' );
-		if( !empty( $sticky_array ) ) {
-			$args['post__in'] = $sticky_array;
-		}
-		
-	}
-	
-	return $args;
-	
-}
-add_filter( 'micemade_elements_query_args','micemade_elements_query_args_func', 10, 2 );
 
 /**
  *	IMAGE SIZES hook

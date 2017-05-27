@@ -3,7 +3,7 @@
  * Plugin Name: Micemade Elements
  * Description: Custom elements for Elementor, created by Micemade
  * Plugin URI: https://github.com/Micemade/micemade-elements/
- * Version: 0.0.4
+ * Version: 0.0.5
  * Author: micemade
  * Author URI: http://micemade.com
  * Text Domain: micemade-elements
@@ -46,7 +46,7 @@ class MM_Elements {
 			
 			// Enqueue scripts and styles for frontend
 			add_action( 'wp_enqueue_scripts', array( self::$instance,'micemade_elements_styles') );
-			//add_action( 'wp_enqueue_scripts', array( self::$instance,'micemade_elements_scripts') );
+			add_action( 'wp_enqueue_scripts', array( self::$instance,'micemade_elements_scripts') );
 		
 		}else {
 			
@@ -178,6 +178,7 @@ class MM_Elements {
 		$plugin_path = plugin_dir_path( __FILE__ );
 		include( $plugin_path . "/includes/Parsedown.php" );
 		include( $plugin_path . "/includes/admin.php" );
+		include( $plugin_path . "/includes/ajax_posts.php" );
 		include( $plugin_path . "/includes/helpers.php" );
 		include( $plugin_path . "/includes/wc-functions.php" );
 		
@@ -227,15 +228,25 @@ class MM_Elements {
 	public function micemade_elements_scripts () {
 		
 		// JS scripts:
-		wp_register_script('micemade-elements-js', MICEMADE_ELEMENTS_URL .'assets/js/scripts.min.js');
-		wp_enqueue_script('micemade-elements-js', MICEMADE_ELEMENTS_URL .'assets/js/scripts.min.js', array('jQuery'), '1.0', true);
+		wp_register_script('micemade-elements-js', MICEMADE_ELEMENTS_URL .'assets/js/micemade-elements.min.js');
+		wp_enqueue_script('micemade-elements-js', MICEMADE_ELEMENTS_URL .'assets/js/micemade-elements.min.js', array('jQuery'), '1.0', true);
 		
+		$ajaxurl = '';
+		if( MICEMADE_ELEMENTS_WPML_ON ){
+			$ajaxurl .= admin_url( 'admin-ajax.php?lang=' . ICL_LANGUAGE_CODE );
+		} else{
+			$ajaxurl .= admin_url( 'admin-ajax.php');
+		}
+		 
+		wp_localize_script( 'micemade-elements-js', 'screenReaderText', array(
+			'expand'		=> __( 'expand child menu', 'micemade-elements' ),
+			'collapse'		=> __( 'collapse child menu', 'micemade-elements' ),
+			'ajaxurl'		=> $ajaxurl,
+			'loadingposts'  => esc_html__('Loading posts ...', 'micemade-elements'),
+			'noposts'		=> esc_html__('No more posts found', 'micemade-elements'),
+			'loadmore'		=> esc_html__('Load more', 'micemade-elements')
+		) );
 		
-		// Localize the script with our data.
-		$translation_array = array( 
-			'loading_qb' => __( 'Loading quick view','micemade_elements' )
-		);
-		wp_localize_script( 'vc-ase-ajax-js', 'wplocalize_vcase_js', $translation_array );
 	}
 	
 	public function ajax_url_var() {

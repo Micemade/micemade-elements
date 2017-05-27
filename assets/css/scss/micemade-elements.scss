@@ -119,6 +119,7 @@
 	
 	/**
 	 *	POSTS GRID ELEMENT
+	 *	.micemade-elements_posts-grid  
 	 */
 	
 	&_posts-grid {
@@ -217,6 +218,25 @@
 		@extend %clear;	
 	
 	} // posts grid element
-
+	
+	
+	//.micemade-elements_button 
+	&_button {
+		display: inline-block;
+		background: #d2691e;
+		color: #fff !important;
+		border-radius: 6px;
+		padding: 10px 20px;
+		
+		&.disabled {
+			opacity: .25;
+			cursor: not-allowed;
+		}
+		
+		&.post_loading_loader {
+			opacity: .6;
+			cursor: not-allowed;
+		}
+	}
 	
 }
