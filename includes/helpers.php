@@ -130,7 +130,6 @@ function micemade_elements_thumb_f( $img_format = "thumbnail" ) {
 		'alt' => get_the_title()
 	);
 	
-	
 	echo '<div class="post-thumb">';
 	if ( has_post_thumbnail() ) { 
 		
@@ -142,13 +141,41 @@ function micemade_elements_thumb_f( $img_format = "thumbnail" ) {
 		$img_atts		= wp_get_attachment_image_src( $gall_image_ID, $img_format, $atts );
 		$img_url		= $img_atts[0];
 		
-		echo '<img src="'. esc_url( $img_url ).'" class="no-image" alt="'. esc_attr__( 'No image','micemade_elements' ) .'" >';
+		echo '<img src="'. esc_url( $img_url ).'" class="no-image" alt="'. the_title_attribute("echo=0") .'" >';
 		
 	}else{ 
 		
-		echo '<img src="'. esc_url( apply_filters('micemade_elements_no_image','') ).'" class="no-image" alt="'. esc_attr__( 'No image','micemade_elements' ) .'" >';
+		echo '<img src="'. esc_url( apply_filters('micemade_elements_no_image','') ).'" class="no-image" alt="'. the_title_attribute("echo=0") .'" >';
 	}
 	echo '</div>';
+}
+/**
+ *  POST THUMB BACKGROUND
+ */
+add_action( 'micemade_elements_thumb_back','micemade_elements_thumb_back_f' , 10, 1 ); 
+function micemade_elements_thumb_back_f( $img_format = "thumbnail" ) {
+	
+	$gallery_shortcode = apply_filters( 'micemade_elements_gallery_ids','' );
+	
+	$img_url = '';
+
+	if ( has_post_thumbnail() ) { 
+		
+		$img_url = get_the_post_thumbnail_url( get_the_ID(), $img_format);
+		
+	}elseif( !empty( $gallery_shortcode ) ) {
+		
+		$gall_image_ID	= $gallery_shortcode[0]; // get first image from WP gallery
+		$img_atts		= wp_get_attachment_image_src( $gall_image_ID, $img_format );
+		$img_url		= $img_atts[0];
+				
+	}else{ 
+		
+		$img_url = apply_filters('micemade_elements_no_image','');
+	}
+	
+	echo '<div class="post-thumb-back" style="background-image: url('. esc_url( $img_url ).');"></div>';
+
 }
 /**
  * GET GALLERY IMAGES ID's
@@ -224,13 +251,20 @@ add_filter( 'micemade_elements_query_args','micemade_elements_query_args_func', 
  *  
  *  DRY effort, mostly because of ajax posts.
  */
-function micemade_elements_loop_post_func( $grid = '', $img_format = 'thumbnail', $meta = true, $excerpt = true, $css_class = '' ) {
+function micemade_elements_loop_post_func( $style = 'style_1', $grid = '', $img_format = 'thumbnail', $meta = true, $excerpt = true, $css_class = '' ) {
 	?>
 	<div class="post <?php echo esc_attr( $grid ); ?> mme-col-xs-12">
 				
 		<div class="inner-wrap">
 		
-			<?php do_action( 'micemade_elements_thumb', $img_format );  ?>
+			<?php
+			if( $style == 'style_3' ) {
+				echo do_action( 'micemade_elements_thumb_back', $img_format );
+				echo '<div class="post-overlay"></div>';
+			}else{
+				do_action( 'micemade_elements_thumb', $img_format );  
+			}
+			?>
 
 			<div class="post-text">
 				
@@ -251,7 +285,7 @@ function micemade_elements_loop_post_func( $grid = '', $img_format = 'thumbnail'
 					
 					the_excerpt(); 
 					
-					echo '<a href="'. get_permalink() .'" title="'.the_title_attribute("echo=0").'" class="'. esc_attr( $css_class ) .' micemade-elements-buton">'.esc_html__( 'Read more','micemade-elements' ) .'</a>';
+					echo '<a href="'. get_permalink() .'" title="'.the_title_attribute("echo=0").'" class="micemade-elements-readmore '. esc_attr( $css_class ) .' ">'.esc_html__( 'Read more','micemade-elements' ) .'</a>';
 				}
 				?>
 				 
@@ -262,4 +296,4 @@ function micemade_elements_loop_post_func( $grid = '', $img_format = 'thumbnail'
 	</div>
 	<?php 
 }
-add_filter( 'micemade_elements_loop_post','micemade_elements_loop_post_func', 10, 5 );
+add_filter( 'micemade_elements_loop_post','micemade_elements_loop_post_func', 10, 6 );

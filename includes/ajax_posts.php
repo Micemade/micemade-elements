@@ -19,6 +19,7 @@ if ( !function_exists('micemade_elements_more_post_ajax') ) {
 	    
 		$posts_per_page = ( isset($_POST['ppp']) )			? $_POST['ppp'] : 3;
 	    $categories 	= ( isset($_POST['categories']) )	? json_decode( $_POST['categories'] ) : array();
+	    $style			= ( isset($_POST['style']) )		? $_POST['style'] : 'style_1';
 	    $img_format		= ( isset($_POST['img_format']) )	? $_POST['img_format'] : 'thumbnail';
 	    $excerpt		= ( isset($_POST['excerpt']) )		? $_POST['excerpt'] : true;
 	    $meta			= ( isset($_POST['meta']) )			? $_POST['meta'] : true;
@@ -38,7 +39,7 @@ if ( !function_exists('micemade_elements_more_post_ajax') ) {
 				
 			setup_postdata( $post ); 
 			
-			apply_filters( 'micemade_elements_loop_post', $grid , $img_format , $meta , $excerpt, $css_class );// hook in includes/helpers.php
+			apply_filters( 'micemade_elements_loop_post', $style, $grid , $img_format , $meta , $excerpt, $css_class );// hook in includes/helpers.php
 			
 		} // end foreach
  

@@ -43,65 +43,77 @@
 	 * AJAX LOADING POSTS
 	 *
 	 */
-	var $content	= $('.micemade-elements_posts-grid'),
-		$loader		= $content.next('.more_posts'),
-		$settings	= $content.find('.posts-grid-settings'),
-		ppp			= $settings.data('ppp'),
-		categories	= $settings.data('categories'),
-		img_format	= $settings.data('img_format'),
-		excerpt		= $settings.data('excerpt'),
-		meta		= $settings.data('meta'),
-		css_class	= $settings.data('css_class'),
-		grid		= $settings.data('grid'),
-		offset		= $content.find('.post').length;
-	 
-	$loader.on( 'click', load_ajax_posts );
-	 
-	function load_ajax_posts(e) {
-				
-		e.preventDefault();
+	var $content	= $('.micemade-elements_posts-grid');
 		
-		if ( !($loader.hasClass('post_loading_loader') || $loader.hasClass('no_more_posts')) ) {
-			
-			$.ajax({
-				type: 'POST',
-				dataType: 'html',
-				url: screenReaderText.ajaxurl,
-				data: {
-					'ppp': ppp,
-					'categories': categories,
-					'img_format': img_format,
-					'excerpt': excerpt,
-					'meta': meta,
-					'css_class': css_class,
-					'grid': grid,
-					'offset': offset,
-					'action': 'micemade_elements_more_post_ajax'
-				},
-				beforeSend : function () {
-					$loader.addClass('post_loading_loader').html(screenReaderText.loadingposts);
-				},
-				success: function (data) {
+	$content.each( function() {
+		
+		var $_content = $(this);
+		
+		var	$loader		= $_content.next('.micemade-elements_more-posts-wrap').find('.more_posts'),
+			$settings	= $_content.find('.posts-grid-settings'),
+			ppp			= $settings.data('ppp'),
+			categories	= $settings.data('categories'),
+			style		= $settings.data('style'),
+			img_format	= $settings.data('img_format'),
+			excerpt		= $settings.data('excerpt'),
+			meta		= $settings.data('meta'),
+			css_class	= $settings.data('css_class'),
+			grid		= $settings.data('grid'),
+			startoffset	= $settings.data('startoffset'),
+			offset		= $_content.find('.post').length;
+		 
+		$loader.on( 'click', load_ajax_posts );
+		 
+		function load_ajax_posts(e) {
 					
-					var $data = $(data);
-					if ($data.length) {
-						var $newElements = $data.css({ opacity: 0 });
-						$content.append($newElements);
-						$newElements.animate({ opacity: 1 });
-						$loader.removeClass('post_loading_loader').html(screenReaderText.loadmore);
-					} else {
-						$loader.removeClass('post_loading_loader').addClass('no_more_posts disabled').html(screenReaderText.noposts);
-					}
-				},
-				error : function (jqXHR, textStatus, errorThrown) {
-					$loader.html($.parseJSON(jqXHR.responseText) + ' :: ' + textStatus + ' :: ' + errorThrown);
-					console.log(jqXHR);
-				},
-			});
+			e.preventDefault();
 			
+			if ( !($loader.hasClass('post_loading_loader') || $loader.hasClass('no_more_posts')) ) {
+				
+				$.ajax({
+					type: 'POST',
+					dataType: 'html',
+					url: screenReaderText.ajaxurl,
+					data: {
+						'ppp': ppp,
+						'categories': categories,
+						'style': style,
+						'img_format': img_format,
+						'excerpt': excerpt,
+						'meta': meta,
+						'css_class': css_class,
+						'grid': grid,
+						'offset': offset + startoffset,
+						'action': 'micemade_elements_more_post_ajax'
+					},
+					beforeSend : function () {
+						$loader.addClass('post_loading_loader').html(screenReaderText.loadingposts);
+					},
+					success: function (data) {
+						
+						var $data = $(data);
+						if ($data.length) {
+							var $newElements = $data.css({ opacity: 0 });
+							$_content.append($newElements);
+							$newElements.animate({ opacity: 1 });
+							$loader.removeClass('post_loading_loader').html(screenReaderText.loadmore);
+						} else {
+							$loader.removeClass('post_loading_loader').addClass('no_more_posts disabled').html(screenReaderText.noposts);
+						}
+					},
+					error : function (jqXHR, textStatus, errorThrown) {
+						$loader.html($.parseJSON(jqXHR.responseText) + ' :: ' + textStatus + ' :: ' + errorThrown);
+						console.log(jqXHR);
+					},
+				});
+				
+			}
+			offset += ppp;
+			return false;
 		}
-		offset += ppp;
-		return false;
-	}
 
+	
+	});
+		
+	
 })(jQuery);

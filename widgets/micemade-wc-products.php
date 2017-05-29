@@ -101,14 +101,9 @@ class Micemade_WC_Products extends Widget_Base {
 		
 		$woocommerce_loop['columns'] = $products_per_row;
 		
-		$base_args = array( 
-			'posts_per_page'	=> $posts_per_page,
-			'post_type'			=> 'product',
-		);
-		$filter_args = apply_filters( 'micemade_elements_wc_query_args', $filters, $categories ); // hook in includes/wc-functions.php
 		
-	
-		$args = array_merge( $base_args, $filter_args );
+		$args = apply_filters( 'micemade_elements_wc_query_args', $posts_per_page, $filters, $categories ); // hook in includes/wc-functions.php
+
 		
 		$products = get_posts( $args );
 		
