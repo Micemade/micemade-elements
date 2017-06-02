@@ -45,8 +45,6 @@ if ( !function_exists('micemade_elements_more_post_ajax') ) {
  
 	    wp_reset_postdata();
 		
-		
-	    //wp_die($out);
 	    wp_die();
 	}
 }

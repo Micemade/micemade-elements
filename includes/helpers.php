@@ -8,7 +8,7 @@
  *  @return selector
  *  
  */
-function micemade_elemets_grid_class( $items_desktop = 3, $items_mobile = 1,  $no_margin = false) {
+function micemade_elements_grid_class( $items_desktop = 3, $items_mobile = 1,  $no_margin = false) {
 
     $style_class = $desktop_class = $mobiles_class = '';
 
@@ -258,7 +258,7 @@ function micemade_elements_loop_post_func( $style = 'style_1', $grid = '', $img_
 		<div class="inner-wrap">
 		
 			<?php
-			if( $style == 'style_3' ) {
+			if( $style == 'style_3' || $style == 'style_4' ) {
 				echo do_action( 'micemade_elements_thumb_back', $img_format );
 				echo '<div class="post-overlay"></div>';
 			}else{
@@ -297,3 +297,67 @@ function micemade_elements_loop_post_func( $style = 'style_1', $grid = '', $img_
 	<?php 
 }
 add_filter( 'micemade_elements_loop_post','micemade_elements_loop_post_func', 10, 6 );
+/**
+ *  TERM DATA
+ *  
+ *  @param [string] $taxonomy Parameter_Description
+ *  @param [string] $term Parameter_Description
+ *  @param [string] $img_format Parameter_Description
+ *  @return array term data - term ID, term title, term link, term image url
+ *  
+ *  @details retrieve term data by taxonomy and term slug
+ */
+function micemade_elements_term_data_f( $taxonomy, $term, $img_format = 'thumbnail' ) {
+	 
+	if( !$term ) return;
+		
+	$term_data = array();
+	
+	// Term data
+	$term_obj	= get_term_by( 'slug', $term, $taxonomy );
+	if( is_wp_error($term_obj) ) return;
+	
+	// Get term ID for term name, link and term meta for thumbnail ( WC meta "thumbnail_id ")
+	$term_id		= $term_obj->term_id;
+	$meta			= get_term_meta( $term_id );
+	$thumbnail_id	= $meta['thumbnail_id'][0];
+	
+	$term_data['term_id']		= $term_id;
+	$term_data['term_title']	= $term_obj->name;
+	$term_data['term_link']		= get_term_link( $term_obj->slug, $taxonomy );
+	
+	if( $thumbnail_id ) {
+		$image_atts				= wp_get_attachment_image_src( $thumbnail_id, $img_format );
+		$term_data['image_url']	= $image_atts[0];
+	}else{
+		$term_data['image_url']	= apply_filters('micemade_elements_no_image','');
+	}
+	
+	
+	return $term_data;
+	
+}
+add_filter( 'micemade_elements_term_data', 'micemade_elements_term_data_f', 100, 3 );
+/**
+ *  PRODUCT COUNT PER CATEGORY
+ *  
+ *  @param [int] $term_id Parameter_Description
+ *  @return html
+ *  
+ *  @details html with count of products in category
+ */
+function micemade_elements_product_count_f( $term_id ) {
+	
+	$no_of_prods	= get_woocommerce_term_meta( intval($term_id),'product_count_product_cat' );
+			
+	if ( is_wp_error( $no_of_prods  ) || !$no_of_prods ) return;
+	
+	$prod_count = '<span class="category__product-count">';
+	
+	$prod_count .= sprintf( _n( '%s product', '%s products', $no_of_prods, 'mm_sow' ), $no_of_prods );
+	
+	$prod_count .= '</span>';
+	
+	return $prod_count;
+}
+add_filter( 'micemade_elements_product_count', 'micemade_elements_product_count_f', 100, 3 );

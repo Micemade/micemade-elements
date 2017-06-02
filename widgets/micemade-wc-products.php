@@ -102,7 +102,7 @@ class Micemade_WC_Products extends Widget_Base {
 		$woocommerce_loop['columns'] = $products_per_row;
 		
 		
-		$args = apply_filters( 'micemade_elements_wc_query_args', $posts_per_page, $filters, $categories ); // hook in includes/wc-functions.php
+		$args = apply_filters( 'micemade_elements_wc_query_args', $posts_per_page, $categories, $filters ); // hook in includes/wc-functions.php
 
 		
 		$products = get_posts( $args );
@@ -120,6 +120,7 @@ class Micemade_WC_Products extends Widget_Base {
 				wc_get_template_part( 'content', 'product' ); 
 				
 			}
+			
 			woocommerce_product_loop_end();
 			
 			echo '</div>';

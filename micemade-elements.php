@@ -159,12 +159,14 @@ class MM_Elements {
 		);
 		
 		if( MICEMADE_ELEMENTS_WOO_ACTIVE ) {
-			$widgets_list['micemade-wc-products']		= 'Micemade_WC_Products';
-			$widgets_list['micemade-wc-single-product']	= 'Micemade_WC_Single_Product';
+			$widgets_list['micemade-wc-products']			= 'Micemade_WC_Products';
+			$widgets_list['micemade-wc-products-slider']	= 'Micemade_WC_Products_Slider';
+			$widgets_list['micemade-wc-single-product']		= 'Micemade_WC_Single_Product';
+			$widgets_list['micemade-wc-categories']			= 'Micemade_WC_Categories';
 		}
 		
 		if( MICEMADE_ELEMENTS_REVSLIDER_ON ) {
-			$widgets_list['micemade-rev-slider']		= 'Micemade_Rev_Slider';
+			$widgets_list['micemade-rev-slider']			= 'Micemade_Rev_Slider';
 		}
 		
 		
@@ -238,9 +240,7 @@ class MM_Elements {
 			$ajaxurl .= admin_url( 'admin-ajax.php');
 		}
 		 
-		wp_localize_script( 'micemade-elements-js', 'screenReaderText', array(
-			'expand'		=> __( 'expand child menu', 'micemade-elements' ),
-			'collapse'		=> __( 'collapse child menu', 'micemade-elements' ),
+		wp_localize_script( 'micemade-elements-js', 'micemadeJsLocalize', array(
 			'ajaxurl'		=> $ajaxurl,
 			'loadingposts'  => esc_html__('Loading posts ...', 'micemade-elements'),
 			'noposts'		=> esc_html__('No more posts found', 'micemade-elements'),
