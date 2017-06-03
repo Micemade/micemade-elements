@@ -1,14 +1,23 @@
 === Micemade SO widgets Widgets ===
 
 Author URI: http://micemade.com
+
 Plugin URI: http://micemade.com/micemade-elements
+
 Contributors: Micemade
-Tags: elementor, elementor addon, elementor extension, elements, widgets, posts grid, woocommerce, catalog, products, product, 
+
+Tags: elementor, elementor addon, elementor extension, elements, widgets, posts grid, woocommerce, catalog, products, product, micemade
+
 Requires at least: 4.3
+
 Tested up to: 4.7
-Stable Tag: 1.0.0.
+
+Stable Tag: 0.1.0
+
 License: GPLv2 or later
+
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
+
 
 A collection of free elements for Elementor page builder WordPress plugin . "Elementor" plugin is required.
 
@@ -24,7 +33,9 @@ The plugin currently comes with the following elements.
 
 * Micemade Posts Grid - display posts in grid
 * Micemade WC Products	- display WooCommerce products as in catalog / product taxonomies page - (requires WooCommerce)
-* Micemade Single Products - display WooCommerce single product - (requires WooCommerce)
+* Micemade WC Single Product - display WooCommerce single product - (requires WooCommerce)
+* Micemade WC Products Slider - display WooCommerce products slider ( Swiper.js ) - (requires WooCommerce)
+* Micemade WC Categories - display WooCommerce categories - (requires WooCommerce)
 * Micemade Revolution Slider - display single Revolution slider - (requires Revolution Slider - premium plugin)
 
 
@@ -48,6 +59,11 @@ Our tests indicate that the widgets work well with most themes that are well cod
 Time will tell. When we estimate plugin has enough added functionalities to Elementor, or some other reason, it will be available on wp.org. So far, install it from GitHub (Download zip or clone the repository) .
 
 **Changelog**
+
+= 0.1.0 =
+* Added "Micemade WC Categories" element
+* Added "Micemade WC Products Slider" element
+* Added 4th style for posts grid and products slider elements
 
 = 0.0.5 =
 * Added ajax "Load more" to Micemade posts grid elements
