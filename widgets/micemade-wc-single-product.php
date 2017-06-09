@@ -160,7 +160,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		$this->start_controls_section(
 			'section_style',
 			[
-				'label' => esc_html__( 'Micemade WC Single Product', 'elementor' ),
+				'label' => esc_html__( 'Micemade WC Single Product', 'micemade-elements' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -168,7 +168,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		$this->add_control(
 			'background_color',
 			[
-				'label' => __( 'Product info background', 'elementor' ),
+				'label' => __( 'Product info background', 'micemade-elements' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .entry-summary' => 'background-color: {{VALUE}};',
@@ -181,19 +181,19 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		$this->add_responsive_control(
 			'align',
 			[
-				'label' => __( 'Alignment', 'elementor' ),
+				'label' => __( 'Alignment', 'micemade-elements' ),
 				'type' => Controls_Manager::CHOOSE,
 				'options' => [
 					'left'    => [
-						'title' => __( 'Left', 'elementor' ),
+						'title' => __( 'Left', 'micemade-elements' ),
 						'icon' => 'fa fa-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'elementor' ),
+						'title' => __( 'Center', 'micemade-elements' ),
 						'icon' => 'fa fa-align-center',
 					],
 					'right' => [
-						'title' => __( 'Right', 'elementor' ),
+						'title' => __( 'Right', 'micemade-elements' ),
 						'icon' => 'fa fa-align-right',
 					],
 				],

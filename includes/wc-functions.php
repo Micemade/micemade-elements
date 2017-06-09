@@ -72,7 +72,7 @@ add_filter( 'micemade_elements_wc_query_args','micemade_elements_wc_query_args_f
  *  
  *  DRY effort ...
  */
-function micemade_elements_loop_product_func( $style = 'style_1', $img_format = 'thumbnail', $meta = true, $excerpt = false, $price = true, $add_to_cart = true, $css_class = '' ) {
+function micemade_elements_loop_product_func( $style = 'style_1', $img_format = 'thumbnail', $posted_in = true, $short_desc = false, $price = true, $add_to_cart = true, $css_class = '' ) {
 	?>
 	<div class="post swiper-slide">
 				
@@ -91,7 +91,7 @@ function micemade_elements_loop_product_func( $style = 'style_1', $img_format = 
 				
 				<h4><a href="<?php the_permalink();?>" title="<?php the_title_attribute(); ?>"><?php the_title();?></a></h4>
 			
-				<?php if( $meta ) { ?>
+				<?php if( $posted_in ) { ?>
 				<div class="meta">
 				
 					<?php echo apply_filters( 'micemade_elements_posted_in','product_cat' ); ?>
@@ -99,27 +99,29 @@ function micemade_elements_loop_product_func( $style = 'style_1', $img_format = 
 				</div>
 				<?php } ?>
 
-				<?php 
-				if( $price ) {
-					woocommerce_template_loop_price(); 
-				}
-				?>
-				
-				<?php
-				if( $add_to_cart ) {
-					woocommerce_template_loop_add_to_cart();
-				}
-				?>
-				
-				<?php 
-				if( $excerpt ) {
+				<div class="product-details">
+					<?php 
+					if( $price ) {
+						woocommerce_template_loop_price(); 
+					}
+					?>
 					
-					the_excerpt(); 
+					<?php
+					if( $add_to_cart ) {
+						woocommerce_template_loop_add_to_cart();
+					}
+					?>
 					
-					echo '<a href="'. get_permalink() .'" title="'.the_title_attribute("echo=0").'" class="micemade-elements-readmore '. esc_attr( $css_class ) .' ">'. apply_filters( 'micemade-elements-prod-details', esc_html__( 'Product details','micemade-elements' ) ).'</a>';
-				}				
-				?>
-				 
+					<?php 
+					if( $short_desc ) {
+						
+						the_excerpt(); 
+						
+						echo '<a href="'. get_permalink() .'" title="'.the_title_attribute("echo=0").'" class="micemade-elements-readmore '. esc_attr( $css_class ) .' ">'. apply_filters( 'micemade-elements-prod-details', esc_html__( 'Product details','micemade-elements' ) ).'</a>';
+					}				
+					?>
+				</div>
+			
 			</div>
 		
 		</div>

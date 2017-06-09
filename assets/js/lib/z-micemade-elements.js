@@ -48,25 +48,32 @@
 				
 				swiperContainer.each( function() {
 					
-					var $_this	= $(this),
-						config	= $_this.find('.slider-config'),
-						pps		= config.data('pps'),
-						ppst	= config.data('ppst'),
-						ppsm	= config.data('ppsm'),
-						space	= config.data('space'),
-						pagin	= config.data('pagin');
+					var $_this		= $(this),
+						config		= $_this.find('.slider-config'),
+						pps			= config.data('pps'),
+						ppst		= config.data('ppst'),
+						ppsm		= config.data('ppsm'),
+						space		= config.data('space'),
+						pagin		= config.data('pagin'),
+						autoplay	= config.data('autoplay');
 					
 					
 					var swiper = new Swiper( $_this, {
 						pagination: '.swiper-pagination',
 						//effect: 'flip',
+						//paginationClickable: true,
 						slidesPerView: pps,
 						paginationClickable: true,
 						spaceBetween: space,
 						grabCursor: true,
 						pagination: '.swiper-pagination',
 						paginationType: pagin,
-						//paginationClickable: true,
+						autoplay: autoplay,
+						autoplayDisableOnInteraction: true,
+						//centeredSlides: true,
+						//loop: true,
+						nextButton: '.swiper-button-next',
+						prevButton: '.swiper-button-prev',
 						breakpoints: {
 					
 							768: {

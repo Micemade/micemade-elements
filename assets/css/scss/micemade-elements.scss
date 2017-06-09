@@ -130,6 +130,8 @@
 			
 			margin-bottom: 1rem;
 			
+			&.swiper-slide { margin-bottom: 0; }
+			
 			.inner-wrap {
 				flex-grow: 1;
 				flex-basis: 100%;
@@ -153,15 +155,16 @@
 				h4 {
 					font-size: 22px;
 					margin: 0 0 10px;
-					padding: 10px 0;
-					border-bottom: 1px solid rgba(#999, 0.3);
+					padding: 0.5em 0;
+					transition: all 0.2s linear;
 				}
+				
+				a { transition: all 0.2s linear; }
 				
 				.meta {
 					font-size: 11px;
 					margin-bottom: 10px;
 					padding: 0 0 10px;
-					border-bottom: 1px solid rgba(#999, 0.3);
 					
 					> span {
 						padding: 0 5px;
@@ -182,7 +185,7 @@
 				
 				.price {
 					font-size: 22px;
-					padding: 1em 0;
+					padding: 0.5em 0;
 					display: inline-block;
 					font-style: normal;
 				}
@@ -296,6 +299,14 @@
 			} // .inner-wrap
 		}
 		
+		
+		.swiper-button-next {
+			.elementor & { right: 20px }
+		}
+		
+		.swiper-button-prev {
+			.elementor & { left: 20px }
+		}
 		
 		@extend %clear;	
 	

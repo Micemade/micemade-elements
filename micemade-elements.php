@@ -1,9 +1,9 @@
 <?php
 /**
  * Plugin Name: Micemade Elements
- * Description: Custom elements for Elementor, created by Micemade
+ * Description: Addon plugin with custom elements for Elementor, created by Micemade. Elementor plugin required.
  * Plugin URI: https://github.com/Micemade/micemade-elements/
- * Version: 0.1.0
+ * Version: 0.2.0
  * Author: micemade
  * Author URI: http://micemade.com
  * Text Domain: micemade-elements
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class MM_Elements {
+class Micemade_Elements {
 
 
 	private static $instance = null;
@@ -40,6 +40,8 @@ class MM_Elements {
 			self::$instance->activation_checks();
 			
 			self::$instance->includes();
+			
+			add_action( 'init', array( self::$instance, 'mega_menu_post_type' ) );
 			
 			// Enqueue script and styles for ADMIN
 			//add_action( 'admin_enqueue_scripts', array( self::$instance, 'micemade_elements_admin_js_css' ) );
@@ -168,9 +170,7 @@ class MM_Elements {
 		if( MICEMADE_ELEMENTS_REVSLIDER_ON ) {
 			$widgets_list['micemade-rev-slider']			= 'Micemade_Rev_Slider';
 		}
-		
-		
-		
+				
 		return $widgets_list;
 		
 	}
@@ -204,11 +204,10 @@ class MM_Elements {
 		// Setup paths to current locale file
 		$mofile_local = $lang_dir . $mofile;
 
-		if (file_exists($mofile_local)) {
+		if ( file_exists( $mofile_local ) ) {
 			// Look in the /wp-content/plugins/micemade-elements/languages/ folder
 			load_textdomain('micemade-elements', $mofile_local);
-		}
-		else {
+		} else {
 			// Load the default language files
 			load_plugin_textdomain('micemade-elements', false, $lang_dir);
 		}
@@ -222,7 +221,6 @@ class MM_Elements {
 		// CSS styles:
 		wp_register_style( 'micemade-elements', MICEMADE_ELEMENTS_URL . 'assets/css/micemade-elements.css' );
 		wp_enqueue_style( 'micemade-elements' );
-		
 		
 	}
 	
@@ -244,7 +242,7 @@ class MM_Elements {
 			'ajaxurl'		=> $ajaxurl,
 			'loadingposts'  => esc_html__('Loading posts ...', 'micemade-elements'),
 			'noposts'		=> esc_html__('No more posts found', 'micemade-elements'),
-			'loadmore'		=> esc_html__('Load more', 'micemade-elements')
+			'loadmore'		=> esc_html__('Load more posts', 'micemade-elements')
 		) );
 		
 	}
@@ -261,6 +259,46 @@ class MM_Elements {
 		
 	}
 	
+	public function mega_menu_post_type() {
+		
+		$micemade_themes	= array( 'adorn', 'cloth'); // list of Micemade themes compatible with MM Mega menu CPT
+		$active_theme		= get_option( 'template' );
+
+		if( in_array( $active_theme, $micemade_themes ) ) {
+			
+			$labels = array(
+				'name'			=> __( 'Mega Menus', 'micemade-elements' ),
+				'singular_name'	=> __( 'Mega Menu', 'micemade-elements' ),
+				'add_new'		=> __( 'New Mega Menu', 'micemade-elements' ),
+				'add_new_item'	=> __( 'Add New Mega Menu', 'micemade-elements' ),
+				'edit_item'		=> __( 'Edit Mega Menu', 'micemade-elements' ),
+				'new_item'		=> __( 'New Mega Menu', 'micemade-elements' ),
+				'view_item'		=> __( 'View Mega Menu', 'micemade-elements' ),
+				'search_items'	=> __( 'Search Mega Menus', 'micemade-elements' ),
+				'not_found'		=>  __( 'No Mega Menus Found', 'micemade-elements' ),
+				'not_found_in_trash' => __( 'No Mega Menus found in Trash', 'micemade-elements' ),
+				);
+			$args = array(
+				'labels'		=> $labels,
+				'supports'              => array( 'title','editor' ),
+				'public'                => true,
+				'rewrite'               => false,
+				'show_ui'               => true,
+				'show_in_menu'          => true,
+				'show_in_nav_menus'     => false,
+				'exclude_from_search'   => true,
+				'capability_type'       => 'post',
+				'hierarchical'          => false,
+				'menu-icon'             => 'dashicon-tagcloud'
+			);
+			
+			register_post_type( 'MM Mega menu', $args );
+		}
+		
+		return false;
+		
+	}
+	
 	function updater() {
 			
 		require_once( plugin_dir_path( __FILE__ ) . 'github_updater.php' );
@@ -270,6 +308,6 @@ class MM_Elements {
 	}
 
 	
-} // end class MM_Elements
+} // end class Micemade_Elements
 
-MM_Elements::get_instance()->init();
+Micemade_Elements::get_instance()->init();

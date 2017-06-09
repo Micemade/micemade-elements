@@ -32,10 +32,10 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_control(
 			'posts_per_page',
 			[
-				'label'		=> __( 'Number of posts', 'micemade-elements' ),
+				'label'		=> __( 'Total posts', 'micemade-elements' ),
 				'type'		=> Controls_Manager::TEXT,
 				'default'	=> '6',
-				'title'		=> __( 'Enter total number of products to show', 'micemade-elements' ),
+				'title'		=> __( 'Enter total number of posts to show', 'micemade-elements' ),
 			]
 		);
 		
@@ -118,7 +118,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->start_controls_section(
 			'section_style',
 			[
-				'label' => esc_html__( 'Micemade posts grid', 'elementor' ),
+				'label' => esc_html__( 'Micemade posts grid', 'micemade-elements' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -169,7 +169,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_control(
 			'post_text_background_color',
 			[
-				'label' => __( 'Post text background', 'elementor' ),
+				'label' => __( 'Post text background', 'micemade-elements' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .inner-wrap, {{WRAPPER}} .post-overlay' => 'background-color: {{VALUE}};',
@@ -180,7 +180,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_control(
 			'post_text_background_opacity',
 			[
-				'label' => __( 'Post text background opacity', 'elementor' ),
+				'label' => __( 'Post text background opacity', 'micemade-elements' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => 0.8,
@@ -204,7 +204,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_control(
 			'post_text_background_opacity_hover',
 			[
-				'label' => __( 'Post text background opacity hover', 'elementor' ),
+				'label' => __( 'Post text background opacity hover', 'micemade-elements' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => 1,
@@ -226,9 +226,9 @@ class Micemade_Posts_Grid extends Widget_Base {
 		);
 		
 		$this->add_responsive_control(
-			'product_text_height',
+			'post_text_height',
 			[
-				'label' => __( 'Post text height', 'elementor' ),
+				'label' => __( 'Post text height', 'micemade-elements' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => '',
@@ -250,6 +250,27 @@ class Micemade_Posts_Grid extends Widget_Base {
 		);
 		
 		$this->add_responsive_control(
+			'content_vertical_alignment',
+			[
+				'label' => __( 'Vertical Align Post Text', 'micemade-elements' ),
+				'type' => Controls_Manager::SELECT,
+				'options' => [
+					'flex-start'=>__( 'Top', 'micemade-elements' ),
+					'center'	=> __( 'Middle', 'micemade-elements' ),
+					'flex-end'	=> __( 'Bottom', 'micemade-elements' ),
+				],
+				'default' => 'center',
+				'selectors' => [
+					'{{WRAPPER}} .post-text' => 'justify-content: {{VALUE}};',
+				],
+				'condition' => [
+					'style' => ['style_3','style_4']
+				],
+			]
+		);
+		
+		
+		$this->add_responsive_control(
 			'post_text_padding',
 			[
 				'label' => esc_html__( 'Post text padding', 'micemade-elements' ),
@@ -264,19 +285,19 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_responsive_control(
 			'post_text_align',
 			[
-				'label' => __( 'Post text alignment', 'elementor' ),
+				'label' => __( 'Post text alignment', 'micemade-elements' ),
 				'type' => Controls_Manager::CHOOSE,
 				'options' => [
 					'left' => [
-						'title' => __( 'Left', 'elementor' ),
+						'title' => __( 'Left', 'micemade-elements' ),
 						'icon' => 'fa fa-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'elementor' ),
+						'title' => __( 'Center', 'micemade-elements' ),
 						'icon' => 'fa fa-align-center',
 					],
 					'right' => [
-						'title' => __( 'Right', 'elementor' ),
+						'title' => __( 'Right', 'micemade-elements' ),
 						'icon' => 'fa fa-align-right',
 					],
 				],
@@ -292,7 +313,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name' => 'border',
-				'label' => __( 'Border', 'elementor' ),
+				'label' => __( 'Border', 'micemade-elements' ),
 				'placeholder' => '1px',
 				'default' => '1px',
 				'selector' => '{{WRAPPER}} .inner-wrap',
@@ -307,7 +328,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->start_controls_section(
 			'section_title',
 			[
-				'label' => __( 'Title', 'elementor' ),
+				'label' => __( 'Title', 'micemade-elements' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -318,14 +339,14 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->start_controls_tab(
 			'tab_button_normal',
 			[
-				'label' => __( 'Normal', 'elementor' ),
+				'label' => __( 'Normal', 'micemade-elements' ),
 			]
 		);
 
 		$this->add_control(
 			'title_text_color',
 			[
-				'label' => __( 'Title Color', 'elementor' ),
+				'label' => __( 'Title Color', 'micemade-elements' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
@@ -333,21 +354,32 @@ class Micemade_Posts_Grid extends Widget_Base {
 				],
 			]
 		);
-
+		
+		$this->add_control(
+			'title_back_color',
+			[
+				'label' => __( 'Title Back Color', 'micemade-elements' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}} .post-text h4' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
 		$this->end_controls_tab();
 
 		// HOVER
 		$this->start_controls_tab(
 			'tab_title_hover',
 			[
-				'label' => __( 'Hover', 'elementor' ),
+				'label' => __( 'Hover', 'micemade-elements' ),
 			]
 		);
 
 		$this->add_control(
 			'title_hover_color',
 			[
-				'label' => __( 'Title Color on Hover', 'elementor' ),
+				'label' => __( 'Title Color on Hover', 'micemade-elements' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .post-text h4:hover a' => 'color: {{VALUE}};',
@@ -356,24 +388,50 @@ class Micemade_Posts_Grid extends Widget_Base {
 		);
 
 		$this->add_control(
-			'hover_animation',
+			'title_back_color_hover',
 			[
-				'label' => __( 'Animation', 'elementor' ),
-				'type' => Controls_Manager::HOVER_ANIMATION,
+				'label' => __( 'Title Back Color on Hover', 'micemade-elements' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}} .post-text h4:hover' => 'background-color: {{VALUE}};',
+				],
 			]
 		);
-
-		$this->end_controls_tab();
-		
+		$this->end_controls_tab();		
 		$this->end_controls_tabs();
 		// end tabs
+		
+		// Title border
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name' => 'postgrid_title_border',
+				'label' => __( 'Title Border', 'micemade-elements' ),
+				'placeholder' => '1px',
+				'default' => '1px',
+				'selector' => '{{WRAPPER}} .post-text h4',
+			]
+		);
+		
+		$this->add_responsive_control(
+			'postgrid_title_padding',
+			[
+				'label' => esc_html__( 'Title padding', 'micemade-elements' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'em', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .post-text h4' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
 		
 		// Title typohraphy
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
 				'name' => 'title_typography',
-				'label' => __( 'Typography', 'elementor' ),
+				'label' => __( 'Typography', 'micemade-elements' ),
 				'scheme' => Scheme_Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} .post-text h4',
 			]
@@ -386,7 +444,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->start_controls_section(
 			'section_text',
 			[
-				'label' => __( 'Excerpt and Meta', 'elementor' ),
+				'label' => __( 'Excerpt and Meta', 'micemade-elements' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -394,7 +452,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_control(
 			'meta_text_color',
 			[
-				'label' => __( 'Meta Text Color', 'elementor' ),
+				'label' => __( 'Meta Text Color', 'micemade-elements' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .post-text .meta span, {{WRAPPER}} .post-text .meta a' => 'color: {{VALUE}};',
@@ -423,10 +481,11 @@ class Micemade_Posts_Grid extends Widget_Base {
 			]
 		);
 		
+		// Excerpt text color
 		$this->add_control(
 			'excerpt_text_color',
 			[
-				'label' => __( 'Excerpt Text Color', 'elementor' ),
+				'label' => __( 'Excerpt Text Color', 'micemade-elements' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .post-text p' => 'color: {{VALUE}};',
@@ -436,18 +495,41 @@ class Micemade_Posts_Grid extends Widget_Base {
 			]
 		);
 		
-		// Title typohraphy
+		// Excerpt typohraphy
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
 				'name' => 'text_typography',
-				'label' => __( 'Excerpt typography', 'elementor' ),
+				'label' => __( 'Excerpt typography', 'micemade-elements' ),
 				'scheme' => Scheme_Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} .post-text p',
 				
 			]
 		);
-
+		
+		// Excerpt border
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name' => 'postgrid_excerpt_border',
+				'label' => __( 'Excerpt Border', 'micemade-elements' ),
+				'placeholder' => '1px',
+				'default' => '1px',
+				'selector' => '{{WRAPPER}} .post-text p',
+			]
+		);
+		// Excerpt padding
+		$this->add_responsive_control(
+			'postgrid_excerpt_padding',
+			[
+				'label' => esc_html__( 'Excerpt padding', 'micemade-elements' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'em', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .post-text p' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
 		
 		$this->end_controls_section();
 		
@@ -455,7 +537,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->start_controls_section(
 			'section_css_class',
 			[
-				'label' => __( '"Read more" button custom css', 'elementor' ),
+				'label' => __( '"Read more" button custom css', 'micemade-elements' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -476,7 +558,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->start_controls_section(
 			'section_ajax_load_more',
 			[
-				'label' => __( 'Ajax LOAD MORE settings', 'elementor' ),
+				'label' => __( 'Ajax LOAD MORE settings', 'micemade-elements' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -508,19 +590,19 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_responsive_control(
 			'loadmore_align',
 			[
-				'label' => __( '"LOAD MORE"  alignment', 'elementor' ),
+				'label' => __( '"LOAD MORE"  alignment', 'micemade-elements' ),
 				'type' => Controls_Manager::CHOOSE,
 				'options' => [
 					'left' => [
-						'title' => __( 'Left', 'elementor' ),
+						'title' => __( 'Left', 'micemade-elements' ),
 						'icon' => 'fa fa-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'elementor' ),
+						'title' => __( 'Center', 'micemade-elements' ),
 						'icon' => 'fa fa-align-center',
 					],
 					'right' => [
-						'title' => __( 'Right', 'elementor' ),
+						'title' => __( 'Right', 'micemade-elements' ),
 						'icon' => 'fa fa-align-right',
 					],
 				],
@@ -586,7 +668,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		wp_reset_postdata(); 
 		
 		if( $use_load_more ) {
-			echo '<div class="micemade-elements_more-posts-wrap"><a href="#" class="micemade-elements_more-posts more_posts button">'. __('Load More', 'micemade-elements') .'</a></div>';
+			echo '<div class="micemade-elements_more-posts-wrap"><a href="#" class="micemade-elements_more-posts more_posts button">'. __('Load more posts', 'micemade-elements') .'</a></div>';
 		}
 
 	}

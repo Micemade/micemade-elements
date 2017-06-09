@@ -76,7 +76,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_responsive_control(
 			'horiz_spacing',
 			[
-				'label' => __( 'Categories horizontal spacing', 'elementor' ),
+				'label' => __( 'Categories horizontal spacing', 'micemade-elements' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => '',
@@ -99,7 +99,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_responsive_control(
 			'vert_spacing',
 			[
-				'label' => __( 'Categories bottom spacing', 'elementor' ),
+				'label' => __( 'Categories bottom spacing', 'micemade-elements' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => '20',
@@ -172,7 +172,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->start_controls_section(
 			'section_style',
 			[
-				'label' => esc_html__( 'Micemade WC Categories', 'elementor' ),
+				'label' => esc_html__( 'Micemade WC Categories', 'micemade-elements' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -181,7 +181,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_responsive_control(
 			'categories_height',
 			[
-				'label' => __( 'Categories height', 'elementor' ),
+				'label' => __( 'Categories height', 'micemade-elements' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => '',
@@ -205,14 +205,14 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->start_controls_tab(
 			'tab_button_normal',
 			[
-				'label' => __( 'Normal', 'elementor' ),
+				'label' => __( 'Normal', 'micemade-elements' ),
 			]
 		);
 
 		$this->add_control(
 			'title_text_color',
 			[
-				'label' => __( 'Title Color', 'elementor' ),
+				'label' => __( 'Title Color', 'micemade-elements' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
@@ -224,7 +224,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'background_color',
 			[
-				'label' => __( 'Category overlay color', 'elementor' ),
+				'label' => __( 'Category overlay color', 'micemade-elements' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .category__overlay' => 'background-color: {{VALUE}};',
@@ -239,14 +239,14 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->start_controls_tab(
 			'tab_title_hover',
 			[
-				'label' => __( 'Hover', 'elementor' ),
+				'label' => __( 'Hover', 'micemade-elements' ),
 			]
 		);
 
 		$this->add_control(
 			'title_hover_color',
 			[
-				'label' => __( 'Title Color on Hover', 'elementor' ),
+				'label' => __( 'Title Color on Hover', 'micemade-elements' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .category:hover' => 'color: {{VALUE}};',
@@ -257,7 +257,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'background_color_hover',
 			[
-				'label'		=> __( 'Category overlay color on hover', 'elementor' ),
+				'label'		=> __( 'Category overlay color on hover', 'micemade-elements' ),
 				'type'		=> Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .category:hover .category__overlay' => 'background-color: {{VALUE}};',
@@ -271,19 +271,19 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_responsive_control(
 			'post_text_align',
 			[
-				'label' => __( 'Categories alignment', 'elementor' ),
+				'label' => __( 'Categories alignment', 'micemade-elements' ),
 				'type' => Controls_Manager::CHOOSE,
 				'options' => [
 					'left' => [
-						'title' => __( 'Left', 'elementor' ),
+						'title' => __( 'Left', 'micemade-elements' ),
 						'icon' => 'fa fa-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'elementor' ),
+						'title' => __( 'Center', 'micemade-elements' ),
 						'icon' => 'fa fa-align-center',
 					],
 					'right' => [
-						'title' => __( 'Right', 'elementor' ),
+						'title' => __( 'Right', 'micemade-elements' ),
 						'icon' => 'fa fa-align-right',
 					],
 				],
@@ -311,7 +311,7 @@ class Micemade_WC_Categories extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name' => 'title_typography',
-				'label' => __( 'Typography', 'elementor' ),
+				'label' => __( 'Typography', 'micemade-elements' ),
 				'scheme' => Scheme_Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} .category__title',
 			]
@@ -321,7 +321,7 @@ class Micemade_WC_Categories extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name' => 'border',
-				'label' => __( 'Border', 'elementor' ),
+				'label' => __( 'Border', 'micemade-elements' ),
 				'placeholder' => '1px',
 				'default' => '1px',
 				'selector' => '{{WRAPPER}} .category__inner-wrap',
@@ -332,7 +332,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'background_opacity',
 			[
-				'label' => __( 'Category overlay opacity', 'elementor' ),
+				'label' => __( 'Category overlay opacity', 'micemade-elements' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => 0.8,
@@ -356,7 +356,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'background_opacity_hover',
 			[
-				'label' => __( 'Category overlay opacity hover', 'elementor' ),
+				'label' => __( 'Category overlay opacity hover', 'micemade-elements' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => 1,

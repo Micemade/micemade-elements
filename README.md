@@ -60,6 +60,15 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 
 **Changelog**
 
+= 0.2.0 =
+* Added "MM Mega menu" custom post type for usage with Micemade themes ( MegaMenu with Elementor )
+* Added background, border and padding controls for Products slider and Posts grid titles and excerpt
+* Added vertical alignment for styles 3 & 4 in Products slider and Posts grid
+* corrected all the textdomains
+
+= 0.1.1 =
+* Added Color control for swiper pagination
+
 = 0.1.0 =
 * Added "Micemade WC Categories" element
 * Added "Micemade WC Products Slider" element
