@@ -40,61 +40,109 @@
 		
 	})( jQuery );
 	
+	/**
+	 *  SWIPER SLIDER
+	 */
+	
 	( function( $ ){
 			
-			window.micemade_elements_swiper = function() {
+		window.micemade_elements_swiper = function() {
+			
+			var swiperContainer = $( '.swiper-container' );
+			
+			swiperContainer.each( function() {
 				
-				var swiperContainer = $( '.swiper-container' );
+				var $_this		= $(this),
+					config		= $_this.find('.slider-config'),
+					pps			= config.data('pps'),
+					ppst		= config.data('ppst'),
+					ppsm		= config.data('ppsm'),
+					space		= config.data('space'),
+					pagin		= config.data('pagin'),
+					autoplay	= config.data('autoplay');
 				
-				swiperContainer.each( function() {
-					
-					var $_this		= $(this),
-						config		= $_this.find('.slider-config'),
-						pps			= config.data('pps'),
-						ppst		= config.data('ppst'),
-						ppsm		= config.data('ppsm'),
-						space		= config.data('space'),
-						pagin		= config.data('pagin'),
-						autoplay	= config.data('autoplay');
-					
-					
-					var swiper = new Swiper( $_this, {
-						pagination: '.swiper-pagination',
-						//effect: 'flip',
-						//paginationClickable: true,
-						slidesPerView: pps,
-						paginationClickable: true,
-						spaceBetween: space,
-						grabCursor: true,
-						pagination: '.swiper-pagination',
-						paginationType: pagin,
-						autoplay: autoplay,
-						autoplayDisableOnInteraction: true,
-						//centeredSlides: true,
-						//loop: true,
-						nextButton: '.swiper-button-next',
-						prevButton: '.swiper-button-prev',
-						breakpoints: {
-					
-							768: {
-								slidesPerView: ppst,
-								//spaceBetween: 30
-							},
-							480: {
-								slidesPerView: ppsm,
-								//spaceBetween: 20
-							},
+				var swiper = new Swiper( $_this, {
+					pagination: '.swiper-pagination',
+					//effect: 'flip',
+					//paginationClickable: true,
+					slidesPerView: pps,
+					paginationClickable: true,
+					spaceBetween: space,
+					grabCursor: true,
+					pagination: '.swiper-pagination',
+					paginationType: pagin,
+					autoplay: autoplay,
+					autoplayDisableOnInteraction: true,
+					//centeredSlides: true,
+					//loop: true,
+					nextButton: '.swiper-button-next',
+					prevButton: '.swiper-button-prev',
+					breakpoints: {
+				
+						768: {
+							slidesPerView: ppst,
+							//spaceBetween: 30
+						},
+						480: {
+							slidesPerView: ppsm,
+							//spaceBetween: 20
+						},
 
-						}
-					});	
-					
-				});
-			};
-					
-		})( jQuery );
+					}
+				});	
+				
+			});
+		};
+				
+	})( jQuery );
 	
 	$(document).ready(function() {
 	
+		var testMobile;
+		var isMobile = {
+			Android: function() {
+				return navigator.userAgent.match(/Android/i);
+			},
+			BlackBerry: function() {
+				return navigator.userAgent.match(/BlackBerry/i);
+			},
+			iOS: function() {
+				return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+			},
+			Opera: function() {
+				return navigator.userAgent.match(/Opera Mini/i);
+			},
+			Windows: function() {
+				return navigator.userAgent.match(/IEMobile/i);
+			},
+			any: function() {
+				return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+			}
+		};
+
+		/**
+		 *  Add class for mobile browsers
+		 */
+		if( isMobile.any() ) {
+			$('body').addClass( 'micemade-elements-is-mobile' );
+		}
+		
+		/**
+		 *  Parallax for all "parallax" sections/columns selectors
+		 */
+		var parallax = function() {
+			testMobile = isMobile.any();
+			if( testMobile == null ) {
+				$(".parallax").parallax("50%", 0.3);
+			}
+		};
+
+		// Dom Ready
+		$(function() {
+			parallax();
+		});
+			
+		
 		/**
 		 * AJAX LOADING POSTS
 		 *

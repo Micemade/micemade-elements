@@ -191,6 +191,15 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		);
 		
 		$this->add_control(
+			'buttons',
+			[
+				'label'		=> esc_html__( 'Show navigation buttons', 'micemade-elements' ),
+				'type'		=> Controls_Manager::CHECKBOX,
+				'default'	=> true,
+			]
+		);
+		
+		$this->add_control(
 			'autoplay',
 			[
 				'label'		=> __( 'Autoplay speed', 'micemade-elements' ),
@@ -732,6 +741,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$posts_per_slide_mob= ! empty( $settings['posts_per_slide_mob'] )	? (int)$settings['posts_per_slide_mob'] : 1;
 		$space				= ! empty( $settings['space'] )					? (int)$settings['space'] : 0;
 		$pagination			= ! empty( $settings['pagination'] )			? $settings['pagination'] : 'bullets';
+		$buttons			= ! empty( $settings['buttons'] )				? $settings['buttons'] : '';
 		$autoplay			= ! empty( $settings['autoplay'] )				? $settings['autoplay'] : 0;
 		$categories			= ! empty( $settings['categories'] )			? $settings['categories'] : array();
 		$filters			= ! empty( $settings['filters'] )				? $settings['filters'] : '';
@@ -752,14 +762,13 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$products	= get_posts( $args );
 		
 		if( ! empty( $products ) ) {
-			
+						
 			echo '<div class="micemade-elements_products_slider mme-row swiper-container '.esc_attr( $style ) .'">';
 			
 			echo '<input type="hidden" data-pps="'. $posts_per_slide .'" data-ppst="'. $posts_per_slide_tab .'" data-ppsm="'. $posts_per_slide_mob .'" data-space="'.$space.'" data-pagin="'. $pagination .'" data-autoplay="'. $autoplay .'" class="slider-config">';
 			
 			
 			echo '<div class="swiper-wrapper">';
-						
 			
 			foreach ( $products as $post ) {
 				
@@ -775,8 +784,9 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 				echo '<div class="swiper-pagination"></div>';
 			}
 			
-			echo '<div class="swiper-button-next"></div><div class="swiper-button-prev"></div>';
-			
+			if( $buttons ) {
+				echo '<div class="swiper-button-next"></div><div class="swiper-button-prev"></div>';
+			}
 			echo '</div>';
 		}
 		

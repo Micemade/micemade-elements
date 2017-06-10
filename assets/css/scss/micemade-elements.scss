@@ -163,7 +163,6 @@
 				
 				.meta {
 					font-size: 11px;
-					margin-bottom: 10px;
 					padding: 0 0 10px;
 					
 					> span {
@@ -301,12 +300,39 @@
 		
 		
 		.swiper-button-next {
-			.elementor & { right: 20px }
+			.elementor & { 
+				right: 20px;
+				transform: none;
+			}
 		}
 		
 		.swiper-button-prev {
-			.elementor & { left: 20px }
+			.elementor & {
+				left: 20px;
+				transform: none;
+			}
 		}
+		
+		.swiper-button-next:before, .swiper-button-prev:before {
+			.elementor & {
+				opacity: 0;
+				transition: opacity 0.3s linear;
+				.micemade-elements-is-mobile & {
+					opacity: 1;
+				}
+			}
+		}
+		
+		&:hover {
+			.swiper-button-next:before, .swiper-button-prev:before {
+				.elementor & {
+					opacity: 1;
+				}
+			}
+		}
+		
+		
+		
 		
 		@extend %clear;	
 	
