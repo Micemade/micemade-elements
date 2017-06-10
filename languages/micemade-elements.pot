@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/index\n"
-"POT-Creation-Date: 2017-06-10 18:16:09+00:00\n"
+"POT-Creation-Date: 2017-06-10 18:31:04+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -41,62 +41,62 @@ msgid_plural "%s products"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/wc-functions.php:120 widgets/micemade-wc-products-slider.php:563
+#: includes/wc-functions.php:120 widgets/micemade-wc-products-slider.php:578
 msgid "Product details"
 msgstr ""
 
-#: micemade-elements.php:243
+#: micemade-elements.php:245
 msgid "Loading posts ..."
 msgstr ""
 
-#: micemade-elements.php:244
+#: micemade-elements.php:246
 msgid "No more posts found"
 msgstr ""
 
-#: micemade-elements.php:245 widgets/micemade-posts-grid.php:671
+#: micemade-elements.php:247 widgets/micemade-posts-grid.php:671
 msgid "Load more posts"
 msgstr ""
 
-#: micemade-elements.php:257
+#: micemade-elements.php:259
 msgid ""
 "Micemade elements is not effective without \"Elementor\" plugin activated. "
 "Either install and activate  \"Elementor\" plugin or deactivate Micemade "
 "elements. "
 msgstr ""
 
-#: micemade-elements.php:270
+#: micemade-elements.php:272
 msgid "Mega Menus"
 msgstr ""
 
-#: micemade-elements.php:271
+#: micemade-elements.php:273
 msgid "Mega Menu"
 msgstr ""
 
-#: micemade-elements.php:272 micemade-elements.php:275
+#: micemade-elements.php:274 micemade-elements.php:277
 msgid "New Mega Menu"
 msgstr ""
 
-#: micemade-elements.php:273
+#: micemade-elements.php:275
 msgid "Add New Mega Menu"
 msgstr ""
 
-#: micemade-elements.php:274
+#: micemade-elements.php:276
 msgid "Edit Mega Menu"
 msgstr ""
 
-#: micemade-elements.php:276
+#: micemade-elements.php:278
 msgid "View Mega Menu"
 msgstr ""
 
-#: micemade-elements.php:277
+#: micemade-elements.php:279
 msgid "Search Mega Menus"
 msgstr ""
 
-#: micemade-elements.php:278
+#: micemade-elements.php:280
 msgid "No Mega Menus Found"
 msgstr ""
 
-#: micemade-elements.php:279
+#: micemade-elements.php:281
 msgid "No Mega Menus found in Trash"
 msgstr ""
 
@@ -192,22 +192,22 @@ msgid "Post base style"
 msgstr ""
 
 #: widgets/micemade-posts-grid.php:133 widgets/micemade-wc-categories.php:131
-#: widgets/micemade-wc-products-slider.php:232
+#: widgets/micemade-wc-products-slider.php:247
 msgid "Style one"
 msgstr ""
 
 #: widgets/micemade-posts-grid.php:134 widgets/micemade-wc-categories.php:132
-#: widgets/micemade-wc-products-slider.php:233
+#: widgets/micemade-wc-products-slider.php:248
 msgid "Style two"
 msgstr ""
 
 #: widgets/micemade-posts-grid.php:135 widgets/micemade-wc-categories.php:133
-#: widgets/micemade-wc-products-slider.php:234
+#: widgets/micemade-wc-products-slider.php:249
 msgid "Style three"
 msgstr ""
 
 #: widgets/micemade-posts-grid.php:136 widgets/micemade-wc-categories.php:134
-#: widgets/micemade-wc-products-slider.php:235
+#: widgets/micemade-wc-products-slider.php:250
 msgid "Style four"
 msgstr ""
 
@@ -244,17 +244,17 @@ msgid "Vertical Align Post Text"
 msgstr ""
 
 #: widgets/micemade-posts-grid.php:258
-#: widgets/micemade-wc-products-slider.php:375
+#: widgets/micemade-wc-products-slider.php:390
 msgid "Top"
 msgstr ""
 
 #: widgets/micemade-posts-grid.php:259
-#: widgets/micemade-wc-products-slider.php:376
+#: widgets/micemade-wc-products-slider.php:391
 msgid "Middle"
 msgstr ""
 
 #: widgets/micemade-posts-grid.php:260
-#: widgets/micemade-wc-products-slider.php:377
+#: widgets/micemade-wc-products-slider.php:392
 msgid "Bottom"
 msgstr ""
 
@@ -268,19 +268,19 @@ msgstr ""
 
 #: widgets/micemade-posts-grid.php:292 widgets/micemade-posts-grid.php:597
 #: widgets/micemade-wc-categories.php:278
-#: widgets/micemade-wc-products-slider.php:408
+#: widgets/micemade-wc-products-slider.php:423
 msgid "Left"
 msgstr ""
 
 #: widgets/micemade-posts-grid.php:296 widgets/micemade-posts-grid.php:601
 #: widgets/micemade-wc-categories.php:282
-#: widgets/micemade-wc-products-slider.php:412
+#: widgets/micemade-wc-products-slider.php:427
 msgid "Center"
 msgstr ""
 
 #: widgets/micemade-posts-grid.php:300 widgets/micemade-posts-grid.php:605
 #: widgets/micemade-wc-categories.php:286
-#: widgets/micemade-wc-products-slider.php:416
+#: widgets/micemade-wc-products-slider.php:431
 msgid "Right"
 msgstr ""
 
@@ -289,52 +289,52 @@ msgid "Border"
 msgstr ""
 
 #: widgets/micemade-posts-grid.php:331
-#: widgets/micemade-wc-products-slider.php:445
+#: widgets/micemade-wc-products-slider.php:460
 msgid "Title"
 msgstr ""
 
 #: widgets/micemade-posts-grid.php:342 widgets/micemade-wc-categories.php:208
-#: widgets/micemade-wc-products-slider.php:456
+#: widgets/micemade-wc-products-slider.php:471
 msgid "Normal"
 msgstr ""
 
 #: widgets/micemade-posts-grid.php:349 widgets/micemade-wc-categories.php:215
-#: widgets/micemade-wc-products-slider.php:463
+#: widgets/micemade-wc-products-slider.php:478
 msgid "Title Color"
 msgstr ""
 
 #: widgets/micemade-posts-grid.php:361
-#: widgets/micemade-wc-products-slider.php:474
+#: widgets/micemade-wc-products-slider.php:489
 msgid "Title Back Color"
 msgstr ""
 
 #: widgets/micemade-posts-grid.php:375 widgets/micemade-wc-categories.php:242
-#: widgets/micemade-wc-products-slider.php:489
+#: widgets/micemade-wc-products-slider.php:504
 msgid "Hover"
 msgstr ""
 
 #: widgets/micemade-posts-grid.php:382 widgets/micemade-wc-categories.php:249
-#: widgets/micemade-wc-products-slider.php:496
+#: widgets/micemade-wc-products-slider.php:511
 msgid "Title Color on Hover"
 msgstr ""
 
 #: widgets/micemade-posts-grid.php:393
-#: widgets/micemade-wc-products-slider.php:507
+#: widgets/micemade-wc-products-slider.php:522
 msgid "Title Back Color on Hover"
 msgstr ""
 
 #: widgets/micemade-posts-grid.php:410
-#: widgets/micemade-wc-products-slider.php:526
+#: widgets/micemade-wc-products-slider.php:541
 msgid "Title Border"
 msgstr ""
 
 #: widgets/micemade-posts-grid.php:420
-#: widgets/micemade-wc-products-slider.php:536
+#: widgets/micemade-wc-products-slider.php:551
 msgid "Title padding"
 msgstr ""
 
 #: widgets/micemade-posts-grid.php:434 widgets/micemade-wc-categories.php:314
-#: widgets/micemade-wc-products-slider.php:550
+#: widgets/micemade-wc-products-slider.php:565
 msgid "Typography"
 msgstr ""
 
@@ -472,7 +472,7 @@ msgid "Micemade WC products slider"
 msgstr ""
 
 #: widgets/micemade-wc-products-slider.php:28
-#: widgets/micemade-wc-products-slider.php:220
+#: widgets/micemade-wc-products-slider.php:235
 msgid "Micemade products slider"
 msgstr ""
 
@@ -572,129 +572,133 @@ msgstr ""
 msgid "Pagination color"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:196
+#: widgets/micemade-wc-products-slider.php:197
 msgid "Show navigation buttons"
 msgstr ""
 
 #: widgets/micemade-wc-products-slider.php:205
+msgid "Navigation buttons color"
+msgstr ""
+
+#: widgets/micemade-wc-products-slider.php:220
 msgid "Autoplay speed"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:210
+#: widgets/micemade-wc-products-slider.php:225
 msgid "Leave 0 (zero) do discard autoplay"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:228
+#: widgets/micemade-wc-products-slider.php:243
 msgid "Product base style"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:243
+#: widgets/micemade-wc-products-slider.php:258
 msgid "Product image format"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:253
+#: widgets/micemade-wc-products-slider.php:268
 msgid "Show price"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:262
+#: widgets/micemade-wc-products-slider.php:277
 msgid "Show \"Add to cart\""
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:271
+#: widgets/micemade-wc-products-slider.php:286
 msgid "Show product short description"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:280
+#: widgets/micemade-wc-products-slider.php:295
 msgid "Show \"posted in categories\""
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:289
+#: widgets/micemade-wc-products-slider.php:304
 #: widgets/micemade-wc-single-product.php:171
 msgid "Product info background"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:300
+#: widgets/micemade-wc-products-slider.php:315
 msgid "Product info background opacity"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:324
+#: widgets/micemade-wc-products-slider.php:339
 msgid "Product info background opacity hover"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:348
+#: widgets/micemade-wc-products-slider.php:363
 msgid "Product height"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:372
+#: widgets/micemade-wc-products-slider.php:387
 msgid "Vertical Align Product Info"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:392
+#: widgets/micemade-wc-products-slider.php:407
 #: widgets/micemade-wc-single-product.php:82
 msgid "Product info padding"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:404
+#: widgets/micemade-wc-products-slider.php:419
 msgid "Product info alignment"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:431
+#: widgets/micemade-wc-products-slider.php:446
 msgid "Product border"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:571
+#: widgets/micemade-wc-products-slider.php:586
 msgid "Categories Text Color"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:582
+#: widgets/micemade-wc-products-slider.php:597
 msgid "Categories font size (%)"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:603
+#: widgets/micemade-wc-products-slider.php:618
 msgid "Short description  options"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:612
+#: widgets/micemade-wc-products-slider.php:627
 msgid "Short description text Color"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:627
+#: widgets/micemade-wc-products-slider.php:642
 msgid "Short description typography"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:638
+#: widgets/micemade-wc-products-slider.php:653
 msgid "Price  options"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:647
+#: widgets/micemade-wc-products-slider.php:662
 msgid "Price text Color"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:658
+#: widgets/micemade-wc-products-slider.php:673
 msgid "Price font size (%)"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:679
+#: widgets/micemade-wc-products-slider.php:694
 msgid "Border and padding"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:689
+#: widgets/micemade-wc-products-slider.php:704
 msgid "Product details Border"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:699
+#: widgets/micemade-wc-products-slider.php:714
 msgid "Product details padding"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:711
+#: widgets/micemade-wc-products-slider.php:726
 msgid "\"Product details\" link"
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:720
+#: widgets/micemade-wc-products-slider.php:735
 msgid "CSS for \"Product details\""
 msgstr ""
 
-#: widgets/micemade-wc-products-slider.php:723
+#: widgets/micemade-wc-products-slider.php:738
 msgid ""
 "Style the \"Product details\" with css class(es) defined in your theme, "
 "plugin or customizer"

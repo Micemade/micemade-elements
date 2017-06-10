@@ -158,7 +158,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 				'step' => 10,
 			]
 		);
-
+		// Pagination
 		$this->add_control(
 			'pagination',
 			[
@@ -190,6 +190,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 			]
 		);
 		
+		// Slider navigation
 		$this->add_control(
 			'buttons',
 			[
@@ -198,7 +199,21 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 				'default'	=> true,
 			]
 		);
-		
+		$this->add_control(
+			'buttons_color',
+			[
+				'label' => __( 'Navigation buttons color', 'micemade-elements' ),
+				'type' => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .swiper-button-next:before' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .swiper-button-prev:before' => 'color: {{VALUE}};',
+				],
+				'condition' => [
+					'buttons!' => '',
+				],
+			]
+		);
+		// Autoplay
 		$this->add_control(
 			'autoplay',
 			[

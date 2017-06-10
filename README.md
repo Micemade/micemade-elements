@@ -59,6 +59,10 @@ Our tests indicate that the widgets work well with most themes that are well cod
 Time will tell. When we estimate plugin has enough added functionalities to Elementor, or some other reason, it will be available on wp.org. So far, install it from GitHub (Download zip or clone the repository) .
 
 **Changelog**
+= 0.2.2 =
+* Fixed GitHub updater
+* Added color control for Products slider navigaton buttons
+
 = 0.2.1 =
 * Added parallax script ( use by adding "parallax" selector in Edit Section/Column > Advanced > CSS Classes)
 * Fixed left/right swiper slider position
