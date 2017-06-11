@@ -59,6 +59,9 @@ Our tests indicate that the widgets work well with most themes that are well cod
 Time will tell. When we estimate plugin has enough added functionalities to Elementor, or some other reason, it will be available on wp.org. So far, install it from GitHub (Download zip or clone the repository) .
 
 **Changelog**
+= 0.2.3 =
+* Added automatic enabling of MM Mega Menu CPT for Micemade themes.
+
 = 0.2.2 =
 * Fixed GitHub updater
 * Added color control for Products slider navigaton buttons

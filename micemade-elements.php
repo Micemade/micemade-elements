@@ -3,7 +3,7 @@
  * Plugin Name: Micemade Elements
  * Description: Addon plugin with custom elements for Elementor, created by Micemade. Elementor plugin required.
  * Plugin URI: https://github.com/Micemade/micemade-elements/
- * Version: 0.2.2
+ * Version: 0.2.3
  * Author: micemade
  * Author URI: http://micemade.com
  * Text Domain: micemade-elements
@@ -146,13 +146,13 @@ class Micemade_Elements {
 							
 						} // end foreach
 						
-					}
+					} // end if( method_exists ...
 					
-				}
+				} // end if ( isset( $theElementor ...
 				
-			}
+			} // end if ( is_callable( 'Elementor\Plugin' ...
 			
-		}
+		} //if ( class_exists( 'Elementor\Plugin' ) )
 		
 	}
 	
@@ -295,6 +295,14 @@ class Micemade_Elements {
 			);
 			
 			register_post_type( 'MM Mega menu', $args );
+			
+			// Automatically activate Elementor support for MM Mega menu CPT (always active)
+			$elementor_cpt_support = get_option( 'elementor_cpt_support', [ 'page', 'post' ] );
+			if( ! in_array( 'mmmegamenu', $elementor_cpt_support ) ) {
+				$elementor_cpt_support[] = 'mmmegamenu';
+				update_option( 'elementor_cpt_support',$elementor_cpt_support );
+			}
+			
 		}
 		
 		return false;
