@@ -195,8 +195,10 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 			'buttons',
 			[
 				'label'		=> esc_html__( 'Show navigation buttons', 'micemade-elements' ),
-				'type'		=> Controls_Manager::CHECKBOX,
-				'default'	=> true,
+				'type' => Controls_Manager::SWITCHER,
+				'label_off' => __( 'No', 'elementor' ),
+				'label_on' => __( 'Yes', 'elementor' ),
+				'default' => 'yes',
 			]
 		);
 		$this->add_control(
@@ -266,8 +268,10 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 			'price',
 			[
 				'label'		=> esc_html__( 'Show price', 'micemade-elements' ),
-				'type'		=> Controls_Manager::CHECKBOX,
-				'default'	=> true,
+				'type' => Controls_Manager::SWITCHER,
+				'label_off' => __( 'No', 'elementor' ),
+				'label_on' => __( 'Yes', 'elementor' ),
+				'default' => 'yes',
 			]
 		);
 		
@@ -275,8 +279,10 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 			'add_to_cart',
 			[
 				'label'		=> esc_html__( 'Show "Add to cart"', 'micemade-elements' ),
-				'type'		=> Controls_Manager::CHECKBOX,
-				'default'	=> true,
+				'type' => Controls_Manager::SWITCHER,
+				'label_off' => __( 'No', 'elementor' ),
+				'label_on' => __( 'Yes', 'elementor' ),
+				'default' => 'yes',
 			]
 		);
 		
@@ -284,17 +290,21 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 			'short_desc',
 			[
 				'label'		=> esc_html__( 'Show product short description', 'micemade-elements' ),
-				'type'		=> Controls_Manager::CHECKBOX,
-				'default'	=> false,
+				'type' => Controls_Manager::SWITCHER,
+				'label_off' => __( 'No', 'elementor' ),
+				'label_on' => __( 'Yes', 'elementor' ),
+				//'default' => 'yes',
 			]
 		);
 		
 		$this->add_control(
 			'posted_in',
 			[
-				'label'		=> esc_html__( 'Show "posted in categories"', 'micemade-elements' ),
-				'type'		=> Controls_Manager::CHECKBOX,
-				'default'	=> true,
+				'label'		=> esc_html__( 'Show product categories (posted in)', 'micemade-elements' ),
+				'type' => Controls_Manager::SWITCHER,
+				'label_off' => __( 'No', 'elementor' ),
+				'label_on' => __( 'Yes', 'elementor' ),
+				'default' => 'yes',
 			]
 		);
 		

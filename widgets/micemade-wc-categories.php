@@ -140,8 +140,10 @@ class Micemade_WC_Categories extends Widget_Base {
 			'image',
 			[
 				'label'		=> esc_html__( 'Show category image', 'micemade-elements' ),
-				'type'		=> Controls_Manager::CHECKBOX,
-				'default'	=> true,
+				'type' => Controls_Manager::SWITCHER,
+				'label_off' => __( 'No', 'elementor' ),
+				'label_on' => __( 'Yes', 'elementor' ),
+				'default' => 'yes',
 			]
 		);
 		
@@ -162,8 +164,10 @@ class Micemade_WC_Categories extends Widget_Base {
 			'prod_count',
 			[
 				'label'		=> esc_html__( 'Show products count', 'micemade-elements' ),
-				'type'		=> Controls_Manager::CHECKBOX,
-				'default'	=> true,
+				'type' => Controls_Manager::SWITCHER,
+				'label_off' => __( 'No', 'elementor' ),
+				'label_on' => __( 'Yes', 'elementor' ),
+				'default' => 'yes',
 			]
 		);
 		$this->end_controls_section();

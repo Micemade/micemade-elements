@@ -106,9 +106,11 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_control(
 			'sticky',
 			[
-				'label'		=> esc_html__( 'Only sticky posts', 'micemade-elements' ),
-				'type'		=> Controls_Manager::CHECKBOX,
-				'default'	=> false,
+				'label'		=> esc_html__( 'Show only sticky posts', 'micemade-elements' ),
+				'type' => Controls_Manager::SWITCHER,
+				'label_off' => __( 'No', 'elementor' ),
+				'label_on' => __( 'Yes', 'elementor' ),
+				//'default' => 'yes',
 			]
 		);
 		
@@ -152,8 +154,10 @@ class Micemade_Posts_Grid extends Widget_Base {
 			'excerpt',
 			[
 				'label'		=> esc_html__( 'Show excerpt', 'micemade-elements' ),
-				'type'		=> Controls_Manager::CHECKBOX,
-				'default'	=> true,
+				'type' => Controls_Manager::SWITCHER,
+				'label_off' => __( 'No', 'elementor' ),
+				'label_on' => __( 'Yes', 'elementor' ),
+				'default' => 'yes',
 			]
 		);
 		
@@ -161,8 +165,10 @@ class Micemade_Posts_Grid extends Widget_Base {
 			'meta',
 			[
 				'label'		=> esc_html__( 'Show post meta', 'micemade-elements' ),
-				'type'		=> Controls_Manager::CHECKBOX,
-				'default'	=> true,
+				'type' => Controls_Manager::SWITCHER,
+				'label_off' => __( 'No', 'elementor' ),
+				'label_on' => __( 'Yes', 'elementor' ),
+				'default' => 'yes',
 			]
 		);
 		
@@ -567,8 +573,10 @@ class Micemade_Posts_Grid extends Widget_Base {
 			'use_load_more',
 			[
 				'label'		=> esc_html__( 'Use load more', 'micemade-elements' ),
-				'type'		=> Controls_Manager::CHECKBOX,
-				'default'	=> true,
+				'type' => Controls_Manager::SWITCHER,
+				'label_off' => __( 'No', 'elementor' ),
+				'label_on' => __( 'Yes', 'elementor' ),
+				'default' => 'yes',
 			]
 		);
 		

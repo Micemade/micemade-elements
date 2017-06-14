@@ -331,10 +331,6 @@
 			}
 		}
 		
-		
-		
-		
-		@extend %clear;	
 	
 	} // posts grid element
 	
@@ -506,6 +502,24 @@
 	
 }
 
+.micemade-elements-is-mobile {
+	.elementor-section {
+		
+		background:{
+			attachment: scroll;
+			position: center center;
+			size: 100%;
+		}
+		-webkit-background:{
+			attachment: scroll;
+			position: center center;
+			size: 100%;
+		}
+	}
+}
+
+
+// Editor fix
 .elementor-editor-active .elementor.elementor-edit-mode .elementor-editor-widget-settings {
 	z-index:10 !important;
 }
