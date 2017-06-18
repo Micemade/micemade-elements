@@ -138,17 +138,18 @@ class Micemade_WC_Single_Product extends Widget_Base {
 			[
 				'label' => esc_html__( 'Image height', 'micemade-elements' ),
 				'type' => Controls_Manager::SLIDER,
-				'selectors' => [
-					'{{WRAPPER}} .product-thumb' => 'height: {{SIZE}}{{UNIT}} !important;',
-				],
 				'default' => [
-					'unit' => 'em',
+					'size' => '',
 				],
 				'range' => [
-					'em' => [
+					'px' => [
 						'min' => 0,
-						'max' => 100,
+						'max' => 1000,
+						'step'=> 10
 					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .product-thumb' => 'height: {{SIZE}}{{UNIT}} !important;',
 				],
 			]
 		);
@@ -177,7 +178,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		);
 		
 		
-		/*
+		
 		$this->add_responsive_control(
 			'align',
 			[
@@ -197,13 +198,14 @@ class Micemade_WC_Single_Product extends Widget_Base {
 						'icon' => 'fa fa-align-right',
 					],
 				],
-				'default' => 'center',
-				'selectors' => [
-					'{{WRAPPER}}' => 'text-align: {{VALUE}};',
-				],
+				'default' => 'left',
+				/* 'selectors' => [
+					'{{WRAPPER}} .entry-summary' => 'text-align: {{VALUE}};',
+					'{{WRAPPER}} .entry-summary form.cart' => ( '{{VALUE}}' == 'center' ) ? 'float:none' : 'float:{{VALUE}};',
+				], */
 			]
 		);
-		 */
+		
 	
 		$this->end_controls_section();
 		
@@ -216,6 +218,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		// get our input from the widget settings.
 		$settings			= $this->get_settings();
 		
+		$this->add_render_attribute( 'summary', 'class', $settings['align'] . ' summary entry-summary' );
 		
 		$post_name		= ! empty( $settings['post_name'] )		? $settings['post_name'] : '';
 		$layout			= ! empty( $settings['layout'] )		? $settings['layout'] : 'images_left';
@@ -267,7 +270,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 				
 				<?php remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_meta' , 40 ); ?>
 				
-				<div class="summary entry-summary">
+				<div <?php echo $this->get_render_attribute_string( 'summary' ); ?>>
 
 					<div class="thumb-summary-link fa fa-angle-left"></div>
 					
