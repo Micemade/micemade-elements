@@ -263,7 +263,7 @@ class Micemade_Elements {
 	
 	public function mega_menu_post_type() {
 		
-		$micemade_themes	= array( 'adorn', 'cloth'); // list of Micemade themes compatible with MM Mega menu CPT
+		$micemade_themes	= array( 'natura', 'adorn', 'cloth'); // list of Micemade themes compatible with MM Mega menu CPT
 		$active_theme		= get_option( 'template' );
 
 		if( in_array( $active_theme, $micemade_themes ) ) {
