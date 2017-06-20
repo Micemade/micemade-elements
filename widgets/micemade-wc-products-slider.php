@@ -263,7 +263,14 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 				'options' => apply_filters('micemade_elements_image_sizes','')
 			]
 		);
-		
+		$this->add_control(
+			'product_info_elements',
+			[
+				'label' => __( 'Product info visibility', 'micemade-elements' ),
+				'type' => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
 		$this->add_control(
 			'price',
 			[
@@ -309,63 +316,59 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		);
 		
 		$this->add_control(
+			'product_info_box',
+			[
+				'label' => __( 'Product info box styling', 'micemade-elements' ),
+				'type' => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+		
+		$this->start_controls_tabs( 'tabs_product_background' );
+		$this->start_controls_tab(
+			'tab_product_background_normal',
+			[
+				'label' => __( 'Normal', 'micemade-elements' ),
+			]
+		);
+		
+		$this->add_control(
 			'post_info_background_color',
 			[
 				'label' => __( 'Product info background', 'micemade-elements' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .inner-wrap, {{WRAPPER}} .post-overlay' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .inner-wrap' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .post-overlay' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
-		
-		$this->add_control(
-			'post_info_background_opacity',
+		$this->end_controls_tab();
+		// HOVER
+		$this->start_controls_tab(
+			'tab_product_background_hover',
 			[
-				'label' => __( 'Product info background opacity', 'micemade-elements' ),
-				'type' => Controls_Manager::SLIDER,
-				'default' => [
-					'size' => 0.8,
-				],
-				'range' => [
-					'px' => [
-						'max' => 1,
-						'min' => 0.10,
-						'step' => 0.01,
-					],
-				],
+				'label' => __( 'Hover', 'micemade-elements' ),
+			]
+		);
+		$this->add_control(
+			'post_info_background_color_hover',
+			[
+				'label' => __( 'Hover product info background', 'micemade-elements' ),
+				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .post-overlay' => 'opacity: {{SIZE}};',
+					'{{WRAPPER}} .inner-wrap:hover'=> 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .inner-wrap:hover .post-overlay' => 'background-color: {{VALUE}};',
 				],
-				'condition' => [
+				/* 'condition' => [
 					'style' => ['style_3','style_4'],
-				],
+				], */
 			]
 		);
+		$this->end_controls_tab();
+		$this->end_controls_tabs();
 		
-		$this->add_control(
-			'post_info_background_opacity_hover',
-			[
-				'label' => __( 'Product info background opacity hover', 'micemade-elements' ),
-				'type' => Controls_Manager::SLIDER,
-				'default' => [
-					'size' => 1,
-				],
-				'range' => [
-					'px' => [
-						'max' => 1,
-						'min' => 0.10,
-						'step' => 0.01,
-					],
-				],
-				'selectors' => [
-					'{{WRAPPER}} .inner-wrap:hover .post-overlay' => 'opacity: {{SIZE}};',
-				],
-				'condition' => [
-					'style' => ['style_3','style_4']
-				],
-			]
-		);
+		
 		
 		$this->add_responsive_control(
 			'product_text_height',

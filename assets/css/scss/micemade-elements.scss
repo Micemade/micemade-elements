@@ -173,6 +173,10 @@
 				max-width: 100%;				
 			}
 			
+			.inner-wrap, .post-overlay {
+				transition: background-color 0.3s linear;
+			}
+			
 			.post-thumb {
 			
 				overflow: hidden;
@@ -283,7 +287,6 @@
 				.post-overlay {
 					z-index:1;
 					background: rgba( #fff, 0.85);
-					transition: opacity 0.3s linear;
 				}
 				.post-text {
 					position: relative;
