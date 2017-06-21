@@ -18,7 +18,6 @@
 			margin: 0;
 			display: flex;
 			align-items: center;
-			align-items: stretch;
 
 			// Main elements genreal styles
 			.product-thumb {
@@ -35,31 +34,44 @@
 				z-index: 0;
 				position: relative;
 				padding: 3em;
+				
 				form.cart {
 					float: none;
 					> * {
 						float: none !important;
 						display: inline-block;
 						vertical-align: top;
-						margin-top: 10px !important;
+						margin-top: 20px !important;
+						
 					}
+					table.variations { 
+						display: table;
+						table-layout: auto;
+						
+						@include breakpoint(tablet-down) {
+							td.label {
+								padding: 10px;
+							}
+							label, select {
+								font-size: 12px;
+							}						
+						}
+						
+					}
+					.single_variation_wrap .single_variation {
+						margin-top: 0;
+					}
+					
+					input, button {
+						font-size: 12px;
+					}
+					
 				}
+				
 				.yith-wcwl-add-to-wishlist > * {
 					&.show { display: inline-block !important; };
 					float: none !important;
 				}
-				&.left {
-					text-align: left;
-				}
-				
-				&.right {
-					text-align: right;
-				}
-
-				&.center {
-					text-align: center;
-				}
-
 				
 				.woocommerce-product-rating { position: absolute; top: 20px; }
 			}

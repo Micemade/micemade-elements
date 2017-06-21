@@ -66,95 +66,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		);
 		
 		
-		$this->add_control(
-			'heading_content',
-			[
-				'label' => __( 'Additional layout options', 'micemade-elements' ),
-				'type' => Controls_Manager::HEADING,
-				'separator' => 'before',
-			]
-		);
-		
-		
-		$this->add_responsive_control(
-			'padding',
-			[
-				'label' => esc_html__( 'Product info padding', 'micemade-elements' ),
-				'type' => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', 'em', '%' ],
-				'selectors' => [
-					'{{WRAPPER}} .entry-summary' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
-			]
-		);
-		
-		$this->add_responsive_control(
-			'summary_width',
-			[
-				'label' => esc_html__( 'Product info width (%)', 'micemade-elements' ),
-				'type' => Controls_Manager::SLIDER,
-				'selectors' => [
-					'{{WRAPPER}} .entry-summary' => 'width: {{SIZE}}{{UNIT}};',
-				],
-				'default' => [
-					'unit' => '%',
-				],
-				'range' => [
-					'em' => [
-						'min' => 0,
-						'max' => 100,
-					],
-				],
-				'condition' => [
-					'layout' => ['images_left', 'images_right'],
-				],
-			]
-		);
-		$this->add_responsive_control(
-			'thumb_width',
-			[
-				'label' => esc_html__( 'Image width (%)', 'micemade-elements' ),
-				'type' => Controls_Manager::SLIDER,
-				'selectors' => [
-					'{{WRAPPER}} .product-thumb' => 'width: {{SIZE}}{{UNIT}};',
-				],
-				'default' => [
-					'unit' => '%',
-				],
-				'range' => [
-					'em' => [
-						'min' => 0,
-						'max' => 100,
-					],
-				],
-				'condition' => [
-					'layout' => ['images_left', 'images_right'],
-				],
-			]
-		);
-		
-		$this->add_responsive_control(
-			'thumb_height',
-			[
-				'label' => esc_html__( 'Image height', 'micemade-elements' ),
-				'type' => Controls_Manager::SLIDER,
-				'default' => [
-					'size' => '',
-				],
-				'range' => [
-					'px' => [
-						'min' => 0,
-						'max' => 1000,
-						'step'=> 10
-					],
-				],
-				'selectors' => [
-					'{{WRAPPER}} .product-thumb' => 'height: {{SIZE}}{{UNIT}} !important;',
-				],
-			]
-		);
 
-		
 		$this->end_controls_section();
 		
 		
@@ -199,13 +111,90 @@ class Micemade_WC_Single_Product extends Widget_Base {
 					],
 				],
 				'default' => 'left',
-				/* 'selectors' => [
+				'selectors' => [
 					'{{WRAPPER}} .entry-summary' => 'text-align: {{VALUE}};',
-					'{{WRAPPER}} .entry-summary form.cart' => ( '{{VALUE}}' == 'center' ) ? 'float:none' : 'float:{{VALUE}};',
+				],
+			]
+		);
+		
+		$this->add_control(
+			'heading_content',
+			[
+				'label' => __( 'Additional layout options', 'micemade-elements' ),
+				'type' => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+		
+		
+		$this->add_responsive_control(
+			'padding',
+			[
+				'label' => esc_html__( 'Product info padding', 'micemade-elements' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'em', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .entry-summary' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		
+		$this->add_responsive_control(
+			'summary_width',
+			[
+				'label' => __( 'Info width (%)', 'elementor' ),
+				'type' => Controls_Manager::NUMBER,
+				'default' => '',
+				'min' => 0,
+				'max' => 100,
+				'step' => 5,
+				'selectors' => [
+					'{{WRAPPER}} .entry-summary' => 'width: {{VALUE}}%;',
+				],
+				/* 'condition' => [
+					'layout' => ['images_left', 'images_right'],
 				], */
 			]
 		);
 		
+		
+		$this->add_responsive_control(
+			'thumb_width',
+			[
+				'label' => __( 'Image width (%)', 'elementor' ),
+				'type' => Controls_Manager::NUMBER,
+				'default' => '',
+				'min' => 0,
+				'max' => 100,
+				'step' => 5,
+				'selectors' => [
+					'{{WRAPPER}} .product-thumb' => 'width: {{VALUE}}%;',
+				],
+			]
+		);
+		
+		
+		$this->add_responsive_control(
+			'thumb_height',
+			[
+				'label' => esc_html__( 'Image height', 'micemade-elements' ),
+				'type' => Controls_Manager::SLIDER,
+				'default' => [
+					'size' => '',
+				],
+				'range' => [
+					'px' => [
+						'min' => 0,
+						'max' => 1000,
+						'step'=> 10
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .product-thumb' => 'height: {{SIZE}}{{UNIT}} !important;',
+				],
+			]
+		);
 	
 		$this->end_controls_section();
 		
