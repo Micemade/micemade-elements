@@ -60,6 +60,9 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 
 **Changelog**
 
+= 0.2.8 =
+* Repaced support for Adorn theme with support for Beautify theme
+
 = 0.2.7 =
 * Single product elements css and settings tweaks
 
