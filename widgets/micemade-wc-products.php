@@ -7,6 +7,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Micemade_WC_Products extends Widget_Base {
 
+	private $grid;
+	
 	public function get_name() {
 		return 'micemade-wc-products';
 	}
@@ -32,8 +34,8 @@ class Micemade_WC_Products extends Widget_Base {
 		$this->add_control(
 			'posts_per_page',
 			[
-				'label'		=> __( 'Number of products', 'micemade-elements' ),
-				'type'		=> Controls_Manager::TEXT,
+				'label'		=> __( 'Total products', 'micemade-elements' ),
+				'type'		=> Controls_Manager::NUMBER,
 				'default'	=> '6',
 				'title'		=> __( 'Enter total number of products to show', 'micemade-elements' ),
 			]
@@ -43,6 +45,22 @@ class Micemade_WC_Products extends Widget_Base {
 			'products_per_row',
 			[
 				'label' => __( 'Products per row', 'micemade-elements' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 3,
+				'options' => [
+					1 => __( 'One', 'micemade-elements' ),
+					2 => __( 'Two', 'micemade-elements' ),
+					3 => __( 'Three', 'micemade-elements' ),
+					4 => __( 'Four', 'micemade-elements' ),
+					6 => __( 'Six', 'micemade-elements' ),
+				]
+			]
+		);
+		
+		$this->add_control(
+			'products_per_row_mob',
+			[
+				'label' => __( 'Products per row (on mobiles)', 'micemade-elements' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => 3,
 				'options' => [
@@ -83,6 +101,54 @@ class Micemade_WC_Products extends Widget_Base {
 			]
 		);
 		
+		
+		$this->add_responsive_control(
+			'horiz_spacing',
+			[
+				'label' => __( 'Products horizontal spacing', 'micemade-elements' ),
+				'type' => Controls_Manager::SLIDER,
+				'default' => [
+					'size' => '',
+				],
+				'range' => [
+					'px' => [
+						'max' => 50,
+						'min' => 0,
+						'step' => 1,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} li.product' => 'padding-left:{{SIZE}}px;padding-right:{{SIZE}}px;',
+					'{{WRAPPER}} .mme-row' => 'margin-left:-{{SIZE}}px; margin-right:-{{SIZE}}px;',
+				],
+
+			]
+		);
+		
+		$this->add_responsive_control(
+			'vert_spacing',
+			[
+				'label' => __( 'Products bottom spacing', 'micemade-elements' ),
+				'type' => Controls_Manager::SLIDER,
+				'default' => [
+					'size' => '20',
+				],
+				'range' => [
+					'px' => [
+						'max' => 100,
+						'min' => 0,
+						'step' => 1,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} li.product' => 'margin-bottom:{{SIZE}}px;',
+					'{{WRAPPER}} .mme-row' => 'margin-bottom:-{{SIZE}}px;',
+				],
+
+			]
+		);
+		
+		
 		$this->end_controls_section();
 
 	}
@@ -92,15 +158,24 @@ class Micemade_WC_Products extends Widget_Base {
 		// get our input from the widget settings.
 		$settings		= $this->get_settings();
 		
-		$posts_per_page		= ! empty( $settings['posts_per_page'] )	? (int)$settings['posts_per_page'] : 6;
-		$products_per_row	= ! empty( $settings['products_per_row'] )	? (int)$settings['products_per_row'] : 3;
-		$categories			= ! empty( $settings['categories'] )		? $settings['categories'] : array();
-		$filters			= ! empty( $settings['filters'] )			? $settings['filters'] : 'latest';
+		$posts_per_page			= ! empty( $settings['posts_per_page'] )		? (int)$settings['posts_per_page'] : 6;
+		$products_per_row		= ! empty( $settings['products_per_row'] )		? (int)$settings['products_per_row'] : 3;
+		$products_per_row_mob	= ! empty( $settings['products_per_row_mob'] )	? (int)$settings['products_per_row_mob'] : 2;
+		$categories				= ! empty( $settings['categories'] )			? $settings['categories'] : array();
+		$filters				= ! empty( $settings['filters'] )				? $settings['filters'] : 'latest';
 		
 		global $post, $woocommerce_loop;
 		
-		$woocommerce_loop['columns'] = $products_per_row;
+		//$woocommerce_loop['columns'] = $products_per_row;
 		
+		$this->grid = micemade_elements_grid_class( intval( $products_per_row ), intval( $products_per_row_mob ) );
+		
+		add_filter( 'post_class', function( $classes ) {
+			
+			$classes[]	= $this->grid;
+			$classes[]	= "item";
+			return $classes;
+		});
 		
 		$args = apply_filters( 'micemade_elements_wc_query_args', $posts_per_page, $categories, $filters ); // hook in includes/wc-functions.php
 
@@ -109,22 +184,24 @@ class Micemade_WC_Products extends Widget_Base {
 		
 		if( ! empty( $products ) ) {
 			
-			echo '<div class="woocommerce woocommerce-page">';
+			echo '<div class="woocommerce woocommerce-page micemade-elements_wc-catalog">';
 			
-			woocommerce_product_loop_start();
-			
-			foreach ( $products as $post ) {
+				echo '<ul class="products mme-row">';
 				
-				setup_postdata( $post ); 
+				foreach ( $products as $post ) {
+					
+					setup_postdata( $post ); 
 
-				wc_get_template_part( 'content', 'product' ); 
+					wc_get_template_part( 'content', 'product' ); 
+					
+				}
 				
-			}
-			
-			woocommerce_product_loop_end();
-			
+				echo '</ul>';
+				
 			echo '</div>';
 		}
+		
+		add_filter( 'post_class', function( $classes ) { $classes	= array(); return $classes; });
 		
 		wp_reset_postdata(); 
 

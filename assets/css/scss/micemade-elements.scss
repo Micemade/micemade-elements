@@ -8,6 +8,27 @@
 .micemade-elements {
 	
 	/**
+	 *	WC CATALOG PRODUCTS
+	 */
+	 &_wc-catalog {
+		
+		ul.products {
+			opacity: 1;
+			
+			// Micemade themes only(Beautify, Natura)
+			.item {
+				margin-bottom: 0;
+				.anim-wrap {
+					opacity: 1;
+				}
+			}
+			// end mm themes
+			
+		}
+	 
+	 }
+	 
+	/**
 	 *	SINGLE PRODUCT ELEMENT
 	 */
 	

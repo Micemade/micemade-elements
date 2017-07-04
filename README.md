@@ -60,6 +60,10 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 
 **Changelog**
 
+= 0.3.0 =
+* Fixes for terms functions
+* Changes in Micemade WC products (catalog view)
+
 = 0.2.9 =
 * Fixes for css styling of Single product element
 
