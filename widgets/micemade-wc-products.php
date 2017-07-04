@@ -7,6 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Micemade_WC_Products extends Widget_Base {
 
+	// $grid var - set here to use as "global" var in "post_class" hook
 	private $grid;
 	
 	public function get_name() {
@@ -164,12 +165,11 @@ class Micemade_WC_Products extends Widget_Base {
 		$categories				= ! empty( $settings['categories'] )			? $settings['categories'] : array();
 		$filters				= ! empty( $settings['filters'] )				? $settings['filters'] : 'latest';
 		
-		global $post, $woocommerce_loop;
-		
-		//$woocommerce_loop['columns'] = $products_per_row;
-		
+		global $post;
+				
 		$this->grid = micemade_elements_grid_class( intval( $products_per_row ), intval( $products_per_row_mob ) );
 		
+		// Add (inject) grid classes to products in loop ( in "content-product.php" template )
 		add_filter( 'post_class', function( $classes ) {
 			
 			$classes[]	= $this->grid;
@@ -201,7 +201,14 @@ class Micemade_WC_Products extends Widget_Base {
 			echo '</div>';
 		}
 		
-		add_filter( 'post_class', function( $classes ) { $classes	= array(); return $classes; });
+		// "Clean" or "reset" post_class to not conflict with other "post_class" functions
+		add_filter( 'post_class', function( $classes ) { 
+			
+			$classes_to_clean = array( $this->grid, "item" );
+			$classes = array_diff( $classes, $classes_to_clean );
+			
+			return $classes; 
+		});
 		
 		wp_reset_postdata(); 
 
