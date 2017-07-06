@@ -60,6 +60,9 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 
 **Changelog**
 
+= 0.3.1 =
+* Fixes for WC products post_class (reset post class)
+
 = 0.3.0 =
 * Fixes for terms functions
 * Changes in Micemade WC products (catalog view)
