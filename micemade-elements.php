@@ -3,7 +3,7 @@
  * Plugin Name: Micemade Elements
  * Description: Addon plugin with custom elements for Elementor, created by Micemade. Elementor plugin required.
  * Plugin URI: https://github.com/Micemade/micemade-elements/
- * Version: 0.3.1
+ * Version: 0.3.3
  * Author: micemade
  * Author URI: http://micemade.com
  * Text Domain: micemade-elements
@@ -263,8 +263,14 @@ class Micemade_Elements {
 	
 	public function mega_menu_post_type() {
 		
-		$micemade_themes	= array( 'natura', 'beautify', 'cloth'); // list of Micemade themes compatible with MM Mega menu CPT
-		$active_theme		= get_option( 'template' );
+		$micemade_themes	= array( 'natura', 'beautify', 'florist', 'cloth'); // list of Micemade themes compatible with MM Mega menu CPT
+		
+		if( is_child_theme() ) {
+			$parent_theme		= wp_get_theme();
+			$active_theme		= $parent_theme->get( 'Template' );
+		}else{
+			$active_theme		= get_option( 'template' );
+		}
 
 		if( in_array( $active_theme, $micemade_themes ) ) {
 			

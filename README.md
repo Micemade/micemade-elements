@@ -60,6 +60,12 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 
 **Changelog**
 
+= 0.3.3=
+* Fix - missing Mega menu if Micemade CHILD theme was activated
+
+= 0.3.2 =
+* Added "Florist" theme to supported Micemade Themes
+
 = 0.3.1 =
 * Fixes for WC products post_class (reset post class)
 
