@@ -309,14 +309,14 @@ add_filter( 'micemade_elements_loop_post','micemade_elements_loop_post_func', 10
  */
 function micemade_elements_term_data_f( $taxonomy, $term, $img_format = 'thumbnail' ) {
 			
-	if( ! term_exists( $term, $taxonomy ) ) return; 
+	if( ! term_exists( $term, $taxonomy ) ) return array(); 
 	
 	$term_data = array();
 	
 	// Term data
 	$term_obj	= get_term_by( 'slug', $term, $taxonomy );
 	
-	if( is_wp_error($term_obj) ) return;
+	if( is_wp_error($term_obj) ) return array();
 	
 	// Get term ID for term name, link and term meta for thumbnail ( WC meta "thumbnail_id ")
 	$term_id		= $term_obj->term_id;

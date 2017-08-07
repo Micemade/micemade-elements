@@ -602,3 +602,8 @@
 .elementor-editor-active .elementor.elementor-edit-mode .elementor-editor-widget-settings {
 	z-index:10 !important;
 }
+
+// Parallax fix
+.elementor-element.parallax {
+    transition: none !important;
+}

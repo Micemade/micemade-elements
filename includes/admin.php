@@ -29,7 +29,7 @@ function micemade_posts_array_func( $post_type = "post") {
 }
 
 /**
- *	MICEMADE_ELEMENTS_TERMS_FUNC ( micemade_elements_terms hook )
+ *	MICEMADE ELEMENTS TERMS ( micemade_elements_terms hook )
  *	get terms array from taxonomy
  *
  *	return array $terms_arr

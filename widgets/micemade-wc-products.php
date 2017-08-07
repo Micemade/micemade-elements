@@ -119,7 +119,7 @@ class Micemade_WC_Products extends Widget_Base {
 					],
 				],
 				'selectors' => [
-					'{{WRAPPER}} li.product' => 'padding-left:{{SIZE}}px;padding-right:{{SIZE}}px;',
+					'{{WRAPPER}} ul.products > li' => 'padding-left:{{SIZE}}px;padding-right:{{SIZE}}px;',
 					'{{WRAPPER}} .mme-row' => 'margin-left:-{{SIZE}}px; margin-right:-{{SIZE}}px;',
 				],
 
@@ -142,7 +142,7 @@ class Micemade_WC_Products extends Widget_Base {
 					],
 				],
 				'selectors' => [
-					'{{WRAPPER}} li.product' => 'margin-bottom:{{SIZE}}px;',
+					'{{WRAPPER}} ul.products > li' => 'margin-bottom:{{SIZE}}px;',
 					'{{WRAPPER}} .mme-row' => 'margin-bottom:-{{SIZE}}px;',
 				],
 

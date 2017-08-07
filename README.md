@@ -60,6 +60,11 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 
 **Changelog**
 
+= 0.3.4 =
+* Fix - Micemade WC Categories errors when missing category
+* Fix - corrected Micemade WC products horizontal spacing 
+* Tweak -  removed css transition if class "parallax" is added to section/column
+
 = 0.3.3=
 * Fix - missing Mega menu if Micemade CHILD theme was activated
 

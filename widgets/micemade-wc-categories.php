@@ -331,57 +331,7 @@ class Micemade_WC_Categories extends Widget_Base {
 				'selector' => '{{WRAPPER}} .category__inner-wrap',
 			]
 		);
-		
-		/* 
-		$this->add_control(
-			'background_opacity',
-			[
-				'label' => __( 'Category overlay opacity', 'micemade-elements' ),
-				'type' => Controls_Manager::SLIDER,
-				'default' => [
-					'size' => 0.8,
-				],
-				'range' => [
-					'px' => [
-						'max' => 1,
-						'min' => 0.10,
-						'step' => 0.01,
-					],
-				],
-				'selectors' => [
-					'{{WRAPPER}} .category__overlay' => 'opacity: {{SIZE}};',
-				],
-				'condition' => [
-					'style' => ['style_3','style_4'],
-				],
-			]
-		);
-		
-		$this->add_control(
-			'background_opacity_hover',
-			[
-				'label' => __( 'Category overlay opacity hover', 'micemade-elements' ),
-				'type' => Controls_Manager::SLIDER,
-				'default' => [
-					'size' => 1,
-				],
-				'range' => [
-					'px' => [
-						'max' => 1,
-						'min' => 0.10,
-						'step' => 0.01,
-					],
-				],
-				'selectors' => [
-					'{{WRAPPER}} .category:hover .category__overlay' => 'opacity: {{SIZE}};',
-				],
-				'condition' => [
-					'style' => ['style_3','style_4'],
-				],
-			]
-		);
-		
-		 */
+
 		$this->end_controls_section();
 
 	}
@@ -401,7 +351,6 @@ class Micemade_WC_Categories extends Widget_Base {
 		
 		$grid = micemade_elements_grid_class( intval( $cats_per_row ), intval( $cats_per_row_mob ) );
 		
-		
 		if( empty( $categories ) ) return;
 		
 		echo '<div class="micemade-elements_product-categories mme-row '. esc_attr( $style ) .'">';
@@ -410,10 +359,12 @@ class Micemade_WC_Categories extends Widget_Base {
 			
 			$term_data = apply_filters( 'micemade_elements_term_data', 'product_cat', $cat, $img_format ); // hook in inc/helpers.php
 				
-			$term_id	= $term_data['term_id'];
-			$term_title	= $term_data['term_title'];
-			$term_link	= $term_data['term_link'];
-			$image_url	= $term_data['image_url'];
+			if( empty( $term_data ) ) continue;
+			
+			$term_id	= isset( $term_data['term_id'] ) ? $term_data['term_id'] : '';
+			$term_title	= isset( $term_data['term_title'] ) ?  $term_data['term_title'] : '';
+			$term_link	= isset( $term_data['term_link'] ) ? $term_data['term_link'] : '#';
+			$image_url	= isset( $term_data['image_url'] ) ? $term_data['image_url'] : '';
 				
 			echo '<a class="category '. esc_attr( $grid ).' mme-col-xs-12" href="'. esc_url( $term_link ) .'" title="'. esc_attr( $term_title ) .'">';
 			
@@ -427,9 +378,11 @@ class Micemade_WC_Categories extends Widget_Base {
 					
 					echo '<div class="category__text-wrap">';
 					
-						echo '<h3 class="category__title">' . esc_html( $term_title ). '</h3>';
-						
-						if( $prod_count ) {
+						if( $term_title ) {
+							echo '<h3 class="category__title">' . esc_html( $term_title ). '</h3>';
+						}
+
+						if( $prod_count && $term_id ) {
 							echo apply_filters( 'micemade_elements_product_count', $term_id );
 						}
 					
