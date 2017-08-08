@@ -325,7 +325,14 @@ function micemade_elements_term_data_f( $taxonomy, $term, $img_format = 'thumbna
 	
 	$term_data['term_id']		= $term_id;
 	$term_data['term_title']	= $term_obj->name;
-	$term_data['term_link']		= get_term_link( $term_obj->slug, $taxonomy );
+	
+	$term_link =  get_term_link( $term_obj->slug, $taxonomy );
+	if( ! is_wp_error( $term_link ) ) {
+		$term_data['term_link']	= $term_link;
+	}else{
+		$term_data['term_link'] = '';
+	}
+	
 	
 	if( $thumbnail_id ) {
 		$image_atts				= wp_get_attachment_image_src( $thumbnail_id, $img_format );

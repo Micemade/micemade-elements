@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/index\n"
-"POT-Creation-Date: 2017-07-04 11:23:58+00:00\n"
+"POT-Creation-Date: 2017-08-08 10:10:01+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -64,39 +64,39 @@ msgid ""
 "elements. "
 msgstr ""
 
-#: micemade-elements.php:272
+#: micemade-elements.php:278
 msgid "Mega Menus"
 msgstr ""
 
-#: micemade-elements.php:273
+#: micemade-elements.php:279
 msgid "Mega Menu"
 msgstr ""
 
-#: micemade-elements.php:274 micemade-elements.php:277
+#: micemade-elements.php:280 micemade-elements.php:283
 msgid "New Mega Menu"
 msgstr ""
 
-#: micemade-elements.php:275
+#: micemade-elements.php:281
 msgid "Add New Mega Menu"
 msgstr ""
 
-#: micemade-elements.php:276
+#: micemade-elements.php:282
 msgid "Edit Mega Menu"
 msgstr ""
 
-#: micemade-elements.php:278
+#: micemade-elements.php:284
 msgid "View Mega Menu"
 msgstr ""
 
-#: micemade-elements.php:279
+#: micemade-elements.php:285
 msgid "Search Mega Menus"
 msgstr ""
 
-#: micemade-elements.php:280
+#: micemade-elements.php:286
 msgid "No Mega Menus Found"
 msgstr ""
 
-#: micemade-elements.php:281
+#: micemade-elements.php:287
 msgid "No Mega Menus found in Trash"
 msgstr ""
 
@@ -131,7 +131,7 @@ msgstr ""
 #: widgets/micemade-wc-products-slider.php:110
 #: widgets/micemade-wc-products-slider.php:126
 #: widgets/micemade-wc-products-slider.php:142
-#: widgets/micemade-wc-products.php:51 widgets/micemade-wc-products.php:67
+#: widgets/micemade-wc-products.php:52 widgets/micemade-wc-products.php:68
 msgid "One"
 msgstr ""
 
@@ -140,7 +140,7 @@ msgstr ""
 #: widgets/micemade-wc-products-slider.php:111
 #: widgets/micemade-wc-products-slider.php:127
 #: widgets/micemade-wc-products-slider.php:143
-#: widgets/micemade-wc-products.php:52 widgets/micemade-wc-products.php:68
+#: widgets/micemade-wc-products.php:53 widgets/micemade-wc-products.php:69
 msgid "Two"
 msgstr ""
 
@@ -149,7 +149,7 @@ msgstr ""
 #: widgets/micemade-wc-products-slider.php:112
 #: widgets/micemade-wc-products-slider.php:128
 #: widgets/micemade-wc-products-slider.php:144
-#: widgets/micemade-wc-products.php:53 widgets/micemade-wc-products.php:69
+#: widgets/micemade-wc-products.php:54 widgets/micemade-wc-products.php:70
 msgid "Three"
 msgstr ""
 
@@ -158,7 +158,7 @@ msgstr ""
 #: widgets/micemade-wc-products-slider.php:113
 #: widgets/micemade-wc-products-slider.php:129
 #: widgets/micemade-wc-products-slider.php:145
-#: widgets/micemade-wc-products.php:54 widgets/micemade-wc-products.php:70
+#: widgets/micemade-wc-products.php:55 widgets/micemade-wc-products.php:71
 msgid "Four"
 msgstr ""
 
@@ -167,7 +167,7 @@ msgstr ""
 #: widgets/micemade-wc-products-slider.php:114
 #: widgets/micemade-wc-products-slider.php:130
 #: widgets/micemade-wc-products-slider.php:146
-#: widgets/micemade-wc-products.php:55 widgets/micemade-wc-products.php:71
+#: widgets/micemade-wc-products.php:56 widgets/micemade-wc-products.php:72
 msgid "Six"
 msgstr ""
 
@@ -440,7 +440,7 @@ msgstr ""
 
 #: widgets/micemade-wc-categories.php:36
 #: widgets/micemade-wc-products-slider.php:68
-#: widgets/micemade-wc-products.php:79
+#: widgets/micemade-wc-products.php:80
 msgid "Select product categories"
 msgstr ""
 
@@ -506,12 +506,12 @@ msgid "Micemade products slider"
 msgstr ""
 
 #: widgets/micemade-wc-products-slider.php:35
-#: widgets/micemade-wc-products.php:37
+#: widgets/micemade-wc-products.php:38
 msgid "Total products"
 msgstr ""
 
 #: widgets/micemade-wc-products-slider.php:40
-#: widgets/micemade-wc-products.php:40
+#: widgets/micemade-wc-products.php:41
 msgid "Enter total number of products to show"
 msgstr ""
 
@@ -524,37 +524,37 @@ msgid "Products filtering options"
 msgstr ""
 
 #: widgets/micemade-wc-products-slider.php:80
-#: widgets/micemade-wc-products.php:90
+#: widgets/micemade-wc-products.php:91
 msgid "Products filters"
 msgstr ""
 
 #: widgets/micemade-wc-products-slider.php:84
-#: widgets/micemade-wc-products.php:94
+#: widgets/micemade-wc-products.php:95
 msgid "Latest products"
 msgstr ""
 
 #: widgets/micemade-wc-products-slider.php:85
-#: widgets/micemade-wc-products.php:95
+#: widgets/micemade-wc-products.php:96
 msgid "Featured products"
 msgstr ""
 
 #: widgets/micemade-wc-products-slider.php:86
-#: widgets/micemade-wc-products.php:96
+#: widgets/micemade-wc-products.php:97
 msgid "Best selling products"
 msgstr ""
 
 #: widgets/micemade-wc-products-slider.php:87
-#: widgets/micemade-wc-products.php:97
+#: widgets/micemade-wc-products.php:98
 msgid "Best rated products"
 msgstr ""
 
 #: widgets/micemade-wc-products-slider.php:88
-#: widgets/micemade-wc-products.php:98
+#: widgets/micemade-wc-products.php:99
 msgid "Products on sale"
 msgstr ""
 
 #: widgets/micemade-wc-products-slider.php:89
-#: widgets/micemade-wc-products.php:99
+#: widgets/micemade-wc-products.php:100
 msgid "Random products"
 msgstr ""
 
@@ -738,23 +738,23 @@ msgid ""
 "plugin or customizer"
 msgstr ""
 
-#: widgets/micemade-wc-products.php:17 widgets/micemade-wc-products.php:30
+#: widgets/micemade-wc-products.php:18 widgets/micemade-wc-products.php:31
 msgid "Micemade WC Products"
 msgstr ""
 
-#: widgets/micemade-wc-products.php:47
+#: widgets/micemade-wc-products.php:48
 msgid "Products per row"
 msgstr ""
 
-#: widgets/micemade-wc-products.php:63
+#: widgets/micemade-wc-products.php:64
 msgid "Products per row (on mobiles)"
 msgstr ""
 
-#: widgets/micemade-wc-products.php:108
+#: widgets/micemade-wc-products.php:109
 msgid "Products horizontal spacing"
 msgstr ""
 
-#: widgets/micemade-wc-products.php:131
+#: widgets/micemade-wc-products.php:132
 msgid "Products bottom spacing"
 msgstr ""
 

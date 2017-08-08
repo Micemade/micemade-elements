@@ -60,6 +60,9 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 
 **Changelog**
 
+= 0.3.5 =
+* Additional fix for Micemade WC Categories element (missing categories)
+
 = 0.3.4 =
 * Fix - Micemade WC Categories errors when missing category
 * Fix - corrected Micemade WC products horizontal spacing 
