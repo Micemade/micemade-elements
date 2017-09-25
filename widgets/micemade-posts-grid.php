@@ -12,12 +12,16 @@ class Micemade_Posts_Grid extends Widget_Base {
 	}
 
 	public function get_title() {
-		return __( 'Micemade posts grid', 'micemade-elements' );
+		return __( 'Micemade Posts Grid', 'micemade-elements' );
 	}
 
 	public function get_icon() {
 		// Icon name from the Elementor font file, as per http://dtbaker.net/web-development/creating-your-own-custom-elementor-widgets/
 		return 'eicon-posts-grid';
+	}
+
+	public function get_categories() {
+		return [ 'micemade_elements' ];
 	}
 
 	protected function _register_controls() {
@@ -172,64 +176,49 @@ class Micemade_Posts_Grid extends Widget_Base {
 			]
 		);
 		
+		$this->start_controls_tabs( 'tabs_post_background' );
+		$this->start_controls_tab(
+			'tab_post_background_normal',
+			[
+				'label' => __( 'Normal', 'micemade-elements' ),
+			]
+		);
+
 		$this->add_control(
 			'post_text_background_color',
 			[
 				'label' => __( 'Post text background', 'micemade-elements' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .inner-wrap, {{WRAPPER}} .post-overlay' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .inner-wrap' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .post-overlay' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
-		
-		$this->add_control(
-			'post_text_background_opacity',
+		$this->end_controls_tab();
+		// HOVER
+		$this->start_controls_tab(
+			'tab_product_background_hover',
 			[
-				'label' => __( 'Post text background opacity', 'micemade-elements' ),
-				'type' => Controls_Manager::SLIDER,
-				'default' => [
-					'size' => 0.8,
-				],
-				'range' => [
-					'px' => [
-						'max' => 1,
-						'min' => 0.10,
-						'step' => 0.01,
-					],
-				],
-				'selectors' => [
-					'{{WRAPPER}} .post-overlay' => 'opacity: {{SIZE}};',
-				],
-				'condition' => [
-					'style' => ['style_3','style_4'],
-				],
+				'label' => __( 'Hover', 'micemade-elements' ),
 			]
 		);
-		
 		$this->add_control(
-			'post_text_background_opacity_hover',
+			'post_text_background_color_hover',
 			[
-				'label' => __( 'Post text background opacity hover', 'micemade-elements' ),
-				'type' => Controls_Manager::SLIDER,
-				'default' => [
-					'size' => 1,
-				],
-				'range' => [
-					'px' => [
-						'max' => 1,
-						'min' => 0.10,
-						'step' => 0.01,
-					],
-				],
+				'label' => __( 'Hover post text  background', 'micemade-elements' ),
+				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .inner-wrap:hover .post-overlay' => 'opacity: {{SIZE}};',
+					'{{WRAPPER}} .inner-wrap:hover'=> 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .inner-wrap:hover .post-overlay' => 'background-color: {{VALUE}};',
 				],
-				'condition' => [
+				/* 'condition' => [
 					'style' => ['style_3','style_4'],
-				],
+				], */
 			]
 		);
+		$this->end_controls_tab();
+		$this->end_controls_tabs();
 		
 		$this->add_responsive_control(
 			'post_text_height',

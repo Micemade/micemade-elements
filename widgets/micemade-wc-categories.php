@@ -20,6 +20,10 @@ class Micemade_WC_Categories extends Widget_Base {
 		return 'eicon-woocommerce';
 	}
 
+	public function get_categories() {
+		return [ 'micemade_elements' ];
+	}
+
 	protected function _register_controls() {
 
 		$this->start_controls_section(
@@ -235,7 +239,6 @@ class Micemade_WC_Categories extends Widget_Base {
 				],
 			]
 		);
-		
 
 		$this->end_controls_tab();
 
@@ -272,6 +275,21 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->end_controls_tab();
 		$this->end_controls_tabs();
 		
+		$this->add_control(
+			'hover_style',
+			[
+				'label'		=> __( 'Hover style', 'micemade-elements' ),
+				'type'		=> Controls_Manager::SELECT,
+				'default'	=> 'blur_image',
+				'options'	=> [
+					'blur_image'		=> __( 'Blur image', 'micemade-elements' ),
+					'enlarge_image'		=> __( 'Enlarge image', 'micemade-elements' ),
+					'shrink_image'		=> __( 'Shrink image', 'micemade-elements' ),
+					'greyscale_image'	=> __( 'Greyscale image', 'micemade-elements' ),
+				]
+			]
+		);
+
 		$this->add_responsive_control(
 			'post_text_align',
 			[
@@ -345,6 +363,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$cats_per_row		= ! empty( $settings['cats_per_row'] )		? (int)$settings['cats_per_row'] : 3;
 		$cats_per_row_mob	= ! empty( $settings['cats_per_row_mob'] )	? (int)$settings['cats_per_row_mob'] : 1;
 		$style				= ! empty( $settings['style'] )				? $settings['style']		: 'style_1';
+		$hover_style		= ! empty( $settings['hover_style'] )		? $settings['hover_style']	: 'blur_image';
 		$image				= ! empty( $settings['image'] )				? $settings['image']		: '';
 		$img_format			= ! empty( $settings['img_format'] )		? $settings['img_format']	: 'thumbnail';
 		$prod_count			= ! empty( $settings['prod_count'] )		? $settings['prod_count']	: '';
@@ -353,7 +372,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		
 		if( empty( $categories ) ) return;
 		
-		echo '<div class="micemade-elements_product-categories mme-row '. esc_attr( $style ) .'">';
+		echo '<div class="micemade-elements_product-categories mme-row '. esc_attr( $style .' '. $hover_style ) .'">';
 		
 		foreach ( $categories as $cat ) {
 			

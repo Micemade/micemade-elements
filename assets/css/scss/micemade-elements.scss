@@ -15,7 +15,7 @@
 		ul.products {
 			opacity: 1;
 			
-			// Micemade themes only(Beautify, Natura)
+			// Micemade themes only
 			.item {
 				margin-bottom: 0;
 				.anim-wrap {
@@ -381,18 +381,16 @@
 		.swiper-button-next {
 			.elementor & { 
 				right: 20px;
-				transform: none;
 			}
 		}
 		
 		.swiper-button-prev {
 			.elementor & {
 				left: 20px;
-				transform: none;
 			}
 		}
 		
-		.swiper-button-next:before, .swiper-button-prev:before {
+		.swiper-button-next, .swiper-button-prev {
 			.elementor & {
 				opacity: 0;
 				transition: opacity 0.3s linear;
@@ -403,7 +401,7 @@
 		}
 		
 		&:hover {
-			.swiper-button-next:before, .swiper-button-prev:before {
+			.swiper-button-next, .swiper-button-prev {
 				.elementor & {
 					opacity: 1;
 				}
@@ -466,8 +464,9 @@
 					background-size: cover;
 					background-repeat: no-repeat;
 					background-position: center;
-					filter: blur(0px);
-					transition: filter 0.3s linear;
+					filter: blur(0px) grayscale(0);
+					transform: scale(1);
+					transition: all 0.3s ease-in-out;
 				}
 				
 			}
@@ -487,19 +486,14 @@
 			&__title {
 				font-size: 24px;
 				color: inherit;
-				display: block;
+				display: inline-block;
+				position: relative;
 			}
 			&__product-count {
 				display: block;
 				font-size:12px;
 			}
-			
-			&:hover {
-				.image-inner {
-					filter: blur(10px);
-				}
-			}
-			
+
 		
 		}
 		&.style_1 {
@@ -557,7 +551,73 @@
 			}
 		
 		}
-	
+
+		&.style_4 {
+			
+			.category {
+				
+				&__overlay {
+					z-index: 1;
+					&:before {
+						content: "";
+						position: absolute;
+						z-index: 1;
+						top: 5px;
+						left: 5px;
+						bottom: 5px;
+						right: 5px;
+						border: 1px solid rgba(#fff,0.3);
+					}
+				}
+				&__text-wrap {
+					align-self: flex-end;
+				}
+				&__title {
+					&:after {
+						content: "";
+						position: absolute;
+						display: block;
+						bottom: 0;
+						height: 1px;
+						width: 100%;
+						border-bottom: 1px solid;
+						opacity: 0.3
+					}
+				}
+			}
+		} // .style4
+
+		// hover styles
+		&.blur_image {
+			.category:hover {
+				.image-inner {
+					filter: blur(10px) grayscale(0) hue-rotate();
+				}
+			}
+		}
+		&.greyscale_image {
+			.category:hover {
+				.image-inner {
+					filter: blur(0px) grayscale(100%) hue-rotate(0);
+				}
+			}
+		}
+		&.enlarge_image {
+			.category:hover {
+				.image-inner {
+					transform: scale(1.2);
+				}
+			}
+		}
+		&.shrink_image {
+			.image-inner { transform: scale(1.2) }
+			.category:hover {
+				.image-inner {
+					transform: scale(1);
+				}
+			}
+		}
+		
 	} // product-categories
 	
 	

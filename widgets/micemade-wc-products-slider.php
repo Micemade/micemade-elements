@@ -20,6 +20,10 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		return 'eicon-woocommerce';
 	}
 
+	public function get_categories() {
+		return [ 'micemade_elements' ];
+	}
+
 	protected function _register_controls() {
 
 		$this->start_controls_section(
@@ -207,8 +211,8 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 				'label' => __( 'Navigation buttons color', 'micemade-elements' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .swiper-button-next:before' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .swiper-button-prev:before' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .swiper-button-next' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .swiper-button-prev' => 'background-color: {{VALUE}};',
 				],
 				'condition' => [
 					'buttons!' => '',
@@ -266,7 +270,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$this->add_control(
 			'product_info_elements',
 			[
-				'label' => __( 'Product info visibility', 'micemade-elements' ),
+				'label' => __( 'Product info elements', 'micemade-elements' ),
 				'type' => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -315,6 +319,33 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 			]
 		);
 		
+		$this->add_responsive_control(
+			'product_elements_spacing',
+			[
+				'label' => __( 'Elements vertical spacing', 'micemade-elements' ),
+				'type' => Controls_Manager::SLIDER,
+				'default' => [
+					'size' => '',
+				],
+				'range' => [
+					'px' => [
+						'max' => 200,
+						'min' => 0,
+						'step' => 1,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .post-text h4' => 'margin-top: {{SIZE}}px;margin-bottom: {{SIZE}}px;',
+					'{{WRAPPER}} .post-text meta' => 'margin-top: {{SIZE}}px;margin-bottom: {{SIZE}}px;',
+					'{{WRAPPER}} .post-text .price' => 'margin-top: {{SIZE}}px;margin-bottom: {{SIZE}}px;',
+					'{{WRAPPER}} .post-text a.button' => 'margin-top: {{SIZE}}px;margin-bottom: {{SIZE}}px;',
+				],
+				/* 'condition' => [
+					'style' => ['style_3','style_4']
+				], */
+			]
+		);
+
 		$this->add_control(
 			'product_info_box',
 			[

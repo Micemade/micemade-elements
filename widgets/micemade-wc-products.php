@@ -7,8 +7,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Micemade_WC_Products extends Widget_Base {
 
-	// $grid var - set here to use as "global" var in "post_class" hook
-	private $grid;
+	// $mm_products_grid var - set here to use as "global" var in "post_class" hook
+	public $mm_products_grid;
 	
 	public function get_name() {
 		return 'micemade-wc-products';
@@ -21,6 +21,10 @@ class Micemade_WC_Products extends Widget_Base {
 	public function get_icon() {
 		// Icon name from the Elementor font file, as per http://dtbaker.net/web-development/creating-your-own-custom-elementor-widgets/
 		return 'eicon-woocommerce';
+	}
+
+	public function get_categories() {
+		return [ 'micemade_elements' ];
 	}
 
 	protected function _register_controls() {
@@ -167,18 +171,17 @@ class Micemade_WC_Products extends Widget_Base {
 		
 		global $post;
 				
-		$this->grid = micemade_elements_grid_class( intval( $products_per_row ), intval( $products_per_row_mob ) );
-		
+		$this->mm_products_grid = micemade_elements_grid_class( intval( $products_per_row ), intval( $products_per_row_mob ) );
+		 
+		$args = apply_filters( 'micemade_elements_wc_query_args', $posts_per_page, $categories, $filters ); // hook in includes/wc-functions.php
+
 		// Add (inject) grid classes to products in loop ( in "content-product.php" template )
 		add_filter( 'post_class', function( $classes ) {
 			
-			$classes[]	= $this->grid;
-			$classes[]	= "item";
+			$classes[] = $this->mm_products_grid;
+			$classes[] = 'item';
 			return $classes;
 		});
-		
-		$args = apply_filters( 'micemade_elements_wc_query_args', $posts_per_page, $categories, $filters ); // hook in includes/wc-functions.php
-
 		
 		$products = get_posts( $args );
 		
@@ -190,8 +193,8 @@ class Micemade_WC_Products extends Widget_Base {
 				
 				foreach ( $products as $post ) {
 					
-					setup_postdata( $post ); 
-
+					setup_postdata( $post );
+					
 					wc_get_template_part( 'content', 'product' ); 
 					
 				}
@@ -204,7 +207,7 @@ class Micemade_WC_Products extends Widget_Base {
 		// "Clean" or "reset" post_class to not conflict with other "post_class" functions
 		add_filter( 'post_class', function( $classes ) { 
 			
-			$classes_to_clean = array( $this->grid, "item" );
+			$classes_to_clean = array( $this->mm_products_grid, 'item' );
 			$classes = array_diff( $classes, $classes_to_clean );
 			
 			return $classes; 

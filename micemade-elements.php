@@ -3,7 +3,7 @@
  * Plugin Name: Micemade Elements
  * Description: Addon plugin with custom elements for Elementor, created by Micemade. Elementor plugin required.
  * Plugin URI: https://github.com/Micemade/micemade-elements/
- * Version: 0.3.5
+ * Version: 0.3.6
  * Author: micemade
  * Author URI: http://micemade.com
  * Text Domain: micemade-elements
@@ -31,15 +31,16 @@ class Micemade_Elements {
 			define('MICEMADE_ELEMENTS_DIR', plugin_dir_path( __FILE__ ) );
 			define('MICEMADE_ELEMENTS_URL', plugin_dir_url( __FILE__ ) );
 			
+			self::$instance->activation_checks();
 			
+			self::$instance->includes();
+
+			// Add "Micemade Elements" widgets category and register widgets
+			add_action( 'elementor/init', array( $this, 'add_widgets_category' ) );
 			add_action( 'elementor/widgets/widgets_registered', array( $this, 'widgets_registered' ) );
 			//add_action( 'elementor/init', array( $this, 'widgets_registered' ) );
 			
 			add_action('plugins_loaded', array( self::$instance, 'load_plugin_textdomain') );
-			
-			self::$instance->activation_checks();
-			
-			self::$instance->includes();
 			
 			add_action( 'init', array( self::$instance, 'mega_menu_post_type' ) );
 			
@@ -108,10 +109,22 @@ class Micemade_Elements {
 		}else{
 			define('MICEMADE_ELEMENTS_REVSLIDER_ON',false );	
 		}
-		
 
 	}
 	
+	public function add_widgets_category() {
+		
+		$elementsManager = Elementor\Plugin::instance()->elements_manager;
+		$elementsManager->add_category(
+			'micemade_elements',
+			array(
+				'title' => __( 'Micemade Elements', 'micemade-elements' ),
+				'icon' =>  'eicon-font'
+			),
+			1
+		);
+	}
+
 	public function widgets_registered() {
 
 		// get our own widgets up and running:

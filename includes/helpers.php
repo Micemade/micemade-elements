@@ -321,7 +321,7 @@ function micemade_elements_term_data_f( $taxonomy, $term, $img_format = 'thumbna
 	// Get term ID for term name, link and term meta for thumbnail ( WC meta "thumbnail_id ")
 	$term_id		= $term_obj->term_id;
 	$meta			= get_term_meta( $term_id );
-	$thumbnail_id	= $meta['thumbnail_id'][0];
+	$thumbnail_id	= isset($meta['thumbnail_id']) ? $meta['thumbnail_id'][0] : '';
 	
 	$term_data['term_id']		= $term_id;
 	$term_data['term_title']	= $term_obj->name;

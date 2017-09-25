@@ -20,6 +20,10 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		return 'eicon-woocommerce';
 	}
 
+	public function get_categories() {
+		return [ 'micemade_elements' ];
+	}
+
 	protected function _register_controls() {
 
 		$this->start_controls_section(

@@ -20,6 +20,10 @@ class Micemade_Rev_Slider extends Widget_Base {
 		return 'eicon-slideshow';
 	}
 
+	public function get_categories() {
+		return [ 'micemade_elements' ];
+	}
+
 	protected function _register_controls() {
 
 		$this->start_controls_section(
