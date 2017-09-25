@@ -37,7 +37,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 			'posts_per_page',
 			[
 				'label'		=> __( 'Total posts', 'micemade-elements' ),
-				'type'		=> Controls_Manager::TEXT,
+				'type'		=> Controls_Manager::NUMBER,
 				'default'	=> '6',
 				'title'		=> __( 'Enter total number of posts to show', 'micemade-elements' ),
 			]
@@ -47,7 +47,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 			'offset',
 			[
 				'label'		=> __( 'Offset', 'micemade-elements' ),
-				'type'		=> Controls_Manager::TEXT,
+				'type'		=> Controls_Manager::NUMBER,
 				'default'	=> '',
 				'title'		=> __( 'Offset is number of skipped posts', 'micemade-elements' ),
 			]
@@ -85,6 +85,50 @@ class Micemade_Posts_Grid extends Widget_Base {
 			]
 		);
 		
+		$this->add_responsive_control(
+			'horiz_spacing',
+			[
+				'label' => __( 'Posts horizontal spacing', 'micemade-elements' ),
+				'type' => Controls_Manager::SLIDER,
+				'default' => [
+					'size' => '',
+				],
+				'range' => [
+					'px' => [
+						'max' => 50,
+						'min' => 0,
+						'step' => 1,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .mme-row .post' => 'padding-left:{{SIZE}}px;padding-right:{{SIZE}}px;',
+					'{{WRAPPER}} .mme-row' => 'margin-left:-{{SIZE}}px; margin-right:-{{SIZE}}px;',
+				],
+
+			]
+		);
+		$this->add_responsive_control(
+			'vert_spacing',
+			[
+				'label' => __( 'Posts bottom spacing', 'micemade-elements' ),
+				'type' => Controls_Manager::SLIDER,
+				'default' => [
+					'size' => '20',
+				],
+				'range' => [
+					'px' => [
+						'max' => 100,
+						'min' => 0,
+						'step' => 1,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .mme-row .post' => 'margin-bottom:{{SIZE}}px;',
+					'{{WRAPPER}} .mme-row' => 'margin-bottom:-{{SIZE}}px;',
+				],
+
+			]
+		);
 		
 		$this->add_control(
 			'heading_filtering',
@@ -435,12 +479,15 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->end_controls_section();
 		
 		//
-		// POST EXCERPT AND META
+		// META CONTROLS
 		$this->start_controls_section(
-			'section_text',
+			'section_meta',
 			[
-				'label' => __( 'Excerpt and Meta', 'micemade-elements' ),
+				'label' => __( 'Meta', 'micemade-elements' ),
 				'tab' => Controls_Manager::TAB_STYLE,
+				'condition' => [
+					'meta!' => '',
+				],
 			]
 		);
 		
@@ -450,7 +497,29 @@ class Micemade_Posts_Grid extends Widget_Base {
 				'label' => __( 'Meta Text Color', 'micemade-elements' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .post-text .meta span, {{WRAPPER}} .post-text .meta a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .post-text .meta span' => 'color: {{VALUE}};',
+				],
+			]
+		);
+		
+		$this->add_control(
+			'meta_links_color',
+			[
+				'label' => __( 'Meta Links Color', 'micemade-elements' ),
+				'type' => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .post-text .meta a, {{WRAPPER}} .post-text .meta a:active' => 'color: {{VALUE}};',
+				],
+			]
+		);
+		
+		$this->add_control(
+			'meta_links_hover_color',
+			[
+				'label' => __( 'Meta Links Hover Color', 'micemade-elements' ),
+				'type' => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .post-text .meta a:hover' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -473,6 +542,29 @@ class Micemade_Posts_Grid extends Widget_Base {
 					],
 				]
 
+			]
+		);
+		$this->end_controls_section();
+		
+		// EXCERPT CONTROLS
+		$this->start_controls_section(
+			'section_excerpt',
+			[
+				'label' => __( 'Excerpt', 'micemade-elements' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+				'condition' => [
+					'excerpt!' => '',
+				],
+			]
+		);
+		
+		$this->add_control(
+			'excerpt_limit',
+			[
+				'label'		=> __( 'Excerpt Limit (words)', 'micemade-elements' ),
+				'type'		=> Controls_Manager::NUMBER,
+				'default'	=> '20',
+				'title'		=> __( 'Max. number of words in excerpt', 'micemade-elements' ),
 			]
 		);
 		
@@ -501,18 +593,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 				
 			]
 		);
-		
-		// Excerpt border
-		$this->add_group_control(
-			Group_Control_Border::get_type(),
-			[
-				'name' => 'postgrid_excerpt_border',
-				'label' => __( 'Excerpt Border', 'micemade-elements' ),
-				'placeholder' => '1px',
-				'default' => '1px',
-				'selector' => '{{WRAPPER}} .post-text p',
-			]
-		);
+
 		// Excerpt padding
 		$this->add_responsive_control(
 			'postgrid_excerpt_padding',
@@ -525,18 +606,27 @@ class Micemade_Posts_Grid extends Widget_Base {
 				],
 			]
 		);
-		
-		$this->end_controls_section();
-		
-		// Add custom css style selector
-		$this->start_controls_section(
-			'section_css_class',
+		// Excerpt border
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
 			[
-				'label' => __( '"Read more" button custom css', 'micemade-elements' ),
-				'tab' => Controls_Manager::TAB_STYLE,
+				'name' => 'postgrid_excerpt_border',
+				'label' => __( 'Excerpt Border', 'micemade-elements' ),
+				'placeholder' => '1px',
+				'default' => '1px',
+				'selector' => '{{WRAPPER}} .post-text p',
 			]
 		);
 		
+		 $this->add_control(
+			'readmore_title',
+			[
+				'label' => __( '"Read more" button custom css', 'micemade-elements' ),
+				'type' => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+
 		$this->add_control(
 			'css_class',
 			[
@@ -629,6 +719,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$img_format			= ! empty( $settings['img_format'] )		? $settings['img_format'] : 'thumbnail';
 		$style				= ! empty( $settings['style'] )				? $settings['style'] : 'style_1';
 		$excerpt			= ! empty( $settings['excerpt'] )			? $settings['excerpt'] : '';
+		$excerpt_limit		= ! empty( $settings['excerpt_limit'] )		? $settings['excerpt_limit'] : 20;
 		$meta				= ! empty( $settings['meta'] )				? $settings['meta'] : '';
 		$sticky				= ! empty( $settings['sticky'] )			? $settings['sticky'] : '';
 		$css_class			= ! empty( $settings['css_class'] )			? $settings['css_class'] : '';
@@ -647,7 +738,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 			echo '<div class="micemade-elements_posts-grid'. (  $use_load_more ? ' micemade-elements-load-more' : '' ) .' mme-row '.esc_attr( $style ) .'">';
 						
 			if( $use_load_more ) {
-				echo '<input type="hidden" data-ppp="'. esc_attr($posts_per_page).'" data-categories="'. esc_js( json_encode($categories)) .'" data-style="'.  esc_attr($style) .'" data-img_format="'.  esc_attr($img_format) .'" data-excerpt="'.  esc_attr($excerpt) .'" data-meta="'.  esc_attr($meta) .'" data-css_class="'.  esc_attr($css_class) .'" data-grid="'.  esc_attr($grid) .'" data-startoffset="'. $offset  .'"  class="posts-grid-settings">';
+				echo '<input type="hidden" data-ppp="'. esc_attr($posts_per_page).'" data-categories="'. esc_js( json_encode($categories)) .'" data-style="'.  esc_attr($style) .'" data-img_format="'.  esc_attr($img_format) .'" data-excerpt="'.  esc_attr($excerpt) .'"  data-exc_limit="'.  esc_attr($excerpt_limit) .'" data-meta="'.  esc_attr($meta) .'" data-css_class="'.  esc_attr($css_class) .'" data-grid="'.  esc_attr($grid) .'" data-startoffset="'. $offset  .'"  class="posts-grid-settings">';
 	
 			}
 			
@@ -655,7 +746,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 				
 				setup_postdata( $post ); 
 				
-				apply_filters( 'micemade_elements_loop_post', $style, $grid , $img_format , $meta , $excerpt, $css_class );// hook in includes/helpers.php
+				apply_filters( 'micemade_elements_loop_post', $style, $grid , $img_format , $meta , $excerpt, $excerpt_limit, $css_class );// hook in includes/helpers.php
 				
 			}
 			

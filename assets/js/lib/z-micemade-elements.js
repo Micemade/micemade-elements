@@ -153,18 +153,19 @@
 			
 			var $_posts_holder = $(this);
 			
-			var	$loader		= $_posts_holder.next('.micemade-elements_more-posts-wrap').find('.more_posts'),
-				$settings	= $_posts_holder.find('.posts-grid-settings'),
-				ppp			= $settings.data('ppp'),
-				categories	= $settings.data('categories'),
-				style		= $settings.data('style'),
-				img_format	= $settings.data('img_format'),
-				excerpt		= $settings.data('excerpt'),
-				meta		= $settings.data('meta'),
-				css_class	= $settings.data('css_class'),
-				grid		= $settings.data('grid'),
-				startoffset	= $settings.data('startoffset'),
-				offset		= $_posts_holder.find('.post').length;
+			var	$loader			= $_posts_holder.next('.micemade-elements_more-posts-wrap').find('.more_posts'),
+				$settings		= $_posts_holder.find('.posts-grid-settings'),
+				ppp				= $settings.data('ppp'),
+				categories		= $settings.data('categories'),
+				style			= $settings.data('style'),
+				img_format		= $settings.data('img_format'),
+				excerpt			= $settings.data('excerpt'),
+				excerpt_limit	= $settings.data('exc_limit'),
+				meta			= $settings.data('meta'),
+				css_class		= $settings.data('css_class'),
+				grid			= $settings.data('grid'),
+				startoffset		= $settings.data('startoffset'),
+				offset			= $_posts_holder.find('.post').length;
 			 
 			$loader.on( 'click', load_ajax_posts );
 			 
@@ -184,6 +185,7 @@
 							'style': style,
 							'img_format': img_format,
 							'excerpt': excerpt,
+							'excerpt_limit': excerpt_limit,
 							'meta': meta,
 							'css_class': css_class,
 							'grid': grid,

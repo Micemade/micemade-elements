@@ -59,6 +59,9 @@ Our tests indicate that the widgets work well with most themes that are well cod
 Time will tell. When we estimate plugin has enough added functionalities to Elementor, or some other reason, it will be available on wp.org. So far, install it from GitHub (Download zip or clone the repository) .
 
 **Changelog**
+= 0.3.6.1 = 
+* Refactored "Micemade Posts Grid" - added grid spacing control, rearranged title / meta / excerpt controls 
+
 = 0.3.6 = 
 * Micemade elements grouped in separate "Micemade Elements" category, in editor sidebar
 * Fixed slider navigation color changing in "Micemade WC Products Slider"

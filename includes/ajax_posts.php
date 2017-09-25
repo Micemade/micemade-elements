@@ -22,6 +22,7 @@ if ( !function_exists('micemade_elements_more_post_ajax') ) {
 	    $style			= ( isset($_POST['style']) )		? $_POST['style'] : 'style_1';
 	    $img_format		= ( isset($_POST['img_format']) )	? $_POST['img_format'] : 'thumbnail';
 	    $excerpt		= ( isset($_POST['excerpt']) )		? $_POST['excerpt'] : true;
+	    $excerpt_limit	= ( isset($_POST['excerpt_limit']) ) ? $_POST['excerpt_limit'] : 20;
 	    $meta			= ( isset($_POST['meta']) )			? $_POST['meta'] : true;
 	    $css_class		= ( isset($_POST['css_class']) )	? $_POST['css_class'] : '';
 	    $grid			= ( isset($_POST['grid']) )			? $_POST['grid'] : '';
@@ -34,12 +35,11 @@ if ( !function_exists('micemade_elements_more_post_ajax') ) {
  
 	    if( empty( $posts ) ) return;
 		
-		
 		foreach ( $posts as $post ) {
 				
 			setup_postdata( $post ); 
 			
-			apply_filters( 'micemade_elements_loop_post', $style, $grid , $img_format , $meta , $excerpt, $css_class );// hook in includes/helpers.php
+			apply_filters( 'micemade_elements_loop_post', $style, $grid , $img_format , $meta , $excerpt, $excerpt_limit, $css_class );// hook in includes/helpers.php
 			
 		} // end foreach
  

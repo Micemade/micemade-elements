@@ -251,7 +251,7 @@ add_filter( 'micemade_elements_query_args','micemade_elements_query_args_func', 
  *  
  *  DRY effort, mostly because of ajax posts.
  */
-function micemade_elements_loop_post_func( $style = 'style_1', $grid = '', $img_format = 'thumbnail', $meta = true, $excerpt = true, $css_class = '' ) {
+function micemade_elements_loop_post_func( $style = 'style_1', $grid = '', $img_format = 'thumbnail', $meta = true, $excerpt = true, $excerpt_limit = 20, $css_class = '' ) {
 	?>
 	<div class="post <?php echo esc_attr( $grid ); ?> mme-col-xs-12">
 				
@@ -280,14 +280,15 @@ function micemade_elements_loop_post_func( $style = 'style_1', $grid = '', $img_
 				</div>
 				<?php } ?>
 
-				<?php 
-				if( $excerpt ) {
-					
-					the_excerpt(); 
-					
-					echo '<a href="'. get_permalink() .'" title="'.the_title_attribute("echo=0").'" class="micemade-elements-readmore '. esc_attr( $css_class ) .' ">'.esc_html__( 'Read more','micemade-elements' ) .'</a>';
-				}
+				<?php if( $excerpt ) {?>
+				<p>	
+					<?php echo micemade_elements_excerpt( $excerpt_limit );?>
+				</p>
+
+				<?php echo '<a href="'. get_permalink() .'" title="'.the_title_attribute("echo=0").'" class="micemade-elements-readmore '. esc_attr( $css_class ) .' ">'.esc_html__( 'Read more','micemade-elements' ) .'</a>';
 				?>
+				
+				<?php } ?>
 				 
 			</div>
 		
@@ -297,6 +298,17 @@ function micemade_elements_loop_post_func( $style = 'style_1', $grid = '', $img_
 	<?php 
 }
 add_filter( 'micemade_elements_loop_post','micemade_elements_loop_post_func', 10, 6 );
+function micemade_elements_excerpt( $limit = 20 ) {
+	$excerpt = explode( ' ', get_the_excerpt(), $limit );
+	if ( count( $excerpt )>=$limit ) {
+		array_pop($excerpt);
+		$excerpt = implode( " ",$excerpt ).' ...';
+	} else {
+		$excerpt = implode( " ",$excerpt );
+	}	
+	$excerpt = preg_replace('`[[^]]*]`','', $excerpt ) ;
+	return $excerpt;
+}
 /**
  *  TERM DATA
  *  
