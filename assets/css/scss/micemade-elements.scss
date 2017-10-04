@@ -63,7 +63,7 @@
 						float: none !important;
 						display: inline-block;
 						vertical-align: top;
-						margin-top: 20px !important;
+						margin-bottom: 20px;
 						
 					}
 					table.variations { 
@@ -98,44 +98,14 @@
 				.woocommerce-product-rating { position: absolute; top: 20px; }
 			}
 			
-			.thumb-summary-link {
-				z-index: 0;
-				content: "";
-				position: absolute;
-				display: block;
-				width: 40px;
-				height: 40px;
-				border-radius: 20px;
-				text-align: center;
-				background: #fff;
-				color: #ccc;
-				margin: 0 !important;
-				box-shadow: 0 0 20px rgba(0,0,0,0.12);
-				&:before {
-					position: absolute;
-					top: 50%;
-					left: 50%;
-					transform: translateX(-50%) translateY(-50%);
-				}
-			}
 			
 			// Variants: 
 			&.images_left {
 				flex-direction: row;
-				.thumb-summary-link {
-					top: 50%;
-					left: 0;
-					transform: translateX(-50%) translateY(-50%);
-				}
 			}
 
 			&.images_right {
 				flex-direction: row-reverse;
-				.thumb-summary-link {
-					top: 50%;
-					left: 100%;
-					transform: translateX(-50%) translateY(-50%) rotate(180deg);
-				}
 			}
 
 			&.images_left, &.images_right {
@@ -157,22 +127,10 @@
 			
 			&.vertical {
 				flex-direction: column;
-			
-				.thumb-summary-link {
-					top: 0;
-					left: 50%;
-					transform: translateX(-50%) translateY(-50%) rotate(90deg);
-				}
-				
 			}
 			
 			&.vertical_reversed {
 				flex-direction: column-reverse;
-				.thumb-summary-link {
-					top: 100%;
-					left: 50%;
-					transform: translateX(-50%) translateY(-50%) rotate(-90deg);
-				}
 			}
 			&.vertical, &.vertical_reversed {
 				.product-thumb {
@@ -265,7 +223,7 @@
 				.price {
 					font-size: 22px;
 					padding: 0.5em 0;
-					display: inline-block;
+					display: block;
 					font-style: normal;
 				}
 
@@ -361,13 +319,13 @@
 					top: 10%;
 					bottom: 10%;
 					left: 40%;
-					right: 10%;
+					right: 0;
 					box-shadow: 0 0 50px rgba(0,0,0,0.2);
 				}
 				.post-text {
 					margin:{
 						left:40%;
-						right: 10%;
+						right: 0;
 						top: 10%;
 						bottom: 10%;
 					} 

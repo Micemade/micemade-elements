@@ -3,7 +3,7 @@
  * Plugin Name: Micemade Elements
  * Description: Addon plugin with custom elements for Elementor, created by Micemade. Elementor plugin required.
  * Plugin URI: https://github.com/Micemade/micemade-elements/
- * Version: 0.3.6.1
+ * Version: 0.3.7
  * Author: micemade
  * Author URI: http://micemade.com
  * Text Domain: micemade-elements
@@ -14,7 +14,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Micemade_Elements {
-
 
 	private static $instance = null;
 	
@@ -82,34 +81,9 @@ class Micemade_Elements {
 	
 	private function activation_checks() {
 		
-		// VARIOUS PLUGINS ACTIVATION CHECK:
-		// if WOOCOMMERCE activated:
-		if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) )  {
-			define('MICEMADE_ELEMENTS_WOO_ACTIVE',true );								
-		}else{
-			define('MICEMADE_ELEMENTS_WOO_ACTIVE',false );	
-		}
-		// if YITH WC WISHLIST activated:
-		if ( in_array( 'yith-woocommerce-wishlist/init.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) )  {
-			define('MICEMADE_ELEMENTS_WISHLIST_ACTIVE',true );
-		}else{
-			define('MICEMADE_ELEMENTS_WISHLIST_ACTIVE',false );
-		}
+		// VARIOUS PLUGINS ACTIVATION CHECKS:
+		require_once MICEMADE_ELEMENTS_DIR . 'includes/plugins.php';
 		
-		// if WPML activated:
-		if ( in_array( 'sitepress-multilingual-cms/sitepress.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) )  {
-			define('MICEMADE_ELEMENTS_WPML_ON',true );										
-		}else{
-			define('MICEMADE_ELEMENTS_WPML_ON',false );	
-		}
-		
-		// if REV. SLIDER activated:
-		if ( in_array( 'revslider/revslider.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) )  {
-			define('MICEMADE_ELEMENTS_REVSLIDER_ON',true );										
-		}else{
-			define('MICEMADE_ELEMENTS_REVSLIDER_ON',false );	
-		}
-
 	}
 	
 	public function add_widgets_category() {
@@ -127,67 +101,28 @@ class Micemade_Elements {
 
 	public function widgets_registered() {
 
-		// get our own widgets up and running:
-		// copied from widgets-manager.php
-		if ( class_exists( 'Elementor\Plugin' ) ) {
-			
-			if ( is_callable( 'Elementor\Plugin', 'instance' ) ) {
-								
-				$theElementor = Elementor\Plugin::instance();
-				
-				if ( isset( $theElementor->widgets_manager ) ) {
-					
-					if ( method_exists( $theElementor->widgets_manager, 'register_widget_type' ) ) {
-
-						$widgets = self::$instance -> widgets_list();
-						
-						foreach( $widgets as $file => $class ) {
-							$widget_file   = 'plugins/elementor/'.$file.'.php';
-							$template_file = locate_template( $widget_file );
-													
-							if ( !$template_file || !is_readable( $template_file ) ) {
-								$template_file = plugin_dir_path(__FILE__) . 'widgets/'.$file.'.php';
-							}
-							
-							if ( $template_file && is_readable( $template_file ) ) {
-								require_once $template_file;
-								
-								$widget_class = 'Elementor\\' . $class;
-								
-								$theElementor->widgets_manager->register_widget_type( new $widget_class );
-							}
-							
-						} // end foreach
-						
-					} // end if( method_exists ...
-					
-				} // end if ( isset( $theElementor ...
-				
-			} // end if ( is_callable( 'Elementor\Plugin' ...
-			
-		} //if ( class_exists( 'Elementor\Plugin' ) )
+		require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-posts-grid.php';
 		
-	}
-	
-	public function widgets_list() {
-		
-		$widgets_list = array(
-			'micemade-posts-grid'			=> 'Micemade_Posts_Grid'
-		);
-		
-		if( MICEMADE_ELEMENTS_WOO_ACTIVE ) {
-			$widgets_list['micemade-wc-products']			= 'Micemade_WC_Products';
-			$widgets_list['micemade-wc-products-slider']	= 'Micemade_WC_Products_Slider';
-			$widgets_list['micemade-wc-single-product']		= 'Micemade_WC_Single_Product';
-			$widgets_list['micemade-wc-categories']			= 'Micemade_WC_Categories';
-		}
-		
+		// Revoltion Slider plugin
 		if( MICEMADE_ELEMENTS_REVSLIDER_ON ) {
-			$widgets_list['micemade-rev-slider']			= 'Micemade_Rev_Slider';
+			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-rev-slider.php';	
 		}
-				
-		return $widgets_list;
-		
+		// WooCommerce plugin
+		if( MICEMADE_ELEMENTS_WOO_ACTIVE ) {
+			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-wc-categories.php';
+			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-wc-products.php';
+			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-wc-products-slider.php';
+			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-wc-single-product.php';
+			
+		}
+		// Contact Form 7 plugin
+		if( MICEMADE_ELEMENTS_CF7_ON ) {
+			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-contact-form-7.php';	
+		}
+		// MailChimp 4 WP plugin
+		if( MICEMADE_ELEMENTS_MC4WP_ON ) {
+			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-mailchimp.php';
+		}
 	}
 	
 	public function includes () {

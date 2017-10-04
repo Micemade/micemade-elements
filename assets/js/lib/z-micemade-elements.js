@@ -156,6 +156,7 @@
 			var	$loader			= $_posts_holder.next('.micemade-elements_more-posts-wrap').find('.more_posts'),
 				$settings		= $_posts_holder.find('.posts-grid-settings'),
 				ppp				= $settings.data('ppp'),
+				sticky			= $settings.data('sticky'),
 				categories		= $settings.data('categories'),
 				style			= $settings.data('style'),
 				img_format		= $settings.data('img_format'),
@@ -181,6 +182,7 @@
 						url: micemadeJsLocalize.ajaxurl,
 						data: {
 							'ppp': ppp,
+							'sticky': sticky,
 							'categories': categories,
 							'style': style,
 							'img_format': img_format,

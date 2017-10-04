@@ -712,6 +712,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$settings		= $this->get_settings();
 		
 		$posts_per_page		= ! empty( $settings['posts_per_page'] )	? (int)$settings['posts_per_page'] : 6;
+		$sticky				= ! empty( $settings['sticky'] )			? $settings['sticky'] : '';
 		$offset				= ! empty( $settings['offset'] )			? (int)$settings['offset'] : 0;
 		$posts_per_row		= ! empty( $settings['posts_per_row'] )		? (int)$settings['posts_per_row'] : 3;
 		$posts_per_row_mob	= ! empty( $settings['posts_per_row_mob'] )	? (int)$settings['posts_per_row_mob'] : 1;
@@ -721,7 +722,6 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$excerpt			= ! empty( $settings['excerpt'] )			? $settings['excerpt'] : '';
 		$excerpt_limit		= ! empty( $settings['excerpt_limit'] )		? $settings['excerpt_limit'] : 20;
 		$meta				= ! empty( $settings['meta'] )				? $settings['meta'] : '';
-		$sticky				= ! empty( $settings['sticky'] )			? $settings['sticky'] : '';
 		$css_class			= ! empty( $settings['css_class'] )			? $settings['css_class'] : '';
 		$use_load_more		= ! empty( $settings['use_load_more'] )		? $settings['use_load_more'] : '';
 		
@@ -738,7 +738,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 			echo '<div class="micemade-elements_posts-grid'. (  $use_load_more ? ' micemade-elements-load-more' : '' ) .' mme-row '.esc_attr( $style ) .'">';
 						
 			if( $use_load_more ) {
-				echo '<input type="hidden" data-ppp="'. esc_attr($posts_per_page).'" data-categories="'. esc_js( json_encode($categories)) .'" data-style="'.  esc_attr($style) .'" data-img_format="'.  esc_attr($img_format) .'" data-excerpt="'.  esc_attr($excerpt) .'"  data-exc_limit="'.  esc_attr($excerpt_limit) .'" data-meta="'.  esc_attr($meta) .'" data-css_class="'.  esc_attr($css_class) .'" data-grid="'.  esc_attr($grid) .'" data-startoffset="'. $offset  .'"  class="posts-grid-settings">';
+				echo '<input type="hidden" data-ppp="'. esc_attr($posts_per_page).'" data-sticky="'. esc_attr($sticky).'" data-categories="'. esc_js( json_encode($categories)) .'" data-style="'.  esc_attr($style) .'" data-img_format="'.  esc_attr($img_format) .'" data-excerpt="'.  esc_attr($excerpt) .'"  data-exc_limit="'.  esc_attr($excerpt_limit) .'" data-meta="'.  esc_attr($meta) .'" data-css_class="'.  esc_attr($css_class) .'" data-grid="'.  esc_attr($grid) .'" data-startoffset="'. $offset  .'"  class="posts-grid-settings">';
 	
 			}
 			
@@ -766,3 +766,5 @@ class Micemade_Posts_Grid extends Widget_Base {
 	public function render_plain_content( $instance = [] ) {}
 
 }
+
+Plugin::instance()->widgets_manager->register_widget_type( new Micemade_Posts_Grid() );

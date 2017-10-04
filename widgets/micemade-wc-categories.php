@@ -80,7 +80,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_responsive_control(
 			'horiz_spacing',
 			[
-				'label' => __( 'Categories horizontal spacing', 'micemade-elements' ),
+				'label' => __( 'Grid horizontal spacing', 'micemade-elements' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => '',
@@ -103,7 +103,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_responsive_control(
 			'vert_spacing',
 			[
-				'label' => __( 'Categories bottom spacing', 'micemade-elements' ),
+				'label' => __( 'Grid bottom spacing', 'micemade-elements' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => '20',
@@ -118,6 +118,28 @@ class Micemade_WC_Categories extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .category' => 'margin-bottom:{{SIZE}}px;',
 					'{{WRAPPER}} .mme-row' => 'margin-bottom:-{{SIZE}}px;',
+				],
+
+			]
+		);
+
+		$this->add_responsive_control(
+			'inner_spacing',
+			[
+				'label' => __( 'Inner spacing', 'micemade-elements' ),
+				'type' => Controls_Manager::SLIDER,
+				'default' => [
+					'size' => '0',
+				],
+				'range' => [
+					'px' => [
+						'max' => 100,
+						'min' => 0,
+						'step' => 1,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .category__inner-wrap' => 'margin:{{SIZE}}px;',
 				],
 
 			]
@@ -421,3 +443,5 @@ class Micemade_WC_Categories extends Widget_Base {
 	public function render_plain_content( $instance = [] ) {}
 
 }
+
+Plugin::instance()->widgets_manager->register_widget_type( new Micemade_WC_Categories() );

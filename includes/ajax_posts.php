@@ -18,6 +18,7 @@ if ( !function_exists('micemade_elements_more_post_ajax') ) {
 		global $post;
 	    
 		$posts_per_page = ( isset($_POST['ppp']) )			? $_POST['ppp'] : 3;
+		$sticky 		= ( isset($_POST['sticky']) )		? $_POST['sticky'] : false;
 	    $categories 	= ( isset($_POST['categories']) )	? json_decode( $_POST['categories'] ) : array();
 	    $style			= ( isset($_POST['style']) )		? $_POST['style'] : 'style_1';
 	    $img_format		= ( isset($_POST['img_format']) )	? $_POST['img_format'] : 'thumbnail';

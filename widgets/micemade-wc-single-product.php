@@ -130,6 +130,30 @@ class Micemade_WC_Single_Product extends Widget_Base {
 			]
 		);
 		
+		$this->add_responsive_control(
+			'product_elements_spacing',
+			[
+				'label' => __( 'Elements vertical spacing', 'micemade-elements' ),
+				'type' => Controls_Manager::SLIDER,
+				'default' => [
+					'size' => '',
+				],
+				'range' => [
+					'px' => [
+						'max' => 200,
+						'min' => 0,
+						'step' => 1,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .woocommerce div.product div.summary>*' => 'margin-top: {{SIZE}}px;margin-bottom: {{SIZE}}px;',
+					'{{WRAPPER}} .woocommerce div.product div.summary form.cart >*' => 'margin-bottom: {{SIZE}}px;',
+				],
+				/* 'condition' => [
+					'style' => ['style_3','style_4']
+				], */
+			]
+		);
 		
 		$this->add_responsive_control(
 			'padding',
@@ -267,7 +291,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 
 					<div class="thumb-summary-link fa fa-angle-left"></div>
 					
-					<?php do_action( 'woocommerce_single_product_summary' ); ?>
+					<?php do_action( 'woocommerce_single_product_summary', 100 ); ?>
 				
 				</div>
 			
@@ -289,3 +313,5 @@ class Micemade_WC_Single_Product extends Widget_Base {
 	// public function render_plain_content( $instance = [] ) {}
 
 }
+
+Plugin::instance()->widgets_manager->register_widget_type( new Micemade_WC_Single_Product() );

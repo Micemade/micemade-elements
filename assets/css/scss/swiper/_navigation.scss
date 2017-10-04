@@ -18,10 +18,11 @@
 	.swiper-button-prev, .swiper-container-rtl .swiper-button-next,
 	.swiper-button-next, .swiper-container-rtl .swiper-button-prev	{
 		
-		background-color: red;
+		background-color: #333;
 		-webkit-mask-image: url(arrow.svg);
 		mask-image: url(arrow.svg);
 		background-image: none;
+		background-size: 80% 80%;
 		
 	}
 	.swiper-button-prev, .swiper-container-rtl .swiper-button-next {
