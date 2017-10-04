@@ -211,7 +211,7 @@ class Micemade_Elements {
 	
 	public function mega_menu_post_type() {
 		
-		$micemade_themes	= array( 'natura', 'beautify', 'florist', 'cloth'); // list of Micemade themes compatible with MM Mega menu CPT
+		$micemade_themes	= array( 'natura', 'beautify', 'roses', 'cloth'); // list of Micemade themes compatible with MM Mega menu CPT
 		
 		if( is_child_theme() ) {
 			$parent_theme		= wp_get_theme();
