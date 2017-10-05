@@ -52,6 +52,9 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 
 **Changelog**
 
+= 0.3.8. =
+* Added option for displaying product info as in catalog (simple) - in "Micemade WC Single Product"
+
 = 0.3.7 = 
 * Changed registering of MM Elements elements - simpler method
 * Added "Micemade Contact Form 7 Forms" element for displaying contact forms (required "Contact Form 7" plugin)

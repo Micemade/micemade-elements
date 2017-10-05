@@ -51,10 +51,10 @@ class Micemade_WC_Single_Product extends Widget_Base {
 				'type' => Controls_Manager::SELECT,
 				'default' => 'images_left',
 				'options' => [
-					'images_left'		=> 'Image left',
-					'images_right'		=> 'Image right',
-					'vertical'			=> 'Vertical',
-					'vertical_reversed'	=> 'Vertical reversed',
+					'images_left'		=> esc_html__( 'Image left', 'micemade-elements' ),
+					'images_right'		=> esc_html__( 'Image right', 'micemade-elements' ),
+					'vertical'			=> esc_html__( 'Vertical', 'micemade-elements' ),
+					'vertical_reversed'	=> esc_html__( 'Vertical reversed', 'micemade-elements' ),
 				]
 			]
 		);
@@ -66,6 +66,34 @@ class Micemade_WC_Single_Product extends Widget_Base {
 				'type' => Controls_Manager::SELECT,
 				'default' => 'thumbnail',
 				'options' => apply_filters('micemade_elements_image_sizes','')
+			]
+		);
+		
+		
+		$this->add_control(
+			'product_data',
+			[
+				'label' => esc_html__( 'Product data', 'micemade-elements' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 'full',
+				'options' => [
+					'full'		=> esc_html__( 'Full - single product page', 'micemade-elements' ),
+					'reduced'	=> esc_html__( 'Reduced - catalog product', 'micemade-elements' ),
+				],
+				
+			]
+		);
+		$this->add_control(
+			'short_desc',
+			[
+				'label'		=> esc_html__( 'Show "Product Short Description"', 'micemade-elements' ),
+				'type' => Controls_Manager::SWITCHER,
+				'label_off' => __( 'No', 'elementor' ),
+				'label_on' => __( 'Yes', 'elementor' ),
+				'default' => 'yes',
+				'condition' => [
+					'product_data' => 'reduced',
+				],
 			]
 		);
 		
@@ -240,6 +268,8 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		$post_name		= ! empty( $settings['post_name'] )		? $settings['post_name'] : '';
 		$layout			= ! empty( $settings['layout'] )		? $settings['layout'] : 'images_left';
 		$img_format		= ! empty( $settings['img_format'] )	? $settings['img_format'] : 'thumbnail';
+		$product_data	= ! empty( $settings['product_data'] )	? $settings['product_data'] : 'full';
+		$short_desc 	= ! empty( $settings['short_desc'] )	? ( $settings['short_desc'] == 'yes' ) : '';
 		
 		if( is_array($post_name) ) {
 			$post_name = $post_name;
@@ -247,7 +277,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 			$post_name = array( $post_name );
 		}
 		
-		global $post, $woocommerce_loop;
+		global $post;
 		
 		$args = array( 
 			'posts_per_page'	=> 1,
@@ -256,7 +286,6 @@ class Micemade_WC_Single_Product extends Widget_Base {
 			'post_status'		=> 'publish',
 			'post_parent'		=> 0,
 			'suppress_filters'	=> false,
-			'numberposts'		=> 1,
 			'post_name__in'		=> $post_name
 		);
 				
@@ -281,20 +310,25 @@ class Micemade_WC_Single_Product extends Widget_Base {
 					$img_src		= wp_get_attachment_image_src( $post_thumb_id , $img_format );
 					$img_url		= $img_src[0]; 
 					
-					echo '<div class="product-thumb" style="background-image: url( '.esc_url( $img_url) .' );"></div>';
+					echo '<div class="product-thumb" style="background-image: url( '. esc_url(  $img_url ) .' );"></div>';
 				}
 				?>
-				
-				<?php remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_meta' , 40 ); ?>
-				
-				<div <?php echo $this->get_render_attribute_string( 'summary' ); ?>>
 
-					<div class="thumb-summary-link fa fa-angle-left"></div>
-					
-					<?php do_action( 'woocommerce_single_product_summary', 100 ); ?>
+				<div <?php echo $this->get_render_attribute_string( 'summary' ); ?>>
+					<?php 
+					if( $product_data == 'full' ) { 
+						// display full single prod. summary
+						remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_meta' , 40 );
+						do_action( 'woocommerce_single_product_summary' ); 
+
+					}else{
+						// display price / short desc. / button
+						apply_filters( 'micemade_elements_simple_prod_data', $short_desc );
+					}
+					?>
 				
 				</div>
-			
+
 			</div>
 			
 			<?php } // end foreach ?>

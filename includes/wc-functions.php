@@ -75,7 +75,7 @@ add_filter( 'micemade_elements_wc_query_args','micemade_elements_wc_query_args_f
 function micemade_elements_loop_product_func( $style = 'style_1', $img_format = 'thumbnail', $posted_in = true, $short_desc = false, $price = true, $add_to_cart = true, $css_class = '' ) {
 	?>
 	<div class="post swiper-slide">
-				
+		
 		<div class="inner-wrap">
 		
 			<?php
@@ -118,7 +118,7 @@ function micemade_elements_loop_product_func( $style = 'style_1', $img_format = 
 						the_excerpt(); 
 						
 						echo '<a href="'. get_permalink() .'" title="'.the_title_attribute("echo=0").'" class="micemade-elements-readmore '. esc_attr( $css_class ) .' ">'. apply_filters( 'micemade-elements-prod-details', esc_html__( 'Product details','micemade-elements' ) ).'</a>';
-					}				
+					}
 					?>
 				</div>
 			
@@ -130,4 +130,21 @@ function micemade_elements_loop_product_func( $style = 'style_1', $img_format = 
 	<?php 
 }
 add_filter( 'micemade_elements_loop_product','micemade_elements_loop_product_func', 10, 7 );
-?>
+/**
+ * SIMPLE PRODUCT DATA (as in WC catalog)
+ *
+ * @return html
+ */
+function micemade_elements_simple_prod_data_func( $short_desc = true ){
+	
+	echo '<h3 class="product_title"><a href="'. esc_attr( get_permalink() ) .'" title="'. the_title_attribute (array('echo' => 0)).'"> ' . get_the_title() .'</a></h4>';
+
+	if( $short_desc ) {
+		wc_get_template_part( 'single-product/short', 'description' );
+	}	
+	woocommerce_template_loop_price();
+	
+	woocommerce_template_loop_add_to_cart();
+
+}
+add_filter( 'micemade_elements_simple_prod_data', 'micemade_elements_simple_prod_data_func', 10, 1);
