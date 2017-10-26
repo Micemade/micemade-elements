@@ -144,7 +144,9 @@ function micemade_elements_simple_prod_data_func( $short_desc = true ){
 	}	
 	woocommerce_template_loop_price();
 	
-	woocommerce_template_loop_add_to_cart();
+	echo '<div class="add-to-cart-wrapper">';
+		woocommerce_template_loop_add_to_cart();
+	echo '</div>';
 
 }
 add_filter( 'micemade_elements_simple_prod_data', 'micemade_elements_simple_prod_data_func', 10, 1);

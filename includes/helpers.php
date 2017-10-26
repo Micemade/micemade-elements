@@ -41,8 +41,9 @@ function micemade_elements_grid_class( $items_desktop = 3, $items_mobile = 1,  $
     }
 
     $style_class = $no_margin ? ( $desktop_class . ' ' . $mobiles_class . ' mme-zero-margin') : ( $desktop_class . ' ' . $mobiles_class );
-
-    return $style_class;
+	
+	// Added fixed full width to small screen - to do controls for small devices (?)
+    return $style_class . ' mme-col-sm-12 mme-col-xs-12';
 }
 /*
  * Converting string to boolean

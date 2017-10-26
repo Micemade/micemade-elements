@@ -51,7 +51,7 @@ class Micemade_WC_Products extends Widget_Base {
 			[
 				'label' => __( 'Products per row', 'micemade-elements' ),
 				'type' => Controls_Manager::SELECT,
-				'default' => 3,
+				'default' => 4,
 				'options' => [
 					1 => __( 'One', 'micemade-elements' ),
 					2 => __( 'Two', 'micemade-elements' ),
@@ -67,7 +67,7 @@ class Micemade_WC_Products extends Widget_Base {
 			[
 				'label' => __( 'Products per row (on mobiles)', 'micemade-elements' ),
 				'type' => Controls_Manager::SELECT,
-				'default' => 3,
+				'default' => 2,
 				'options' => [
 					1 => __( 'One', 'micemade-elements' ),
 					2 => __( 'Two', 'micemade-elements' ),

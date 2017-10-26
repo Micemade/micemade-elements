@@ -149,12 +149,117 @@ class Micemade_WC_Single_Product extends Widget_Base {
 			]
 		);
 		
-		$this->add_control(
-			'heading_content',
+		$this->end_controls_section();
+		
+		/* 
+		 * SET OPTIONS FOR TITLE PRICE AND DESCRIPTION
+		 */
+		$this->start_controls_section(
+			'section_title_price_desc',
 			[
-				'label' => __( 'Additional layout options', 'micemade-elements' ),
+				'label' => __( 'Title, price, description options', 'micemade-elements' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+			]
+		);
+		// Title Options
+		$this->add_control(
+			'heading_title',
+			[
+				'label' => __( 'Title', 'micemade-elements' ),
 				'type' => Controls_Manager::HEADING,
 				'separator' => 'before',
+			]
+		);
+		$this->add_control(
+			'title_text_color',
+			[
+				'label' => __( 'Title Color', 'micemade-elements' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}} .entry-summary h3, {{WRAPPER}} .entry-summary h4' => 'color: {{VALUE}};',
+				],
+			]
+		);
+		
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'title_typography',
+				'label' => __( 'Typography', 'micemade-elements' ),
+				'scheme' => Scheme_Typography::TYPOGRAPHY_4,
+				'selector' => '{{WRAPPER}} .entry-summary h3, {{WRAPPER}} .entry-summary h4',
+			]
+		);
+		
+		// Price options
+		$this->add_control(
+			'heading_price',
+			[
+				'label' => __( 'Price', 'micemade-elements' ),
+				'type' => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+		$this->add_control(
+			'price_color',
+			[
+				'label' => __( 'Price Color', 'micemade-elements' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}} .entry-summary .price' => 'color: {{VALUE}};',
+				],
+			]
+		);
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'price_typography',
+				'label' => __( 'Typography', 'micemade-elements' ),
+				'scheme' => Scheme_Typography::TYPOGRAPHY_4,
+				'selector' => '{{WRAPPER}} .entry-summary .price',
+			]
+		);
+		// Description options
+		$this->add_control(
+			'heading_desc',
+			[
+				'label' => __( 'Short description', 'micemade-elements' ),
+				'type' => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+		
+		$this->add_control(
+			'desc_color',
+			[
+				'label' => __( 'Short description Color', 'micemade-elements' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}} .entry-summary .woocommerce-product-details__short-description' => 'color: {{VALUE}};',
+				],
+			]
+		);
+		
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'desc_typography',
+				'label' => __( 'Typography', 'micemade-elements' ),
+				'scheme' => Scheme_Typography::TYPOGRAPHY_4,
+				'selector' => '{{WRAPPER}} .entry-summary .woocommerce-product-details__short-description',
+			]
+		);
+		
+		$this->end_controls_section();
+		
+		$this->start_controls_section(
+			'section_additional',
+			[
+				'label' => __( 'Additional layout options', 'micemade-elements' ),
+				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
 		
@@ -251,8 +356,9 @@ class Micemade_WC_Single_Product extends Widget_Base {
 				],
 			]
 		);
-	
 		$this->end_controls_section();
+		
+		
 		
 		//Plugin::$instance->controls_manager->add_custom_css_controls( $this );
  

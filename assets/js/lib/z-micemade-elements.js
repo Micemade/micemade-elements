@@ -233,9 +233,54 @@
 			autoplay: 2500,
 			autoplayDisableOnInteraction: false
 		});
-		 */
-		
+		*/
+		function makeid() {
+			var text = "";
+			var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
+			for( var i=0; i < 5; i++ )
+				text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+			return text;
+		}
+
+		var micemadeElementsTabs = $('.micemade-elements_tabs');
+		
+		micemadeElementsTabs.each( function(){
+			
+			var randId = makeid();
+			
+			$(this).find('.tab-title').addClass( randId );
+			$(this).find('.tab-content').addClass( randId );
+			
+			var tabsWrapper = $(this).find('.tabs-wrapper'),
+				tabTitles = tabsWrapper.find('.tab-title'),
+				tabsContent =  $(this).find('.tabs-content-wrapper'),
+				content = tabsContent.find('.tab-content');
+
+			
+			//tabTitles.click( function(event) {
+			$( document ).on( 'click', '.tab-title', function(event) {
+				
+				if( ! $(this).hasClass( randId ) ) {
+					return;
+				}
+				
+				event.preventDefault();
+				$(this).addClass('active');
+				$(this).siblings().removeClass('active');
+				
+				var tab = $(this).data('tab');
+				
+				content.not('.tab-'+ tab).css('display', 'none').removeClass('active');
+				
+				tabsContent.find('.tab-' + tab).fadeIn().addClass('active');
+			});
+			
+		});
+		
+		
+		
 	});
 	
 })(jQuery);

@@ -88,7 +88,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_responsive_control(
 			'horiz_spacing',
 			[
-				'label' => __( 'Posts horizontal spacing', 'micemade-elements' ),
+				'label' => __( 'Posts grid horizontal spacing', 'micemade-elements' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => '',
@@ -110,7 +110,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_responsive_control(
 			'vert_spacing',
 			[
-				'label' => __( 'Posts bottom spacing', 'micemade-elements' ),
+				'label' => __( 'Posts grid bottom spacing', 'micemade-elements' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => '20',
@@ -231,7 +231,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_control(
 			'post_text_background_color',
 			[
-				'label' => __( 'Post text background', 'micemade-elements' ),
+				'label' => __( 'Post content background', 'micemade-elements' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .inner-wrap' => 'background-color: {{VALUE}};',
@@ -250,7 +250,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_control(
 			'post_text_background_color_hover',
 			[
-				'label' => __( 'Hover post text  background', 'micemade-elements' ),
+				'label' => __( 'Hover post content background', 'micemade-elements' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .inner-wrap:hover'=> 'background-color: {{VALUE}};',
@@ -267,7 +267,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_responsive_control(
 			'post_text_height',
 			[
-				'label' => __( 'Post text height', 'micemade-elements' ),
+				'label' => __( 'Post content height', 'micemade-elements' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => '',
@@ -289,21 +289,55 @@ class Micemade_Posts_Grid extends Widget_Base {
 		);
 		
 		$this->add_responsive_control(
-			'content_vertical_alignment',
+			'post_thumb_width',
 			[
-				'label' => __( 'Vertical Align Post Text', 'micemade-elements' ),
-				'type' => Controls_Manager::SELECT,
-				'options' => [
-					'flex-start'=>__( 'Top', 'micemade-elements' ),
-					'center'	=> __( 'Middle', 'micemade-elements' ),
-					'flex-end'	=> __( 'Bottom', 'micemade-elements' ),
+				'label' => __( 'Post thumb width (%)', 'micemade-elements' ),
+				'type' => Controls_Manager::SLIDER,
+				'default' => [
+					'size' => '',
 				],
-				'default' => 'center',
+				'range' => [
+					'px' => [
+						'max' => 100,
+						'min' => 0,
+						'step' => 1,
+					],
+				],
 				'selectors' => [
-					'{{WRAPPER}} .post-text' => 'justify-content: {{VALUE}};',
+					// thumb style 2
+					'{{WRAPPER}} .post-thumb' => 'width:{{SIZE}}%;',
+					'{{WRAPPER}} .style_2 .post-text' => 'width: calc( 100% - {{SIZE}}%);',
+					// thumb style 4
+					'{{WRAPPER}} .post-thumb-back' => 'right: calc( 100% - {{SIZE}}%);',
+
 				],
 				'condition' => [
-					'style' => ['style_3','style_4']
+					'style' => ['style_2','style_4']
+				],
+			]
+		);
+		
+		$this->add_responsive_control(
+			'post_content_width',
+			[
+				'label' => __( 'Post content width (%)', 'micemade-elements' ),
+				'type' => Controls_Manager::SLIDER,
+				'default' => [
+					'size' => '',
+				],
+				'range' => [
+					'px' => [
+						'max' => 100,
+						'min' => 0,
+						'step' => 1,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .style_4 .post-overlay' => 'left: calc( 100% - {{SIZE}}%);',
+					'{{WRAPPER}} .style_4 .post-text' => 'margin-left: calc( 100% - {{SIZE}}%);',
+				],
+				'condition' => [
+					'style' => ['style_4']
 				],
 			]
 		);
@@ -312,7 +346,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_responsive_control(
 			'post_text_padding',
 			[
-				'label' => esc_html__( 'Post text padding', 'micemade-elements' ),
+				'label' => esc_html__( 'Post content padding', 'micemade-elements' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', '%' ],
 				'selectors' => [
@@ -324,7 +358,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_responsive_control(
 			'post_text_align',
 			[
-				'label' => __( 'Post text alignment', 'micemade-elements' ),
+				'label' => __( 'Post content alignment', 'micemade-elements' ),
 				'type' => Controls_Manager::CHOOSE,
 				'options' => [
 					'left' => [
@@ -347,6 +381,66 @@ class Micemade_Posts_Grid extends Widget_Base {
 				
 			]
 		);
+		
+		
+		$this->add_responsive_control(
+			'content_vertical_alignment',
+			[
+				'label' => __( 'Vertical align', 'micemade-elements' ),
+				'type' => Controls_Manager::SELECT,
+				'options' => [
+					'flex-start'=>__( 'Top', 'micemade-elements' ),
+					'center'	=> __( 'Middle', 'micemade-elements' ),
+					'flex-end'	=> __( 'Bottom', 'micemade-elements' ),
+				],
+				'default' => 'center',
+				'selectors' => [
+					'{{WRAPPER}} .post-text' => 'justify-content: {{VALUE}};',
+					'{{WRAPPER}} .inner-wrap' => 'align-items: {{VALUE}};',
+				],
+				'condition' => [
+					'style' => ['style_2','style_3','style_4']
+				],
+			]
+		);
+		
+		$this->add_responsive_control(
+			'post_elements_spacing',
+			[
+				'label' => __( 'Elements vertical spacing', 'micemade-elements' ),
+				'type' => Controls_Manager::SLIDER,
+				'default' => [
+					'size' => '',
+				],
+				'range' => [
+					'px' => [
+						'max' => 200,
+						'min' => 0,
+						'step' => 1,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .post-text h4' => 'margin-bottom: {{SIZE}}px;',
+					'{{WRAPPER}} .post-text meta' => 'margin-bottom: {{SIZE}}px;',
+					'{{WRAPPER}} .post-text p' => 'margin-bottom: {{SIZE}}px;',
+					'{{WRAPPER}} .post-text a.micemade-elements-readmore  ' => 'margin-bottom: {{SIZE}}px;',
+				],
+				
+			]
+		);
+		
+		$this->add_responsive_control(
+			'post_overal_padding',
+			[
+				'label' => esc_html__( 'Post overal padding', 'micemade-elements' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'em', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .inner-wrap' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+		
 		
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
