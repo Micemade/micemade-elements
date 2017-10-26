@@ -27,6 +27,7 @@ Micemade Elements features a collection of premium, easy to use yet highly funct
 * **Micemade WC Single Product** - display WooCommerce single product - (requires WooCommerce)
 * **Micemade WC Products Slider** - display WooCommerce products slider ( Swiper.js ) - (requires WooCommerce)
 * **Micemade WC Categories** - display WooCommerce categories - (requires WooCommerce)
+* **Micemade WC Products Tabs** - display WooCommerce products in tabs - (requires WooCommerce)
 * **Micemade Revolution Slider** - display single Revolution slider - (requires Revolution Slider - premium plugin)
 * **Micemade Contact Form 7 forms** - display one of contact forms created with "Contact Form 7" plugin
 * **Micemade MailChimp 4 WP forms** - display one of newsletter forms created with "MailChimp 4 WP forms" plugin
@@ -51,6 +52,12 @@ Our tests indicate that the elements work well with most themes that are well co
 Time will tell. When we estimate plugin has enough added functionalities to Elementor, or some other reason, it will be available on wp.org. So far, install it from GitHub (Download zip or clone the repository) .
 
 **Changelog**
+= 0.4.0. =
+* Added "Micemade WC Products Tabs" element - display WC catalog items in tabs ( use WC or theme "content-product.php" template)
+* CSS tweaks in various elements
+* Added "Ambiance" and "Ayame" to Micemade themes list for Mega Menu support
+* Additional options for "Micemade Posts Grid" element
+* Additional options for "Micemade WC Single Product"
 
 = 0.3.8. =
 * Added option for displaying product info as in catalog (simple) - in "Micemade WC Single Product"
