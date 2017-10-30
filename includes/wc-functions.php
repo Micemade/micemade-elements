@@ -150,3 +150,26 @@ function micemade_elements_simple_prod_data_func( $short_desc = true ){
 
 }
 add_filter( 'micemade_elements_simple_prod_data', 'micemade_elements_simple_prod_data_func', 10, 1);
+/**
+ *  PRODUCT COUNT PER CATEGORY
+ *  
+ *  @param [int] $term_id Parameter_Description
+ *  @return html
+ *  
+ *  @details html with count of products in category
+ */
+function micemade_elements_product_count_f( $term_id ) {
+	
+	$products_count	= get_woocommerce_term_meta( intval($term_id),'product_count_product_cat' );
+			
+	if ( is_wp_error( $products_count  ) || !$products_count ) return;
+	
+	$prod_count = '<span class="category__product-count">';
+	
+	$prod_count .= sprintf( _n( '%s product', '%s products', $products_count, 'micemade-elements' ), $products_count );
+	
+	$prod_count .= '</span>';
+	
+	return $prod_count;
+}
+add_filter( 'micemade_elements_product_count', 'micemade_elements_product_count_f', 100, 3 );

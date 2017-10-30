@@ -52,17 +52,22 @@ Our tests indicate that the elements work well with most themes that are well co
 Time will tell. When we estimate plugin has enough added functionalities to Elementor, or some other reason, it will be available on wp.org. So far, install it from GitHub (Download zip or clone the repository) .
 
 **Changelog**
-= 0.4.0. =
+
+*** 0.4.1. ***
+* Translation strings fixes
+* functions re-organized in appropriate files
+
+*** 0.4.0. ***
 * Added "Micemade WC Products Tabs" element - display WC catalog items in tabs ( use WC or theme "content-product.php" template)
 * CSS tweaks in various elements
 * Added "Ambiance" and "Ayame" to Micemade themes list for Mega Menu support
 * Additional options for "Micemade Posts Grid" element
 * Additional options for "Micemade WC Single Product"
 
-= 0.3.8. =
+*** 0.3.8. ***
 * Added option for displaying product info as in catalog (simple) - in "Micemade WC Single Product"
 
-= 0.3.7 = 
+*** 0.3.7 *** 
 * Changed registering of MM Elements elements - simpler method
 * Added "Micemade Contact Form 7 Forms" element for displaying contact forms (required "Contact Form 7" plugin)
 * Added "Micemade MailChimp 4 WP Forms" element for displaying newsletter subscription forms (required "MailChimp 4 WP" plugin)
@@ -70,94 +75,94 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 * Added "Inner spacing" control in "Micemade WC Categories"
 * Added "Elements vertical spacing" for product info elements, in "Micemade WC Single Product"
 
-= 0.3.6 = 
+*** 0.3.6 *** 
 * Micemade elements grouped in separate "Micemade Elements" category, in editor sidebar
 * Fixed slider navigation color changing in "Micemade WC Products Slider"
 * Refactored background / overlay color (with hover) for "Micemade Posts Grid"
 * Added spacing between product info elements un "Micemade WC Products Slider"
 * Additional base style and hover image effect added to "Micemade WC Categories"
 	
-= 0.3.5 =
+*** 0.3.5 ***
 * Additional fix for Micemade WC Categories element (missing categories)
 
-= 0.3.4 =
+*** 0.3.4 ***
 * Fix - Micemade WC Categories errors when missing category
 * Fix - corrected Micemade WC products horizontal spacing 
 * Tweak -  removed css transition if class "parallax" is added to section/column
 
-= 0.3.3=
+*** 0.3.3=
 * Fix - missing Mega menu if Micemade CHILD theme was activated
 
-= 0.3.2 =
+*** 0.3.2 ***
 * Added "Florist" theme to supported Micemade Themes
 
-= 0.3.1 =
+*** 0.3.1 ***
 * Fixes for WC products post_class (reset post class)
 
-= 0.3.0 =
+*** 0.3.0 ***
 * Fixes for terms functions
 * Changes in Micemade WC products (catalog view)
 
-= 0.2.9 =
+*** 0.2.9 ***
 * Fixes for css styling of Single product element
 
-= 0.2.8 =
+*** 0.2.8 ***
 * Repaced support for Adorn theme with support for Beautify theme
 
-= 0.2.7 =
+*** 0.2.7 ***
 * Single product elements css and settings tweaks
 
-= 0.2.6 =
+*** 0.2.6 ***
 * Tweaked product info styling options on products slider element
 
-= 0.2.5 =
+*** 0.2.5 ***
 * Fixed responsive styles for Single product element
 * Added alignment control in Single product element
 
-= 0.2.4 =
+*** 0.2.4 ***
 * Replaced all the CHECKBOX controls with SWITCHER controls
 
-= 0.2.3 =
+*** 0.2.3 ***
 * Added automatic enabling of MM Mega Menu CPT for Micemade themes.
 
-= 0.2.2 =
+*** 0.2.2 ***
 * Fixed GitHub updater
 * Added color control for Products slider navigaton buttons
 
-= 0.2.1 =
+*** 0.2.1 ***
 * Added parallax script ( use by adding "parallax" selector in Edit Section/Column > Advanced > CSS Classes)
 * Fixed left/right swiper slider position
 * Added left/right toggle off/on
 
-= 0.2.0 =
+*** 0.2.0 ***
 * Added "MM Mega menu" custom post type for usage with Micemade themes ( MegaMenu with Elementor )
 * Added background, border and padding controls for Products slider and Posts grid titles and excerpt
 * Added vertical alignment for styles 3 & 4 in Products slider and Posts grid
 * corrected all the textdomains
 
-= 0.1.1 =
+*** 0.1.1 ***
 * Added Color control for swiper pagination
 
-= 0.1.0 =
+*** 0.1.0 ***
 * Added "Micemade WC Categories" element
 * Added "Micemade WC Products Slider" element
 * Added 4th style for posts grid and products slider elements
 
-= 0.0.5 =
+*** 0.0.5 ***
 * Added ajax "Load more" to Micemade posts grid elements
 * Added 3rd style posts grid
 
-= 0.0.4 =
+*** 0.0.4 ***
 * Added Revolution Slider element - pick one of created Revolution sliders
 * Added css class field for custom "Read more" button class
 
-= 0.0.3=
+*** 0.0.3=
 * Php errors fixes in multiple files
 
-= 0.0.2 =
+*** 0.0.2 ***
 * Added responsive breakpoints
 * Posts grid element - added text padding control
 * Single product widget tweaks
 
-= 0.0.1 =
+*** 0.0.1 ***
 * Initial release.

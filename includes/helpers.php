@@ -359,26 +359,3 @@ function micemade_elements_term_data_f( $taxonomy, $term, $img_format = 'thumbna
 	
 }
 add_filter( 'micemade_elements_term_data', 'micemade_elements_term_data_f', 100, 3 );
-/**
- *  PRODUCT COUNT PER CATEGORY
- *  
- *  @param [int] $term_id Parameter_Description
- *  @return html
- *  
- *  @details html with count of products in category
- */
-function micemade_elements_product_count_f( $term_id ) {
-	
-	$no_of_prods	= get_woocommerce_term_meta( intval($term_id),'product_count_product_cat' );
-			
-	if ( is_wp_error( $no_of_prods  ) || !$no_of_prods ) return;
-	
-	$prod_count = '<span class="category__product-count">';
-	
-	$prod_count .= sprintf( _n( '%s product', '%s products', $no_of_prods, 'mm_sow' ), $no_of_prods );
-	
-	$prod_count .= '</span>';
-	
-	return $prod_count;
-}
-add_filter( 'micemade_elements_product_count', 'micemade_elements_product_count_f', 100, 3 );

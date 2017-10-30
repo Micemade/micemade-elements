@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/index\n"
-"POT-Creation-Date: 2017-10-26 15:23:51+00:00\n"
+"POT-Creation-Date: 2017-10-30 08:54:20+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -35,15 +35,15 @@ msgstr ""
 msgid "Read more"
 msgstr ""
 
-#: includes/helpers.php:378
+#: includes/wc-functions.php:120 widgets/micemade-wc-products-slider.php:622
+msgid "Product details"
+msgstr ""
+
+#: includes/wc-functions.php:169
 msgid "%s product"
 msgid_plural "%s products"
 msgstr[0] ""
 msgstr[1] ""
-
-#: includes/wc-functions.php:120 widgets/micemade-wc-products-slider.php:622
-msgid "Product details"
-msgstr ""
 
 #: micemade-elements.php:95
 msgid "Micemade Elements"
