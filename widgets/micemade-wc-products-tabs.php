@@ -50,7 +50,7 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 					'horizontal' => __( 'Horizontal', 'micemade-elements' ),
 					'vertical' => __( 'Vertical', 'micemade-elements' ),
 				],
-				'prefix_class' => 'elementor-tabs-view-',
+				//'prefix_class' => 'elementor-tabs-view-',
 			]
 		);
 
@@ -232,13 +232,71 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 					],
 				],
 				'selectors' => [
-					'{{WRAPPER}} .elementor-tabs-wrapper' => 'width: {{SIZE}}{{UNIT}}',
+					'{{WRAPPER}} .tabs-wrapper' => 'flex-basis: {{SIZE}}{{UNIT}}',
+					'{{WRAPPER}} .tabs-content-wrapper' => 'flex-basis: calc( 100% - {{SIZE}}{{UNIT}} )',
 				],
 				'condition' => [
 					'type' => 'vertical',
 				],
 			]
 		);
+		
+		$this->add_responsive_control(
+			'align',
+			[
+				'label' => __( 'Tabs Alignment', 'elementor' ),
+				'type' => Controls_Manager::CHOOSE,
+				'options' => [
+					'left' => [
+						'title' => __( 'Left', 'elementor' ),
+						'icon' => 'fa fa-align-left',
+					],
+					'center' => [
+						'title' => __( 'Center', 'elementor' ),
+						'icon' => 'fa fa-align-center',
+					],
+					'right' => [
+						'title' => __( 'Right', 'elementor' ),
+						'icon' => 'fa fa-align-right',
+					],
+
+				],
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}} .tabs-wrapper' => 'text-align: {{VALUE}};',
+				],
+			]
+		);
+		$this->add_control(
+			'vertical-align',
+			[
+				'label' => __( 'Vertical Alignment', 'elementor' ),
+				'type' => Controls_Manager::CHOOSE,
+				'options' => [
+					'flex-start' => [
+						'title' => __( 'Top', 'elementor' ),
+						'icon' => 'fa fa-caret-down',
+					],
+					'center' => [
+						'title' => __( 'Center', 'elementor' ),
+						'icon' => 'fa fa-unsorted',
+					],
+					'flex-end' => [
+						'title' => __( 'Bottom', 'elementor' ),
+						'icon' => 'fa fa-caret-up',
+					],
+
+				],
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}} .tabs-wrapper, {{WRAPPER}} .tabs-content-wrapper' => 'justify-content: {{VALUE}};',
+				],
+				'condition' => [
+					'type' => 'vertical',
+				],
+			]
+		);
+
 
 		$this->add_control(
 			'border_width',
@@ -255,7 +313,7 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 					],
 				],
 				'selectors' => [
-					'{{WRAPPER}} .tab-title, {{WRAPPER}} .tab-title:before, {{WRAPPER}} .tab-title:after, {{WRAPPER}} .tab-content, {{WRAPPER}} .tabs-content-wrapper' => 'border-width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .tab-title, {{WRAPPER}} .tab-title:before, {{WRAPPER}} .tab-title:after, {{WRAPPER}} .tab-content, {{WRAPPER}} .tabs-content-wrapper, {{WRAPPER}} .tabs-content-wrapper:before' => 'border-width: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -265,8 +323,9 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 			[
 				'label' => __( 'Border Color', 'micemade-elements' ),
 				'type' => Controls_Manager::COLOR,
+				'default' => '#999999',
 				'selectors' => [
-					'{{WRAPPER}} .tab-title.active, {{WRAPPER}} .tab-title:before, {{WRAPPER}} .tab-title:after, {{WRAPPER}} .tab-content, {{WRAPPER}} .tabs-content-wrapper' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} .tab-title.active, {{WRAPPER}} .tab-title:before, {{WRAPPER}} .tab-title:after, {{WRAPPER}} .tab-content, {{WRAPPER}} .tabs-content-wrapper, {{WRAPPER}} .tabs-content-wrapper:before' => 'border-color: {{VALUE}};',
 				],
 			]
 		);
@@ -278,7 +337,19 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .tab-title.active' => 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .tabs-content-wrapper' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .tab-content.active' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+		
+		$this->add_responsive_control(
+			'tab_padding',
+			[
+				'label' => esc_html__( 'Tabs padding', 'micemade-elements' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'em', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .tab-title' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -298,12 +369,14 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 				'label' => __( 'Color', 'micemade-elements' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .elementor-tab-title' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .tab-title' => 'color: {{VALUE}};',
 				],
+				/* discarded - color from Elementor pallete
 				'scheme' => [
 					'type' => Scheme_Color::get_type(),
 					'value' => Scheme_Color::COLOR_1,
 				],
+				 */
 			]
 		);
 
@@ -315,10 +388,11 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .tab-title.active' => 'color: {{VALUE}};',
 				],
+				/* discarded - color from Elementor pallete
 				'scheme' => [
 					'type' => Scheme_Color::get_type(),
 					'value' => Scheme_Color::COLOR_4,
-				],
+				], */
 			]
 		);
 
@@ -347,7 +421,7 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', '%' ],
 				'selectors' => [
-					'{{WRAPPER}} .tabs-content-wrapper' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .tab-content' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -363,8 +437,10 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 	 */
 	protected function render() {
 		$tabs = $this->get_settings( 'tabs' );
+		$type = $this->get_settings( 'type' );
 		?>
-		<div class="micemade-elements_tabs" role="tablist">
+		
+		<div class="micemade-elements_tabs <?php echo esc_attr($type); ?>" role="tablist">
 			
 			<?php $counter = 1; 
 			$tab_status = $content_status = '';
@@ -384,11 +460,14 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 			<?php $counter = 1; ?>
 			<div class="tabs-content-wrapper" role="tabpanel">
 				
+				
 				<?php foreach ( $tabs as $item ) : ?>
 					<?php
 					$content_status = ( $counter == 1 ) ? ' active' : '';
-					
 					$tab_title = $item['tab_title'];
+					
+					echo '<span class="tab-title tab-mobile-title'. esc_attr( $content_status ) .'" data-tab="'. esc_attr( $counter ) .'">'. esc_html( $tab_title ) . '</span>';
+					
 					$products_per_row = $item['products_per_row'];
 					$products_per_row_mob = $item['products_per_row_mob'];
 					$posts_per_page = $item['posts_per_page'];

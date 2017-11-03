@@ -244,43 +244,49 @@
 			return text;
 		}
 
-		var micemadeElementsTabs = $('.micemade-elements_tabs');
-		
-		micemadeElementsTabs.each( function(){
-			
-			var randId = makeid();
-			
-			$(this).find('.tab-title').addClass( randId );
-			$(this).find('.tab-content').addClass( randId );
-			
-			var tabsWrapper = $(this).find('.tabs-wrapper'),
-				tabTitles = tabsWrapper.find('.tab-title'),
-				tabsContent =  $(this).find('.tabs-content-wrapper'),
-				content = tabsContent.find('.tab-content');
+		function micemadeElementsTabs() {
+			var  tabs = $('.micemade-elements_tabs');
+			tabs.each( function(){
+				
+				var randId = makeid();
+				
+				$(this).find('.tab-title').addClass( randId );
+				$(this).find('.tab-content').addClass( randId );
+				
+				var tabsWrapper = $(this).find('.tabs-wrapper'),
+					tabTitles = tabsWrapper.find('.tab-title'),
+					tabsContent =  $(this).find('.tabs-content-wrapper'),
+					content = tabsContent.find('.tab-content');
 
+				
+				//tabTitles.click( function(event) {
+				$( document ).on( 'click', '.tab-title', function(event) {
+					
+					if( ! $(this).hasClass( randId ) ) {
+						return;
+					}
+					
+					event.preventDefault();
+					$(this).addClass('active');
+					$(this).siblings().removeClass('active');
+					
+					var tab = $(this).data('tab');
+					
+					content.not('.tab-'+ tab).css('display', 'none').removeClass('active');
+					
+					tabsContent.find('.tab-' + tab).fadeIn().addClass('active');
+				});
+				
+			});	
+		}
+		micemadeElementsTabs();
+		/* 
+		$('.elementor-widget-container').ajaxComplete( function( event, request, settings ) {
 			
-			//tabTitles.click( function(event) {
-			$( document ).on( 'click', '.tab-title', function(event) {
-				
-				if( ! $(this).hasClass( randId ) ) {
-					return;
-				}
-				
-				event.preventDefault();
-				$(this).addClass('active');
-				$(this).siblings().removeClass('active');
-				
-				var tab = $(this).data('tab');
-				
-				content.not('.tab-'+ tab).css('display', 'none').removeClass('active');
-				
-				tabsContent.find('.tab-' + tab).fadeIn().addClass('active');
-			});
-			
+			micemadeElementsTabs();
+			console.log("Ajax is done");
 		});
-		
-		
-		
+		 */
 	});
 	
 })(jQuery);

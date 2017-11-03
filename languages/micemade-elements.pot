@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/index\n"
-"POT-Creation-Date: 2017-10-30 08:54:20+00:00\n"
+"POT-Creation-Date: 2017-11-03 14:53:13+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -355,6 +355,7 @@ msgstr ""
 #: widgets/micemade-posts-grid.php:365 widgets/micemade-posts-grid.php:778
 #: widgets/micemade-wc-categories.php:322
 #: widgets/micemade-wc-products-slider.php:467
+#: widgets/micemade-wc-products-tabs.php:251
 #: widgets/micemade-wc-single-product.php:133
 msgid "Left"
 msgstr ""
@@ -362,6 +363,8 @@ msgstr ""
 #: widgets/micemade-posts-grid.php:369 widgets/micemade-posts-grid.php:782
 #: widgets/micemade-wc-categories.php:326
 #: widgets/micemade-wc-products-slider.php:471
+#: widgets/micemade-wc-products-tabs.php:255
+#: widgets/micemade-wc-products-tabs.php:281
 #: widgets/micemade-wc-single-product.php:137
 msgid "Center"
 msgstr ""
@@ -369,6 +372,7 @@ msgstr ""
 #: widgets/micemade-posts-grid.php:373 widgets/micemade-posts-grid.php:786
 #: widgets/micemade-wc-categories.php:330
 #: widgets/micemade-wc-products-slider.php:475
+#: widgets/micemade-wc-products-tabs.php:259
 #: widgets/micemade-wc-single-product.php:141
 msgid "Right"
 msgstr ""
@@ -379,6 +383,7 @@ msgstr ""
 
 #: widgets/micemade-posts-grid.php:392
 #: widgets/micemade-wc-products-slider.php:434
+#: widgets/micemade-wc-products-tabs.php:277
 msgid "Top"
 msgstr ""
 
@@ -389,6 +394,7 @@ msgstr ""
 
 #: widgets/micemade-posts-grid.php:394
 #: widgets/micemade-wc-products-slider.php:436
+#: widgets/micemade-wc-products-tabs.php:285
 msgid "Bottom"
 msgstr ""
 
@@ -408,7 +414,7 @@ msgstr ""
 
 #: widgets/micemade-posts-grid.php:464
 #: widgets/micemade-wc-products-slider.php:504
-#: widgets/micemade-wc-products-tabs.php:289
+#: widgets/micemade-wc-products-tabs.php:360
 #: widgets/micemade-wc-single-product.php:168
 msgid "Title"
 msgstr ""
@@ -941,31 +947,43 @@ msgstr ""
 msgid "Navigation Width"
 msgstr ""
 
-#: widgets/micemade-wc-products-tabs.php:246
+#: widgets/micemade-wc-products-tabs.php:247
+msgid "Tabs Alignment"
+msgstr ""
+
+#: widgets/micemade-wc-products-tabs.php:273
+msgid "Vertical Alignment"
+msgstr ""
+
+#: widgets/micemade-wc-products-tabs.php:304
 msgid "Border Width"
 msgstr ""
 
-#: widgets/micemade-wc-products-tabs.php:266
+#: widgets/micemade-wc-products-tabs.php:324
 msgid "Border Color"
 msgstr ""
 
-#: widgets/micemade-wc-products-tabs.php:277
+#: widgets/micemade-wc-products-tabs.php:336
 msgid "Background Color"
 msgstr ""
 
-#: widgets/micemade-wc-products-tabs.php:298
+#: widgets/micemade-wc-products-tabs.php:348
+msgid "Tabs padding"
+msgstr ""
+
+#: widgets/micemade-wc-products-tabs.php:369
 msgid "Color"
 msgstr ""
 
-#: widgets/micemade-wc-products-tabs.php:313
+#: widgets/micemade-wc-products-tabs.php:386
 msgid "Active Color"
 msgstr ""
 
-#: widgets/micemade-wc-products-tabs.php:337
+#: widgets/micemade-wc-products-tabs.php:411
 msgid "Content"
 msgstr ""
 
-#: widgets/micemade-wc-products-tabs.php:346
+#: widgets/micemade-wc-products-tabs.php:420
 msgid "Content padding"
 msgstr ""
 

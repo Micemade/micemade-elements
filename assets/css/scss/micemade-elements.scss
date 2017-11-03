@@ -105,7 +105,13 @@
 					float: none !important;
 				}
 				
-				.woocommerce-product-rating { position: absolute; top: 20px; }
+				.woocommerce-product-rating { 
+					position: absolute;
+					top: 20px;
+					.star-rating {
+						margin: 0;
+					}
+				}
 			}
 			
 			
@@ -209,6 +215,7 @@
 				.meta {
 					font-size: 11px;
 					padding: 0 0 10px;
+					line-height: 1.6;
 					
 					> span {
 						padding: 0 5px;
@@ -607,7 +614,7 @@
 	
 	&_tabs {
 	
-		.tabs-wrapper {
+		.tabs-wrapper, .tabs-content-wrapper {
 			
 			display: block;
 			text-align: center;
@@ -622,30 +629,59 @@
 				&:hover {
 					cursor: pointer
 				}
-				
-				&.active {
-					z-index:1;
-					border-style: solid;
-					border-bottom-width: 0 !important;
-					
+
+				&.tab-mobile-title {
+					display: none;
+					border-width: 1px;
+					border:{
+						left: 0;
+						right: 0;
+						top: 0;
+					}
 					&:before,
 					&:after {
 						display: block;
 						content: "";
 						position: absolute;
-						bottom: 0;
 						height: 0;
 						right: 100%;
-						width: 999em;
+						width: 100%;
 						border-bottom-style: solid;
 					}
-					&:after {
-						left: 100%;
+					
+					&:before {
+						right: 0;
+						top: 0;
 					}
+					&:after {
+						left: 0;
+						bottom: 0;
+					}
+					&:first-of-type:before {
+						display: none;
+					}
+					&:last-of-type:after {
+						display: none;
+					}
+
+					&.active {
+						&:before {
+							display: none;
+						}
+						&:after {
+							display: none;
+						}
+					} 
+					
+					@include breakpoint(mobileonly) {
+						display: block;
+					}
+					
 				}
 				
 				@include breakpoint(mobileonly) {
-					display: block;
+					display: none;
+					//border-style: solid;
 				}
 				
 			} //.tab-title
@@ -655,22 +691,129 @@
 		.tabs-content-wrapper {
 			
 			border-style: solid;
-			border-top-width: 0 !important;
-			&:before {
-				display: block;
-				content: "";
-				position: absolute;
-				z-index: 0;
+			
+			@include breakpoint(mobileonly) {
+				
+				&:before {
+					display: block;
+					content: "";
+					position: absolute;
+					z-index: 0;
+					top: 0;
+					height: 0;
+					right:0;
+					left: 0;
+					border-bottom-style: solid;
+				}
 			}
-			padding: 2em;
 			
 			.tab-content {
+				padding: 2em;
 				display: none;
 				&.active {
 					display: block;
 				}
 			}
 		
+		} //.tabs-content-wrapper
+		
+		&.horizontal {
+			
+			.tabs-wrapper {
+				
+				.tab-title {
+					
+					border-bottom-width: 0 !important;
+					&.active {
+						z-index:1;
+						border-style: solid;
+						
+						&:not(.tab-mobile-title):before,
+						&:not(.tab-mobile-title):after {
+							display: block;
+							content: "";
+							position: absolute;
+							bottom: 0;
+							height: 0;
+							right: 100%;
+							width: 999em;
+							border-bottom-style: solid;
+						}
+						&:after {
+							left: 100%;
+						}
+
+					}
+				}
+			
+			}
+			
+			.tabs-content-wrapper {
+				@include breakpoint(phablet) {
+					border-top-width: 0 !important;
+				}
+			}
+			
+		}
+		
+		&.vertical {
+			
+			display: flex;
+			flex-direction: row;
+			align-items: stretch;
+			
+			.tabs-wrapper,
+			.tabs-content-wrapper {
+				display: flex;
+				flex-direction: column;
+				justify-content: flex-start;
+			}
+			
+			.tabs-wrapper {
+				flex-basis: 20%;
+
+				.tab-title {
+					display: block;
+					border-right-width: 0 !important;
+					&.active {
+						z-index:1;
+						border-style: solid;
+						
+						&:not(.tab-mobile-title):before,
+						&:not(.tab-mobile-title):after {
+							display: block;
+							content: "";
+							position: absolute;
+							bottom: 100%;
+							width: 0;
+							right: 0;
+							height: 999em;
+							border-left-style: solid;
+							z-index: 1;
+						}
+						&:after {
+							bottom: auto;
+							top: 100%;
+						}
+
+					}
+				}
+				
+				@include breakpoint(mobileonly) {
+					display: none;
+				}
+			} 
+			.tabs-content-wrapper {
+				flex-basis: 80%;
+				
+				@include breakpoint(phablet) {
+					border-left-width: 0 !important;
+				}
+				@include breakpoint(mobileonly) {
+					flex-basis: 100% !important;
+				}
+				
+			}
 		}
 	
 	}

@@ -53,6 +53,14 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 
 **Changelog**
 
+*** 0.4.2. ***
+* CSS / JS tweaks for various elements
+* improved "Micemade WC Products Tabs" 
+	* added tab padding;
+	* better responsive styles;
+	* added vertical tabs
+	* vertical alignment
+
 *** 0.4.1. ***
 * Translation strings fixes
 * functions re-organized in appropriate files
