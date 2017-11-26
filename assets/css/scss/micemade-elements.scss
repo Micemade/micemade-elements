@@ -272,7 +272,7 @@
 					flex-direction: column;
 
 					> div {
-						width: 100%;
+						width: 100% !important;
 					}
 					
 				}
@@ -816,8 +816,46 @@
 			}
 		}
 	
-	}
+	} // end micemade-elements_tabs
 	
+	&_buttons {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		
+		.micemade-button {
+			text-align: center;
+			display: flex;
+			justify-content: center;
+			transition: all 0.3s linear;
+		}
+		
+		&.horizontal {
+			.micemade-button {
+				&:first-child {
+					margin-left: 0 !important;
+				}
+				&:last-child {
+					margin-right: 0 !important;
+				}
+			}
+		}
+
+		&.vertical {
+			flex-direction: column;
+			
+			.micemade-button {
+				&:first-child {
+					margin-top: 0 !important;
+				}
+				&:last-child {
+					margin-bottom: 0 !important;
+				}
+			}
+			
+		}
+
+	}
 }
 
 .micemade-elements-is-mobile {

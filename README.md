@@ -31,6 +31,7 @@ Micemade Elements features a collection of premium, easy to use yet highly funct
 * **Micemade Revolution Slider** - display single Revolution slider - (requires Revolution Slider - premium plugin)
 * **Micemade Contact Form 7 forms** - display one of contact forms created with "Contact Form 7" plugin
 * **Micemade MailChimp 4 WP forms** - display one of newsletter forms created with "MailChimp 4 WP forms" plugin
+* **Micemade Buttons** - add buttons to group in single element, stacked horizontally or vertically
 
 Do you have suggestions to make or want to be notified of important updates? Reach out to us on [Twitter](http://twitter.com/themicemade)
 
@@ -52,6 +53,9 @@ Our tests indicate that the elements work well with most themes that are well co
 Time will tell. When we estimate plugin has enough added functionalities to Elementor, or some other reason, it will be available on wp.org. So far, install it from GitHub (Download zip or clone the repository) .
 
 **Changelog**
+
+*** 0.5.0. ***
+* Added "Micemade Buttons" element
 
 *** 0.4.2. ***
 * CSS / JS tweaks for various elements
