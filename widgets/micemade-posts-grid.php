@@ -110,7 +110,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_responsive_control(
 			'vert_spacing',
 			[
-				'label' => __( 'Posts grid bottom spacing', 'micemade-elements' ),
+				'label' => __( 'Posts grid vertical spacing', 'micemade-elements' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => '20',
@@ -515,7 +515,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 				'label' => __( 'Title Color on Hover', 'micemade-elements' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .post-text h4:hover a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .inner-wrap:hover .post-text h4 a' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -527,7 +527,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
-					'{{WRAPPER}} .post-text h4:hover' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .inner-wrap:hover .post-text h4' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -573,6 +573,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->end_controls_section();
 		
 		//
+		//
 		// META CONTROLS
 		$this->start_controls_section(
 			'section_meta',
@@ -585,6 +586,16 @@ class Micemade_Posts_Grid extends Widget_Base {
 			]
 		);
 		
+		// META HOVER TABS 
+		$this->start_controls_tabs( 'tabs_meta_style' );
+		// NORMAL
+		$this->start_controls_tab(
+			'tab_meta_normal',
+			[
+				'label' => __( 'Normal', 'micemade-elements' ),
+			]
+		);
+
 		$this->add_control(
 			'meta_text_color',
 			[
@@ -606,18 +617,41 @@ class Micemade_Posts_Grid extends Widget_Base {
 				],
 			]
 		);
-		
+
+		$this->end_controls_tab();
+
+		// HOVER
+		$this->start_controls_tab(
+			'tab_meta_hover',
+			[
+				'label' => __( 'Hover', 'micemade-elements' ),
+			]
+		);
+		$this->add_control(
+			'meta_text_hover_color',
+			[
+				'label' => __( 'Meta Text Hover Color', 'micemade-elements' ),
+				'type' => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .inner-wrap:hover .post-text .meta span' => 'color: {{VALUE}};',
+				],
+			]
+		);
 		$this->add_control(
 			'meta_links_hover_color',
 			[
 				'label' => __( 'Meta Links Hover Color', 'micemade-elements' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .post-text .meta a:hover' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .inner-wrap:hover .post-text .meta a' => 'color: {{VALUE}};',
 				],
 			]
 		);
+
+		$this->end_controls_tab();
+		$this->end_controls_tabs();
 		
+
 		$this->add_responsive_control(
 			'meta_font_size',
 			[
@@ -651,7 +685,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 				],
 			]
 		);
-		
+
 		$this->add_control(
 			'excerpt_limit',
 			[
@@ -661,7 +695,17 @@ class Micemade_Posts_Grid extends Widget_Base {
 				'title'		=> __( 'Max. number of words in excerpt', 'micemade-elements' ),
 			]
 		);
-		
+
+
+		// EXCERPT HOVER TABS 
+		$this->start_controls_tabs( 'tabs_excerpt_style' );
+		// NORMAL
+		$this->start_controls_tab(
+			'tab_excerpt_normal',
+			[
+				'label' => __( 'Normal', 'micemade-elements' ),
+			]
+		);
 		// Excerpt text color
 		$this->add_control(
 			'excerpt_text_color',
@@ -675,6 +719,30 @@ class Micemade_Posts_Grid extends Widget_Base {
 				
 			]
 		);
+		$this->end_controls_tab();
+		// HOVER
+		$this->start_controls_tab(
+			'tab_excerpt_hover',
+			[
+				'label' => __( 'Hover', 'micemade-elements' ),
+			]
+		);
+		// Excerpt text color
+		$this->add_control(
+			'excerpt_text_hover_color',
+			[
+				'label' => __( 'Excerpt Text Hover Color', 'micemade-elements' ),
+				'type' => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .inner-wrap:hover .post-text p' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .inner-wrap:hover .post-text .micemade-elements-readmore' => 'color: {{VALUE}};',
+				],
+				
+			]
+		);
+
+		$this->end_controls_tab();
+		$this->end_controls_tabs();
 		
 		// Excerpt typohraphy
 		$this->add_group_control(

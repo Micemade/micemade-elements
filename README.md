@@ -5,8 +5,8 @@ Plugin URI: http://micemade.com/micemade-elements
 Contributors: Micemade  
 Tags: elementor, elementor addon, elementor extension, elements, widgets, posts grid, woocommerce, catalog, products, product, micemade  
 Requires at least: 4.3  
-Tested up to: 4.7  
-Stable Tag: 0.3.7  
+Tested up to: 4.9.1  
+Stable Tag: 0.5.0  
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,12 @@ Our tests indicate that the elements work well with most themes that are well co
 Time will tell. When we estimate plugin has enough added functionalities to Elementor, or some other reason, it will be available on wp.org. So far, install it from GitHub (Download zip or clone the repository) .
 
 **Changelog**
+
+*** 0.5.1. ***
+* "Micemade Buttons" element tweaks - vertical button spacing is on for horizontal and vertical layout
+* "Micemade Posts Grid" element
+	*  tweaked hover colors - hover title, meta and excerpt colors change on items hover now
+	*  Admin micemade_posts_array filter - added fix for large number of posts query items
 
 *** 0.5.0. ***
 * Added "Micemade Buttons" element

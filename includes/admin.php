@@ -10,24 +10,27 @@ function micemade_posts_array_func( $post_type = "post") {
 		'post_type'			=> $post_type,
 		'posts_per_page'	=> -1,
 		'suppress_filters'	=> true,
+		'cache_results' 	=> false // suppress errors when large number of posts (memory)
 	);
 	
 	$posts_arr	= array();
 	$posts_obj	= get_posts($args);
-	if ( $posts_obj ) {
+	if ( !empty( $posts_obj ) ) {
+		
 		foreach( $posts_obj as $single_post ) {
+			
+			if( ! is_object( $single_post ) ) continue;
 			
 			$posts_arr[$single_post->post_name] = strip_tags( $single_post->post_title )  ;
 		}
+		
 	}else{
 		$posts_arr[] = '';
 	}
 	
-	
 	return $posts_arr; 
 	
 }
-
 /**
  *	MICEMADE ELEMENTS TERMS ( micemade_elements_terms hook )
  *	get terms array from taxonomy
@@ -68,7 +71,6 @@ function micemade_elements_terms_func( $taxonomy ) {
 
 }
 add_filter('micemade_elements_terms','micemade_elements_terms_func', 10, 1);
-
 /**
  *	IMAGE SIZES hook
  *	- create array of all registered image sizes
@@ -133,4 +135,3 @@ function micemade_elements_rev_sliders_f() {
 	
 	return $slider_arr;
 }
-?>

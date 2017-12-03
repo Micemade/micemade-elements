@@ -280,9 +280,6 @@
 					'selectors' => [
 						'{{WRAPPER}} .micemade-button' => 'margin-top: {{SIZE}}{{UNIT}}; margin-bottom: {{SIZE}}{{UNIT}}',
 					],
-					'condition' => [
-						'orientation' => 'vertical',
-					],
 				]
 			);
 			
