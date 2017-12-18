@@ -3,7 +3,7 @@
  * Plugin Name: Micemade Elements
  * Description: Addon plugin with custom elements for Elementor, created by Micemade. Elementor plugin required.
  * Plugin URI: https://github.com/Micemade/micemade-elements/
- * Version: 0.5.1
+ * Version: 0.6.0
  * Author: micemade
  * Author URI: http://micemade.com
  * Text Domain: micemade-elements
@@ -34,10 +34,13 @@ class Micemade_Elements {
 			
 			self::$instance->includes();
 
-			// Add "Micemade Elements" widgets category and register widgets
+			// Add "Micemade Elements" widgets category
 			add_action( 'elementor/init', array( $this, 'add_widgets_category' ) );
+			// Register "Micemade elements" widgets
 			add_action( 'elementor/widgets/widgets_registered', array( $this, 'widgets_registered' ) );
-			//add_action( 'elementor/init', array( $this, 'widgets_registered' ) );
+			// Add custom controls to Elementor section
+			add_action( 'elementor/element/after_section_end', array( $this, 'custom_section_controls' ), 10, 5 );
+
 			
 			add_action('plugins_loaded', array( self::$instance, 'load_plugin_textdomain') );
 			
@@ -80,7 +83,6 @@ class Micemade_Elements {
 	
 	
 	private function activation_checks() {
-		
 		// VARIOUS PLUGINS ACTIVATION CHECKS:
 		require_once MICEMADE_ELEMENTS_DIR . 'includes/plugins.php';
 		
@@ -115,7 +117,6 @@ class Micemade_Elements {
 			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-wc-products-slider.php';
 			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-wc-single-product.php';
 			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-wc-products-tabs.php';
-			
 		}
 		// Contact Form 7 plugin
 		if( MICEMADE_ELEMENTS_CF7_ON ) {
@@ -126,15 +127,46 @@ class Micemade_Elements {
 			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-mailchimp.php';
 		}
 	}
+
+	public function custom_section_controls( $element, $section_id, $args ) {
+		// @var \Elementor\Element_Base $element
+		if ( 'section' === $element->get_name() && 'section_typo' === $section_id ) {
+		
+			   $element->start_controls_section(
+				   'section_sticky',
+				   [
+					   'tab' => \Elementor\Controls_Manager::TAB_STYLE,
+					   'label' => __( 'Sticky section', 'micemade-elements' ),
+				   ]
+			   );
+		
+			   $element->add_control(
+				   'sticky',
+				   [
+					   'label' => __( 'Section sticky method', 'micemade-elements' ),
+					   'type' => \Elementor\Controls_Manager::SELECT,
+					   'default'      => 'not-sticked',
+					   'options'      => array( 
+						   'not-sticked' => __( 'Not sticked', 'micemade-elements' ),
+						   'sticked-header' => __( 'Sticked header', 'micemade-elements' ),
+						   'sticked-inner' => __( 'Sticked inside column', 'micemade-elements' ),
+						   'sticked-footer' => __( 'Sticked footer', 'micemade-elements' ),
+					   ),
+					   'prefix_class' => 'selection-is-',
+				   ]
+			   );
+		
+			   $element->end_controls_section();
+		   }
+	}
 	
 	public function includes () {
 		
-		$plugin_path = plugin_dir_path( __FILE__ );
-		include( $plugin_path . "/includes/Parsedown.php" );
-		include( $plugin_path . "/includes/admin.php" );
-		include( $plugin_path . "/includes/ajax_posts.php" );
-		include( $plugin_path . "/includes/helpers.php" );
-		include( $plugin_path . "/includes/wc-functions.php" );
+		include( MICEMADE_ELEMENTS_DIR . "/includes/Parsedown.php" );
+		include( MICEMADE_ELEMENTS_DIR . "/includes/admin.php" );
+		include( MICEMADE_ELEMENTS_DIR . "/includes/ajax_posts.php" );
+		include( MICEMADE_ELEMENTS_DIR . "/includes/helpers.php" );
+		include( MICEMADE_ELEMENTS_DIR . "/includes/wc-functions.php" );
 		
 	}
 	
@@ -150,18 +182,18 @@ class Micemade_Elements {
 		$lang_dir = apply_filters('micemade_elements_lang_dir', trailingslashit( MICEMADE_ELEMENTS_DIR . 'languages') );
 
 		// Traditional WordPress plugin locale filter
-		$locale = apply_filters('plugin_locale', get_locale(), 'micemade-elements');
-		$mofile = sprintf('%1$s-%2$s.mo', 'micemade-elements', $locale);
+		$locale = apply_filters( 'plugin_locale', get_locale(), 'micemade-elements' );
+		$mofile = sprintf('%1$s-%2$s.mo', 'micemade-elements', $locale );
 
 		// Setup paths to current locale file
 		$mofile_local = $lang_dir . $mofile;
 
 		if ( file_exists( $mofile_local ) ) {
 			// Look in the /wp-content/plugins/micemade-elements/languages/ folder
-			load_textdomain('micemade-elements', $mofile_local);
+			load_textdomain( 'micemade-elements', $mofile_local );
 		} else {
 			// Load the default language files
-			load_plugin_textdomain('micemade-elements', false, $lang_dir);
+			load_plugin_textdomain( 'micemade-elements', false, $lang_dir );
 		}
 
 		return false;
@@ -200,21 +232,21 @@ class Micemade_Elements {
 	}
 	
 	public function ajax_url_var() {
-		echo '<script type="text/javascript">var micemade_elements_ajaxurl = "'. admin_url("admin-ajax.php") .'"</script>';
+		echo '<script type="text/javascript">var micemade_elements_ajaxurl = "'. admin_url( "admin-ajax.php" ) .'"</script>';
 	}
 	
 	public function admin_notice() {
 		
 		$class = "error updated settings-error notice is-dismissible";
-		$message = __("Micemade elements is not effective without \"Elementor\" plugin activated. Either install and activate  \"Elementor\" plugin or deactivate Micemade elements. ","micemade-elements");
-        echo"<div class=\"$class\"> <p>$message</p></div>"; 
+		$message = __( '"Micemade elements" plugin is not effective without "Elementor" plugin activated. Either install and activate  "Elementor" plugin or deactivate "Micemade elements".', 'micemade-elements' );
+        echo "<div class=\"$class\"><p>$message</p></div>"; 
 		
 	}
 	
 	public function mega_menu_post_type() {
 		
 		// list of Micemade themes compatible with MM Mega menu CPT
-		$micemade_themes	= array( 'natura', 'beautify', 'ayame', 'ambiance', 'cloth','goodfood','lillabelle' );
+		$micemade_themes	= array( 'natura', 'beautify', 'ayame', 'inspace', 'cloth','goodfood','lillabelle' );
 		
 		if( is_child_theme() ) {
 			$parent_theme		= wp_get_theme();
@@ -223,42 +255,11 @@ class Micemade_Elements {
 			$active_theme		= get_option( 'template' );
 		}
 
-		if( in_array( $active_theme, $micemade_themes ) ) {
+		if( in_array( $active_theme, $micemade_themes ) && ELEMENTOR_IS_ACTIVE ) {
 			
-			$labels = array(
-				'name'			=> __( 'Mega Menus', 'micemade-elements' ),
-				'singular_name'	=> __( 'Mega Menu', 'micemade-elements' ),
-				'add_new'		=> __( 'New Mega Menu', 'micemade-elements' ),
-				'add_new_item'	=> __( 'Add New Mega Menu', 'micemade-elements' ),
-				'edit_item'		=> __( 'Edit Mega Menu', 'micemade-elements' ),
-				'new_item'		=> __( 'New Mega Menu', 'micemade-elements' ),
-				'view_item'		=> __( 'View Mega Menu', 'micemade-elements' ),
-				'search_items'	=> __( 'Search Mega Menus', 'micemade-elements' ),
-				'not_found'		=>  __( 'No Mega Menus Found', 'micemade-elements' ),
-				'not_found_in_trash' => __( 'No Mega Menus found in Trash', 'micemade-elements' ),
-				);
-			$args = array(
-				'labels'		=> $labels,
-				'supports'              => array( 'title','editor' ),
-				'public'                => true,
-				'rewrite'               => false,
-				'show_ui'               => true,
-				'show_in_menu'          => true,
-				'show_in_nav_menus'     => false,
-				'exclude_from_search'   => true,
-				'capability_type'       => 'post',
-				'hierarchical'          => false,
-				'menu-icon'             => 'dashicon-tagcloud'
-			);
-			
-			register_post_type( 'MM Mega menu', $args );
-			
-			// Automatically activate Elementor support for MM Mega menu CPT (always active)
-			$elementor_cpt_support = get_option( 'elementor_cpt_support', [ 'page', 'post' ] );
-			if( ! in_array( 'mmmegamenu', $elementor_cpt_support ) ) {
-				$elementor_cpt_support[] = 'mmmegamenu';
-				update_option( 'elementor_cpt_support',$elementor_cpt_support );
-			}
+			// include file with Custom Post Types registration:
+			// MM Mega Menu, MM Header, MM Footer
+			include( MICEMADE_ELEMENTS_DIR . "/includes/cpt.php" );
 			
 		}
 		

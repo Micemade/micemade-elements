@@ -300,10 +300,11 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'hover_style',
 			[
-				'label'		=> __( 'Hover style', 'micemade-elements' ),
+				'label'		=> __( 'Image hover effect', 'micemade-elements' ),
 				'type'		=> Controls_Manager::SELECT,
 				'default'	=> 'blur_image',
 				'options'	=> [
+					'no_image_effect'	=> __( 'No image hover effect', 'micemade-elements' ),
 					'blur_image'		=> __( 'Blur image', 'micemade-elements' ),
 					'enlarge_image'		=> __( 'Enlarge image', 'micemade-elements' ),
 					'shrink_image'		=> __( 'Shrink image', 'micemade-elements' ),

@@ -4,7 +4,6 @@
 @import "flex-grid";
 @import "swiper/swiper";
 
-
 .micemade-elements {
 	
 	/**
@@ -23,7 +22,6 @@
 				}
 			}
 			// end mm themes
-			
 		}
 	 
 	 }
@@ -883,4 +881,15 @@
 // Parallax fix
 .elementor-element.parallax {
     transition: none !important;
+}
+
+// Styles for sticky header
+body:not(.elementor-editor-active) {
+	.elementor-section-wrap {
+		.selection-is-sticked-header {
+			position: fixed;
+			z-index: 999;
+			width: 100% !important;
+		}
+	}	
 }

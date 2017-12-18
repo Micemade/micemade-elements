@@ -54,6 +54,10 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 
 **Changelog**
 
+*** 0.6.0. ***
+* Added Footer CPT ( 'mmfooter' ) for usage with Micemade Themes - create unlimited footers
+* Added custom control to Elementor section - sticky section (sticky header, menus)
+
 *** 0.5.1. ***
 * "Micemade Buttons" element tweaks - vertical button spacing is on for horizontal and vertical layout
 * "Micemade Posts Grid" element

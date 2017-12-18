@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/index\n"
-"POT-Creation-Date: 2017-12-03 14:29:42+00:00\n"
+"POT-Creation-Date: 2017-12-11 11:02:04+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -45,62 +45,82 @@ msgid_plural "%s products"
 msgstr[0] ""
 msgstr[1] ""
 
-#: micemade-elements.php:95
+#: micemade-elements.php:97
 msgid "Micemade Elements"
 msgstr ""
 
-#: micemade-elements.php:195
+#: micemade-elements.php:139
+msgid "Sticky section"
+msgstr ""
+
+#: micemade-elements.php:146
+msgid "Section sticky method"
+msgstr ""
+
+#: micemade-elements.php:150
+msgid "Not sticked"
+msgstr ""
+
+#: micemade-elements.php:151
+msgid "Sticked header"
+msgstr ""
+
+#: micemade-elements.php:152
+msgid "Sticked inside column"
+msgstr ""
+
+#: micemade-elements.php:227
 msgid "Loading posts ..."
 msgstr ""
 
-#: micemade-elements.php:196
+#: micemade-elements.php:228
 msgid "No more posts found"
 msgstr ""
 
-#: micemade-elements.php:197 widgets/micemade-posts-grid.php:921
+#: micemade-elements.php:229 widgets/micemade-posts-grid.php:921
 msgid "Load more posts"
 msgstr ""
 
-#: micemade-elements.php:209
+#: micemade-elements.php:241
 msgid ""
-"Micemade elements is not effective without \"Elementor\" plugin activated. "
-"Either install and activate  \"Elementor\" plugin or deactivate Micemade "
-"elements. "
+"\"Micemade elements\" plugin is not effective without \"Elementor\" plugin "
+"activated. Either install and activate  \"Elementor\" plugin or deactivate "
+"\"Micemade elements\"."
 msgstr ""
 
-#: micemade-elements.php:229
+#: micemade-elements.php:261
 msgid "Mega Menus"
 msgstr ""
 
-#: micemade-elements.php:230
+#: micemade-elements.php:262
 msgid "Mega Menu"
 msgstr ""
 
-#: micemade-elements.php:231 micemade-elements.php:234
+#: micemade-elements.php:263 micemade-elements.php:266
 msgid "New Mega Menu"
 msgstr ""
 
-#: micemade-elements.php:232
+#: micemade-elements.php:264
 msgid "Add New Mega Menu"
 msgstr ""
 
-#: micemade-elements.php:233
+#: micemade-elements.php:265
 msgid "Edit Mega Menu"
 msgstr ""
 
-#: micemade-elements.php:235
+#: micemade-elements.php:267
 msgid "View Mega Menu"
 msgstr ""
 
-#: micemade-elements.php:236
+#: micemade-elements.php:268
 msgid "Search Mega Menus"
 msgstr ""
 
-#: micemade-elements.php:237
+#: micemade-elements.php:269
 msgid "No Mega Menus Found"
 msgstr ""
 
-#: micemade-elements.php:238
+#: micemade-elements.php:270
 msgid "No Mega Menus found in Trash"
 msgstr ""
 
@@ -222,7 +242,7 @@ msgstr ""
 
 #: widgets/micemade-buttons.php:184 widgets/micemade-buttons.php:216
 #: widgets/micemade-posts-grid.php:365 widgets/micemade-posts-grid.php:846
-#: widgets/micemade-wc-categories.php:322
+#: widgets/micemade-wc-categories.php:323
 #: widgets/micemade-wc-products-slider.php:467
 #: widgets/micemade-wc-products-tabs.php:251
 #: widgets/micemade-wc-single-product.php:133
@@ -231,7 +251,7 @@ msgstr ""
 
 #: widgets/micemade-buttons.php:188 widgets/micemade-buttons.php:220
 #: widgets/micemade-posts-grid.php:369 widgets/micemade-posts-grid.php:850
-#: widgets/micemade-wc-categories.php:326
+#: widgets/micemade-wc-categories.php:327
 #: widgets/micemade-wc-products-slider.php:471
 #: widgets/micemade-wc-products-tabs.php:255
 #: widgets/micemade-wc-products-tabs.php:281
@@ -241,7 +261,7 @@ msgstr ""
 
 #: widgets/micemade-buttons.php:192 widgets/micemade-buttons.php:224
 #: widgets/micemade-posts-grid.php:373 widgets/micemade-posts-grid.php:854
-#: widgets/micemade-wc-categories.php:330
+#: widgets/micemade-wc-categories.php:331
 #: widgets/micemade-wc-products-slider.php:475
 #: widgets/micemade-wc-products-tabs.php:259
 #: widgets/micemade-wc-single-product.php:141
@@ -269,7 +289,7 @@ msgid "Icon Spacing"
 msgstr ""
 
 #: widgets/micemade-buttons.php:336 widgets/micemade-posts-grid.php:567
-#: widgets/micemade-wc-categories.php:358
+#: widgets/micemade-wc-categories.php:359
 #: widgets/micemade-wc-products-slider.php:609
 #: widgets/micemade-wc-single-product.php:189
 #: widgets/micemade-wc-single-product.php:219
@@ -278,7 +298,7 @@ msgid "Typography"
 msgstr ""
 
 #: widgets/micemade-buttons.php:347 widgets/micemade-posts-grid.php:449
-#: widgets/micemade-wc-categories.php:368
+#: widgets/micemade-wc-categories.php:369
 msgid "Border"
 msgstr ""
 
@@ -742,30 +762,34 @@ msgid "Category overlay color on hover"
 msgstr ""
 
 #: widgets/micemade-wc-categories.php:303
-msgid "Hover style"
+msgid "Image hover effect"
 msgstr ""
 
 #: widgets/micemade-wc-categories.php:307
-msgid "Blur image"
+msgid "No image hover effect"
 msgstr ""
 
 #: widgets/micemade-wc-categories.php:308
-msgid "Enlarge image"
+msgid "Blur image"
 msgstr ""
 
 #: widgets/micemade-wc-categories.php:309
-msgid "Shrink image"
+msgid "Enlarge image"
 msgstr ""
 
 #: widgets/micemade-wc-categories.php:310
+msgid "Shrink image"
+msgstr ""
+
+#: widgets/micemade-wc-categories.php:311
 msgid "Greyscale image"
 msgstr ""
 
-#: widgets/micemade-wc-categories.php:318
+#: widgets/micemade-wc-categories.php:319
 msgid "Categories alignment"
 msgstr ""
 
-#: widgets/micemade-wc-categories.php:345
+#: widgets/micemade-wc-categories.php:346
 msgid "Categories title padding"
 msgstr ""
 
