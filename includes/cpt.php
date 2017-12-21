@@ -58,12 +58,14 @@ register_post_type( 'MM Footer', $mm_footer_args );
 
 // Automatically activate Elementor support for MM Mega menu CPT (always active)
 $elementor_cpt_support = get_option( 'elementor_cpt_support', [ 'page', 'post' ] );
-if( ! in_array( array( 'mmmegamenu', 'mmfooter' ), $elementor_cpt_support ) ) {
+if( ! in_array( 'mmmegamenu', $elementor_cpt_support ) ) {
     $elementor_cpt_support[] = 'mmmegamenu';
+    update_option( 'elementor_cpt_support', $elementor_cpt_support );
+}
+if( ! in_array( 'mmfooter', $elementor_cpt_support ) ) {
     $elementor_cpt_support[] = 'mmfooter';
     update_option( 'elementor_cpt_support', $elementor_cpt_support );
 }
-
 
 add_filter( 'mm_megamenu_cpt', '__return_true' );
 add_filter( 'mm_footer_cpt', '__return_true' );

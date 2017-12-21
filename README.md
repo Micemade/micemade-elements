@@ -54,6 +54,9 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 
 **Changelog**
 
+*** 0.6.1. ***
+* Minor fix for registering Elementor enabled post types ( automatically enable "Mega Menu" & "Footer" CPT's - "mmmegamenu" / "mmfooter" )
+
 *** 0.6.0. ***
 * Added Footer CPT ( 'mmfooter' ) for usage with Micemade Themes - create unlimited footers
 * Added custom control to Elementor section - sticky section (sticky header, menus)
