@@ -54,6 +54,9 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 
 **Changelog**
 
+*** 0.6.2. ***
+* Changed theme support - usage of add_theme_support / current_theme_supports with Micemade themes
+
 *** 0.6.1. ***
 * Minor fix for registering Elementor enabled post types ( automatically enable "Mega Menu" & "Footer" CPT's - "mmmegamenu" / "mmfooter" )
 

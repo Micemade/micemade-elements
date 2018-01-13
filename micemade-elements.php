@@ -1,9 +1,9 @@
 <?php
 /**
  * Plugin Name: Micemade Elements
- * Description: Addon plugin with custom elements for Elementor, created by Micemade. Elementor plugin required.
+ * Description: Extension plugin with custom elements for Elementor, created by Micemade. Elementor plugin required.
  * Plugin URI: https://github.com/Micemade/micemade-elements/
- * Version: 0.6.1
+ * Version: 0.6.2
  * Author: micemade
  * Author URI: http://micemade.com
  * Text Domain: micemade-elements
@@ -41,10 +41,11 @@ class Micemade_Elements {
 			// Add custom controls to Elementor section
 			add_action( 'elementor/element/after_section_end', array( $this, 'custom_section_controls' ), 10, 5 );
 
-			
+			// Load textdomain
 			add_action('plugins_loaded', array( self::$instance, 'load_plugin_textdomain') );
 			
-			add_action( 'init', array( self::$instance, 'mega_menu_post_type' ) );
+			// Register CPT's
+			add_action( 'init', array( self::$instance, 'register_custom_post_types' ) );
 			
 			// Enqueue script and styles for ADMIN
 			//add_action( 'admin_enqueue_scripts', array( self::$instance, 'micemade_elements_admin_js_css' ) );
@@ -211,7 +212,7 @@ class Micemade_Elements {
 	// ENQUEUE SCRIPTS
 	public function micemade_elements_scripts () {
 		
-		// JS scripts:
+		// Register and enqueue JS scripts:
 		wp_register_script('micemade-elements-js', MICEMADE_ELEMENTS_URL .'assets/js/micemade-elements.min.js');
 		wp_enqueue_script('micemade-elements-js', MICEMADE_ELEMENTS_URL .'assets/js/micemade-elements.min.js', array('jQuery'), '1.0', true);
 		
@@ -231,31 +232,31 @@ class Micemade_Elements {
 		
 	}
 	
-	public function ajax_url_var() {
-		echo '<script type="text/javascript">var micemade_elements_ajaxurl = "'. admin_url( "admin-ajax.php" ) .'"</script>';
-	}
 	
 	public function admin_notice() {
 		
 		$class = "error updated settings-error notice is-dismissible";
-		$message = __( '"Micemade elements" plugin is not effective without "Elementor" plugin activated. Either install and activate  "Elementor" plugin or deactivate "Micemade elements".', 'micemade-elements' );
+		$message = __( '"Micemade elements" plugin is not effective without "Elementor" plugin activated. Please, either install and activate  "Elementor" plugin or deactivate "Micemade elements".', 'micemade-elements' );
         echo "<div class=\"$class\"><p>$message</p></div>"; 
 		
 	}
 	
-	public function mega_menu_post_type() {
+	public function register_custom_post_types() {
 		
-		// list of Micemade themes compatible with MM Mega menu CPT
-		$micemade_themes	= array( 'natura', 'beautify', 'ayame', 'inspace', 'cloth','goodfood','lillabelle' );
+		// Array of supported Micemade Themes
+		$micemade_themes	= array( 'natura', 'beautify', 'ayame','lillabelle', 'inspace' );
 		
+		// To deprecate
 		if( is_child_theme() ) {
 			$parent_theme		= wp_get_theme();
 			$active_theme		= $parent_theme->get( 'Template' );
 		}else{
 			$active_theme		= get_option( 'template' );
 		}
-
-		if( in_array( $active_theme, $micemade_themes ) && ELEMENTOR_IS_ACTIVE ) {
+		$current_theme_supported = in_array( $active_theme, $micemade_themes );
+		// end deprecate
+			
+		if( ( current_theme_supports( 'micemade-elements-cpt' ) || $current_theme_supported ) && ELEMENTOR_IS_ACTIVE ) {
 			
 			// include file with Custom Post Types registration:
 			// MM Mega Menu, MM Header, MM Footer
