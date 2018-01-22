@@ -102,13 +102,17 @@ function micemade_elements_loop_product_func( $style = 'style_1', $img_format = 
 				<div class="product-details">
 					<?php 
 					if( $price ) {
-						woocommerce_template_loop_price(); 
+						echo '<span class="price-wrap">';
+						woocommerce_template_loop_price();
+						echo '</span>';
 					}
 					?>
 					
 					<?php
 					if( $add_to_cart ) {
+						echo '<span class="add-to-cart-wrap">';
 						woocommerce_template_loop_add_to_cart();
+						echo '</span>';
 					}
 					?>
 					

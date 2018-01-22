@@ -280,13 +280,15 @@
 			});	
 		}
 		micemadeElementsTabs();
-		/* 
-		$('.elementor-widget-container').ajaxComplete( function( event, request, settings ) {
-			
-			micemadeElementsTabs();
-			console.log("Ajax is done");
-		});
-		 */
+		
+		function micemade_in_viewport() {
+			$('.mm-enter-animate').whenInViewport( function( $paragraph ) {
+				var animType = $paragraph.data('anim');
+				$paragraph.addClass( animType ).addClass( 'anim-done' );
+			});
+		}
+		micemade_in_viewport();
+		
 	});
 	
 })(jQuery);

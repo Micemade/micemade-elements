@@ -335,10 +335,11 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 					],
 				],
 				'selectors' => [
-					'{{WRAPPER}} .post-text h4' => 'margin-top: {{SIZE}}px;margin-bottom: {{SIZE}}px;',
-					'{{WRAPPER}} .post-text meta' => 'margin-top: {{SIZE}}px;margin-bottom: {{SIZE}}px;',
-					'{{WRAPPER}} .post-text .price' => 'margin-top: {{SIZE}}px;margin-bottom: {{SIZE}}px;',
-					'{{WRAPPER}} .post-text a.button' => 'margin-top: {{SIZE}}px;margin-bottom: {{SIZE}}px;',
+					'{{WRAPPER}} .post-text h4' => 'padding: 0 0 {{SIZE}}px;',
+					'{{WRAPPER}} .post-text .meta' => 'padding: 0 0 {{SIZE}}px;',
+					'{{WRAPPER}} .post-text .price-wrap' => 'padding: 0 0 {{SIZE}}px;',
+					'{{WRAPPER}} .post-text .add-to-cart-wrap' => 'padding: 0 0 {{SIZE}}px;',
+					'{{WRAPPER}} .post-text p' => 'padding: 0 0 {{SIZE}}px;',
 				],
 				/* 'condition' => [
 					'style' => ['style_3','style_4']

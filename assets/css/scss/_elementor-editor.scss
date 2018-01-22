@@ -1,0 +1,15 @@
+// EDITOR TWEAKS
+.elementor-editor-active .elementor.elementor-edit-mode .elementor-editor-widget-settings {
+	z-index:10 !important;
+}
+// Styles for sticky header
+body:not(.elementor-editor-active) {
+	.elementor-section-wrap {
+		.selection-is-sticked-header {
+			position: fixed;
+			z-index: 999;
+			width: 100% !important;
+			left: 0;
+		}
+	}	
+}

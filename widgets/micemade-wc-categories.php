@@ -309,6 +309,27 @@ class Micemade_WC_Categories extends Widget_Base {
 					'enlarge_image'		=> __( 'Enlarge image', 'micemade-elements' ),
 					'shrink_image'		=> __( 'Shrink image', 'micemade-elements' ),
 					'greyscale_image'	=> __( 'Greyscale image', 'micemade-elements' ),
+				],
+				'condition' => [
+					'image!' => ''
+				],
+			]
+		);
+		
+		$this->add_control(
+			'hover_style_box',
+			[
+				'label'		=> __( 'Category hover effect', 'micemade-elements' ),
+				'type'		=> Controls_Manager::SELECT,
+				'default'	=> 'blur_image',
+				'options'	=> [
+					'none'	=> __( 'None', 'micemade-elements' ),
+					'box_enlarge_shadow'	=> __( 'Enlarge with shadow', 'micemade-elements' ),
+					'box_shrink_shadow'	=> __( 'Shrink with shadow', 'micemade-elements' ),
+					'box_move_up'	=> __( 'Float', 'micemade-elements' ),
+					'box_move_down'	=> __( 'Sink', 'micemade-elements' ),
+					'box_move_right'	=> __( 'Forward', 'micemade-elements' ),
+					'box_move_left'	=> __( 'Backward', 'micemade-elements' ),
 				]
 			]
 		);
@@ -373,6 +394,50 @@ class Micemade_WC_Categories extends Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'item_anim',
+			[
+				'label' => __( 'Single Category Animation', 'elementor' ),
+				'type' => Controls_Manager::ANIMATION,
+				'default' => '',
+				'label_block' => true,
+			]
+		);
+		/* 
+		$this->add_control(
+			'item_anim_duration',
+			[
+				'label' => __( 'Animation Speed', 'elementor' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => '',
+				'options' => [
+					'slow' => __( 'Slow', 'elementor' ),
+					'' => __( 'Normal', 'elementor' ),
+					'fast' => __( 'Fast', 'elementor' ),
+				],
+				'condition' => [
+					'item_anim!' => '',
+				],
+			]
+		);
+
+		$this->add_control(
+			'item_anim_delay',
+			[
+				'label' => __( 'Animation Delay', 'elementor' ) . ' (ms)',
+				'type' => Controls_Manager::NUMBER,
+				'default' => '',
+				'min' => 0,
+				'step' => 100,
+				'condition' => [
+					'item_anim!' => '',
+				],
+				'render_type' => 'ui',
+				//'frontend_available' => true,
+			]
+		);
+ */
+
 		$this->end_controls_section();
 
 	}
@@ -381,23 +446,41 @@ class Micemade_WC_Categories extends Widget_Base {
 
 		// get our input from the widget settings.
 		$settings		= $this->get_settings();
-		
-		$categories			= ! empty( $settings['categories'] )		? $settings['categories']	: array();
+		// Settings vars:
+		$categories			= ! empty( $settings['categories'] )		? $settings['categories'] : array();
 		$cats_per_row		= ! empty( $settings['cats_per_row'] )		? (int)$settings['cats_per_row'] : 3;
 		$cats_per_row_mob	= ! empty( $settings['cats_per_row_mob'] )	? (int)$settings['cats_per_row_mob'] : 1;
-		$style				= ! empty( $settings['style'] )				? $settings['style']		: 'style_1';
-		$hover_style		= ! empty( $settings['hover_style'] )		? $settings['hover_style']	: 'blur_image';
-		$image				= ! empty( $settings['image'] )				? $settings['image']		: '';
-		$img_format			= ! empty( $settings['img_format'] )		? $settings['img_format']	: 'thumbnail';
-		$prod_count			= ! empty( $settings['prod_count'] )		? $settings['prod_count']	: '';
+		$style				= ! empty( $settings['style'] )				? $settings['style'] : 'style_1';
+		$hover_style		= ! empty( $settings['hover_style'] )		? $settings['hover_style'] : 'blur_image';
+		$hover_style_box	= ! empty( $settings['hover_style_box'] )	? $settings['hover_style_box'] : 'none';
+		$image				= ! empty( $settings['image'] )				? $settings['image'] : '';
+		$img_format			= ! empty( $settings['img_format'] )		? $settings['img_format'] : 'thumbnail';
+		$prod_count			= ! empty( $settings['prod_count'] )		? $settings['prod_count'] : '';
+		$item_anim			= ! empty( $settings['item_anim'] )			? $settings['item_anim'] : '';
 		
+		$id = $this->get_id();
+		
+		// All the styles for categories holder:
+		$this->add_render_attribute( 'categories-holder-css', 'class', 'micemade-elements_product-categories mme-row' );
+		$this->add_render_attribute( 'categories-holder-css', 'class', $style );
+		$this->add_render_attribute( 'categories-holder-css', 'class', $hover_style );
+		$this->add_render_attribute( 'categories-holder-css', 'class', $hover_style_box );
+
+		
+		// Each singular category styles:
 		$grid = micemade_elements_grid_class( intval( $cats_per_row ), intval( $cats_per_row_mob ) );
+		$this->add_render_attribute( 'category-css', 'class', 'category '. $grid );
+		$this->add_render_attribute( 'category-css', 'class', $item_anim ? 'mm-enter-animate animated' : '' );
+		$this->add_render_attribute( 'item-anim-data', 'data-anim', $item_anim );
 		
 		if( empty( $categories ) ) return;
 		
-		echo '<div class="micemade-elements_product-categories mme-row '. esc_attr( $style .' '. $hover_style ) .'">';
+		// Catgories holder
+		echo '<div '. $this->get_render_attribute_string( 'categories-holder-css' ) .'>';
 		
-		foreach ( $categories as $cat ) {
+		foreach ( $categories as $index => $cat ) {
+
+			$count = $index + 1;
 			
 			$term_data = apply_filters( 'micemade_elements_term_data', 'product_cat', $cat, $img_format ); // hook in inc/helpers.php
 				
@@ -407,8 +490,11 @@ class Micemade_WC_Categories extends Widget_Base {
 			$term_title	= isset( $term_data['term_title'] ) ?  $term_data['term_title'] : '';
 			$term_link	= isset( $term_data['term_link'] ) ? $term_data['term_link'] : '#';
 			$image_url	= isset( $term_data['image_url'] ) ? $term_data['image_url'] : '';
-				
-			echo '<a class="category '. esc_attr( $grid ).' mme-col-xs-12" href="'. esc_url( $term_link ) .'" title="'. esc_attr( $term_title ) .'">';
+			
+			// Category item id
+			$this->add_render_attribute( 'item-id'. $count, 'data-id', $id . '-'. $count );
+			
+			echo '<a '. $this->get_render_attribute_string( 'item-id'. $count ) . ' ' . $this->get_render_attribute_string( 'category-css' ) .' href="'. esc_url( $term_link ) .'" title="'. esc_attr( $term_title ) .'" '. $this->get_render_attribute_string( 'item-anim-data' ) .'>';
 			
 				echo '<div class="category__inner-wrap">';
 				
@@ -433,6 +519,7 @@ class Micemade_WC_Categories extends Widget_Base {
 				echo '</div>'; //.inner-wrap
 			
 			echo '</a>';
+
 		}
 		
 		echo '</div>';

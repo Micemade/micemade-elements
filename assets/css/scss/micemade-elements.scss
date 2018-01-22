@@ -3,6 +3,7 @@
 @import "partials";
 @import "flex-grid";
 @import "swiper/swiper";
+@import "elementor-editor";
 
 .micemade-elements {
 	
@@ -32,7 +33,7 @@
 	
 	&_single-product {
 		
-		div.product {
+		div.single-product-container {
 			
 			margin: 0;
 			display: flex;
@@ -61,6 +62,7 @@
 				
 				form.cart {
 					float: none;
+					margin-bottom: 0;
 					> * {
 						float: none !important;
 						display: inline-block;
@@ -78,7 +80,7 @@
 							}
 							label, select {
 								font-size: 12px;
-							}						
+							}
 						}
 						
 					}
@@ -103,11 +105,13 @@
 					float: none !important;
 				}
 				
-				.woocommerce-product-rating { 
-					position: absolute;
-					top: 20px;
-					.star-rating {
+				.woocommerce-product-ng { 
+					position: relative;
+					.star-rang {
 						margin: 0;
+					}
+					.woocommerce-review-link {
+						font-size: 11px;
 					}
 				}
 			}
@@ -152,6 +156,25 @@
 				}
 			}
 
+			&.image_background {
+				
+				flex-direction: column;
+				height: 450px;
+				
+				.entry-summary {
+					position: absolute;
+					z-index: 1;
+				}
+				.product-thumb {
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					z-index: 0;
+					display: block;
+				}
+			}
 		
 		}
 		
@@ -161,8 +184,8 @@
 	
 	/**
 	 *	POSTS GRID & PRODUCTS SLIDER ELEMENTS
-	 *	.micemade-elements_posts-grid  
-	 *	.micemade-elements_products_slider  
+	 *	.micemade-elements_posts-grid
+	 *	.micemade-elements_products_slider
 	 */
 	
 	&_posts-grid, &_products_slider {
@@ -176,7 +199,7 @@
 			.inner-wrap {
 				flex-grow: 1;
 				flex-basis: 100%;
-				max-width: 100%;				
+				max-width: 100%;
 			}
 			
 			.inner-wrap, .post-overlay {
@@ -198,13 +221,13 @@
 				padding: 20px;
 				
 				> * {
-						display: block;
+					display: block;
 				}
 				
 				h4 {
 					font-size: 22px;
-					margin: 0 0 10px;
-					padding: 0 0 0.5em;
+					margin: 0;
+					padding: 0 0 15px;
 					transition: all 0.2s linear;
 				}
 				
@@ -212,7 +235,7 @@
 				
 				.meta {
 					font-size: 11px;
-					padding: 0 0 10px;
+					padding: 0 0 15px;
 					line-height: 1.6;
 					
 					> span {
@@ -236,21 +259,22 @@
 				
 				p {
 					font-size: 14px;
-					margin: 1em 0;
+					margin: 0;
+					padding: 0 0 15px;
 				}
 				
-				.price {
-					font-size: 22px;
-					padding: 0.5em 0;
+				.price-wrap, .add-to-cart-wrap {
+					padding: 0 0 15px;
 					display: block;
+				}
+				span.price {
+					font-size: 22px;
 					font-style: normal;
 				}
 
-				
 			} //.post-text
 			
 			
-		
 		} // .post
 		
 		// STYLE 2
@@ -331,13 +355,13 @@
 					top: 10%;
 					bottom: 10%;
 					left: 40%;
-					right: 0;
+					right: 5%;
 					box-shadow: 0 0 50px rgba(0,0,0,0.2);
 				}
 				.post-text {
 					margin:{
 						left:40%;
-						right: 0;
+						right: 5%;
 						top: 10%;
 						bottom: 10%;
 					} 
@@ -380,7 +404,24 @@
 		
 	
 	} // posts grid element
-	
+		
+	//.micemade-elements_button 
+	&_more-posts-wrap {
+		display: block;
+	}
+	&_more-posts {
+		display: inline-block;
+		
+		&.disabled {
+			opacity: .25;
+			cursor: not-allowed;
+		}
+		
+		&.post_loading_loader {
+			opacity: .6;
+			cursor: not-allowed;
+		}
+	}
 	
 	/**
 	 *	WC PRODUCT CATEGORIES ELEMENT
@@ -394,7 +435,10 @@
 			
 			position: relative;
 			text-align: center;
-			
+			z-index: 0;
+			&:hover {
+				z-index: 2 !important;
+			}
 			
 			&__inner-wrap {
 				position: relative;
@@ -406,6 +450,7 @@
 				flex-grow: 1;
 				flex-basis: 100%;
 				max-width: 100%;
+				transition: all 0.3s ease-in-out;
 			}
 			
 			&__image, &__overlay {
@@ -458,6 +503,7 @@
 				color: inherit;
 				display: inline-block;
 				position: relative;
+				margin-bottom: 0;
 			}
 			&__product-count {
 				display: block;
@@ -481,7 +527,7 @@
 					z-index: 1;
 					height: 100%;
 					position: relative;
-					//@include aspect-ratio( 1, 1 );
+					//@include aspect-o( 1, 1 );
 				}
 				&__text-wrap {
 					position:relative;
@@ -555,9 +601,9 @@
 					}
 				}
 			}
-		} // .style4
+		} // .style_4
 
-		// hover styles
+		// image hover styles
 		&.blur_image {
 			.category:hover {
 				.image-inner {
@@ -588,28 +634,49 @@
 			}
 		}
 		
+		// box hover styles
+		.category__inner-wrap {
+			transform: scale(1) translateX(0) translateY(0);
+			box-shadow: none;
+		}
+		&.box_enlarge_shadow {
+			.category__inner-wrap:hover {
+				transform: scale(1.05);
+				box-shadow: 0 0 20px rgba(0,0,0,0.15);
+			}
+		}
+		&.box_shrink_shadow {
+			.category__inner-wrap:hover {
+				transform: scale(0.95);
+				box-shadow: 0 0 10px rgba(0,0,0,0.15);
+			}
+		}
+		&.box_move_up {
+			.category__inner-wrap:hover {
+				transform: translateY(-5px);
+			}
+		}
+		&.box_move_down {
+			.category__inner-wrap:hover {
+				transform: translateY(5px);
+			}
+		}
+		&.box_move_right {
+			.category__inner-wrap:hover {
+				transform: translateX(5px);
+			}
+		}
+		&.box_move_left {
+			.category__inner-wrap:hover {
+				transform: translateX(-5px);
+			}
+		}
+		
 	} // product-categories
 	
-	
-	//.micemade-elements_button 
-	&_more-posts-wrap {
-		display: block;
-	}
-	&_more-posts {
-		display: inline-block;
-		
-		&.disabled {
-			opacity: .25;
-			cursor: not-allowed;
-		}
-		
-		&.post_loading_loader {
-			opacity: .6;
-			cursor: not-allowed;
-		}
-	}
-	
-	
+	/**
+	 *	Micemade WC Products Tabs
+	 */
 	&_tabs {
 	
 		.tabs-wrapper, .tabs-content-wrapper {
@@ -816,6 +883,9 @@
 	
 	} // end micemade-elements_tabs
 	
+	/**
+	 * MICEMADE BUTTONS ELEMENT
+	 */
 	&_buttons {
 		display: flex;
 		flex-direction: row;
@@ -854,6 +924,45 @@
 		}
 
 	}
+
+	/**
+	 * HEADER LOGO
+	 */
+	&_header-logo {
+		
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		
+		h1 {
+			margin: 0;
+		}
+		
+		.logo-image {
+			display: block;
+			background-size: contain;
+			background-repeat: no-repeat;
+			background-position: center;
+		}
+		.site-title {
+			&.hidden {
+				display: block;
+				width: 120px;
+				height: 80px;
+				font-size: 0;
+				opacity: 0;
+			}
+		}
+	}
+
+} // END .micemade-elements
+
+
+.mm-enter-animate {
+	opacity: 0;
+	&.anim-done {
+		opacity: 1;
+	}
 }
 
 .micemade-elements-is-mobile {
@@ -873,24 +982,7 @@
 }
 
 
-// Editor fix
-.elementor-editor-active .elementor.elementor-edit-mode .elementor-editor-widget-settings {
-	z-index:10 !important;
-}
-
 // Parallax fix
 .elementor-element.parallax {
     transition: none !important;
-}
-
-// Styles for sticky header
-body:not(.elementor-editor-active) {
-	.elementor-section-wrap {
-		.selection-is-sticked-header {
-			position: fixed;
-			z-index: 999;
-			width: 100% !important;
-			left: 0;
-		}
-	}	
 }
