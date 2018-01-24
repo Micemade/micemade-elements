@@ -883,6 +883,17 @@
 	
 	} // end micemade-elements_tabs
 	
+	&_instagram {
+
+		.image-link {
+			img.stretch {
+				width: 100%;
+				height: auto;
+			}
+		}
+
+	}
+
 	/**
 	 * MICEMADE BUTTONS ELEMENT
 	 */

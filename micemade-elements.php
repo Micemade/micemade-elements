@@ -3,7 +3,7 @@
  * Plugin Name: Micemade Elements
  * Description: Extension plugin with custom elements for Elementor, created by Micemade. Elementor plugin required.
  * Plugin URI: https://github.com/Micemade/micemade-elements/
- * Version: 0.6.3
+ * Version: 0.6.4
  * Author: micemade
  * Author URI: http://micemade.com
  * Text Domain: micemade-elements
@@ -47,7 +47,8 @@ class Micemade_Elements {
 			// Register CPT's
 			add_action( 'init', array( self::$instance, 'register_custom_post_types' ) );
 			
-			// Enqueue script and styles for ADMIN
+			// Enqueue script and styles for Elementor editor
+			add_action( 'elementor/editor/before_enqueue_scripts', array( self::$instance, 'editor_scripts' ) );
 			//add_action( 'admin_enqueue_scripts', array( self::$instance, 'micemade_elements_admin_js_css' ) );
 			
 			// Enqueue scripts and styles for frontend
@@ -58,7 +59,7 @@ class Micemade_Elements {
 		
 		}else {
 			
-			add_action( 'admin_notices', array( self::$instance ,'admin_notice') ); 
+			add_action( 'admin_notices', array( self::$instance ,'admin_notice' ) );
 		}
 	
 		
@@ -127,6 +128,8 @@ class Micemade_Elements {
 		if( MICEMADE_ELEMENTS_MC4WP_ON ) {
 			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-mailchimp.php';
 		}
+
+		require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-instagram.php';
 	}
 
 	public function custom_section_controls( $element, $section_id, $args ) {
@@ -168,6 +171,7 @@ class Micemade_Elements {
 		include( MICEMADE_ELEMENTS_DIR . "/includes/ajax_posts.php" );
 		include( MICEMADE_ELEMENTS_DIR . "/includes/helpers.php" );
 		include( MICEMADE_ELEMENTS_DIR . "/includes/wc-functions.php" );
+		include( MICEMADE_ELEMENTS_DIR . "/includes/instagram.php" );
 		
 	}
 	
@@ -232,6 +236,19 @@ class Micemade_Elements {
 		
 	}
 	
+
+	public function editor_scripts() {
+		
+		wp_enqueue_script( 
+			'micemade-elements-editor',
+			MICEMADE_ELEMENTS_URL .'assets/js/editor.js',
+			[
+				'elementor-editor', // dependency
+			],
+			'1.9.2',
+			true // in_footer
+		);
+	}
 	
 	public function admin_notice() {
 		

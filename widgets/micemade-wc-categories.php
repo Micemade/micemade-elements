@@ -403,7 +403,7 @@ class Micemade_WC_Categories extends Widget_Base {
 				'label_block' => true,
 			]
 		);
-		/* 
+		 
 		$this->add_control(
 			'item_anim_duration',
 			[
@@ -420,7 +420,7 @@ class Micemade_WC_Categories extends Widget_Base {
 				],
 			]
 		);
-
+		
 		$this->add_control(
 			'item_anim_delay',
 			[
@@ -429,14 +429,13 @@ class Micemade_WC_Categories extends Widget_Base {
 				'default' => '',
 				'min' => 0,
 				'step' => 100,
+				'title' => esc_html__( 'animation delay between category items', 'micemade-elements' ),
 				'condition' => [
 					'item_anim!' => '',
 				],
-				'render_type' => 'ui',
-				//'frontend_available' => true,
 			]
 		);
- */
+ 
 
 		$this->end_controls_section();
 
@@ -457,6 +456,8 @@ class Micemade_WC_Categories extends Widget_Base {
 		$img_format			= ! empty( $settings['img_format'] )		? $settings['img_format'] : 'thumbnail';
 		$prod_count			= ! empty( $settings['prod_count'] )		? $settings['prod_count'] : '';
 		$item_anim			= ! empty( $settings['item_anim'] )			? $settings['item_anim'] : '';
+		$item_anim_dur		= ! empty( $settings['item_anim_duration'] ) ? $settings['item_anim_duration'] : '';
+		$item_anim_delay	= ! empty( $settings['item_anim_delay'] )	? $settings['item_anim_delay'] : 0;
 		
 		$id = $this->get_id();
 		
@@ -471,6 +472,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$grid = micemade_elements_grid_class( intval( $cats_per_row ), intval( $cats_per_row_mob ) );
 		$this->add_render_attribute( 'category-css', 'class', 'category '. $grid );
 		$this->add_render_attribute( 'category-css', 'class', $item_anim ? 'mm-enter-animate animated' : '' );
+		$this->add_render_attribute( 'category-css', 'class', 'animated-' . $item_anim_dur );
 		$this->add_render_attribute( 'item-anim-data', 'data-anim', $item_anim );
 		
 		if( empty( $categories ) ) return;
@@ -491,10 +493,11 @@ class Micemade_WC_Categories extends Widget_Base {
 			$term_link	= isset( $term_data['term_link'] ) ? $term_data['term_link'] : '#';
 			$image_url	= isset( $term_data['image_url'] ) ? $term_data['image_url'] : '';
 			
-			// Category item id
-			$this->add_render_attribute( 'item-id'. $count, 'data-id', $id . '-'. $count );
+			// Category item data-id / data-delay
+			$this->add_render_attribute( 'data-id'. $count, 'data-id', $id . '-'. $count );
+			$this->add_render_attribute( 'data-delay'. $count, 'data-delay', $item_anim_delay * $count );
 			
-			echo '<a '. $this->get_render_attribute_string( 'item-id'. $count ) . ' ' . $this->get_render_attribute_string( 'category-css' ) .' href="'. esc_url( $term_link ) .'" title="'. esc_attr( $term_title ) .'" '. $this->get_render_attribute_string( 'item-anim-data' ) .'>';
+			echo '<a '. $this->get_render_attribute_string( 'data-id'. $count ) . ' '. $this->get_render_attribute_string( 'category-css' ) .' href="'. esc_url( $term_link ) .'" title="'. esc_attr( $term_title ) .'" '. $this->get_render_attribute_string( 'item-anim-data' ) . ' ' . $this->get_render_attribute_string( 'data-delay'. $count ) .'>';
 			
 				echo '<div class="category__inner-wrap">';
 				

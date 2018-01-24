@@ -98,6 +98,9 @@
 	
 	$(document).ready(function() {
 	
+		/**
+		 * Test for mobile broswers
+		 */
 		var testMobile;
 		var isMobile = {
 			Android: function() {
@@ -138,7 +141,7 @@
 		};
 
 		// Dom Ready
-		$(function() {
+		$( function() {
 			parallax();
 		});
 			
@@ -234,7 +237,10 @@
 			autoplayDisableOnInteraction: false
 		});
 		*/
-		function makeid() {
+		/**
+		 * Make ID - create random ID
+		 */
+		function mmMakeId() {
 			var text = "";
 			var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -244,11 +250,14 @@
 			return text;
 		}
 
+		/**
+		 * Micemade Tabs - display WC products in tabs
+		 */
 		function micemadeElementsTabs() {
 			var  tabs = $('.micemade-elements_tabs');
 			tabs.each( function(){
 				
-				var randId = makeid();
+				var randId = mmMakeId();
 				
 				$(this).find('.tab-title').addClass( randId );
 				$(this).find('.tab-content').addClass( randId );
@@ -281,13 +290,33 @@
 		}
 		micemadeElementsTabs();
 		
-		function micemade_in_viewport() {
+		/**
+		 * Detect Micemade Elements widgets when in viewport
+		 */
+		window.micemadeInViewport = function micemadeInViewportFunc() {
 			$('.mm-enter-animate').whenInViewport( function( $paragraph ) {
 				var animType = $paragraph.data('anim');
-				$paragraph.addClass( animType ).addClass( 'anim-done' );
+				var delay = $paragraph.data('delay');
+				setTimeout(
+					function() {
+						$paragraph.addClass( animType ).addClass( 'anim-done' );
+					}
+					, delay
+				);
+				
 			});
 		}
-		micemade_in_viewport();
+		var startViewport = window.micemadeInViewport();
+
+		// Restart micemadeInViewport when element changes
+		// Elementor editor only
+		var isEditor = $('.elementor-editor-active');
+		if( isEditor.length ) {
+			elementorFrontend.hooks.addAction( 'frontend/element_ready/micemade-wc-categories.default',
+			function( $scope ) {
+				var startVieportAfterReload = window.micemadeInViewport();
+			} );
+		}
 		
 	});
 	
