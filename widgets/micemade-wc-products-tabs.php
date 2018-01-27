@@ -244,19 +244,19 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 		$this->add_responsive_control(
 			'align',
 			[
-				'label' => __( 'Tabs Alignment', 'elementor' ),
+				'label' => __( 'Tabs Alignment', 'micemade-elements' ),
 				'type' => Controls_Manager::CHOOSE,
 				'options' => [
 					'left' => [
-						'title' => __( 'Left', 'elementor' ),
+						'title' => __( 'Left', 'micemade-elements' ),
 						'icon' => 'fa fa-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'elementor' ),
+						'title' => __( 'Center', 'micemade-elements' ),
 						'icon' => 'fa fa-align-center',
 					],
 					'right' => [
-						'title' => __( 'Right', 'elementor' ),
+						'title' => __( 'Right', 'micemade-elements' ),
 						'icon' => 'fa fa-align-right',
 					],
 
@@ -270,19 +270,19 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 		$this->add_control(
 			'vertical-align',
 			[
-				'label' => __( 'Vertical Alignment', 'elementor' ),
+				'label' => __( 'Vertical Alignment', 'micemade-elements' ),
 				'type' => Controls_Manager::CHOOSE,
 				'options' => [
 					'flex-start' => [
-						'title' => __( 'Top', 'elementor' ),
+						'title' => __( 'Top', 'micemade-elements' ),
 						'icon' => 'fa fa-caret-down',
 					],
 					'center' => [
-						'title' => __( 'Center', 'elementor' ),
+						'title' => __( 'Center', 'micemade-elements' ),
 						'icon' => 'fa fa-unsorted',
 					],
 					'flex-end' => [
-						'title' => __( 'Bottom', 'elementor' ),
+						'title' => __( 'Bottom', 'micemade-elements' ),
 						'icon' => 'fa fa-caret-up',
 					],
 

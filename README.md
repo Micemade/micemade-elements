@@ -55,6 +55,10 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 
 **Changelog**
 
+*** 0.6.5. ***
+* New layout settings in "Micemade MailChimp 4 WP Forms"
+* Updated translation strings for couple of widgets
+
 *** 0.6.4. ***
 * new widget - "Micemade Instagram"
 * "Micemade WC Categories" 

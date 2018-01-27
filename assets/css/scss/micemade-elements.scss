@@ -883,6 +883,9 @@
 	
 	} // end micemade-elements_tabs
 	
+	/**
+	 * Micemade Instagram
+	 */
 	&_instagram {
 
 		.image-link {
@@ -891,8 +894,33 @@
 				height: auto;
 			}
 		}
-
 	}
+
+	/**
+	 * Micemade MailChimp 4 WP
+	 */
+	&_mc4wp {
+
+		display: flex;
+		flex-direction: column;
+		
+		.mc4wp-form-fields {
+			
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			margin: 0 auto;
+			input {
+				&[type=email] {
+					min-width: 200px;
+				}
+				&.button {
+					width: auto;
+				}
+				margin: 0;
+			}
+		}
+	}// end Micemade MailChimp 4 WP
 
 	/**
 	 * MICEMADE BUTTONS ELEMENT

@@ -36,9 +36,124 @@ class Micemade_Mailchimp extends Widget_Base {
 			'mc4wp_slug',
 			[
 				'label' => esc_html__( 'Select Newsletter Form', 'micemade-elements' ),
-                'description' => esc_html__('"MailChimp for WP" - plugin must be installed and there must be some newsletter forms made with the plugin','micemade-elements'),
+                'description' => esc_html__('"MailChimp for WP" - with free version only one form is available - purchase Premuim version of "MailChimp 4 WP" for more forms.','micemade-elements'),
 				'type' => Controls_Manager::SELECT,
-				'options' => apply_filters( 'micemade_posts_array' ,'mc4wp-form' ),
+				'options' => array_merge( 
+					['' => esc_html__( 'Select the newlsetter form', 'micemade-elements' )] ,
+					apply_filters( 'micemade_posts_array' ,'mc4wp-form' )
+					)
+			]
+		);
+
+		$this->add_control(
+			'orientation',
+			[
+				'label' => esc_html__( 'Orientation', 'micemade-elements' ),
+                'description' => esc_html__('stack form elements vertically or horizontally','micemade-elements'),
+				'type' => Controls_Manager::SELECT,
+				'default' => 'row',
+				'options' => [
+					'row' => esc_html__( 'Horizontal', 'micemade-elements' ),
+					'column' => esc_html__( 'Vertical', 'micemade-elements' ),
+				],
+				'selectors' => [
+					'{{WRAPPER}} .micemade-elements_mc4wp .mc4wp-form-fields' => 'flex-direction: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'align',
+			[
+				'label' => __( 'Form Alignment', 'micemade-elements' ),
+				'type' => Controls_Manager::CHOOSE,
+				'options' => [
+					'flex-start' => [
+						'title' => __( 'Left', 'micemade-elements' ),
+						'icon' => 'fa fa-align-left',
+					],
+					'center' => [
+						'title' => __( 'Center', 'micemade-elements' ),
+						'icon' => 'fa fa-align-center',
+					],
+					'flex-end' => [
+						'title' => __( 'Right', 'micemade-elements' ),
+						'icon' => 'fa fa-align-right',
+					],
+					'stretch' => [
+						'title' => __( 'Justify', 'micemade-elements' ),
+						'icon' => 'fa fa-align-justify',
+					],
+
+				],
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}} .mc4wp-form-fields' => 'justify-content: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'form_width',
+			[
+				'label' => __( 'Form Width', 'micemade-elements' ),
+				'type' => Controls_Manager::SLIDER,
+				'default' => [
+					'size' => '',
+					'unit' => '%',
+				],
+				'tablet_default' => [
+					'unit' => '%',
+				],
+				'mobile_default' => [
+					'unit' => '%',
+				],
+				'size_units' => [ '%' ],
+				'range' => [
+					'%' => [
+                        'min' => 0,
+						'max' => 100,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .mc4wp-form-fields' => 'width: {{SIZE}}{{UNIT}}',
+				],
+
+			]
+		);
+
+		$this->add_responsive_control(
+			'email_input_width',
+			[
+				'label' => __( 'Email Input Width', 'micemade-elements' ),
+				'type' => Controls_Manager::SLIDER,
+				'default' => [
+					'unit' => 'px',
+					'size' => ''
+				],
+				'range' => [
+					'px' => [
+						'min' => 0,
+						'max' => 1000,
+						'step' => 10
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .mc4wp-form-fields input[type=email]' => 'width: {{SIZE}}{{UNIT}}',
+				],
+
+			]
+		);
+
+		$this->add_responsive_control(
+			'tab_padding',
+			[
+				'label' => esc_html__( 'Input elements margins', 'micemade-elements' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'em', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .mc4wp-form-fields input, {{WRAPPER}} .mc4wp-form-fields select' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
 			]
 		);
 
@@ -58,9 +173,9 @@ class Micemade_Mailchimp extends Widget_Base {
             else
                 $id = 0;
 
-            echo'<div class="elementor-shortcode">';
+            echo'<div class="micemade-elements_mc4wp elementor-shortcode">';
                 
-                echo do_shortcode('[mc4wp_form id="'. $id .'"]');    
+                echo do_shortcode('[mc4wp_form id="'. $id .'"]');
             
             echo '</div>';  
         }
