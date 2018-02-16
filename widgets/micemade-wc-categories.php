@@ -46,6 +46,21 @@ class Micemade_WC_Categories extends Widget_Base {
 		);
 		
 		$this->add_control(
+			'style',
+			[
+				'label'		=> __( 'Base style', 'micemade-elements' ),
+				'type'		=> Controls_Manager::SELECT,
+				'default'	=> 'style_1',
+				'options'	=> [
+					'style_1'		=> __( 'Style one', 'micemade-elements' ),
+					'style_2'		=> __( 'Style two', 'micemade-elements' ),
+					'style_3'		=> __( 'Style three', 'micemade-elements' ),
+					'style_4'		=> __( 'Style four', 'micemade-elements' ),
+				]
+			]
+		);
+
+		$this->add_control(
 			'cats_per_row',
 			[
 				'label' => __( 'Categories per row', 'micemade-elements' ),
@@ -145,23 +160,7 @@ class Micemade_WC_Categories extends Widget_Base {
 			]
 		);
 		
-		
-		
-		$this->add_control(
-			'style',
-			[
-				'label'		=> __( 'Base style', 'micemade-elements' ),
-				'type'		=> Controls_Manager::SELECT,
-				'default'	=> 'style_1',
-				'options'	=> [
-					'style_1'		=> __( 'Style one', 'micemade-elements' ),
-					'style_2'		=> __( 'Style two', 'micemade-elements' ),
-					'style_3'		=> __( 'Style three', 'micemade-elements' ),
-					'style_4'		=> __( 'Style four', 'micemade-elements' ),
-				]
-			]
-		);
-		
+
 		$this->add_control(
 			'image',
 			[
@@ -196,17 +195,17 @@ class Micemade_WC_Categories extends Widget_Base {
 				'default' => 'yes',
 			]
 		);
+
 		$this->end_controls_section();
 		
 		
 		$this->start_controls_section(
-			'section_style',
+			'section_layout',
 			[
-				'label' => esc_html__( 'Micemade WC Categories', 'micemade-elements' ),
+				'label' => esc_html__( 'Category item layout', 'micemade-elements' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
-		
 		
 		$this->add_responsive_control(
 			'categories_height',
@@ -229,7 +228,57 @@ class Micemade_WC_Categories extends Widget_Base {
 
 			]
 		);
+		$this->add_responsive_control(
+			'cat_title_padding',
+			[
+				'label' => esc_html__( 'Category box padding', 'micemade-elements' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'em', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .category__text-wrap' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'post_text_align',
+			[
+				'label' => __( 'Categories alignment', 'micemade-elements' ),
+				'type' => Controls_Manager::CHOOSE,
+				'options' => [
+					'left' => [
+						'title' => __( 'Left', 'micemade-elements' ),
+						'icon' => 'fa fa-align-left',
+					],
+					'center' => [
+						'title' => __( 'Center', 'micemade-elements' ),
+						'icon' => 'fa fa-align-center',
+					],
+					'right' => [
+						'title' => __( 'Right', 'micemade-elements' ),
+						'icon' => 'fa fa-align-right',
+					],
+				],
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}} .category__text-wrap' => 'text-align: {{VALUE}};',
+				],
+				
+			]
+		);
 		
+		
+		$this->end_controls_section();
+		
+		
+		$this->start_controls_section(
+			'section_style',
+			[
+				'label' => esc_html__( 'Colors, typography, border', 'micemade-elements' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+			]
+		);
+
 		// HOVER TABS 
 		$this->start_controls_tabs( 'tabs_button_style' );
 		$this->start_controls_tab(
@@ -296,7 +345,39 @@ class Micemade_WC_Categories extends Widget_Base {
 
 		$this->end_controls_tab();
 		$this->end_controls_tabs();
+
 		
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'title_typography',
+				'label' => __( 'Typography', 'micemade-elements' ),
+				'scheme' => Scheme_Typography::TYPOGRAPHY_4,
+				'selector' => '{{WRAPPER}} .category__title',
+			]
+		);
+		
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name' => 'border',
+				'label' => __( 'Border', 'micemade-elements' ),
+				'placeholder' => '1px',
+				'default' => '1px',
+				'selector' => '{{WRAPPER}} .category__inner-wrap',
+			]
+		);
+
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'section_anim_effects',
+			[
+				'label' => __( 'Animation and hover effects', 'micemade-elements' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+			]
+		);
+
 		$this->add_control(
 			'hover_style',
 			[
@@ -333,71 +414,11 @@ class Micemade_WC_Categories extends Widget_Base {
 				]
 			]
 		);
-
-		$this->add_responsive_control(
-			'post_text_align',
-			[
-				'label' => __( 'Categories alignment', 'micemade-elements' ),
-				'type' => Controls_Manager::CHOOSE,
-				'options' => [
-					'left' => [
-						'title' => __( 'Left', 'micemade-elements' ),
-						'icon' => 'fa fa-align-left',
-					],
-					'center' => [
-						'title' => __( 'Center', 'micemade-elements' ),
-						'icon' => 'fa fa-align-center',
-					],
-					'right' => [
-						'title' => __( 'Right', 'micemade-elements' ),
-						'icon' => 'fa fa-align-right',
-					],
-				],
-				'default' => '',
-				'selectors' => [
-					'{{WRAPPER}} .category__text-wrap' => 'text-align: {{VALUE}};',
-				],
-				
-			]
-		);
 		
-		$this->add_responsive_control(
-			'cat_title_padding',
-			[
-				'label' => esc_html__( 'Categories title padding', 'micemade-elements' ),
-				'type' => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', 'em', '%' ],
-				'selectors' => [
-					'{{WRAPPER}} .category__text-wrap' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
-			]
-		);
-		
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'title_typography',
-				'label' => __( 'Typography', 'micemade-elements' ),
-				'scheme' => Scheme_Typography::TYPOGRAPHY_4,
-				'selector' => '{{WRAPPER}} .category__title',
-			]
-		);
-		
-		$this->add_group_control(
-			Group_Control_Border::get_type(),
-			[
-				'name' => 'border',
-				'label' => __( 'Border', 'micemade-elements' ),
-				'placeholder' => '1px',
-				'default' => '1px',
-				'selector' => '{{WRAPPER}} .category__inner-wrap',
-			]
-		);
-
 		$this->add_control(
 			'item_anim',
 			[
-				'label' => __( 'Single Category Animation', 'elementor' ),
+				'label' => __( 'Category Entering Animation', 'elementor' ),
 				'type' => Controls_Manager::ANIMATION,
 				'default' => '',
 				'label_block' => true,

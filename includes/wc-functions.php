@@ -104,7 +104,7 @@ function micemade_elements_loop_product_func( $style = 'style_1', $img_format = 
 					if( $price ) {
 						echo '<span class="price-wrap">';
 						woocommerce_template_loop_price();
-						echo '</span>';
+						echo '</span>'; 
 					}
 					?>
 					
@@ -141,7 +141,7 @@ add_filter( 'micemade_elements_loop_product','micemade_elements_loop_product_fun
  */
 function micemade_elements_simple_prod_data_func( $short_desc = true ){
 	
-	echo '<h3 class="product_title"><a href="'. esc_attr( get_permalink() ) .'" title="'. the_title_attribute (array('echo' => 0)).'"> ' . get_the_title() .'</a></h4>';
+	echo '<h3 class="product_title"><a href="'. esc_attr( get_permalink() ) .'" title="'. the_title_attribute (array('echo' => 0)).'"> ' . get_the_title() .'</a></h3>';
 
 	if( $short_desc ) {
 		wc_get_template_part( 'single-product/short', 'description' );

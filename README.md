@@ -55,6 +55,9 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 
 **Changelog**
 
+*** 0.6.6. ***
+* Controls / options changes in WC elements: products slider, single product, product categories
+
 *** 0.6.5. ***
 * New layout settings in "Micemade MailChimp 4 WP Forms"
 * Updated translation strings for couple of widgets

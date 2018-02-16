@@ -143,7 +143,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		$this->start_controls_section(
 			'section_style',
 			[
-				'label' => esc_html__( 'Product text box settings', 'micemade-elements' ),
+				'label' => esc_html__( 'Product info settings', 'micemade-elements' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -151,7 +151,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		$this->add_control(
 			'background_color',
 			[
-				'label' => __( 'Product text box background', 'micemade-elements' ),
+				'label' => __( 'Product info background', 'micemade-elements' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .entry-summary' => 'background-color: {{VALUE}};',
@@ -162,7 +162,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		$this->add_responsive_control(
 			'align',
 			[
-				'label' => __( 'Align product text', 'micemade-elements' ),
+				'label' => __( 'Align product info', 'micemade-elements' ),
 				'type' => Controls_Manager::CHOOSE,
 				'options' => [
 					'left'    => [
@@ -189,7 +189,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		$this->add_responsive_control(
 			'text_box_position',
 			[
-				'label' => esc_html__( 'Product text box position', 'micemade-elements' ),
+				'label' => esc_html__( 'Product info position', 'micemade-elements' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', '%' ],
 				'selectors' => [
@@ -204,7 +204,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		$this->add_responsive_control(
 			'padding',
 			[
-				'label' => esc_html__( 'Product text box padding', 'micemade-elements' ),
+				'label' => esc_html__( 'Product info padding', 'micemade-elements' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', '%' ],
 				'selectors' => [
@@ -217,7 +217,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		$this->add_responsive_control(
 			'summary_width',
 			[
-				'label' => __( 'Product text box width (%)', 'elementor' ),
+				'label' => __( 'Product info width (%)', 'elementor' ),
 				'type' => Controls_Manager::NUMBER,
 				'default' => '',
 				'min' => 0,
@@ -235,7 +235,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		$this->add_responsive_control(
 			'product_elements_spacing',
 			[
-				'label' => __( 'Elements vertical spacing', 'micemade-elements' ),
+				'label' => __( 'Product info vertical spacing', 'micemade-elements' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => '',
@@ -355,9 +355,9 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		$this->add_responsive_control(
 			'thumb_background_size',
 			[
-				'label' => esc_html__( 'Image background position', 'micemade-elements' ),
+				'label' => esc_html__( 'Image background size', 'micemade-elements' ),
 				'type' => Controls_Manager::SELECT,
-				'default' => 'center',
+				'default' => 'cover',
 				'options' => [
 					'auto'		=> esc_html__( 'Auto', 'micemade-elements' ),
 					'cover'		=> esc_html__( 'Cover', 'micemade-elements' ),
@@ -423,7 +423,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
-					'{{WRAPPER}} .entry-summary h3, {{WRAPPER}} .entry-summary h4' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .entry-summary h3 a, {{WRAPPER}} .entry-summary h4 a' => 'color: {{VALUE}};',
 				],
 			]
 		);
