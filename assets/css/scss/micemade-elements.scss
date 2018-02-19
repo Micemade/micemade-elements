@@ -336,11 +336,12 @@
 					justify-content: center;
 				}
 				
-				
 			} // .inner-wrap
-		
+
+			@extend %postthumb_container_pos;
+
 		} // style_3
-		
+
 		&.style_4 {
 			
 			.inner-wrap {

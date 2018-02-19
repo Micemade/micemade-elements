@@ -55,6 +55,9 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 
 **Changelog**
 
+*** 0.6.6.1 ***
+* Improvements in Products slider options.
+
 *** 0.6.6. ***
 * Controls / options changes in WC elements: products slider, single product, product categories
 
