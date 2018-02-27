@@ -203,7 +203,7 @@
 			}
 			
 			.inner-wrap, .post-overlay {
-				transition: background-color 0.3s linear;
+				@include transition-global( background-color );
 			}
 			
 			.post-thumb {
@@ -220,19 +220,16 @@
 				
 				padding: 20px;
 				
-				> * {
-					display: block;
-				}
+				> * { display: block; }
+				
+				* { @include transition-global( all ); }
 				
 				h4 {
 					font-size: 22px;
 					margin: 0;
 					margin-bottom: 0 !important;
 					padding: 0 0 15px;
-					transition: all 0.2s linear;
 				}
-				
-				a { transition: all 0.2s linear; }
 				
 				.meta {
 					font-size: 11px;
@@ -289,6 +286,10 @@
 					width: 50%;
 					flex-grow: 1;
 				}
+				// Fix img bottom space (TODO)
+				.post-thumb img {
+					margin-bottom: -10px;
+				}
 				
 				@include breakpoint(tablet-down) {
 				
@@ -309,7 +310,7 @@
 			.inner-wrap {
 				position: relative;
 				background-color: transparent !important;
-				
+				height: 400px;
 				
 				.post-thumb-back, .post-overlay {
 					top: 0;
@@ -323,13 +324,15 @@
 					background-size: cover;
 					background-repeat: no-repeat;
 					background-position: center;
+					width: 100%;
+					height: 100%;
 				}
 				.post-overlay {
 					z-index:1;
-					background: rgba( #fff, 0.85);
+
 				}
 				.post-text {
-					position: relative;
+					position: absolute;
 					z-index: 2;
 					display: flex;
 					flex-direction: column;
@@ -340,7 +343,18 @@
 
 			@extend %postthumb_container_pos;
 
-		} // style_3
+		} // style_3 & style_4
+
+		&.style_3 {
+			
+			.post-text {
+				// has abs position
+				width: 100%;
+				height: 100%;
+			}
+
+		}// style_3 only
+
 
 		&.style_4 {
 			
@@ -349,7 +363,7 @@
 				background-color: transparent !important;
 				
 				.post-thumb-back {
-					right: 40%;
+					width: 60%;
 				}
 				
 				.post-overlay {
@@ -357,16 +371,14 @@
 					bottom: 10%;
 					left: 40%;
 					right: 5%;
-					box-shadow: 0 0 50px rgba(0,0,0,0.2);
+					background: rgba( #fff, 0.6 );
 				}
 				.post-text {
-					margin:{
-						left:40%;
-						right: 5%;
-						top: 10%;
-						bottom: 10%;
-					} 
-					
+					// has abs position
+					top: 10%;
+					bottom: 10%;
+					left:40%;
+					right: 5%;
 				}
 				
 			} // .inner-wrap

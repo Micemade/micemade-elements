@@ -269,7 +269,7 @@ class Micemade_Instagram extends Widget_Base {
                             'src' => $item[$size],
                             'alt' => $item['description'],
                             'title' => $item['description'],
-                            'class' => ( $stretch == yes ) ? 'stretch' : '',
+                            'class' => ( $stretch == 'yes' ) ? 'stretch' : '',
 
                         ]
                     );

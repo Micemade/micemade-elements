@@ -3,7 +3,7 @@
  * Plugin Name: Micemade Elements
  * Description: Extension plugin with custom elements for Elementor, created by Micemade. Elementor plugin required.
  * Plugin URI: https://github.com/Micemade/micemade-elements/
- * Version: 0.6.6.1
+ * Version: 0.6.7
  * Author: micemade
  * Author URI: http://micemade.com
  * Text Domain: micemade-elements
@@ -11,6 +11,11 @@
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
+
+// Define MICEMADE_ELEMENTS_PLUGIN_FILE.
+if ( ! defined( 'MICEMADE_ELEMENTS_PLUGIN_FILE' ) ) {
+	define( 'MICEMADE_ELEMENTS_PLUGIN_FILE', __FILE__ );
 }
 
 class Micemade_Elements {

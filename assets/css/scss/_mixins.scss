@@ -14,3 +14,7 @@
 		bottom: 0;
 	}
 }
+
+@mixin transition-global( $property: all ) {
+	transition: $property 0.3s linear; 
+}

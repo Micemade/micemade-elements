@@ -234,6 +234,8 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		
 		$this->end_controls_section();
 		
+
+
 		// TAB 2 - STYLES FOR POSTS :
 		$this->start_controls_section(
 			'section_style',
@@ -268,6 +270,30 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 			]
 		);
 
+		$this->add_responsive_control(
+			'product_text_height',
+			[
+				'label' => __( 'Product height', 'micemade-elements' ),
+				'type' => Controls_Manager::SLIDER,
+				'default' => [
+					'size' => 400,
+				],
+				'range' => [
+					'px' => [
+						'max' => 800,
+						'min' => 0,
+						'step' => 10,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .inner-wrap' => 'height: {{SIZE}}px;',
+				],
+				'condition' => [
+					'style' => ['style_3','style_4']
+				],
+			]
+		);
+
 		$this->add_control(
 			'slider_items_padding_border',
 			[
@@ -278,14 +304,17 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
-			'product_info_padding',
+			'slider_items_padding',
 			[
 				'label' => esc_html__( 'Slider items padding', 'micemade-elements' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', '%' ],
 				'selectors' => [
-					'{{WRAPPER}} .post-text' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .swiper-slide' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
+				/* 'condition' => [
+					'style!' => ['style_3'],
+				] */
 			]
 		);
 
@@ -416,14 +445,32 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$this->add_control(
 			'post_info_background_color',
 			[
-				'label' => __( 'Product info background', 'micemade-elements' ),
+				'label' => __( 'Product info back color', 'micemade-elements' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .inner-wrap' => 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .post-overlay' => 'background-color: {{VALUE}};',
 				],
+				'condition' => [
+					'style!' => ['style_3','style_4'],
+				]
 			]
 		);
+		
+		$this->add_control(
+			'post_overlay_color',
+			[
+				'label' => __( 'Product overlay color', 'micemade-elements' ),
+				'type' => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .post-overlay' => 'background-color: {{VALUE}};',
+				],
+				'condition' => [
+					'style' => ['style_3','style_4'],
+				]
+			]
+		);
+
+
 		$this->end_controls_tab();
 		// HOVER
 		$this->start_controls_tab(
@@ -439,41 +486,32 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .inner-wrap:hover'=> 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .inner-wrap:hover .post-overlay' => 'background-color: {{VALUE}};',
 				],
-				/* 'condition' => [
-					'style' => ['style_3','style_4'],
-				], */
+				'condition' => [
+					'style!' => ['style_3'],
+				],
 			]
 		);
+
+		$this->add_control(
+			'post_overlay_hover_color',
+			[
+				'label' => __( 'Hover product overlay color', 'micemade-elements' ),
+				'type' => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .inner-wrap:hover .post-overlay' => 'background-color: {{VALUE}};',
+				],
+				'condition' => [
+					'style' => ['style_3'],
+				]
+			]
+		);
+
+
 		$this->end_controls_tab();
 		$this->end_controls_tabs();
 		
-		
-		$this->add_responsive_control(
-			'product_text_height',
-			[
-				'label' => __( 'Product height', 'micemade-elements' ),
-				'type' => Controls_Manager::SLIDER,
-				'default' => [
-					'size' => '',
-				],
-				'range' => [
-					'px' => [
-						'max' => 800,
-						'min' => 0,
-						'step' => 10,
-					],
-				],
-				'selectors' => [
-					'{{WRAPPER}} .post-text' => 'height: {{SIZE}}px;',
-				],
-				'condition' => [
-					'style' => ['style_3','style_4']
-				],
-			]
-		);
-		
+
 		$this->add_responsive_control(
 			'content_vertical_alignment',
 			[
@@ -521,41 +559,22 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 				
 			]
 		);
-		
-		
-		$this->add_control(
-			'border_padding_product_details',
-			[
-				'label' => __( 'Product info border and padding', 'micemade-elements' ),
-				'type' => Controls_Manager::HEADING,
-				'separator' => 'before',
-			]
-		);
-		// Product details border
-		$this->add_group_control(
-			Group_Control_Border::get_type(),
-			[
-				'name' => 'product_details_border',
-				'label' => __( 'Product info border', 'micemade-elements' ),
-				'placeholder' => '1px',
-				'default' => '1px',
-				'selector' => '{{WRAPPER}} .product-details',
-			]
-		);
-		// Product details padding
+
 		$this->add_responsive_control(
-			'product_details_padding',
+			'product_info_padding',
 			[
-				'label' => esc_html__( 'Product info padding', 'micemade-elements' ),
+				'label' => esc_html__( 'Product info box padding', 'micemade-elements' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', '%' ],
 				'selectors' => [
-					'{{WRAPPER}} .product-details' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .post-text' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
-
+		
 		$this->end_controls_section();
+		// end product info styling
+		
 
 		$this->start_controls_section(
 			'section_product_thumb_settings',
@@ -563,7 +582,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 				'label' => __( 'Product image settings', 'micemade-elements' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 				'condition' => [
-					'style' => 'style_3',
+					'style' => ['style_3','style_4'],
 				]
 			]
 		);
@@ -603,7 +622,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 			[
 				'label' => esc_html__( 'Image container position', 'micemade-elements' ),
 				'type' => Controls_Manager::SELECT,
-				'default' => 'middle',
+				'default' => 'top__left',
 				'options' => [
 					'top__left'		=> esc_html__( 'Top left', 'micemade-elements' ),
 					'top__center'	=> esc_html__( 'Top center', 'micemade-elements' ),
@@ -645,7 +664,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 			[
 				'label' => esc_html__( 'Image background size', 'micemade-elements' ),
 				'type' => Controls_Manager::SELECT,
-				'default' => 'center',
+				'default' => 'cover',
 				'options' => [
 					'auto'		=> esc_html__( 'Auto', 'micemade-elements' ),
 					'cover'		=> esc_html__( 'Cover', 'micemade-elements' ),
@@ -917,7 +936,6 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 			]
 		);
 		
-		
 		$this->add_control(
 			'prod_det_button_options',
 			[
@@ -936,7 +954,44 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 				'title'		=> __( 'Style the "Product details" with css class(es) defined in your theme, plugin or customizer', 'micemade-elements' ),
 			]
 		);
+
 		
+		$this->end_controls_section();
+		// end of section_text
+
+		
+		// SECTION PRODUCT DETAILS STYLING :
+		$this->start_controls_section(
+			'section_details_styling',
+			[
+				'label' => esc_html__( 'Product details styling', 'micemade-elements' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		// Product details border
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name' => 'product_details_border',
+				'label' => __( 'Product details border', 'micemade-elements' ),
+				'placeholder' => '1px',
+				'default' => '1px',
+				'selector' => '{{WRAPPER}} .product-details',
+			]
+		);
+		// Product details padding
+		$this->add_responsive_control(
+			'product_details_padding',
+			[
+				'label' => esc_html__( 'Product details padding', 'micemade-elements' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'em', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .product-details' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
 		
 		$this->end_controls_section();
 

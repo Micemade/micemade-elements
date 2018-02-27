@@ -219,6 +219,33 @@ class Micemade_Posts_Grid extends Widget_Base {
 				'default' => 'yes',
 			]
 		);
+
+		
+		$this->add_responsive_control(
+			'post_overal_padding',
+			[
+				'label' => esc_html__( 'Post overal padding', 'micemade-elements' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'em', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .inner-wrap' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+		
+
+		$this->end_controls_section();
+
+		
+		// CONTENT BOX STYLES
+		
+		$this->start_controls_section(
+			'section_post_text',
+			[
+				'label' => __( 'Post content styling', 'micemade-elements' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+			]
+		);
 		
 		$this->start_controls_tabs( 'tabs_post_background' );
 		$this->start_controls_tab(
@@ -280,7 +307,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 					],
 				],
 				'selectors' => [
-					'{{WRAPPER}} .post-text' => 'height: {{SIZE}}px;',
+					'{{WRAPPER}} .inner-wrap' => 'height: {{SIZE}}px;',
 				],
 				'condition' => [
 					'style' => ['style_3','style_4']
@@ -308,7 +335,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 					'{{WRAPPER}} .post-thumb' => 'width:{{SIZE}}%;',
 					'{{WRAPPER}} .style_2 .post-text' => 'width: calc( 100% - {{SIZE}}%);',
 					// thumb style 4
-					'{{WRAPPER}} .post-thumb-back' => 'right: calc( 100% - {{SIZE}}%);',
+					'{{WRAPPER}} .post-thumb-back' => 'right: calc( 100% - {{SIZE}}%); width: auto;',
 
 				],
 				'condition' => [
@@ -334,7 +361,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 				],
 				'selectors' => [
 					'{{WRAPPER}} .style_4 .post-overlay' => 'left: calc( 100% - {{SIZE}}%);',
-					'{{WRAPPER}} .style_4 .post-text' => 'margin-left: calc( 100% - {{SIZE}}%);',
+					'{{WRAPPER}} .style_4 .post-text' => 'left: calc( 100% - {{SIZE}}%);',
 				],
 				'condition' => [
 					'style' => ['style_4']
@@ -420,24 +447,13 @@ class Micemade_Posts_Grid extends Widget_Base {
 					],
 				],
 				'selectors' => [
-					'{{WRAPPER}} .post-text h4' => 'margin-bottom: {{SIZE}}px;',
-					'{{WRAPPER}} .post-text meta' => 'margin-bottom: {{SIZE}}px;',
+					'{{WRAPPER}} .post-text > *:not(h4)' => 'margin-bottom: {{SIZE}}px; padding-bottom: 0;'
+					/*,
+					 '{{WRAPPER}} .post-text .meta' => 'margin-bottom: {{SIZE}}px;',
 					'{{WRAPPER}} .post-text p' => 'margin-bottom: {{SIZE}}px;',
-					'{{WRAPPER}} .post-text a.micemade-elements-readmore  ' => 'margin-bottom: {{SIZE}}px;',
+					'{{WRAPPER}} .post-text a.micemade-elements-readmore  ' => 'margin-bottom: {{SIZE}}px;', */
 				],
 				
-			]
-		);
-		
-		$this->add_responsive_control(
-			'post_overal_padding',
-			[
-				'label' => esc_html__( 'Post overal padding', 'micemade-elements' ),
-				'type' => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', 'em', '%' ],
-				'selectors' => [
-					'{{WRAPPER}} .inner-wrap' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
 			]
 		);
 		

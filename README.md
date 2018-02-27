@@ -55,15 +55,21 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 
 **Changelog**
 
+*** 0.6.7 ***
+* Added "Micemade Instagram" element
+* Improved organisation of options for elements: WC Products Slider, Posts Grid
+* Improved CSS styling for multiple elements
+* Included gulpfile.js and package.json
+
 *** 0.6.6.1 ***
-* Improvements in Products slider options.
+* Improvements in WC Products slider options.
 
 *** 0.6.6. ***
 * Controls / options changes in WC elements: products slider, single product, product categories
 
 *** 0.6.5. ***
 * New layout settings in "Micemade MailChimp 4 WP Forms"
-* Updated translation strings for couple of widgets
+* Updated translation strings for couple of elements
 
 *** 0.6.4. ***
 * new widget - "Micemade Instagram"
