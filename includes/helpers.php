@@ -8,21 +8,13 @@
  *  @return selector
  *  
  */
-function micemade_elements_grid_class( $items_desktop = 3, $items_mobile = 1,  $no_margin = false) {
+function micemade_elements_grid_class( $items_desktop = 3, $items_tablet = 1, $items_mobile = 1, $no_margin = false ) {
 
-    $style_class = $desktop_class = $mobiles_class = '';
+    $style_class = $desktop_class = $tablets_class = $mobiles_class = '';
 
     $no_margin = micemade_elements_to_boolean($no_margin); // make sure it is not string
 
     $column_desktop = array(
-        1	=> 'mme-col-lg-12',
-        2	=> 'mme-col-lg-6',
-        3	=> 'mme-col-lg-4',
-        4	=> 'mme-col-lg-3',
-        6	=> 'mme-col-lg-2',
-        12	=> 'mme-col-lg-1'
-    );
-	$column_mobile = array(
         1	=> 'mme-col-md-12',
         2	=> 'mme-col-md-6',
         3	=> 'mme-col-md-4',
@@ -30,20 +22,40 @@ function micemade_elements_grid_class( $items_desktop = 3, $items_mobile = 1,  $
         6	=> 'mme-col-md-2',
         12	=> 'mme-col-md-1'
     );
+	$column_tablet = array(
+        1	=> 'mme-col-sm-12',
+        2	=> 'mme-col-sm-6',
+        3	=> 'mme-col-sm-4',
+        4	=> 'mme-col-sm-3',
+        6	=> 'mme-col-sm-2',
+        12	=> 'mme-col-sm-1'
+    );
+	$column_mobile = array(
+        1	=> 'mme-col-xs-12',
+        2	=> 'mme-col-xs-6',
+        3	=> 'mme-col-xs-4',
+        4	=> 'mme-col-xs-3',
+        6	=> 'mme-col-xs-2',
+        12	=> 'mme-col-xs-1'
+    );
 	
 	// generate class selector for desktop
     if ( array_key_exists( $items_desktop, $column_desktop ) && !empty( $column_desktop[$items_desktop] ) ) {
         $desktop_class = $column_desktop[$items_desktop];
+    }
+	// generate class selector for tablets
+    if ( array_key_exists( $items_tablet, $column_tablet ) && !empty( $column_tablet[$items_tablet] ) ) {
+        $tablets_class = $column_tablet[$items_tablet];
     }
 	// generate class selector for mobiles
     if ( array_key_exists( $items_mobile, $column_mobile ) && !empty( $column_mobile[$items_mobile] ) ) {
         $mobiles_class = $column_mobile[$items_mobile];
     }
 
-    $style_class = $no_margin ? ( $desktop_class . ' ' . $mobiles_class . ' mme-zero-margin') : ( $desktop_class . ' ' . $mobiles_class );
+    $style_class = $no_margin ? ( $desktop_class . ' ' . $tablets_class . ' ' . $mobiles_class . ' mme-zero-margin') : ( $desktop_class . ' ' . $tablets_class . ' ' . $mobiles_class );
 	
 	// Added fixed full width to small screen - to do controls for small devices (?)
-    return $style_class . ' mme-col-sm-12 mme-col-xs-12';
+    return $style_class;
 }
 /*
  * Converting string to boolean

@@ -123,7 +123,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$this->add_control(
 			'posts_per_slide_tab',
 			[
-				'label' => __( 'Products per slide (on tablets)', 'micemade-elements' ),
+				'label' => __( 'Products per slide (tablets)', 'micemade-elements' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => 2,
 				'options' => [
@@ -139,7 +139,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$this->add_control(
 			'posts_per_slide_mob',
 			[
-				'label' => __( 'Products per slide (on mobiles)', 'micemade-elements' ),
+				'label' => __( 'Products per slide (mobiles)', 'micemade-elements' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => 1,
 				'options' => [
@@ -1024,7 +1024,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		
 		global $post;
 		
-		$grid = micemade_elements_grid_class( intval( $posts_per_slide ), intval( $posts_per_slide_mob ) );
+		$grid = micemade_elements_grid_class( intval( $posts_per_slide ), intval( $posts_per_slide_tab ), intval( $posts_per_slide_mob ) );
 		
 		// Query posts: ( hook in includes/wc-functions.php )
 		$args 	= apply_filters( 'micemade_elements_wc_query_args', $posts_per_page, $categories, $filters, $offset ); 

@@ -57,7 +57,8 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 
 *** 0.6.7 ***
 * Added "Micemade Instagram" element
-* Improved organisation of options for elements: WC Products Slider, Posts Grid
+* Added responsive grid point for medium (tablet) screen sizes for multiple elements
+* Improved options for elements: WC Products Slider, Posts Grid
 * Improved CSS styling for multiple elements
 * Included gulpfile.js and package.json
 

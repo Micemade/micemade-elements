@@ -70,11 +70,27 @@ class Micemade_Posts_Grid extends Widget_Base {
 		);
 		
 		$this->add_control(
+			'posts_per_row_tab',
+			[
+				'label' => __( 'Posts per row (on tablets)', 'micemade-elements' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 1,
+				'options' => [
+					1 => __( 'One', 'micemade-elements' ),
+					2 => __( 'Two', 'micemade-elements' ),
+					3 => __( 'Three', 'micemade-elements' ),
+					4 => __( 'Four', 'micemade-elements' ),
+					6 => __( 'Six', 'micemade-elements' ),
+				]
+			]
+		);
+		
+		$this->add_control(
 			'posts_per_row_mob',
 			[
 				'label' => __( 'Posts per row (on mobiles)', 'micemade-elements' ),
 				'type' => Controls_Manager::SELECT,
-				'default' => 3,
+				'default' => 1,
 				'options' => [
 					1 => __( 'One', 'micemade-elements' ),
 					2 => __( 'Two', 'micemade-elements' ),
@@ -893,6 +909,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$sticky				= ! empty( $settings['sticky'] )			? $settings['sticky'] : '';
 		$offset				= ! empty( $settings['offset'] )			? (int)$settings['offset'] : 0;
 		$posts_per_row		= ! empty( $settings['posts_per_row'] )		? (int)$settings['posts_per_row'] : 3;
+		$posts_per_row_tab	= ! empty( $settings['posts_per_row_tab'] )	? (int)$settings['posts_per_row_tab'] : 1;
 		$posts_per_row_mob	= ! empty( $settings['posts_per_row_mob'] )	? (int)$settings['posts_per_row_mob'] : 1;
 		$categories			= ! empty( $settings['categories'] )		? $settings['categories'] : array();
 		$img_format			= ! empty( $settings['img_format'] )		? $settings['img_format'] : 'thumbnail';
@@ -905,7 +922,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		
 		global $post;
 		
-		$grid = micemade_elements_grid_class( intval( $posts_per_row ), intval( $posts_per_row_mob ) );
+		$grid = micemade_elements_grid_class( intval( $posts_per_row ), intval( $posts_per_row_tab ), intval( $posts_per_row_mob ) );
 		
 		// Query posts:
 		$args	= apply_filters( 'micemade_elements_query_args', $posts_per_page, $categories, $sticky, $offset ); // hook in includes/helpers.php

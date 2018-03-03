@@ -90,7 +90,7 @@ class Micemade_Instagram extends Widget_Base {
 		$this->start_controls_section(
 			'section_style',
 			[
-				'label' => esc_html__( 'Style', 'micemade-elements' ),
+				'label' => esc_html__( 'Images style and layout', 'micemade-elements' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
         );
@@ -116,9 +116,28 @@ class Micemade_Instagram extends Widget_Base {
 		);
 		
 		$this->add_control(
+			'images_per_row_tab',
+			[
+				'label' => __( 'Images per row (tablets)', 'micemade-elements' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 3,
+				'options' => [
+					1 => __( 'One', 'micemade-elements' ),
+					2 => __( 'Two', 'micemade-elements' ),
+					3 => __( 'Three', 'micemade-elements' ),
+					4 => __( 'Four', 'micemade-elements' ),
+                    6 => __( 'Six', 'micemade-elements' ),
+                    8 => __( 'Eight', 'micemade-elements' ),
+					9 => __( 'Nine', 'micemade-elements' ),
+					12 => __( 'Twelwe', 'micemade-elements' ),
+				]
+			]
+		);
+		
+		$this->add_control(
 			'images_per_row_mob',
 			[
-				'label' => __( 'Images per row (on mobiles)', 'micemade-elements' ),
+				'label' => __( 'Images per row (mobiles)', 'micemade-elements' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => 3,
 				'options' => [
@@ -215,7 +234,85 @@ class Micemade_Instagram extends Widget_Base {
 			]
 		);
 
-        $this->end_controls_section();
+		$this->end_controls_section();
+		
+        
+
+		$this->start_controls_section(
+			'section_username_display',
+			[
+				'label' => esc_html__( 'Username or hashtag display', 'micemade-elements' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+			]
+		);
+		
+		$this->add_control(
+			'add_username_link',
+			[
+				'label' => __( 'Add username or hashtag link', 'micemade-elements' ),
+                'type' => Controls_Manager::SWITCHER,
+                'default' => 'yes',
+			]
+		);
+
+		$this->add_responsive_control(
+			'username_padding',
+			[
+				'label' => esc_html__( 'Padding', 'micemade-elements' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'em', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .instagram-username' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+				'condition' => [
+					'add_username_link' => ['yes'],
+				]
+			]
+		);
+		$this->add_responsive_control(
+			'product_info_align',
+			[
+				'label' => __( 'Alignment', 'micemade-elements' ),
+				'type' => Controls_Manager::CHOOSE,
+				'options' => [
+					'left' => [
+						'title' => __( 'Left', 'micemade-elements' ),
+						'icon' => 'fa fa-align-left',
+					],
+					'center' => [
+						'title' => __( 'Center', 'micemade-elements' ),
+						'icon' => 'fa fa-align-center',
+					],
+					'right' => [
+						'title' => __( 'Right', 'micemade-elements' ),
+						'icon' => 'fa fa-align-right',
+					],
+				],
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}} .instagram-username' => 'text-align: {{VALUE}};',
+				],
+				'condition' => [
+					'add_username_link' => ['yes'],
+				]
+				
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'usernme_typography',
+				'label' => __( 'Typography', 'micemade-elements' ),
+				'scheme' => Scheme_Typography::TYPOGRAPHY_4,
+				'selector' => '{{WRAPPER}} .instagram-username',
+				'condition' => [
+					'add_username_link' => ['yes'],
+				]
+			]
+		);
+
+		$this->end_controls_section();
 	}
 
 	protected function render() {
@@ -225,11 +322,13 @@ class Micemade_Instagram extends Widget_Base {
         $number = $settings['number'];
         $size = $settings['size'];
         $images_per_row = $settings['images_per_row'];
+        $images_per_row_tab = $settings['images_per_row_tab'];
         $images_per_row_mob = $settings['images_per_row_mob'];
         $lightbox = $settings['open_lightbox'];
-        $stretch = $settings['stretch'];
+		$stretch = $settings['stretch'];
+		$link = $settings['add_username_link'];
 
-        $grid = micemade_elements_grid_class( intval( $images_per_row ), intval( $images_per_row_mob ) );
+        $grid = micemade_elements_grid_class( intval( $images_per_row ),intval( $images_per_row_tab ), intval( $images_per_row_mob ) );
 
         if ( '' !== $username ) {
 
@@ -245,54 +344,77 @@ class Micemade_Instagram extends Widget_Base {
 				$media_array = array_slice( $media_array, 0, $number );
 
                 // Element attributes
-                $this->add_render_attribute( 'ul-class', 'class', 'micemade-elements_instagram mme-row instagram-size-' . $size );
+                $this->add_render_attribute( 'ul-class', 'class', 'mme-row instagram-size-' . $size );
                 $this->add_render_attribute( 'li-class', 'class', 'pic ' . $grid );
 				?>
-                
-                <ul <?php echo $this->get_render_attribute_string( 'ul-class' ); ?>>
-                <?php
-				foreach( $media_array as $index => $item ) {
-					
-                    $i = $index + 1;
-                    // Link attributes
-                    $this->add_render_attribute( 'link' . $i, 
-                        [
-                            'href' => ( $lightbox == 'yes') ? $item['original'] : $item['link'],
-                            'class' => 'image-link elementor-clickable',
-                            'data-elementor-open-lightbox' => $settings['open_lightbox'],
-                            'data-elementor-lightbox-slideshow' => $this->get_id(),
-                        ]
-                    );
-                    // Thumb attributes
-                    $this->add_render_attribute( 'img'. $i,
-                        [
-                            'src' => $item[$size],
-                            'alt' => $item['description'],
-                            'title' => $item['description'],
-                            'class' => ( $stretch == 'yes' ) ? 'stretch' : '',
+				
+				<div class="micemade-elements_instagram">
+			   
+					<ul <?php echo $this->get_render_attribute_string( 'ul-class' ); ?>>
+					<?php
+					foreach( $media_array as $index => $item ) {
+						
+						$i = $index + 1;
+						// Link attributes
+						$this->add_render_attribute( 'link' . $i, 
+							[
+								'href' => ( $lightbox == 'yes') ? $item['original'] : $item['link'],
+								'class' => 'image-link elementor-clickable',
+								'data-elementor-open-lightbox' => $settings['open_lightbox'],
+								'data-elementor-lightbox-slideshow' => $this->get_id(),
+							]
+						);
+						// Thumb attributes
+						$this->add_render_attribute( 'img'. $i,
+							[
+								'src' => $item[$size],
+								'alt' => $item['description'],
+								'title' => $item['description'],
+								'class' => ( $stretch == 'yes' ) ? 'stretch' : '',
 
-                        ]
-                    );
+							]
+						);
 
-                    $this->add_render_attribute( 'title'. $i, 'title', $item['description'] );
-                    
-                    echo '<li '. $this->get_render_attribute_string( 'li-class' ) .'>';
-                    
-                    echo '<a ' . $this->get_render_attribute_string( 'link' . $i ) .'>';
-                    
-                    echo '<img '. $this->get_render_attribute_string( 'img' . $i ) . '/>';
-                   
-                    echo '</a>';
-                    echo '</li>';
+						$this->add_render_attribute( 'title'. $i, 'title', $item['description'] );
+						
+						echo '<li '. $this->get_render_attribute_string( 'li-class' ) .'>';
+						
+						echo '<a ' . $this->get_render_attribute_string( 'link' . $i ) .'>';
+						
+						echo '<img '. $this->get_render_attribute_string( 'img' . $i ) . '/>';
 					
-				}
-				?>
-                </ul>
-                <?php
+						echo '</a>';
+						echo '</li>';
+						
+					} // end foreach
+					?>
+					</ul>
+					<?php
+					if( 'yes' === $link ) {
+						switch ( substr( $username, 0, 1 ) ) {
+							case '#':
+								$url = 'https://instagram.com/explore/tags/' . str_replace( '#', '', $username );
+
+								echo '<a href="'. esc_url( $url ) .'" class="instagram-username">' . esc_html__( 'Explore the Instagram with', 'micemade-elements' ) . ' ' . esc_html( $username ) . '</a>';
+							break;
+				
+							default:
+								$url = 'https://instagram.com/' . str_replace( '@', '', $username );
+								echo '<a href="'. esc_url( $url ) .'" class="instagram-username">' . esc_html__( 'Follow', 'micemade-elements' ) . ' ' . esc_html( $username ) . '</a>';
+
+							break;
+						}
+					}
+					?>
+
+				</div>
+
+				<?php
 			}
-		}
+		
+		} // end if $username
 
-    }
+	}
 }
 
 Plugin::instance()->widgets_manager->register_widget_type( new Micemade_Instagram() );

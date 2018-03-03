@@ -63,9 +63,25 @@ class Micemade_WC_Products extends Widget_Base {
 		);
 		
 		$this->add_control(
+			'products_per_row_tab',
+			[
+				'label' => __( 'Products per row (tablets)', 'micemade-elements' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 2,
+				'options' => [
+					1 => __( 'One', 'micemade-elements' ),
+					2 => __( 'Two', 'micemade-elements' ),
+					3 => __( 'Three', 'micemade-elements' ),
+					4 => __( 'Four', 'micemade-elements' ),
+					6 => __( 'Six', 'micemade-elements' ),
+				]
+			]
+		);
+		
+		$this->add_control(
 			'products_per_row_mob',
 			[
-				'label' => __( 'Products per row (on mobiles)', 'micemade-elements' ),
+				'label' => __( 'Products per row (mobiles)', 'micemade-elements' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => 2,
 				'options' => [
@@ -165,23 +181,25 @@ class Micemade_WC_Products extends Widget_Base {
 		
 		$posts_per_page			= ! empty( $settings['posts_per_page'] )		? (int)$settings['posts_per_page'] : 6;
 		$products_per_row		= ! empty( $settings['products_per_row'] )		? (int)$settings['products_per_row'] : 3;
+		$products_per_row_tab	= ! empty( $settings['products_per_row_tab'] )	? (int)$settings['products_per_row_tab'] : 2;
 		$products_per_row_mob	= ! empty( $settings['products_per_row_mob'] )	? (int)$settings['products_per_row_mob'] : 2;
 		$categories				= ! empty( $settings['categories'] )			? $settings['categories'] : array();
 		$filters				= ! empty( $settings['filters'] )				? $settings['filters'] : 'latest';
 		
 		global $post;
 				
-		$this->mm_products_grid = micemade_elements_grid_class( intval( $products_per_row ), intval( $products_per_row_mob ) );
+		$this->mm_products_grid = micemade_elements_grid_class( intval( $products_per_row ), intval( $products_per_row_tab ), intval( $products_per_row_mob ) );
 		 
 		$args = apply_filters( 'micemade_elements_wc_query_args', $posts_per_page, $categories, $filters ); // hook in includes/wc-functions.php
 
-		// Add (inject) grid classes to products in loop ( in "content-product.php" template )
+		// Add (inject) grid classes to products in loop
+		// ( in "content-product.php" template )
+		// "item" class is to support Micemade Themes
 		add_filter( 'post_class', function( $classes ) {
-			
 			$classes[] = $this->mm_products_grid;
 			$classes[] = 'item';
 			return $classes;
-		});
+		}, 10 );
 		
 		$products = get_posts( $args );
 		
@@ -195,7 +213,7 @@ class Micemade_WC_Products extends Widget_Base {
 					
 					setup_postdata( $post );
 					
-					wc_get_template_part( 'content', 'product' ); 
+					wc_get_template_part( 'content', 'product' );
 					
 				}
 				
@@ -204,14 +222,13 @@ class Micemade_WC_Products extends Widget_Base {
 			echo '</div>';
 		}
 		
-		// "Clean" or "reset" post_class to not conflict with other "post_class" functions
+		// "Clean" or "reset" post_class
+		// avoid conflict with other "post_class" functions
 		add_filter( 'post_class', function( $classes ) { 
-			
 			$classes_to_clean = array( $this->mm_products_grid, 'item' );
 			$classes = array_diff( $classes, $classes_to_clean );
-			
 			return $classes; 
-		});
+		}, 10 );
 		
 		wp_reset_postdata(); 
 

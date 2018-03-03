@@ -127,7 +127,7 @@
 			}
 
 			&.images_left, &.images_right {
-				//flex-basis: 50%;
+				
 				.product-thumb, .entry-summary {
 					width: 50%;
 				}
@@ -198,7 +198,7 @@
 			
 			.inner-wrap {
 				flex-grow: 1;
-				flex-basis: 100%;
+				//flex-basis: 100%;
 				max-width: 100%;
 			}
 			
@@ -284,7 +284,7 @@
 				align-items: center;
 				> div {
 					width: 50%;
-					flex-grow: 1;
+					//flex-grow: 1;
 				}
 				// Fix img bottom space (TODO)
 				.post-thumb img {
@@ -461,7 +461,7 @@
 				align-items: stretch;
 				justify-content: center;
 				flex-grow: 1;
-				flex-basis: 100%;
+				//flex-basis: 100%;
 				max-width: 100%;
 				transition: all 0.3s ease-in-out;
 			}
@@ -476,7 +476,7 @@
 			
 			&__image, &__text-wrap {
 				flex-grow: 1;
-				flex-basis: 100%;
+				//flex-basis: 100%;
 				max-width: 100%;
 			}
 			
@@ -906,6 +906,11 @@
 				width: 100%;
 				height: auto;
 			}
+		}
+
+		.instagram-username {
+			display: block;
+			text-align: left;
 		}
 	}
 

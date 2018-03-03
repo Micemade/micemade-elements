@@ -77,11 +77,28 @@ class Micemade_WC_Categories extends Widget_Base {
 		);
 		
 		$this->add_control(
+			'cats_per_row_tab',
+			[
+				'label' => __( 'Categories per row (tablets)', 'micemade-elements' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 1,
+				'options' => [
+					1 => __( 'One', 'micemade-elements' ),
+					2 => __( 'Two', 'micemade-elements' ),
+					3 => __( 'Three', 'micemade-elements' ),
+					4 => __( 'Four', 'micemade-elements' ),
+					6 => __( 'Six', 'micemade-elements' ),
+				]
+			]
+		);
+		
+		
+		$this->add_control(
 			'cats_per_row_mob',
 			[
-				'label' => __( 'Categories per row (on mobiles)', 'micemade-elements' ),
+				'label' => __( 'Categories per row (mobiles)', 'micemade-elements' ),
 				'type' => Controls_Manager::SELECT,
-				'default' => 3,
+				'default' => 1,
 				'options' => [
 					1 => __( 'One', 'micemade-elements' ),
 					2 => __( 'Two', 'micemade-elements' ),
@@ -469,6 +486,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		// Settings vars:
 		$categories			= ! empty( $settings['categories'] )		? $settings['categories'] : array();
 		$cats_per_row		= ! empty( $settings['cats_per_row'] )		? (int)$settings['cats_per_row'] : 3;
+		$cats_per_row_tab	= ! empty( $settings['cats_per_row_tab'] )	? (int)$settings['cats_per_row_tab'] : 1;
 		$cats_per_row_mob	= ! empty( $settings['cats_per_row_mob'] )	? (int)$settings['cats_per_row_mob'] : 1;
 		$style				= ! empty( $settings['style'] )				? $settings['style'] : 'style_1';
 		$hover_style		= ! empty( $settings['hover_style'] )		? $settings['hover_style'] : 'blur_image';
@@ -490,7 +508,7 @@ class Micemade_WC_Categories extends Widget_Base {
 
 		
 		// Each singular category styles:
-		$grid = micemade_elements_grid_class( intval( $cats_per_row ), intval( $cats_per_row_mob ) );
+		$grid = micemade_elements_grid_class( intval( $cats_per_row ), intval( $cats_per_row_tab ), intval( $cats_per_row_mob ) );
 		$this->add_render_attribute( 'category-css', 'class', 'category '. $grid );
 		$this->add_render_attribute( 'category-css', 'class', $item_anim ? 'mm-enter-animate animated' : '' );
 		$this->add_render_attribute( 'category-css', 'class', 'animated-' . $item_anim_dur );

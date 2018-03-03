@@ -49,8 +49,8 @@ $fg-class-off: 'mme-off' !default; // default was 'off'
 $fg-breakpoints: (
   (xs, 320px),
   (sm, 480px),	// default was (sm, 768px),
-  (md, 768px),	// default was (md, 992px),
-  (lg, 992px)	// default was (lg, 1200px)
+  (md, 769px),	// default was (md, 992px),
+  (lg, 1024px)	// default was (lg, 1200px)
 ) !default;
 
 /**
