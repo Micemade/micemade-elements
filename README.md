@@ -54,9 +54,10 @@ Our tests indicate that the elements work well with most themes that are well co
 Time will tell. When we estimate plugin has enough added functionalities to Elementor, or some other reason, it will be available on wp.org. So far, install it from GitHub (Download zip or clone the repository) .
 
 **Changelog**
+
 *** 0.6.8 ***
 * Improvements and fixes for WC Categories element
-* 
+
 *** 0.6.7 ***
 * Added "Micemade Instagram" element
 * Added responsive grid point for medium (tablet) screen sizes for multiple elements
