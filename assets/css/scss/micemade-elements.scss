@@ -532,20 +532,28 @@
 			
 			.category {
 				
+				&__inner-wrap {
+					flex-basis: 100%;
+				}
+				
 				&__overlay {
 					z-index: 0;
 				}
 
+				&__image, &__text-wrap {
+					width: 50%;
+				}
 				&__image {
 					z-index: 1;
 					height: 100%;
 					position: relative;
-					//@include aspect-o( 1, 1 );
+					flex-grow: 1;
 				}
 				&__text-wrap {
 					position:relative;
 					z-index: 2;
 					padding: 20px;
+					flex-grow: 1;
 				}
 				
 			} // .category

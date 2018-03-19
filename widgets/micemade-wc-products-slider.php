@@ -510,19 +510,18 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 
 		$this->end_controls_tab();
 		$this->end_controls_tabs();
-		
 
 		$this->add_responsive_control(
 			'content_vertical_alignment',
 			[
-				'label' => __( 'Vertical Align Product Info', 'micemade-elements' ),
-				'type' => Controls_Manager::SELECT,
-				'options' => [
-					'flex-start'=>__( 'Top', 'micemade-elements' ),
-					'center'	=> __( 'Middle', 'micemade-elements' ),
-					'flex-end'	=> __( 'Bottom', 'micemade-elements' ),
+				'label'     => __( 'Vertical Align Product Info', 'micemade-elements' ),
+				'type'      => Controls_Manager::SELECT,
+				'options'   => [
+					'flex-start' =>__( 'Top', 'micemade-elements' ),
+					'center'     => __( 'Middle', 'micemade-elements' ),
+					'flex-end'   => __( 'Bottom', 'micemade-elements' ),
 				],
-				'default' => 'center',
+				'default'   => 'center',
 				'selectors' => [
 					'{{WRAPPER}} .post-text' => 'justify-content: {{VALUE}};',
 				],
@@ -532,7 +531,6 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 			]
 		);
 
-		
 		$this->add_responsive_control(
 			'product_info_align',
 			[
