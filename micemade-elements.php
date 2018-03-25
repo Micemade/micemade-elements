@@ -230,7 +230,7 @@ class Micemade_Elements {
 		}
 
 		wp_localize_script( 'micemade-elements-js', 'micemadeJsLocalize', array(
-			'ajaxurl'      => $ajaxurl,
+			'ajaxurl'      => esc_url( $ajaxurl ),
 			'loadingposts' => esc_html__( 'Loading posts ...', 'micemade-elements' ),
 			'noposts'      => esc_html__( 'No more posts found', 'micemade-elements' ),
 			'loadmore'     => esc_html__( 'Load more posts', 'micemade-elements' ),

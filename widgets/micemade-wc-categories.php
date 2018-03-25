@@ -571,7 +571,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		if ( ! empty( $add_query_args ) ) {
 			$args = '?';
 			foreach ( $add_query_args as $arg ) {
-				$args .= $arg . ( $arg === end( $add_query_args ) ? '' : '&amp;' );
+				$args .= $arg . ( end( $add_query_args ) === $arg ? '' : '&amp;' );
 			}
 		}
 

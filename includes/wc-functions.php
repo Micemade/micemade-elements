@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * function for filtering WooCommerce posts.
  * with a little help from: https://github.com/woocommerce/woocommerce/blob/master/includes/widgets/class-wc-widget-products.php
  */
-function micemade_elements_wc_query_args_func( $posts_per_page, $categories = array(), $filters = 'latest', $offset = 0 ) {
+function micemade_elements_wc_query_args_func( $posts_per_page, $categories = array(), $exclude_cats = array(), $filters = 'latest', $offset = 0 ) {
 
 	// if WooCommerce is not active.
 	if ( ! 'MICEMADE_ELEMENTS_WOO_ACTIVE' ) {
@@ -40,14 +40,6 @@ function micemade_elements_wc_query_args_func( $posts_per_page, $categories = ar
 
 	$args['orderby'] = 'menu_order date';
 
-	if ( 'featured' === $filters ) {
-		$args['tax_query'][] = array(
-			'taxonomy' => 'product_visibility',
-			'field'    => 'name',
-			'terms'    => 'featured',
-		);
-	}
-
 	if ( ! empty( $categories ) ) {
 		$args['tax_query'][] = array(
 			'taxonomy'         => 'product_cat',
@@ -58,6 +50,23 @@ function micemade_elements_wc_query_args_func( $posts_per_page, $categories = ar
 		);
 	}
 
+	if ( ! empty( $exclude_cats ) ) {
+		$args['tax_query'][] = array(
+			'taxonomy' => 'product_cat',
+			'field'    => 'slug',
+			'operator' => 'NOT IN',
+			'terms'    => $exclude_cats,
+			//'include_children' => true,
+		);
+	}
+
+	if ( 'featured' === $filters ) {
+		$args['tax_query'][] = array(
+			'taxonomy' => 'product_visibility',
+			'field'    => 'name',
+			'terms'    => 'featured',
+		);
+	}
 	if ( 'best_sellers' === $filters ) {
 
 		$args['meta_key'] = 'total_sales';
@@ -124,27 +133,25 @@ function micemade_elements_loop_product_func( $style = 'style_1', $img_format = 
 				<?php } ?>
 
 				<div class="product-details">
-					<?php
-					if ( $price ) {
-						echo '<span class="price-wrap">';
-						woocommerce_template_loop_price();
-						echo '</span>';
-					}
-					if ( $add_to_cart ) {
-						echo '<span class="add-to-cart-wrap">';
-						woocommerce_template_loop_add_to_cart();
-						echo '</span>';
-					}
-					?>
 
-					<?php
-					if ( $short_desc ) {
+				<?php
+				if ( $price ) {
+					echo '<span class="price-wrap">';
+					woocommerce_template_loop_price();
+					echo '</span>';
+				}
+				if ( $add_to_cart ) {
+					echo '<span class="add-to-cart-wrap">';
+					woocommerce_template_loop_add_to_cart();
+					echo '</span>';
+				}
+				if ( $short_desc ) {
 
-						the_excerpt();
+					the_excerpt();
 
-						echo '<a href="' . get_permalink() . '" title="' . the_title_attribute( 'echo=0' ) . '" class="micemade-elements-readmore ' . esc_attr( $css_class ) . ' ">' . apply_filters( 'micemade_elements_prod_details', esc_html__( 'Product details', 'micemade-elements' ) ) . '</a>';
-					}
-					?>
+					echo '<a href="' . get_permalink() . '" title="' . the_title_attribute( 'echo=0' ) . '" class="micemade-elements-readmore ' . esc_attr( $css_class ) . ' ">' . apply_filters( 'micemade_elements_prod_details', esc_html__( 'Product details', 'micemade-elements' ) ) . '</a>';
+				}
+				?>
 				</div>
 
 			</div>
@@ -202,7 +209,7 @@ add_filter( 'micemade_elements_product_count', 'micemade_elements_product_count_
 /**
  * Product categories query arguments
  *
- * @param [type] $query - query object
+ * @param [type] $query - query object.
  * @return void
  */
 function micemade_elements_cat_args( $query ) {
@@ -234,6 +241,7 @@ function micemade_elements_cat_args( $query ) {
 			$query->set( 'orderby', 'meta_value_num' );
 			$query->set( 'order', 'DESC' );
 		}
+
 	}
 
 }
