@@ -3,7 +3,7 @@
  * Plugin Name: Micemade Elements
  * Description: Extension plugin with custom elements for Elementor, created by Micemade. Elementor plugin required.
  * Plugin URI: https://github.com/Micemade/micemade-elements/
- * Version: 0.7.0
+ * Version: 0.6.9
  * Author: micemade
  * Author URI: http://micemade.com
  * Text Domain: micemade-elements
@@ -122,6 +122,7 @@ class Micemade_Elements {
 			],
 			1
 		);
+		/* // Header CPT and header elements postponed for 0.7.0
 		$elements_manager->add_category(
 			'micemade_elements_header',
 			[
@@ -130,6 +131,7 @@ class Micemade_Elements {
 			],
 			2
 		);
+		*/
 	}
 
 	/**
@@ -166,9 +168,9 @@ class Micemade_Elements {
 		// Instagram element.
 		require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-instagram.php';
 
-		// Micemade header elements.
-		require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-header-logo.php';
-		require_once MICEMADE_ELEMENTS_DIR . 'widgets/class-micemade-nav.php';
+		// Micemade header elements - for v.0.7.0
+		//require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-header-logo.php';
+		//require_once MICEMADE_ELEMENTS_DIR . 'widgets/class-micemade-nav.php';
 
 	}
 

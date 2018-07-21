@@ -40,6 +40,8 @@ $mmmega_menu_args   = array(
 register_post_type( 'MM Mega menu', $mmmega_menu_args );
 
 // MM Header CPT
+// - postponed for 0.7.0
+/* 
 $mm_header_labels = array(
 	'name'               => __( 'Headers', 'micemade-elements' ),
 	'singular_name'      => __( 'Header', 'micemade-elements' ),
@@ -66,7 +68,7 @@ $mm_header_args   = array(
 	'menu_icon'           => 'dashicons-layout',
 );
 register_post_type( 'MM Header', $mm_header_args );
-
+*/
 // MM Footer CPT.
 $mm_footer_labels = array(
 	'name'               => __( 'Footers', 'micemade-elements' ),
@@ -102,15 +104,17 @@ if ( ! in_array( 'mmmegamenu', $elementor_cpt_support ) ) {
 	$elementor_cpt_support[] = 'mmmegamenu';
 	update_option( 'elementor_cpt_support', $elementor_cpt_support );
 }
+/* // Postponed for 0.7.0
 if ( ! in_array( 'mmheader', $elementor_cpt_support ) ) {
 	$elementor_cpt_support[] = 'mmheader';
 	update_option( 'elementor_cpt_support', $elementor_cpt_support );
 }
+*/
 if ( ! in_array( 'mmfooter', $elementor_cpt_support ) ) {
 	$elementor_cpt_support[] = 'mmfooter';
 	update_option( 'elementor_cpt_support', $elementor_cpt_support );
 }
 
 add_filter( 'mm_megamenu_cpt', '__return_true' );
-add_filter( 'mm_header_cpt', '__return_true' );
+//add_filter( 'mm_header_cpt', '__return_true' ); // for 0.7.0
 add_filter( 'mm_footer_cpt', '__return_true' );
