@@ -1,0 +1,50 @@
+.sm {
+	
+	position: static !important;
+
+	> .has-mega-menu {
+		position: static !important;
+		
+		.scroll-up, .scroll-down {
+			margin-left: 0 !important;
+		}
+	}
+
+	.mega-menu {
+		margin-left: 0 !important;
+		right: 0 !important;
+		width: auto !important;
+		max-width: none !important;
+		/* 
+		> ul {
+			position: static;
+			display: block;
+			margin: 0.83em 0;
+			border: 0;
+			padding: 0 0 0 20px;
+			width: auto;
+			background: transparent;
+			box-shadow: none;
+		}
+ 		*/
+
+		/* clear any floats inside the mega menus */
+		/* 
+		> li {
+			overflow: auto;
+		}
+
+		a {
+			display: inline;
+			border: 0;
+			padding: 0;
+			background: transparent;
+			color: inherit;
+			text-decoration: underline;
+		}
+ 		*/
+	}
+
+}
+
+

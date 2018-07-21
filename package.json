@@ -1,6 +1,6 @@
 {
   "name": "micemade-elements",
-  "version": "0.6.6",
+  "version": "0.6.9",
   "description": "Micemade Elements plugin Gulp and node tasks",
   "main": "gulpfile.js",
   "scripts": {
@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "del": "^3.0.0",
+    "smartmenus": "^1.1.0",
     "sticky-state": "^2.4.1",
     "vinyl-paths": "^2.1.0"
   }

@@ -454,11 +454,11 @@ class Micemade_WC_Categories extends Widget_Base {
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'blur_image',
 				'options'   => [
-					'no_image_effect'	=> __( 'No image hover effect', 'micemade-elements' ),
-					'blur_image'		=> __( 'Blur image', 'micemade-elements' ),
-					'enlarge_image'		=> __( 'Enlarge image', 'micemade-elements' ),
-					'shrink_image'		=> __( 'Shrink image', 'micemade-elements' ),
-					'greyscale_image'	=> __( 'Greyscale image', 'micemade-elements' ),
+					'no_image_effect' => __( 'No image hover effect', 'micemade-elements' ),
+					'blur_image'      => __( 'Blur image', 'micemade-elements' ),
+					'enlarge_image'   => __( 'Enlarge image', 'micemade-elements' ),
+					'shrink_image'    => __( 'Shrink image', 'micemade-elements' ),
+					'greyscale_image' => __( 'Greyscale image', 'micemade-elements' ),
 				],
 				'condition' => [
 					'image!' => '',
@@ -469,10 +469,10 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'hover_style_box',
 			[
-				'label'		=> __( 'Category hover effect', 'micemade-elements' ),
-				'type'		=> Controls_Manager::SELECT,
-				'default'	=> 'blur_image',
-				'options'	=> [
+				'label'   => __( 'Category hover effect', 'micemade-elements' ),
+				'type'    => Controls_Manager::SELECT,
+				'default' => 'none',
+				'options' => [
 					'none'               => __( 'None', 'micemade-elements' ),
 					'box_enlarge_shadow' => __( 'Enlarge with shadow', 'micemade-elements' ),
 					'box_shrink_shadow'  => __( 'Shrink with shadow', 'micemade-elements' ),
@@ -497,12 +497,12 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'item_anim_duration',
 			[
-				'label' => __( 'Animation Speed', 'elementor' ),
-				'type' => Controls_Manager::SELECT,
-				'default' => '',
-				'options' => [
+				'label'     => __( 'Animation Speed', 'elementor' ),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => '',
+				'options'   => [
 					'slow' => __( 'Slow', 'elementor' ),
-					'' => __( 'Normal', 'elementor' ),
+					''     => __( 'Normal', 'elementor' ),
 					'fast' => __( 'Fast', 'elementor' ),
 				],
 				'condition' => [
@@ -542,7 +542,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$cats_per_row_tab = ! empty( $settings['cats_per_row_tab'] ) ? (int) $settings['cats_per_row_tab'] : 1;
 		$cats_per_row_mob = ! empty( $settings['cats_per_row_mob'] ) ? (int) $settings['cats_per_row_mob'] : 1;
 		$style            = ! empty( $settings['style'] ) ? $settings['style'] : 'style_1';
-		$hover_style      = ! empty( $settings['hover_style'] ) ? $settings['hover_style'] : 'blur_image';
+		$hover_style      = ! empty( $settings['hover_style'] ) ? $settings['hover_style'] : '';
 		$hover_style_box  = ! empty( $settings['hover_style_box'] ) ? $settings['hover_style_box'] : 'none';
 		$image            = ! empty( $settings['image'] ) ? $settings['image'] : '';
 		$img_format       = ! empty( $settings['img_format'] ) ? $settings['img_format'] : 'thumbnail';

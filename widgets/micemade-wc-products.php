@@ -3,7 +3,7 @@ namespace Elementor;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
-} 
+}
 
 class Micemade_WC_Products extends Widget_Base {
 

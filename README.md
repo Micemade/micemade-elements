@@ -55,6 +55,10 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 
 **Changelog**
 
+*** 0.7.0 ***
+* Added WooCommerce catalog display items option to WC Products Slider
+* Fixed multiple sliders issue (next/previos arrows apply only on current slider)
+
 *** 0.6.8 ***
 * Improvements and fixes for WC Categories element
 

@@ -1,0 +1,139 @@
+/**
+ * Mobile first layout SmartMenus Core CSS
+ * (it's not recommended editing these rules)
+ * You need this once per page no matter
+ * how many menu trees or different themes you use.
+ */
+
+.micemade-elements-nav-menu {
+	
+	display:flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	width: 100%;
+	list-style:none;
+	margin:0;
+	padding:0;
+	line-height:normal;
+	direction:ltr;
+	text-align:left;
+	box-sizing:border-box;
+	position:relative;
+	z-index:9999;
+	-webkit-tap-highlight-color:rgba(0,0,0,0);
+
+	.mme-menu-align-left & {
+		justify-content: flex-start;
+	}
+	.mme-menu-align-center & {
+		justify-content: center;
+	}
+	.mme-menu-align-right & {
+		justify-content: flex-end;
+	}
+	.mme-menu-align-justify & {
+		justify-content: stretch;
+	}
+	
+	ul.sub-menu,
+	ul.mega-menu,
+	li.menu-item {
+		display:block;
+		list-style:none;
+		margin:0;
+		padding:0;
+		line-height:normal;
+		direction:ltr;
+		text-align:left;
+	}
+
+	ul.sub-menu,
+	ul.mega-menu {
+		display:none;
+	}
+
+	li.menu-item,
+	li.menu-item a.mme-navmenu-link {
+		position:relative;
+	}
+
+	>li.menu-item {
+		
+		>h1, >h2, >h3, >h4, >h5, >h6 {
+			margin:0;
+			padding:0;
+		}
+		
+	}
+
+	a.mme-navmenu-link {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		font-family: inherit;
+		font-weight: normal;
+		text-decoration: none;
+
+		> span {
+			position: relative;
+			z-index: 1;
+		}
+		
+		&.disabled {
+			cursor:default;
+		}
+
+		&:before {
+			content: "";
+			position: absolute;
+			z-index: 0;
+			display: block;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+
+			.mme-hover-style-underline & {
+				top: 100%;
+				height: 2px;
+			}
+			.mme-hover-style-overline & {
+				top: 10%;
+				height: 2px;
+			}
+		}
+	}
+
+	&-rtl {
+		ul, li {
+			direction:rtl;
+			text-align:right;
+		}
+	}
+
+	&.sm-vertical {
+		flex-direction: column;
+	}
+
+	&:after {
+		content:"";
+		display:block;
+		height:0;
+		font:0px/0 serif;
+		clear:both;
+		overflow:hidden;
+	}
+
+	* {
+		&:before, &:after {
+			box-sizing:inherit;
+		}
+	} 
+}
+
+@import 'smartmenus/sm-default-theme';
+@import 'smartmenus/sm-simple-theme';
+@import 'smartmenus/sm-mint-theme';
+@import 'smartmenus/sm-clean-theme';
+@import 'smartmenus/sm-blue-theme';
+@import 'smartmenus/mega-menu';
