@@ -41,7 +41,7 @@ register_post_type( 'MM Mega menu', $mmmega_menu_args );
 
 // MM Header CPT
 // - postponed for 0.7.0
-/* 
+/*
 $mm_header_labels = array(
 	'name'               => __( 'Headers', 'micemade-elements' ),
 	'singular_name'      => __( 'Header', 'micemade-elements' ),
