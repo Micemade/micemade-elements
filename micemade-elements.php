@@ -29,6 +29,11 @@ class Micemade_Elements {
 		return self::$instance;
 	}
 
+	/**
+	 * Initialize plugin
+	 *
+	 * @return void
+	 */
 	public function init() {
 
 		if ( self::$instance->elementor_activation_check() ) {
@@ -58,7 +63,7 @@ class Micemade_Elements {
 
 			// Enqueue script and styles for Elementor editor.
 			add_action( 'elementor/editor/before_enqueue_scripts', array( self::$instance, 'editor_scripts' ) );
-			//add_action( 'admin_enqueue_scripts', array( self::$instance, 'micemade_elements_admin_js_css' ) );
+			// add_action( 'admin_enqueue_scripts', array( self::$instance, 'micemade_elements_admin_js_css' ) );
 
 			// Enqueue scripts and styles for frontend.
 			add_action( 'wp_enqueue_scripts', array( self::$instance, 'micemade_elements_styles' ) );
@@ -169,17 +174,17 @@ class Micemade_Elements {
 		require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-instagram.php';
 
 		// Micemade header elements - for v.0.7.0
-		//require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-header-logo.php';
-		//require_once MICEMADE_ELEMENTS_DIR . 'widgets/class-micemade-nav.php';
+		// require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-header-logo.php';
+		// require_once MICEMADE_ELEMENTS_DIR . 'widgets/class-micemade-nav.php';
 
 	}
 
 	/**
 	 * Custom controls for section
 	 *
-	 * @param object $element
-	 * @param integer $section_id
-	 * @param array $args
+	 * @param object $element - element type.
+	 * @param integer $section_id - id of section element.
+	 * @param array $args - section argumets.
 	 * @return void
 	 */
 	public function custom_section_controls( $element, $section_id, $args ) {
@@ -215,7 +220,7 @@ class Micemade_Elements {
 	}
 
 	/**
-	 * Plugin file inclusion (requirements)
+	 * Plugin file inclusions (requirements)
 	 *
 	 * @return void
 	 */
@@ -241,15 +246,15 @@ class Micemade_Elements {
 
 		$lang_dir = apply_filters( 'micemade_elements_lang_dir', trailingslashit( MICEMADE_ELEMENTS_DIR . 'languages' ) );
 
-		// Traditional WordPress plugin locale filter
+		// Traditional WordPress plugin locale filter.
 		$locale = apply_filters( 'plugin_locale', get_locale(), 'micemade-elements' );
 		$mofile = sprintf( '%1$s-%2$s.mo', 'micemade-elements', $locale );
 
-		// Setup paths to current locale file
+		// Setup paths to current locale file.
 		$mofile_local = $lang_dir . $mofile;
 
 		if ( file_exists( $mofile_local ) ) {
-			// Look in the /wp-content/plugins/micemade-elements/languages/ folder
+			// Look in the /wp-content/plugins/micemade-elements/languages/ folder.
 			load_textdomain( 'micemade-elements', $mofile_local );
 		} else {
 			// Load the default language files
