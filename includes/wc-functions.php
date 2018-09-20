@@ -2,7 +2,7 @@
 /**
  * Main functions for WooCommerce
  *
- * @since 1.0.0
+ * @since 0.0.1
  * @package WordPress
  * @subpackage Micemade Elements
  */
@@ -36,9 +36,10 @@ function micemade_elements_wc_query_args_func( $posts_per_page, $categories = ar
 		'posts_per_page' => $posts_per_page,
 		'post_type'      => 'product',
 		'offset'         => $offset,
+		'order'          => 'DESC',
 	);
 
-	$args['orderby'] = 'menu_order date';
+	$args['orderby'] = 'date menu_order';
 
 	if ( ! empty( $categories ) ) {
 		$args['tax_query'][] = array(
@@ -94,7 +95,7 @@ function micemade_elements_wc_query_args_func( $posts_per_page, $categories = ar
 	return $args;
 
 }
-add_filter( 'micemade_elements_wc_query_args', 'micemade_elements_wc_query_args_func', 10, 4 );
+add_filter( 'micemade_elements_wc_query_args', 'micemade_elements_wc_query_args_func', 10, 5 );
 /**
  * PRODUCT FOR LOOP
  *
@@ -103,7 +104,7 @@ add_filter( 'micemade_elements_wc_query_args', 'micemade_elements_wc_query_args_
  */
 function micemade_elements_loop_product_func( $style = 'style_1', $img_format = 'thumbnail', $posted_in = true, $short_desc = false, $price = true, $add_to_cart = true, $css_class = '' ) {
 ?>
-	<div class="post swiper-slide">
+	<li class="post swiper-slide">
 
 		<div class="inner-wrap">
 
@@ -158,7 +159,7 @@ function micemade_elements_loop_product_func( $style = 'style_1', $img_format = 
 
 		</div>
 
-	</div>
+	</li>
 	<?php
 }
 add_filter( 'micemade_elements_loop_product', 'micemade_elements_loop_product_func', 10, 7 );
@@ -241,7 +242,6 @@ function micemade_elements_cat_args( $query ) {
 			$query->set( 'orderby', 'meta_value_num' );
 			$query->set( 'order', 'DESC' );
 		}
-
 	}
 
 }

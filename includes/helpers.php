@@ -1,5 +1,17 @@
 <?php
 /**
+ * Helper functions
+ *
+ * @since 0.0.1
+ * @package WordPress
+ * @subpackage Micemade Elements
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
  * COLUMN CSS SELECTORS FOR FLEX GRID
  *
  * @param [in] $items_desktop
@@ -24,7 +36,7 @@ function micemade_elements_grid_class( $items_desktop = 3, $items_tablet = 1, $i
 		6  => 'mme-col-md-2',
 		12 => 'mme-col-md-1',
 	);
-	$column_tablet = array(
+	$column_tablet  = array(
 		1  => 'mme-col-sm-12',
 		2  => 'mme-col-sm-6',
 		3  => 'mme-col-sm-4',
@@ -32,7 +44,7 @@ function micemade_elements_grid_class( $items_desktop = 3, $items_tablet = 1, $i
 		6  => 'mme-col-sm-2',
 		12 => 'mme-col-sm-1',
 	);
-	$column_mobile = array(
+	$column_mobile  = array(
 		1  => 'mme-col-xs-12',
 		2  => 'mme-col-xs-6',
 		3  => 'mme-col-xs-4',
@@ -68,8 +80,7 @@ function micemade_elements_to_boolean( $value ) {
 	}
 	if ( 'true' === $value || '1' === $value ) {
 		$value = true;
-	}
-	elseif ( 'false' === $value || '0' === $value ) {
+	} elseif ( 'false' === $value || '0' === $value ) {
 		$value = false;
 	}
 
@@ -94,13 +105,13 @@ function micemade_elements_posted_in_f( $taxonomy ) {
 		$posted_in_terms = array();
 		$last_term       = end( $terms );
 		foreach ( $terms as $term ) {
-			/* 
-			$term_color		= micemade_elements_get_term_color( $term->term_id, true );
-			$text_color		= $term_color ? micemade_elements_contrast( $term_color ) : '#333333';
-			$back_color		= $term_color ? $term_color : '#ffffff';
-			$style			= ' style="background-color: '. $back_color .'; color: '.$text_color.'"'; // insert in <a href ...
+			/*
+			$term_color = micemade_elements_get_term_color( $term->term_id, true );
+			$text_color = $term_color ? micemade_elements_contrast( $term_color ) : '#333333';
+			$back_color = $term_color ? $term_color : '#ffffff';
+			$style      = ' style="background-color: '. $back_color .'; color: '.$text_color.'"'; // insert in <a href ...
 			 */
-			$separator = ( $term == $last_term ) ? '' : ', ';
+			$separator  = ( $term == $last_term ) ? '' : ', ';
 			$posted_in .= '<a href="' . esc_url( get_term_link( $term->slug, $taxonomy ) ) . '" rel="tag" tabindex="0">' . esc_html( $term->name . ' ' . $term->ID ) . '</a>' . wp_kses_post( $separator );
 
 		}
@@ -151,7 +162,7 @@ function micemade_elements_thumb_f( $img_format = 'thumbnail' ) {
 	echo '<div class="post-thumb">';
 	if ( has_post_thumbnail() ) {
 
-		the_post_thumbnail( $img_format, $atts ); 
+		the_post_thumbnail( $img_format, $atts );
 
 	} elseif ( ! empty( $gallery_shortcode ) ) {
 
@@ -168,12 +179,14 @@ function micemade_elements_thumb_f( $img_format = 'thumbnail' ) {
 	echo '</div>';
 }
 /**
- *  POST THUMB BACKGROUND
+ * POST THUMB BACKGROUND
+ *
+ * @param string $img_format
+ * @return echo html
  */
-add_action( 'micemade_elements_thumb_back', 'micemade_elements_thumb_back_f' , 10, 1 ); 
 function micemade_elements_thumb_back_f( $img_format = 'thumbnail' ) {
 
-	$gallery_shortcode = apply_filters( 'micemade_elements_gallery_ids','' );
+	$gallery_shortcode = apply_filters( 'micemade_elements_gallery_ids', '' );
 
 	$img_url = '';
 
@@ -195,6 +208,7 @@ function micemade_elements_thumb_back_f( $img_format = 'thumbnail' ) {
 	echo '<div class="post-thumb-back" style="background-image: url(' . esc_url( $img_url ) . ');"></div>';
 
 }
+add_action( 'micemade_elements_thumb_back', 'micemade_elements_thumb_back_f', 10, 1 );
 /**
  * GET GALLERY IMAGES ID's
  * get id's from WP gallery shortcode
@@ -212,16 +226,15 @@ function micemade_elements_gallery_ids_f() {
 	//finds the "gallery" shortcode and puts the image ids in an associative array at $matches[3]
 	if ( preg_match_all( '/' . $pattern . '/s', $post->post_content, $matches ) ) {
 		$count = count( $matches[3] ); //in case there is more than one gallery in the post.
-		for ( $i = 0; $i < $count; $i++ ){
+		for ( $i = 0; $i < $count; $i++ ) {
 			$atts = shortcode_parse_atts( $matches[3][ $i ] );
-			if ( isset( $atts['ids'] ) ){
-				$attachment_ids = explode( ',', $atts['ids'] );
-				$ids = array_merge( $ids, $attachment_ids );
+			if ( isset( $atts['ids'] ) ) {
+				$att_ids = explode( ',', $atts['ids'] );
+				$ids     = array_merge( $ids, $att_ids );
 			}
 		}
-
 	}
-	return $ids;	
+	return $ids;
 }
 add_filter( 'micemade_elements_gallery_ids', 'micemade_elements_gallery_ids_f' );
 /**
@@ -287,14 +300,14 @@ function micemade_elements_loop_post_func( $style = 'style_1', $grid = '', $img_
 
 				<h4><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h4>
 
-				<?php 
+				<?php
 				if ( $meta ) {
 					?>
 				<div class="meta">
 
-					<?php echo apply_filters( 'micemade_elements_date','' ); ?>
-					<?php echo apply_filters( 'micemade_elements_author','' ); ?><br>
-					<?php echo apply_filters( 'micemade_elements_posted_in','category' ); ?>
+					<?php echo apply_filters( 'micemade_elements_date', '' ); ?>
+					<?php echo apply_filters( 'micemade_elements_author', '' ); ?><br>
+					<?php echo apply_filters( 'micemade_elements_posted_in', 'category' ); ?>
 
 				</div>
 				<?php } ?>
@@ -303,7 +316,7 @@ function micemade_elements_loop_post_func( $style = 'style_1', $grid = '', $img_
 				if ( $excerpt ) {
 				?>
 				<p>
-					<?php echo micemade_elements_excerpt( $excerpt_limit );?>
+					<?php echo micemade_elements_excerpt( $excerpt_limit ); ?>
 				</p>
 
 				<?php
@@ -327,7 +340,7 @@ function micemade_elements_excerpt( $limit = 20 ) {
 		$excerpt = implode( ' ', $excerpt ) . ' ...';
 	} else {
 		$excerpt = implode( ' ', $excerpt );
-	}	
+	}
 	$excerpt = preg_replace( '`[[^]]*]`', '', $excerpt );
 	return $excerpt;
 }

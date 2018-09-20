@@ -1,4 +1,4 @@
-//jQuery.noConflict();
+jQuery.noConflict();
 ( function( $ ) {
 	"use strict";
 	/**
@@ -27,13 +27,14 @@
 					filter.on( 'click', 'a', function() {
 						var filterValue = $(this).attr('data-filter');
 						container.isotope({ filter: filterValue });
-					});				
+					});
 				}
 				
 				container.on( 'arrangeComplete', function() { 
-					// $(document).foundation('equalizer', 'reflow');
-					// $.waypoints('refresh');
-					} );
+					if( $.waypoints ) {
+						$.waypoints('refresh');
+					}
+				});
 			
 			});
 		};
@@ -41,30 +42,99 @@
 	})( jQuery );
 	
 	/**
-	 *  SWIPER SLIDER
+	 *  SLICK SLIDER
 	 */
-	
 	( function( $ ){
 			
-		window.micemade_elements_swiper = function() {
+		window.micemade_elements_slider = function( rootElement ) {
 			
-			var swiperContainer = $( '.swiper-container' );
-			
-			swiperContainer.each( function() {
+			var root = rootElement || $('body');
+
+			console.log( root );
+
+			var sliderContainers = root.find( '.slick-slider' );
+		
+			sliderContainers.each( function(index, element) {
 				
-				var $_this		= $(this),
-					config		= $_this.find('.slider-config'),
-					pps			= config.data('pps'),
-					ppst		= config.data('ppst'),
-					ppsm		= config.data('ppsm'),
-					space		= config.data('space'),
-					pagin		= config.data('pagin'),
-					autoplay	= config.data('autoplay');
+				var $_this   = $(this),
+					config   = $_this.parent().find('.slider-config'),
+					pps      = config.data('pps'),
+					ppst     = config.data('ppst'),
+					ppsm     = config.data('ppsm'),
+					space    = config.data('space'),
+					pagin    = config.data('pagin'),
+					autoPlay = config.data('autoplay'),
+					loop     = config.data('loop');
+				
+				$_this.not(".slick-initialized").slick({
+					autoplay: autoPlay,
+					infinite: loop,
+					//centerMode: true,
+					//centerPadding: '60px',
+					slidesToShow: parseInt(pps),
+					settings: "unslick",
+					responsive: [
+						{
+							breakpoint: 1025,
+							settings: {
+								arrows: true,
+								//centerMode: true,
+								//centerPadding: space + 'px',
+								slidesToShow: parseInt(ppsm)
+							}
+						},
+						{
+							breakpoint: 769,
+							settings: {
+								arrows: false,
+								//centerMode: true,
+								//centerPadding: space + 'px',
+								slidesToShow: parseInt(ppst)
+							}
+						}
+						
+					]
+				});
+
+			});
+
+		};
+
+	})( jQuery );
+	
+	
+	/**
+	 *  SWIPER SLIDER
+	 */
+	( function( $ ){
+			
+		window.micemade_elements_swiper = function( rootElement ) {
+			
+			var root = $('body');
+			if( rootElement ) {
+				root = $( rootElement );
+			}
+
+			var swiperContainers = root.find( '.swiper-container' );
+
+			swiperContainers.each( function(index, element) {
+				
+				var $_this   = $(this),
+					config   = $_this.find('.slider-config'),
+					pps      = config.data('pps'),
+					ppst     = config.data('ppst'),
+					ppsm     = config.data('ppsm'),
+					space    = config.data('space'),
+					pagin    = config.data('pagin'),
+					autoplay = config.data('autoplay'),
+					loop     = config.data('loop');
 				
 				var swiper = new Swiper( $_this, {
+					//init: false,
+					//centeredSlides: true,
+					paginationClickable: true,
 					pagination: '.swiper-pagination',
-					//effect: 'flip',
-					//paginationClickable: true,
+					effect: 'slide',
 					slidesPerView: pps,
 					paginationClickable: true,
 					spaceBetween: space,
@@ -73,31 +143,175 @@
 					paginationType: pagin,
 					autoplay: autoplay,
 					autoplayDisableOnInteraction: true,
-					//centeredSlides: true,
-					//loop: true,
-					nextButton: '.swiper-button-next',
-					prevButton: '.swiper-button-prev',
+					loop: loop,
+					nextButton: $_this.find(".swiper-button-next")[0],
+					prevButton: $_this.find(".swiper-button-prev")[0],
 					breakpoints: {
 				
 						768: {
 							slidesPerView: ppst,
-							//spaceBetween: 30
 						},
 						480: {
 							slidesPerView: ppsm,
-							//spaceBetween: 20
 						},
 
 					}
-				});	
+				});
+				//swiper.on('init', function() { /* do something */});
+				//swiper.init();
+
+			});
+
+		};
+
+	})( jQuery );
+	
+	( function( $ ){
+		/**
+		 * Make ID - create random ID
+		 */
+		window.mmMakeId = function mmMakeId() {
+			var text = "";
+			var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+			for( var i=0; i < 5; i++ )
+				text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+			return text;
+		}
+	})( jQuery );
+
+	( function( $ ) {
+		/**
+		 * Micemade Tabs - display WC products in tabs
+		 */
+		window.initMicemadeElementsTabs =function micemadeElementsTabs() {
+			
+			var tabs = $('.micemade-elements_tabs');
+			tabs.each( function(){
+				
+				var $_Tabs = $(this); // Single tabs holder
+				
+				var tabsWrapper = $_Tabs.find('.tabs-wrapper'),
+					tabTitles   = tabsWrapper.find('.tab-title'),
+					tabsContent = $_Tabs.find('.tabs-content-wrapper'),
+					content     = tabsContent.find('.tab-content');
+
+				// clear old random "id"'s
+				// "randomid" - unique identifier for tab elements
+				tabsWrapper.data('randomid',null);
+				
+				// create new random "id"
+				var randId = window.mmMakeId();
+				tabsWrapper.data('randomid', randId );
+				
+				//tabTitles.click( function(event) {
+				$( document ).on( 'click', '.tab-title', function(event) {
+
+					if( tabsWrapper.data('randomid') !== randId ) {
+						return;
+					}
+
+					$(this).addClass('active');
+					$(this).siblings().removeClass('active');
+					
+					// Hide inactive tab titles and show active one and content
+					var tab = $(this).data('tab');
+					content.not('.tab-'+ tab).css('display', 'none').removeClass('active');
+					tabsContent.find('.tab-' + tab).fadeIn().addClass('active');
+				});
 				
 			});
-		};
-				
+		}
 	})( jQuery );
+
+	( function( $ ){
+		/**
+		 * Detect Micemade Elements widgets when in viewport
+		 */
+		window.micemadeInViewport = function micemadeInViewportFunc() {
+			$('.mm-enter-animate').whenInViewport( function( $paragraph ) {
+				var animType = $paragraph.data('anim');
+				var delay = $paragraph.data('delay');
+				setTimeout(
+					function() {
+						$paragraph.addClass( animType ).addClass( 'anim-done' );
+					}
+					, delay
+				);
+				
+			});
+		}
+	})( jQuery );
+
+	( function( $ ){
+		window.initMicemadeMenuNav = function micemadeMenuNav() {
+			
+			var navMenuObj = $( '.micemade-elements-nav-menu' );
+			navMenuObj.each( function() {
+				
+				// Start Smartmenus plugin
+				var $_this = $(this).smartmenus({
+					showTimeout: 0,
+					hideDuration: 0
+				});
+
+				jQuery.SmartMenus.prototype.isCSSOn = function() {
+					return true;
+				};
+			});
+		}
+	})( jQuery );
+
+
+	( function( $ ){
+		window.initMicemadeElements = function() {
+			
+			var startMicemadeElementsTabs  = window.initMicemadeElementsTabs();
+			var startMicemadeElementSwiper = window.micemade_elements_swiper();
+			var startMicemadeInViewport    = window.micemadeInViewport();
+			var startMicemadeMenuNav       = window.initMicemadeMenuNav();
+			var startMicemadeMegaMenuWatch = window.megaMenuWatch();
+		}
+
+	})( jQuery );
+
+	( function( $ ){
+		
+		window.megaMenuWatch = function() {
+			
+			var mutationObserver = new MutationObserver( function(mutations) {
+				mutations.forEach(function(mutation) {
+					var target = mutation.target,
+						name = mutation.attributeName,
+						value = target.getAttribute(name);
+					
+					if( value == 'true' ) {
+						var restartMicemadeElementSwiper = window.micemade_elements_swiper('.mega-menu');
+					}else{
+						mutationObserver.disconnect();
+					}
+				});
+			});
+			
+			var megaMenus = document.getElementsByClassName('mega-menu');
+			Array.prototype.forEach.call ( megaMenus, function(el) {
+				mutationObserver.observe( el, {
+					attributes: true,
+					attributeFilter: ['aria-expanded'],
+				});
+			})
+		}
+
+	})( jQuery );
+
+	//( function( $ ){})( jQuery );
 	
 	$(document).ready(function() {
 	
+		
+		var initMicemadeElements = window.initMicemadeElements();
+		
 		/**
 		 * Test for mobile broswers
 		 */
@@ -144,32 +358,31 @@
 		$( function() {
 			parallax();
 		});
-			
-		
+
 		/**
 		 * AJAX LOADING POSTS
 		 *
 		 */
-		var $posts_holder	= $('.micemade-elements-load-more');
+		var $posts_holder = $('.micemade-elements-load-more');
 			
 		$posts_holder.each( function() {
 			
 			var $_posts_holder = $(this);
 			
-			var	$loader			= $_posts_holder.next('.micemade-elements_more-posts-wrap').find('.more_posts'),
-				$settings		= $_posts_holder.find('.posts-grid-settings'),
-				ppp				= $settings.data('ppp'),
-				sticky			= $settings.data('sticky'),
-				categories		= $settings.data('categories'),
-				style			= $settings.data('style'),
-				img_format		= $settings.data('img_format'),
-				excerpt			= $settings.data('excerpt'),
-				excerpt_limit	= $settings.data('exc_limit'),
-				meta			= $settings.data('meta'),
-				css_class		= $settings.data('css_class'),
-				grid			= $settings.data('grid'),
-				startoffset		= $settings.data('startoffset'),
-				offset			= $_posts_holder.find('.post').length;
+			var	$loader = $_posts_holder.next('.micemade-elements_more-posts-wrap').find('.more_posts'),
+				$settings     = $_posts_holder.find('.posts-grid-settings'),
+				ppp           = $settings.data('ppp'),
+				sticky        = $settings.data('sticky'),
+				categories    = $settings.data('categories'),
+				style         = $settings.data('style'),
+				img_format    = $settings.data('img_format'),
+				excerpt       = $settings.data('excerpt'),
+				excerpt_limit = $settings.data('exc_limit'),
+				meta          = $settings.data('meta'),
+				css_class     = $settings.data('css_class'),
+				grid          = $settings.data('grid'),
+				startoffset   = $settings.data('startoffset'),
+				offset        = $_posts_holder.find('.post').length;
 			 
 			$loader.on( 'click', load_ajax_posts );
 			 
@@ -214,7 +427,6 @@
 						},
 						error : function (jqXHR, textStatus, errorThrown) {
 							$loader.html($.parseJSON(jqXHR.responseText) + ' :: ' + textStatus + ' :: ' + errorThrown);
-							console.log(jqXHR);
 						},
 					});
 					
@@ -225,99 +437,21 @@
 
 		
 		}); // end $posts_holder.each
-		/* 
-		var swiper = new Swiper('.swiper-container', {
-			pagination: '.swiper-pagination',
-			nextButton: '.swiper-button-next',
-			prevButton: '.swiper-button-prev',
-			paginationClickable: true,
-			spaceBetween: 30,
-			centeredSlides: true,
-			autoplay: 2500,
-			autoplayDisableOnInteraction: false
-		});
-		*/
-		/**
-		 * Make ID - create random ID
-		 */
-		function mmMakeId() {
-			var text = "";
-			var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-			for( var i=0; i < 5; i++ )
-				text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-			return text;
-		}
-
-		/**
-		 * Micemade Tabs - display WC products in tabs
-		 */
-		function micemadeElementsTabs() {
-			var  tabs = $('.micemade-elements_tabs');
-			tabs.each( function(){
-				
-				var randId = mmMakeId();
-				
-				$(this).find('.tab-title').addClass( randId );
-				$(this).find('.tab-content').addClass( randId );
-				
-				var tabsWrapper = $(this).find('.tabs-wrapper'),
-					tabTitles = tabsWrapper.find('.tab-title'),
-					tabsContent =  $(this).find('.tabs-content-wrapper'),
-					content = tabsContent.find('.tab-content');
-
-				
-				//tabTitles.click( function(event) {
-				$( document ).on( 'click', '.tab-title', function(event) {
-					
-					if( ! $(this).hasClass( randId ) ) {
-						return;
-					}
-					
-					event.preventDefault();
-					$(this).addClass('active');
-					$(this).siblings().removeClass('active');
-					
-					var tab = $(this).data('tab');
-					
-					content.not('.tab-'+ tab).css('display', 'none').removeClass('active');
-					
-					tabsContent.find('.tab-' + tab).fadeIn().addClass('active');
-				});
-				
-			});	
-		}
-		micemadeElementsTabs();
 		
-		/**
-		 * Detect Micemade Elements widgets when in viewport
-		 */
-		window.micemadeInViewport = function micemadeInViewportFunc() {
-			$('.mm-enter-animate').whenInViewport( function( $paragraph ) {
-				var animType = $paragraph.data('anim');
-				var delay = $paragraph.data('delay');
-				setTimeout(
-					function() {
-						$paragraph.addClass( animType ).addClass( 'anim-done' );
-					}
-					, delay
-				);
-				
-			});
-		}
-		var startViewport = window.micemadeInViewport();
-
+		
 		// Restart micemadeInViewport when element changes
 		// Elementor editor only
 		var isEditor = $('.elementor-editor-active');
 		if( isEditor.length ) {
 			elementorFrontend.hooks.addAction( 'frontend/element_ready/micemade-wc-categories.default',
 			function( $scope ) {
-				var startVieportAfterReload = window.micemadeInViewport();
+				var restartVieportAfterReload = window.micemadeInViewport();
 			} );
+
+
 		}
 		
-	});
+
+	}); // end doc ready
 	
 })(jQuery);

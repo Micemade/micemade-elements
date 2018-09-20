@@ -3,7 +3,7 @@
  * Plugin Name: Micemade Elements
  * Description: Extension plugin with custom elements for Elementor, created by Micemade. Elementor plugin required.
  * Plugin URI: https://github.com/Micemade/micemade-elements/
- * Version: 0.6.8
+ * Version: 0.6.9
  * Author: micemade
  * Author URI: http://micemade.com
  * Text Domain: micemade-elements
@@ -38,15 +38,18 @@ class Micemade_Elements {
 
 			self::$instance->includes();
 
-			// Add "Micemade Elements" widgets category.
-			add_action( 'elementor/init', array( $this, 'add_widgets_category' ) );
+			// Add "Micemade Elements" widget categories.
+			add_action( 'elementor/elements/categories_registered', array( $this, 'add_widget_categories' ) );
+
 			// Register "Micemade elements" widgets.
 			add_action( 'elementor/widgets/widgets_registered', array( $this, 'widgets_registered' ) );
+
 			// Add custom controls to Elementor section.
 			add_action( 'elementor/element/after_section_end', array( $this, 'custom_section_controls' ), 10, 5 );
 
 			// Load textdomain.
 			add_action( 'plugins_loaded', array( self::$instance, 'load_plugin_textdomain' ) );
+
 			// Check for plugin dependecies.
 			add_action( 'plugins_loaded', array( self::$instance, 'plugins_dependency_checks' ) );
 
@@ -70,7 +73,11 @@ class Micemade_Elements {
 
 	}
 
-
+	/**
+	 * Check for Elementor activation
+	 *
+	 * @return $micemade_elements_is_active
+	 */
 	private function elementor_activation_check() {
 
 		$micemade_elements_is_active = false;
@@ -88,34 +95,60 @@ class Micemade_Elements {
 
 	}
 
+	/**
+	 * Activation checks for various plugins (dependencies)
+	 *
+	 * @return void
+	 */
 	public function plugins_dependency_checks() {
 		// VARIOUS PLUGINS ACTIVATION CHECKS:
 		require_once MICEMADE_ELEMENTS_DIR . 'includes/plugins.php';
 
 	}
 
-	public function add_widgets_category() {
+	/**
+	 * Register categories for widgets (elements)
+	 *
+	 * @return void
+	 */
+	public function add_widget_categories() {
 
 		$elements_manager = Elementor\Plugin::instance()->elements_manager;
 		$elements_manager->add_category(
 			'micemade_elements',
-			array(
+			[
 				'title' => __( 'Micemade Elements', 'micemade-elements' ),
 				'icon'  => 'eicon-font',
-			)
+			],
+			1
 		);
+		/* // Header CPT and header elements postponed for 0.7.0
+		$elements_manager->add_category(
+			'micemade_elements_header',
+			[
+				'title' => __( 'Micemade Header Elements', 'micemade-elements' ),
+				'icon'  => 'eicon-font',
+			],
+			2
+		);
+		*/
 	}
 
+	/**
+	 * Register widgets (elements) for Elementor
+	 *
+	 * @return void
+	 */
 	public function widgets_registered() {
 
 		require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-posts-grid.php';
 		require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-buttons.php';
 
-		// Revolution Slider plugin element(s).
+		// Revolution Slider plugin element.
 		if ( MICEMADE_ELEMENTS_REVSLIDER_ON ) {
 			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-rev-slider.php';
 		}
-		// WooCommerce plugin element(s).
+		// WooCommerce plugin elements.
 		if ( MICEMADE_ELEMENTS_WOO_ACTIVE ) {
 			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-wc-categories.php';
 			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-wc-products.php';
@@ -123,24 +156,38 @@ class Micemade_Elements {
 			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-wc-single-product.php';
 			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-wc-products-tabs.php';
 		}
-		// Contact Form 7 plugin element(s).
+		// Contact Form 7 plugin element.
 		if ( MICEMADE_ELEMENTS_CF7_ON ) {
 			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-contact-form-7.php';
 		}
-		// MailChimp 4 WP plugin element(s).
+		// MailChimp 4 WP plugin element.
 		if ( MICEMADE_ELEMENTS_MC4WP_ON ) {
 			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-mailchimp.php';
 		}
 
+		// Instagram element.
 		require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-instagram.php';
+
+		// Micemade header elements - for v.0.7.0
+		//require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-header-logo.php';
+		//require_once MICEMADE_ELEMENTS_DIR . 'widgets/class-micemade-nav.php';
+
 	}
 
+	/**
+	 * Custom controls for section
+	 *
+	 * @param object $element
+	 * @param integer $section_id
+	 * @param array $args
+	 * @return void
+	 */
 	public function custom_section_controls( $element, $section_id, $args ) {
-		// @var \Elementor\Element_Base $element
+
 		if ( 'section' === $element->get_name() && 'section_typo' === $section_id ) {
 
 			$element->start_controls_section(
-				'section_sticky',
+				'micemade_elements_section_sticky',
 				[
 					'tab'   => \Elementor\Controls_Manager::TAB_STYLE,
 					'label' => __( 'Sticky section', 'micemade-elements' ),
@@ -148,7 +195,7 @@ class Micemade_Elements {
 			);
 
 			$element->add_control(
-				'sticky',
+				'micemade_elements_sticky',
 				[
 					'label'        => __( 'Section sticky method', 'micemade-elements' ),
 					'type'         => \Elementor\Controls_Manager::SELECT,
@@ -167,14 +214,20 @@ class Micemade_Elements {
 		}
 	}
 
+	/**
+	 * Plugin file inclusion (requirements)
+	 *
+	 * @return void
+	 */
 	public function includes() {
 
-		include( MICEMADE_ELEMENTS_DIR . '/includes/Parsedown.php' );
-		include( MICEMADE_ELEMENTS_DIR . '/includes/admin.php' );
-		include( MICEMADE_ELEMENTS_DIR . '/includes/ajax_posts.php' );
-		include( MICEMADE_ELEMENTS_DIR . '/includes/helpers.php' );
-		include( MICEMADE_ELEMENTS_DIR . '/includes/wc-functions.php' );
-		include( MICEMADE_ELEMENTS_DIR . '/includes/instagram.php' );
+		require MICEMADE_ELEMENTS_DIR . '/includes/Parsedown.php';
+		require MICEMADE_ELEMENTS_DIR . '/includes/admin.php';
+		require MICEMADE_ELEMENTS_DIR . '/includes/ajax_posts.php';
+		require MICEMADE_ELEMENTS_DIR . '/includes/helpers.php';
+		require MICEMADE_ELEMENTS_DIR . '/includes/wc-functions.php';
+		require MICEMADE_ELEMENTS_DIR . '/includes/instagram.php';
+		require MICEMADE_ELEMENTS_DIR . '/includes/class-micemade-nav-html.php';
 
 	}
 
@@ -206,21 +259,35 @@ class Micemade_Elements {
 		return false;
 	}
 
-	// ENQUEUE STYLES
+	/**
+	 * Enqueue plugin styles
+	 *
+	 * @return void
+	 */
 	public function micemade_elements_styles() {
 
-		// CSS styles:
+		// CSS styles.
 		wp_register_style( 'micemade-elements', MICEMADE_ELEMENTS_URL . 'assets/css/micemade-elements.css' );
 		wp_enqueue_style( 'micemade-elements' );
 
+		// Smartmenus styles.
+		wp_register_style( 'micemade-elements-smartmenus', MICEMADE_ELEMENTS_URL . 'assets/css/smartmenus.css' );
+		wp_enqueue_style( 'micemade-elements-smartmenus' );
+
 	}
 
-	// ENQUEUE SCRIPTS
+	/**
+	 * Enqueue plugin JS scrips
+	 *
+	 * @return void
+	 */
 	public function micemade_elements_scripts() {
 
-		// Register and enqueue JS scripts:
+		// Register and enqueue plugin JS scripts:
 		wp_register_script( 'micemade-elements-js', MICEMADE_ELEMENTS_URL . 'assets/js/micemade-elements.min.js' );
 		wp_enqueue_script( 'micemade-elements-js', MICEMADE_ELEMENTS_URL . 'assets/js/micemade-elements.min.js', array( 'jQuery' ), '1.0', true );
+
+		wp_register_script( 'smartmenus', MICEMADE_ELEMENTS_URL . 'assets/js/jquery.smartmenus.min.js' );
 
 		$ajaxurl = '';
 		if ( MICEMADE_ELEMENTS_WPML_ON ) {
@@ -238,6 +305,11 @@ class Micemade_Elements {
 
 	}
 
+	/**
+	 * Enqueue editor scritps
+	 *
+	 * @return void
+	 */
 	public function editor_scripts() {
 
 		wp_enqueue_script(
@@ -251,6 +323,10 @@ class Micemade_Elements {
 		);
 	}
 
+	/**
+	 * Admin notice for plugin activation
+	 *
+	 */
 	public function admin_notice() {
 
 		$class   = 'error updated settings-error notice is-dismissible';
@@ -278,7 +354,7 @@ class Micemade_Elements {
 
 			// include file with Custom Post Types registration:
 			// MM Mega Menu, MM Header, MM Footer
-			include( MICEMADE_ELEMENTS_DIR . '/includes/cpt.php' );
+			require MICEMADE_ELEMENTS_DIR . '/includes/cpt.php';
 
 		}
 
@@ -286,6 +362,14 @@ class Micemade_Elements {
 
 	}
 
+	/**
+	 * Github updater
+	 *
+	 * @return void
+	 *
+	 * class for GitHub automatic plugin updates - will be removed once
+	 * the plugin will be available on WP.org repo
+	 */
 	function updater() {
 
 		require_once( plugin_dir_path( __FILE__ ) . 'github_updater.php' );

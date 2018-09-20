@@ -88,3 +88,11 @@
 		}
 	}
 }
+
+// Elementor slider fix
+%elementor-slickslider-fix {
+	border: none;
+	box-shadow: none;
+	position: absolute;
+	font-size: 0;
+}

@@ -10,7 +10,7 @@
 	/**
 	 *	WC CATALOG PRODUCTS
 	 */
-	 &_wc-catalog {
+	 &_wc-catalog, &_products_slider {
 		
 		ul.products {
 			opacity: 1;
@@ -210,6 +210,7 @@
 			
 				overflow: hidden;
 				img {
+					display: flex;
 					width: 100%;
 					height: auto;
 				}
@@ -960,6 +961,7 @@
 			text-align: center;
 			display: flex;
 			justify-content: center;
+			align-items: center;
 			transition: all 0.3s linear;
 		}
 		
@@ -1008,16 +1010,29 @@
 			background-size: contain;
 			background-repeat: no-repeat;
 			background-position: center;
-		}
-		.site-title {
-			&.hidden {
-				display: block;
+
+			&.logo {
 				width: 120px;
 				height: 80px;
-				font-size: 0;
-				opacity: 0;
 			}
+
+			&.no-logo {
+				background-image: none;
+			}
+
+			.site-title {
+				&.text {
+					&-hidden {
+						font-size: 0;
+						opacity: 0;
+					}
+					display: block;
+
+				}
+			}
+
 		}
+		
 	}
 
 } // END .micemade-elements
@@ -1046,8 +1061,18 @@
 	}
 }
 
+.elementor-slick-slider {
+	.slick-slider {
+		.slick-next, .slick-prev {
+			@extend %elementor-slickslider-fix;
+			&:hover, &:active, &:focus, &:visited {
+				@extend %elementor-slickslider-fix;
+			}
+		}
+	}
+}
 
 // Parallax fix
 .elementor-element.parallax {
-    transition: none !important;
+	transition: none !important;
 }

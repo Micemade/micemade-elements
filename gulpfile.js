@@ -39,7 +39,7 @@ gulp.task('browser-sync', function() {
 gulp.task('styles', function () {
     
     // Process main css file(s) - style.scss and other scss files
-    gulp.src('assets/css/scss/*.scss')
+    gulp.src('assets/css/scss/**/*.scss')
         .pipe(sass({
             'outputStyle' : 'compressed'
         }).on('error', sass.logError))
