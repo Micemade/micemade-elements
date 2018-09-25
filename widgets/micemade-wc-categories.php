@@ -71,7 +71,7 @@ class Micemade_WC_Categories extends Widget_Base {
 					'style_2' => __( 'Style two', 'micemade-elements' ),
 					'style_3' => __( 'Style three', 'micemade-elements' ),
 					'style_4' => __( 'Style four', 'micemade-elements' ),
-				]
+				],
 			]
 		);
 
@@ -87,7 +87,7 @@ class Micemade_WC_Categories extends Widget_Base {
 					3 => __( 'Three', 'micemade-elements' ),
 					4 => __( 'Four', 'micemade-elements' ),
 					6 => __( 'Six', 'micemade-elements' ),
-				]
+				],
 			]
 		);
 
@@ -103,7 +103,7 @@ class Micemade_WC_Categories extends Widget_Base {
 					3 => __( 'Three', 'micemade-elements' ),
 					4 => __( 'Four', 'micemade-elements' ),
 					6 => __( 'Six', 'micemade-elements' ),
-				]
+				],
 			]
 		);
 
@@ -119,7 +119,7 @@ class Micemade_WC_Categories extends Widget_Base {
 					3 => __( 'Three', 'micemade-elements' ),
 					4 => __( 'Four', 'micemade-elements' ),
 					6 => __( 'Six', 'micemade-elements' ),
-				]
+				],
 			]
 		);
 
@@ -129,9 +129,9 @@ class Micemade_WC_Categories extends Widget_Base {
 				'label'     => __( 'Grid horizontal spacing', 'micemade-elements' ),
 				'type'      => Controls_Manager::SLIDER,
 				'default'   => [
-					'size'  => '',
+					'size' => '',
 				],
-				'range'   => [
+				'range'     => [
 					'px' => [
 						'max'  => 50,
 						'min'  => 0,
@@ -179,8 +179,8 @@ class Micemade_WC_Categories extends Widget_Base {
 				],
 				'range'     => [
 					'px' => [
-						'max' => 100,
-						'min' => 0,
+						'max'  => 100,
+						'min'  => 0,
 						'step' => 1,
 					],
 				],
@@ -208,7 +208,7 @@ class Micemade_WC_Categories extends Widget_Base {
 				'label'     => esc_html__( 'Categories image format', 'micemade-elements' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'thumbnail',
-				'options'   => apply_filters( 'micemade_elements_image_sizes','' ),
+				'options'   => apply_filters( 'micemade_elements_image_sizes', '' ),
 				'condition' => [
 					'image!' => '',
 				],
@@ -246,8 +246,8 @@ class Micemade_WC_Categories extends Widget_Base {
 				],
 				'range'     => [
 					'px' => [
-						'max' => 800,
-						'min' => 0,
+						'max'  => 800,
+						'min'  => 0,
 						'step' => 10,
 					],
 				],
@@ -267,8 +267,8 @@ class Micemade_WC_Categories extends Widget_Base {
 				],
 				'range'     => [
 					'px' => [
-						'max' => 100,
-						'min' => 0,
+						'max'  => 100,
+						'min'  => 0,
 						'step' => 1,
 					],
 				],
@@ -296,10 +296,10 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_responsive_control(
 			'post_text_align',
 			[
-				'label'    => __( 'Categories alignment', 'micemade-elements' ),
-				'type'     => Controls_Manager::CHOOSE,
-				'options'  => [
-					'left' => [
+				'label'     => __( 'Categories alignment', 'micemade-elements' ),
+				'type'      => Controls_Manager::CHOOSE,
+				'options'   => [
+					'left'   => [
 						'title' => __( 'Left', 'micemade-elements' ),
 						'icon'  => 'fa fa-align-left',
 					],
@@ -307,7 +307,7 @@ class Micemade_WC_Categories extends Widget_Base {
 						'title' => __( 'Center', 'micemade-elements' ),
 						'icon'  => 'fa fa-align-center',
 					],
-					'right' => [
+					'right'  => [
 						'title' => __( 'Right', 'micemade-elements' ),
 						'icon'  => 'fa fa-align-right',
 					],
@@ -325,7 +325,7 @@ class Micemade_WC_Categories extends Widget_Base {
 				'label'     => __( 'Vertical Align Product Info', 'micemade-elements' ),
 				'type'      => Controls_Manager::SELECT,
 				'options'   => [
-					'flex-start' =>__( 'Top', 'micemade-elements' ),
+					'flex-start' => __( 'Top', 'micemade-elements' ),
 					'center'     => __( 'Middle', 'micemade-elements' ),
 					'flex-end'   => __( 'Bottom', 'micemade-elements' ),
 				],
@@ -334,7 +334,7 @@ class Micemade_WC_Categories extends Widget_Base {
 					'{{WRAPPER}} .category__text-wrap' => 'align-self: {{VALUE}};',
 				],
 				'condition' => [
-					'style' => [ 'style_1', 'style_2', 'style_4', ]
+					'style' => [ 'style_1', 'style_2', 'style_4' ],
 				],
 			]
 		);
@@ -345,7 +345,7 @@ class Micemade_WC_Categories extends Widget_Base {
 			'section_style',
 			[
 				'label' => esc_html__( 'Colors, typography, border', 'micemade-elements' ),
-				'tab' => Controls_Manager::TAB_STYLE,
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
@@ -480,7 +480,7 @@ class Micemade_WC_Categories extends Widget_Base {
 					'box_move_down'      => __( 'Sink', 'micemade-elements' ),
 					'box_move_right'     => __( 'Forward', 'micemade-elements' ),
 					'box_move_left'      => __( 'Backward', 'micemade-elements' ),
-				]
+				],
 			]
 		);
 
@@ -514,18 +514,17 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'item_anim_delay',
 			[
-				'label' => __( 'Animation Delay', 'elementor' ) . ' (ms)',
-				'type' => Controls_Manager::NUMBER,
-				'default' => '',
-				'min' => 0,
-				'step' => 100,
-				'title' => esc_html__( 'animation delay between category items', 'micemade-elements' ),
+				'label'     => __( 'Animation Delay', 'elementor' ) . ' (ms)',
+				'type'      => Controls_Manager::NUMBER,
+				'default'   => '',
+				'min'       => 0,
+				'step'      => 100,
+				'title'     => esc_html__( 'animation delay between category items', 'micemade-elements' ),
 				'condition' => [
 					'item_anim!' => '',
 				],
 			]
 		);
- 
 
 		$this->end_controls_section();
 
@@ -598,28 +597,28 @@ class Micemade_WC_Categories extends Widget_Base {
 			$image_url  = isset( $term_data['image_url'] ) ? $term_data['image_url'] : '';
 
 			// Category item data-id / data-delay
-			$this->add_render_attribute( 'data-id' . $count, 'data-id', $id . '-'. $count );
+			$this->add_render_attribute( 'data-id' . $count, 'data-id', $id . '-' . $count );
 			$this->add_render_attribute( 'data-delay' . $count, 'data-delay', $item_anim_delay * $count );
 
-			echo '<a ' . $this->get_render_attribute_string( 'data-id' . $count ) . ' ' . $this->get_render_attribute_string( 'category-css' ) . ' href="' . esc_url( $term_link ) . '" title="' . esc_attr( $term_title ) . '" ' . $this->get_render_attribute_string( 'item-anim-data' ) . ' ' . $this->get_render_attribute_string( 'data-delay'. $count ) .'>';
+			echo '<a ' . $this->get_render_attribute_string( 'data-id' . $count ) . ' ' . $this->get_render_attribute_string( 'category-css' ) . ' href="' . esc_url( $term_link ) . '" title="' . esc_attr( $term_title ) . '" ' . $this->get_render_attribute_string( 'item-anim-data' ) . ' ' . $this->get_render_attribute_string( 'data-delay' . $count ) . '>';
 
 				echo '<div class="category__inner-wrap">';
 
 					echo '<div class="category__overlay"></div>';
 
-					if ( $image ) {
-						echo '<div class="category__image"><div class="image-inner" style="background-image: url(' . esc_url( $image_url ) . ')"></div></div>';
-					}
+			if ( $image ) {
+				echo '<div class="category__image"><div class="image-inner" style="background-image: url(' . esc_url( $image_url ) . ')"></div></div>';
+			}
 
 					echo '<div class="category__text-wrap">';
 
-						if ( $term_title ) {
-							echo '<h3 class="category__title">' . esc_html( $term_title ) . '</h3>';
-						}
+			if ( $term_title ) {
+				echo '<h3 class="category__title">' . esc_html( $term_title ) . '</h3>';
+			}
 
-						if ( $prod_count && $term_id ) {
-							echo apply_filters( 'micemade_elements_product_count', $term_id );
-						}
+			if ( $prod_count && $term_id ) {
+				echo apply_filters( 'micemade_elements_product_count', $term_id );
+			}
 
 					echo '</div>';
 

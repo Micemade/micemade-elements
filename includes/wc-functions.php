@@ -24,14 +24,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * function for filtering WooCommerce posts.
  * with a little help from: https://github.com/woocommerce/woocommerce/blob/master/includes/widgets/class-wc-widget-products.php
  */
-function micemade_elements_wc_query_args_func( $posts_per_page, $categories = array(), $exclude_cats = array(), $filters = 'latest', $offset = 0 ) {
+function micemade_elements_wc_query_args_func( $posts_per_page, $categories = array(), $exclude_cats = array(), $filters = 'latest', $offset = 0, $products_in = array() ) {
 
 	// if WooCommerce is not active.
 	if ( ! 'MICEMADE_ELEMENTS_WOO_ACTIVE' ) {
 		return;
 	}
 
-	// Default variables
+	// Default variables.
 	$args = array(
 		'posts_per_page' => $posts_per_page,
 		'post_type'      => 'product',
@@ -92,14 +92,25 @@ function micemade_elements_wc_query_args_func( $posts_per_page, $categories = ar
 		}
 	}
 
+	if ( ! empty( $products_in ) ) {
+		$args['post_name__in'] = $products_in;
+	}
+
 	return $args;
 
 }
-add_filter( 'micemade_elements_wc_query_args', 'micemade_elements_wc_query_args_func', 10, 5 );
+add_filter( 'micemade_elements_wc_query_args', 'micemade_elements_wc_query_args_func', 10, 6 );
 /**
  * PRODUCT FOR LOOP
  *
- * @return (html)
+ * @param string $style - slides style.
+ * @param string $img_format - registered image format.
+ * @param boolean $posted_in - to show "Posted in" (categories), or not.
+ * @param boolean $short_desc - to show Short product description or not.
+ * @param boolean $price - to show product price or not.
+ * @param boolean $add_to_cart - to show "Add to Cart" button or not.
+ * @param string $css_class - string with custom CSS classes.
+ * @return void
  * DRY effort ...
  */
 function micemade_elements_loop_product_func( $style = 'style_1', $img_format = 'thumbnail', $posted_in = true, $short_desc = false, $price = true, $add_to_cart = true, $css_class = '' ) {

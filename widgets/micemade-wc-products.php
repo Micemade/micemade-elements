@@ -37,12 +37,42 @@ class Micemade_WC_Products extends Widget_Base {
 		);
 
 		$this->add_control(
+			'heading_product_query_basic',
+			[
+				'label'     => __( 'Basic product query options', 'micemade-elements' ),
+				'type'      => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
 			'posts_per_page',
 			[
 				'label'   => __( 'Total products', 'micemade-elements' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => '6',
 				'title'   => __( 'Enter total number of products to show', 'micemade-elements' ),
+			]
+		);
+
+		$this->add_control(
+			'offset',
+			[
+				'label'   => __( 'Offset', 'micemade-elements' ),
+				'type'    => Controls_Manager::NUMBER,
+				'default' => 0,
+				'min'     => 0,
+				'step'    => 1,
+				'title'   => __( 'Offset is a number of skipped products', 'micemade-elements' ),
+			]
+		);
+
+		$this->add_control(
+			'heading_product_query',
+			[
+				'label'     => __( 'Additional query options', 'micemade-elements' ),
+				'type'      => Controls_Manager::HEADING,
+				'separator' => 'before',
 			]
 		);
 
@@ -60,15 +90,15 @@ class Micemade_WC_Products extends Widget_Base {
 		$this->add_control(
 			'exclude_cats',
 			[
-				'label'     => esc_html__( 'Exclude product categories', 'micemade-elements' ),
-				'type'      => Controls_Manager::SELECT2,
-				'default'   => array(),
-				'options'   => apply_filters( 'micemade_elements_terms', 'product_cat' ),
-				'multiple'  => true,
+				'label'    => esc_html__( 'Exclude product categories', 'micemade-elements' ),
+				'type'     => Controls_Manager::SELECT2,
+				'default'  => array(),
+				'options'  => apply_filters( 'micemade_elements_terms', 'product_cat' ),
+				'multiple' => true,
 				/* 'condition' => [
 					'categories' => [],
 				], */
-				'title'   => __( 'Enter total number of products to show', 'micemade-elements' ),
+				'title'    => __( 'Enter total number of products to show', 'micemade-elements' ),
 			]
 		);
 
@@ -80,12 +110,32 @@ class Micemade_WC_Products extends Widget_Base {
 				'default' => 'latest',
 				'options' => [
 					'latest'       => __( 'Latest products', 'micemade-elements' ),
-					'featured'     => __( 'Featured products', 'micemade-elements' ) ,
+					'featured'     => __( 'Featured products', 'micemade-elements' ),
 					'best_sellers' => __( 'Best selling products', 'micemade-elements' ),
 					'best_rated'   => __( 'Best rated products', 'micemade-elements' ),
 					'on_sale'      => __( 'Products on sale', 'micemade-elements' ),
 					'random'       => __( 'Random products', 'micemade-elements' ),
-				]
+				],
+			]
+		);
+
+		$this->add_control(
+			'products_in',
+			[
+				'label'    => esc_html__( 'Select products', 'micemade-elements' ),
+				'type'     => Controls_Manager::SELECT2,
+				'default'  => 3,
+				'options'  => apply_filters( 'micemade_posts_array', 'product' ),
+				'multiple' => true,
+			]
+		);
+
+		$this->add_control(
+			'heading_display_potions',
+			[
+				'label'     => __( 'Display options', 'micemade-elements' ),
+				'type'      => Controls_Manager::HEADING,
+				'separator' => 'before',
 			]
 		);
 
@@ -101,7 +151,7 @@ class Micemade_WC_Products extends Widget_Base {
 					3 => __( 'Three', 'micemade-elements' ),
 					4 => __( 'Four', 'micemade-elements' ),
 					6 => __( 'Six', 'micemade-elements' ),
-				]
+				],
 			]
 		);
 
@@ -117,7 +167,7 @@ class Micemade_WC_Products extends Widget_Base {
 					3 => __( 'Three', 'micemade-elements' ),
 					4 => __( 'Four', 'micemade-elements' ),
 					6 => __( 'Six', 'micemade-elements' ),
-				]
+				],
 			]
 		);
 
@@ -133,7 +183,7 @@ class Micemade_WC_Products extends Widget_Base {
 					3 => __( 'Three', 'micemade-elements' ),
 					4 => __( 'Four', 'micemade-elements' ),
 					6 => __( 'Six', 'micemade-elements' ),
-				]
+				],
 			]
 		);
 
@@ -163,15 +213,15 @@ class Micemade_WC_Products extends Widget_Base {
 		$this->add_responsive_control(
 			'vert_spacing',
 			[
-				'label'      => __( 'Products bottom spacing', 'micemade-elements' ),
-				'type'       => Controls_Manager::SLIDER,
-				'default'    => [
+				'label'     => __( 'Products bottom spacing', 'micemade-elements' ),
+				'type'      => Controls_Manager::SLIDER,
+				'default'   => [
 					'size' => '20',
 				],
-				'range'      => [
+				'range'     => [
 					'px' => [
-						'max' => 100,
-						'min' => 0,
+						'max'  => 100,
+						'min'  => 0,
 						'step' => 1,
 					],
 				],
@@ -193,9 +243,11 @@ class Micemade_WC_Products extends Widget_Base {
 		$settings = $this->get_settings();
 
 		$posts_per_page = ! empty( $settings['posts_per_page'] ) ? (int) $settings['posts_per_page'] : 6;
+		$offset         = ! empty( $settings['offset'] ) ? (int) $settings['offset'] : 0;
 		$categories     = ! empty( $settings['categories'] ) ? $settings['categories'] : array();
 		$exclude_cats   = ! empty( $settings['exclude_cats'] ) ? $settings['exclude_cats'] : array();
 		$filters        = ! empty( $settings['filters'] ) ? $settings['filters'] : 'latest';
+		$products_in    = ! empty( $settings['products_in'] ) ? $settings['products_in'] : '';
 		$ppr            = ! empty( $settings['products_per_row'] ) ? (int) $settings['products_per_row'] : 3;
 		$ppr_tab        = ! empty( $settings['products_per_row_tab'] ) ? (int) $settings['products_per_row_tab'] : 2;
 		$ppr_mob        = ! empty( $settings['products_per_row_mob'] ) ? (int) $settings['products_per_row_mob'] : 2;
@@ -204,16 +256,18 @@ class Micemade_WC_Products extends Widget_Base {
 
 		$this->mm_products_grid = micemade_elements_grid_class( intval( $ppr ), intval( $ppr_tab ), intval( $ppr_mob ) );
 
-		$args = apply_filters( 'micemade_elements_wc_query_args', $posts_per_page, $categories, $exclude_cats, $filters ); // hook in includes/wc-functions.php
+		$args = apply_filters( 'micemade_elements_wc_query_args', $posts_per_page, $categories, $exclude_cats, $filters, $offset, $products_in ); // hook in includes/wc-functions.php.
 
 		// Add (inject) grid classes to products in loop.
 		// ( in "content-product.php" template ).
 		// "item" class is to support Micemade Themes.
-		add_filter( 'post_class', function( $classes ) {
-			$classes[] = $this->mm_products_grid;
-			$classes[] = 'item';
-			return $classes;
-		}, 10 );
+		add_filter(
+			'post_class', function( $classes ) {
+				$classes[] = $this->mm_products_grid;
+				$classes[] = 'item';
+				return $classes;
+			}, 10
+		);
 
 		$products = get_posts( $args );
 
@@ -238,13 +292,15 @@ class Micemade_WC_Products extends Widget_Base {
 
 		// "Clean" or "reset" post_class
 		// avoid conflict with other "post_class" functions
-		add_filter( 'post_class', function( $classes ) { 
-			$classes_to_clean = array( $this->mm_products_grid, 'item' );
-			$classes = array_diff( $classes, $classes_to_clean );
-			return $classes; 
-		}, 10 );
+		add_filter(
+			'post_class', function( $classes ) {
+				$classes_to_clean = array( $this->mm_products_grid, 'item' );
+				$classes          = array_diff( $classes, $classes_to_clean );
+				return $classes;
+			}, 10
+		);
 
-		wp_reset_postdata(); 
+		wp_reset_postdata();
 
 	}
 

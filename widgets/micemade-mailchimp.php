@@ -3,7 +3,7 @@ namespace Elementor;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
-} 
+}
 
 class Micemade_Mailchimp extends Widget_Base {
 
@@ -23,8 +23,8 @@ class Micemade_Mailchimp extends Widget_Base {
 		return [ 'micemade_elements' ];
 	}
 
-    protected function _register_controls() {
-		
+	protected function _register_controls() {
+
 		$this->start_controls_section(
 			'section_content',
 			[
@@ -35,28 +35,28 @@ class Micemade_Mailchimp extends Widget_Base {
 		$this->add_control(
 			'mc4wp_slug',
 			[
-				'label' => esc_html__( 'Select Newsletter Form', 'micemade-elements' ),
-                'description' => esc_html__('"MailChimp for WP" - with free version only one form is available - purchase Premuim version of "MailChimp 4 WP" for more forms.','micemade-elements'),
-				'type' => Controls_Manager::SELECT,
-				'options' => array_merge( 
-					['' => esc_html__( 'Select the newlsetter form', 'micemade-elements' )] ,
-					apply_filters( 'micemade_posts_array' ,'mc4wp-form' )
-					)
+				'label'       => esc_html__( 'Select Newsletter Form', 'micemade-elements' ),
+				'description' => esc_html__( '"MailChimp for WP" - with free version only one form is available - purchase Premuim version of "MailChimp 4 WP" for more forms.', 'micemade-elements' ),
+				'type'        => Controls_Manager::SELECT,
+				'options'     => array_merge(
+					[ '' => esc_html__( 'Select the newlsetter form', 'micemade-elements' ) ],
+					apply_filters( 'micemade_posts_array', 'mc4wp-form' )
+				),
 			]
 		);
 
 		$this->add_control(
 			'orientation',
 			[
-				'label' => esc_html__( 'Orientation', 'micemade-elements' ),
-                'description' => esc_html__('stack form elements vertically or horizontally','micemade-elements'),
-				'type' => Controls_Manager::SELECT,
-				'default' => 'row',
-				'options' => [
-					'row' => esc_html__( 'Horizontal', 'micemade-elements' ),
+				'label'       => esc_html__( 'Orientation', 'micemade-elements' ),
+				'description' => esc_html__( 'stack form elements vertically or horizontally', 'micemade-elements' ),
+				'type'        => Controls_Manager::SELECT,
+				'default'     => 'row',
+				'options'     => [
+					'row'    => esc_html__( 'Horizontal', 'micemade-elements' ),
 					'column' => esc_html__( 'Vertical', 'micemade-elements' ),
 				],
-				'selectors' => [
+				'selectors'   => [
 					'{{WRAPPER}} .micemade-elements_mc4wp .mc4wp-form-fields' => 'flex-direction: {{VALUE}};',
 				],
 			]
@@ -65,28 +65,28 @@ class Micemade_Mailchimp extends Widget_Base {
 		$this->add_responsive_control(
 			'align',
 			[
-				'label' => __( 'Form Alignment', 'micemade-elements' ),
-				'type' => Controls_Manager::CHOOSE,
-				'options' => [
+				'label'     => __( 'Form Alignment', 'micemade-elements' ),
+				'type'      => Controls_Manager::CHOOSE,
+				'options'   => [
 					'flex-start' => [
 						'title' => __( 'Left', 'micemade-elements' ),
-						'icon' => 'fa fa-align-left',
+						'icon'  => 'fa fa-align-left',
 					],
-					'center' => [
+					'center'     => [
 						'title' => __( 'Center', 'micemade-elements' ),
-						'icon' => 'fa fa-align-center',
+						'icon'  => 'fa fa-align-center',
 					],
-					'flex-end' => [
+					'flex-end'   => [
 						'title' => __( 'Right', 'micemade-elements' ),
-						'icon' => 'fa fa-align-right',
+						'icon'  => 'fa fa-align-right',
 					],
-					'stretch' => [
+					'stretch'    => [
 						'title' => __( 'Justify', 'micemade-elements' ),
-						'icon' => 'fa fa-align-justify',
+						'icon'  => 'fa fa-align-justify',
 					],
 
 				],
-				'default' => '',
+				'default'   => '',
 				'selectors' => [
 					'{{WRAPPER}} .mc4wp-form-fields' => 'justify-content: {{VALUE}};',
 				],
@@ -96,9 +96,9 @@ class Micemade_Mailchimp extends Widget_Base {
 		$this->add_responsive_control(
 			'form_width',
 			[
-				'label' => __( 'Form Width', 'micemade-elements' ),
-				'type' => Controls_Manager::SLIDER,
-				'default' => [
+				'label'          => __( 'Form Width', 'micemade-elements' ),
+				'type'           => Controls_Manager::SLIDER,
+				'default'        => [
 					'size' => '',
 					'unit' => '%',
 				],
@@ -108,14 +108,14 @@ class Micemade_Mailchimp extends Widget_Base {
 				'mobile_default' => [
 					'unit' => '%',
 				],
-				'size_units' => [ '%' ],
-				'range' => [
+				'size_units'     => [ '%' ],
+				'range'          => [
 					'%' => [
-                        'min' => 0,
+						'min' => 0,
 						'max' => 100,
 					],
 				],
-				'selectors' => [
+				'selectors'      => [
 					'{{WRAPPER}} .mc4wp-form-fields' => 'width: {{SIZE}}{{UNIT}}',
 				],
 
@@ -125,17 +125,17 @@ class Micemade_Mailchimp extends Widget_Base {
 		$this->add_responsive_control(
 			'email_input_width',
 			[
-				'label' => __( 'Email Input Width', 'micemade-elements' ),
-				'type' => Controls_Manager::SLIDER,
-				'default' => [
+				'label'     => __( 'Email Input Width', 'micemade-elements' ),
+				'type'      => Controls_Manager::SLIDER,
+				'default'   => [
 					'unit' => 'px',
-					'size' => ''
+					'size' => '',
 				],
-				'range' => [
+				'range'     => [
 					'px' => [
-						'min' => 0,
-						'max' => 1000,
-						'step' => 10
+						'min'  => 0,
+						'max'  => 1000,
+						'step' => 10,
 					],
 				],
 				'selectors' => [
@@ -148,10 +148,10 @@ class Micemade_Mailchimp extends Widget_Base {
 		$this->add_responsive_control(
 			'tab_padding',
 			[
-				'label' => esc_html__( 'Input elements margins', 'micemade-elements' ),
-				'type' => Controls_Manager::DIMENSIONS,
+				'label'      => esc_html__( 'Input elements margins', 'micemade-elements' ),
+				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', '%' ],
-				'selectors' => [
+				'selectors'  => [
 					'{{WRAPPER}} .mc4wp-form-fields input, {{WRAPPER}} .mc4wp-form-fields select' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
@@ -162,25 +162,26 @@ class Micemade_Mailchimp extends Widget_Base {
 	}
 
 	protected function render() {
-        
-        $settings = $this->get_settings();
-        $mc4wp_slug = $settings['mc4wp_slug'];
-       
-        if( ! empty( $mc4wp_slug ) ) {
-            
-            if ( $post = get_page_by_path( $mc4wp_slug, OBJECT, 'mc4wp-form' ) )
-                $id = $post->ID;
-            else
-                $id = 0;
 
-            echo'<div class="micemade-elements_mc4wp elementor-shortcode">';
-                
-                echo do_shortcode('[mc4wp_form id="'. $id .'"]');
-            
-            echo '</div>';  
-        }
+		$settings   = $this->get_settings();
+		$mc4wp_slug = $settings['mc4wp_slug'];
 
-    }
+		if ( ! empty( $mc4wp_slug ) ) {
+
+			if ( $post = get_page_by_path( $mc4wp_slug, OBJECT, 'mc4wp-form' ) ) {
+				$id = $post->ID;
+			} else {
+				$id = 0;
+			}
+
+			echo'<div class="micemade-elements_mc4wp elementor-shortcode">';
+
+				echo do_shortcode( '[mc4wp_form id="' . $id . '"]' );
+
+			echo '</div>';
+		}
+
+	}
 }
 
 Plugin::instance()->widgets_manager->register_widget_type( new Micemade_Mailchimp() );

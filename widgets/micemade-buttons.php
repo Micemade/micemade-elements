@@ -405,11 +405,11 @@ class Micemade_Buttons extends Widget_Base {
 	protected function render() {
 		$settings = $this->get_settings();
 
-		// Buttons wrapper classes
+		// Buttons wrapper classes.
 		$this->add_render_attribute( 'wrapper', 'class', 'micemade-elements_buttons' );
 		$this->add_render_attribute( 'wrapper', 'class', $settings['orientation'] );
 
-		// Add animation class to all buttons
+		// Add animation class to all buttons.
 		$this->add_render_attribute( 'buttons', 'class', 'elementor-button' );
 		?>
 
@@ -426,11 +426,11 @@ class Micemade_Buttons extends Widget_Base {
 				$link     = ! empty( $item['link']['url'] ) ? $item['link']['url'] : '#';
 				$link_key = 'link_' . $index;
 
-				// Add general class attribute
+				// Add general class attribute.
 				$this->add_render_attribute( $link_key, 'class', 'micemade-button' );
-				// Add item specific class attribute
+				// Add item specific class attribute.
 				$this->add_render_attribute( $link_key, 'class', 'elementor-repeater-item-' . $item['_id'] );
-				// Add style selectors if theme inheritance is on
+				// Add style selectors if theme inheritance is on.
 				if ( $settings['inherit'] && $settings['style_selectors'] ) {
 					$this->add_render_attribute( $link_key, 'class', $settings['style_selectors'] );
 				}
@@ -438,13 +438,13 @@ class Micemade_Buttons extends Widget_Base {
 				if ( $settings['hover_animation'] ) {
 					$this->add_render_attribute( $link_key, 'class', 'elementor-animation-' . $settings['hover_animation'] );
 				}
-				// Add link attribute
+				// Add link attribute.
 				$this->add_render_attribute( $link_key, 'href', $link );
-				// add target attribute
+				// Add target attribute.
 				if ( $item['link']['is_external'] ) {
 					$this->add_render_attribute( $link_key, 'target', '_blank' );
 				}
-				// add nofollow attribute
+				// Add nofollow attribute.
 				if ( $item['link']['nofollow'] ) {
 					$this->add_render_attribute( $link_key, 'rel', 'nofollow' );
 				}
@@ -466,7 +466,7 @@ class Micemade_Buttons extends Widget_Base {
 				<?php
 				echo '</a>';
 
-			?>
+				?>
 
 			<?php } // end foreach ?>
 
@@ -506,7 +506,7 @@ class Micemade_Buttons extends Widget_Base {
 			} #>
 		</div>
 
-	<?php
+		<?php
 	}
 }
 

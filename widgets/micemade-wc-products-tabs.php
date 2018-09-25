@@ -63,6 +63,7 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 					[
 						'tab_title'            => __( 'Tab #1', 'micemade-elements' ),
 						'posts_per_page'       => 4,
+						'offset'               => 0,
 						'products_per_row'     => 4,
 						'products_per_row_tab' => 2,
 						'products_per_row_mob' => 2,
@@ -87,6 +88,14 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 						'type'    => Controls_Manager::NUMBER,
 						'default' => '6',
 						'title'   => __( 'Enter total number of products to show', 'micemade-elements' ),
+					],
+
+					[
+						'name'    => 'offset',
+						'label'   => __( 'Offset', 'micemade-elements' ),
+						'type'    => Controls_Manager::NUMBER,
+						'default' => '6',
+						'title'   => __( 'Offset is a number of skipped products', 'micemade-elements' ),
 					],
 
 					[
@@ -120,6 +129,15 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 							'on_sale'      => __( 'Products on sale', 'micemade-elements' ),
 							'random'       => __( 'Random products', 'micemade-elements' ),
 						],
+					],
+
+					[
+						'name'     => 'products_in',
+						'label'    => esc_html__( 'Select products', 'micemade-elements' ),
+						'type'     => Controls_Manager::SELECT2,
+						'default'  => 3,
+						'options'  => apply_filters( 'micemade_posts_array', 'product' ),
+						'multiple' => true,
 					],
 
 					[
@@ -495,6 +513,7 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 					echo '<span class="tab-title tab-mobile-title' . esc_attr( $content_status ) . '" data-tab="' . esc_attr( $counter ) . '">' . esc_html( $tab_title ) . '</span>';
 
 					$posts_per_page = $item['posts_per_page'];
+					$offset         = $item['offset'];
 					$ppr            = $item['products_per_row'];
 					$ppr_tab        = $item['products_per_row_tab'];
 					$ppr_mob        = $item['products_per_row_mob'];
@@ -502,22 +521,25 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 					$categories     = $item['categories'];
 					$exclude_cats   = $item['exclude_cats'];
 					$filters        = $item['filters'];
+					$products_in    = $item['products_in'];
 
 					// Start WC products.
 					global $post;
 
 					$this->mm_products_grid = micemade_elements_grid_class( intval( $ppr ), intval( $ppr_tab ), intval( $ppr_mob ) );
 
-					$args = apply_filters( 'micemade_elements_wc_query_args', $posts_per_page, $categories, $exclude_cats, $filters ); // hook in includes/wc-functions.php
+					$args = apply_filters( 'micemade_elements_wc_query_args', $posts_per_page, $categories, $exclude_cats, $filters, $offset, $products_in ); // hook in includes/wc-functions.php
 
 					// Add (inject) grid classes to products in loop
 					// ( in "content-product.php" template )
 					// "item" class is to support Micemade Themes
-					add_filter( 'post_class', function( $classes ) {
-						$classes[] = $this->mm_products_grid;
-						$classes[] = 'item';
-						return $classes;
-					}, 10 );
+					add_filter(
+						'post_class', function( $classes ) {
+							$classes[] = $this->mm_products_grid;
+							$classes[] = 'item';
+							return $classes;
+						}, 10
+					);
 
 					$products = get_posts( $args );
 					if ( ! empty( $products ) ) {
@@ -541,16 +563,18 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 
 					// "Clean" or "reset" post_class
 					// avoid conflict with other "post_class" functions
-					add_filter( 'post_class', function( $classes ) {
-						$classes_to_clean = array( $this->mm_products_grid, 'item' );
-						$classes          = array_diff( $classes, $classes_to_clean );
-						return $classes;
-					}, 10 );
+					add_filter(
+						'post_class', function( $classes ) {
+							$classes_to_clean = array( $this->mm_products_grid, 'item' );
+							$classes          = array_diff( $classes, $classes_to_clean );
+							return $classes;
+						}, 10
+					);
 
 					wp_reset_postdata();
 					?>
 
-				<?php
+					<?php
 					$counter++;
 				} // end foreach.
 				?>

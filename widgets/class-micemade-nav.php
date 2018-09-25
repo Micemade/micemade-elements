@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Micemade_Nav extends Widget_Base {
 
 	public function get_name() {
-		return 'micemade-nav'; 
+		return 'micemade-nav';
 	}
 
 	public function get_title() {
@@ -95,25 +95,25 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'align_items',
 			[
-				'label' => __( 'Menu align', 'micemade-elements' ),
-				'type' => Controls_Manager::CHOOSE,
-				'label_block' => false,
-				'options' => [
-					'left' => [
+				'label'        => __( 'Menu align', 'micemade-elements' ),
+				'type'         => Controls_Manager::CHOOSE,
+				'label_block'  => false,
+				'options'      => [
+					'left'   => [
 						'title' => __( 'Left', 'micemade-elements' ),
-						'icon' => 'eicon-h-align-left',
+						'icon'  => 'eicon-h-align-left',
 					],
 					'center' => [
 						'title' => __( 'Center', 'micemade-elements' ),
-						'icon' => 'eicon-h-align-center',
+						'icon'  => 'eicon-h-align-center',
 					],
-					'right' => [
+					'right'  => [
 						'title' => __( 'Right', 'micemade-elements' ),
-						'icon' => 'eicon-h-align-right',
+						'icon'  => 'eicon-h-align-right',
 					],
 				],
 				'prefix_class' => 'mme-menu-align-',
-				'condition' => [
+				'condition'    => [
 					'layout!' => 'dropdown',
 				],
 			]
@@ -122,10 +122,10 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'hover_style',
 			[
-				'label'     => __( 'Hover style', 'micemade-elements' ),
-				'type'      => Controls_Manager::SELECT,
-				'default'   => 'background',
-				'options'   => [
+				'label'        => __( 'Hover style', 'micemade-elements' ),
+				'type'         => Controls_Manager::SELECT,
+				'default'      => 'background',
+				'options'      => [
 					'none'        => __( 'None', 'micemade-elements' ),
 					'underline'   => __( 'Underline', 'micemade-elements' ),
 					'overline'    => __( 'Overline', 'micemade-elements' ),
@@ -135,7 +135,7 @@ class Micemade_Nav extends Widget_Base {
 					'text'        => __( 'Text', 'micemade-elements' ),
 				],
 				'prefix_class' => 'mme-hover-style-',
-				'condition' => [
+				'condition'    => [
 					'layout!' => 'dropdown',
 				],
 			]
@@ -231,15 +231,15 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'indicator',
 			[
-				'label' => __( 'Submenu Indicator', 'micemade-elements' ),
-				'type' => Controls_Manager::SELECT,
-				'default' => 'classic',
-				'options' => [
-					'none' => __( 'None', 'micemade-elements' ),
+				'label'        => __( 'Submenu Indicator', 'micemade-elements' ),
+				'type'         => Controls_Manager::SELECT,
+				'default'      => 'classic',
+				'options'      => [
+					'none'    => __( 'None', 'micemade-elements' ),
 					'classic' => __( 'Classic', 'micemade-elements' ),
 					'chevron' => __( 'Chevron', 'micemade-elements' ),
-					'angle' => __( 'Angle', 'micemade-elements' ),
-					'plus' => __( 'Plus', 'micemade-elements' ),
+					'angle'   => __( 'Angle', 'micemade-elements' ),
+					'plus'    => __( 'Plus', 'micemade-elements' ),
 				],
 				'prefix_class' => 'elementor-nav-menu--indicator-',
 			]
@@ -248,8 +248,8 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'heading_mobile_dropdown',
 			[
-				'label' => __( 'Mobile Dropdown', 'micemade-elements' ),
-				'type' => Controls_Manager::HEADING,
+				'label'     => __( 'Mobile Dropdown', 'micemade-elements' ),
+				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 				'condition' => [
 					'layout!' => 'dropdown',
@@ -260,15 +260,15 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'dropdown',
 			[
-				'label' => __( 'Breakpoint', 'micemade-elements' ),
-				'type' => Controls_Manager::SELECT,
-				'default' => 'tablet',
-				'options' => [
+				'label'        => __( 'Breakpoint', 'micemade-elements' ),
+				'type'         => Controls_Manager::SELECT,
+				'default'      => 'tablet',
+				'options'      => [
 					'mobile' => __( 'Mobile (767px >)', 'micemade-elements' ),
 					'tablet' => __( 'Tablet (1023px >)', 'micemade-elements' ),
 				],
 				'prefix_class' => 'elementor-nav-menu--dropdown-',
-				'condition' => [
+				'condition'    => [
 					'layout!' => 'dropdown',
 				],
 			]
@@ -277,11 +277,11 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'full_width',
 			[
-				'label' => __( 'Full Width', 'micemade-elements' ),
-				'type' => Controls_Manager::SWITCHER,
-				'description' => __( 'Stretch the dropdown of the menu to full width.', 'micemade-elements' ),
-				'prefix_class' => 'elementor-nav-menu--',
-				'return_value' => 'stretch',
+				'label'              => __( 'Full Width', 'micemade-elements' ),
+				'type'               => Controls_Manager::SWITCHER,
+				'description'        => __( 'Stretch the dropdown of the menu to full width.', 'micemade-elements' ),
+				'prefix_class'       => 'elementor-nav-menu--',
+				'return_value'       => 'stretch',
 				'frontend_available' => true,
 			]
 		);
@@ -289,11 +289,11 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'text_align',
 			[
-				'label' => __( 'Align', 'micemade-elements' ),
-				'type' => Controls_Manager::SELECT,
-				'default' => 'aside',
-				'options' => [
-					'aside' => __( 'Aside', 'micemade-elements' ),
+				'label'        => __( 'Align', 'micemade-elements' ),
+				'type'         => Controls_Manager::SELECT,
+				'default'      => 'aside',
+				'options'      => [
+					'aside'  => __( 'Aside', 'micemade-elements' ),
 					'center' => __( 'Center', 'micemade-elements' ),
 				],
 				'prefix_class' => 'elementor-nav-menu__text-align-',
@@ -303,15 +303,15 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'toggle',
 			[
-				'label' => __( 'Toggle Button', 'micemade-elements' ),
-				'type' => Controls_Manager::SELECT,
-				'default' => 'burger',
-				'options' => [
-					'' => __( 'None', 'micemade-elements' ),
+				'label'              => __( 'Toggle Button', 'micemade-elements' ),
+				'type'               => Controls_Manager::SELECT,
+				'default'            => 'burger',
+				'options'            => [
+					''       => __( 'None', 'micemade-elements' ),
 					'burger' => __( 'Hamburger', 'micemade-elements' ),
 				],
-				'prefix_class' => 'elementor-nav-menu--toggle elementor-nav-menu--',
-				'render_type' => 'template',
+				'prefix_class'       => 'elementor-nav-menu--toggle elementor-nav-menu--',
+				'render_type'        => 'template',
 				'frontend_available' => true,
 			]
 		);
@@ -319,35 +319,35 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'toggle_align',
 			[
-				'label' => __( 'Toggle Align', 'micemade-elements' ),
-				'type' => Controls_Manager::CHOOSE,
-				'default' => 'center',
-				'options' => [
-					'left' => [
+				'label'                => __( 'Toggle Align', 'micemade-elements' ),
+				'type'                 => Controls_Manager::CHOOSE,
+				'default'              => 'center',
+				'options'              => [
+					'left'   => [
 						'title' => __( 'Left', 'micemade-elements' ),
-						'icon' => 'eicon-h-align-left',
+						'icon'  => 'eicon-h-align-left',
 					],
 					'center' => [
 						'title' => __( 'Center', 'micemade-elements' ),
-						'icon' => 'eicon-h-align-center',
+						'icon'  => 'eicon-h-align-center',
 					],
-					'right' => [
+					'right'  => [
 						'title' => __( 'Right', 'micemade-elements' ),
-						'icon' => 'eicon-h-align-right',
+						'icon'  => 'eicon-h-align-right',
 					],
 				],
 				'selectors_dictionary' => [
-					'left' => 'margin-right: auto',
+					'left'   => 'margin-right: auto',
 					'center' => 'margin: 0 auto',
-					'right' => 'margin-left: auto',
+					'right'  => 'margin-left: auto',
 				],
-				'selectors' => [
+				'selectors'            => [
 					'{{WRAPPER}} .elementor-menu-toggle' => '{{VALUE}}',
 				],
-				'condition' => [
+				'condition'            => [
 					'toggle!' => '',
 				],
-				'label_block' => false,
+				'label_block'          => false,
 			]
 		);
 
@@ -356,8 +356,8 @@ class Micemade_Nav extends Widget_Base {
 		$this->start_controls_section(
 			'section_style_main_items',
 			[
-				'label' => __( 'Menu Main Items', 'micemade-elements' ),
-				'tab' => Controls_Manager::TAB_STYLE,
+				'label'     => __( 'Menu Main Items', 'micemade-elements' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'layout!' => 'dropdown',
 				],
@@ -378,7 +378,7 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'heading_items_style',
 			[
-				'type' => Controls_Manager::HEADING,
+				'type'  => Controls_Manager::HEADING,
 				'label' => __( 'Items Style', 'micemade-elements' ),
 			]
 		);
@@ -406,13 +406,13 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'textcolor_menu_item',
 			[
-				'label' => __( 'Items text color', 'micemade-elements' ),
-				'type' => Controls_Manager::COLOR,
-				'scheme' => [
-					'type' => Scheme_Color::get_type(),
+				'label'     => __( 'Items text color', 'micemade-elements' ),
+				'type'      => Controls_Manager::COLOR,
+				'scheme'    => [
+					'type'  => Scheme_Color::get_type(),
 					'value' => Scheme_Color::COLOR_3,
 				],
-				'default' => '',
+				'default'   => '',
 				'selectors' => [
 					'{{WRAPPER}} ' . $this->selector . ' .menu-item .mme-navmenu-link' => 'color: {{VALUE}}',
 				],
@@ -455,7 +455,7 @@ class Micemade_Nav extends Widget_Base {
 				'label'     => __( 'Hover style color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'scheme'    => [
-					'type' => Scheme_Color::get_type(),
+					'type'  => Scheme_Color::get_type(),
 					'value' => Scheme_Color::COLOR_4,
 				],
 				'default'   => '',
@@ -480,9 +480,9 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'color_item_active',
 			[
-				'label' => __( 'Items text color', 'micemade-elements' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '',
+				'label'     => __( 'Items text color', 'micemade-elements' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '',
 				'selectors' => [
 					'{{WRAPPER}} ' . $this->selector . ' .menu-item .mme-navmenu-link:hover:before' => 'color: {{VALUE}}',
 				],
@@ -492,9 +492,9 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'style_color_item_active',
 			[
-				'label' => __( 'Active style color', 'micemade-elements' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '',
+				'label'     => __( 'Active style color', 'micemade-elements' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '',
 				'selectors' => [
 					'{{WRAPPER}} ' . $this->selector . ' .menu-item .mme-navmenu-link:active:before' => 'background-color: {{VALUE}}',
 				],
@@ -532,14 +532,14 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_responsive_control(
 			'padding_horizontal_menu_item',
 			[
-				'label' => __( 'Horizontal items padding', 'micemade-elements' ),
-				'type' => Controls_Manager::SLIDER,
-				'range' => [
+				'label'     => __( 'Horizontal items padding', 'micemade-elements' ),
+				'type'      => Controls_Manager::SLIDER,
+				'range'     => [
 					'px' => [
 						'max' => 50,
 					],
 				],
-				'devices' => [ 'desktop', 'tablet' ],
+				'devices'   => [ 'desktop', 'tablet' ],
 				'selectors' => [
 					'{{WRAPPER}} ' . $this->selector . ' > .menu-item > .mme-navmenu-link' => 'padding-left: {{SIZE}}{{UNIT}}; padding-right: {{SIZE}}{{UNIT}}',
 				],
@@ -549,14 +549,14 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_responsive_control(
 			'padding_vertical_menu_item',
 			[
-				'label' => __( 'Vertical items padding', 'micemade-elements' ),
-				'type' => Controls_Manager::SLIDER,
-				'range' => [
+				'label'     => __( 'Vertical items padding', 'micemade-elements' ),
+				'type'      => Controls_Manager::SLIDER,
+				'range'     => [
 					'px' => [
 						'max' => 50,
 					],
 				],
-				'devices' => [ 'desktop', 'tablet' ],
+				'devices'   => [ 'desktop', 'tablet' ],
 				'selectors' => [
 					'{{WRAPPER}} ' . $this->selector . ' > .menu-item > .mme-navmenu-link' => 'padding-top: {{SIZE}}{{UNIT}}; padding-bottom: {{SIZE}}{{UNIT}}',
 				],
@@ -566,14 +566,14 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_responsive_control(
 			'items_spacing',
 			[
-				'label' => __( 'Items spacing', 'micemade-elements' ),
-				'type' => Controls_Manager::SLIDER,
-				'range' => [
+				'label'     => __( 'Items spacing', 'micemade-elements' ),
+				'type'      => Controls_Manager::SLIDER,
+				'range'     => [
 					'px' => [
 						'max' => 100,
 					],
 				],
-				'devices' => [ 'desktop', 'tablet' ],
+				'devices'   => [ 'desktop', 'tablet' ],
 				'selectors' => [
 					'{{WRAPPER}} ' . $this->selector . ' > .menu-item:not(:last-child)' => 'margin-right: {{SIZE}}{{UNIT}}',
 				],
@@ -583,18 +583,18 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_responsive_control(
 			'border_radius_menu_item',
 			[
-				'label' => __( 'Border Radius', 'micemade-elements' ),
-				'type' => Controls_Manager::SLIDER,
+				'label'      => __( 'Border Radius', 'micemade-elements' ),
+				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'em', '%' ],
-				'devices' => [ 'desktop', 'tablet' ],
-				'selectors' => [
+				'devices'    => [ 'desktop', 'tablet' ],
+				'selectors'  => [
 					'{{WRAPPER}} .elementor-item:before' => 'border-radius: {{SIZE}}{{UNIT}}',
 					'{{WRAPPER}} .e--animation-shutter-in-horizontal .elementor-item:before' => 'border-radius: {{SIZE}}{{UNIT}} {{SIZE}}{{UNIT}} 0 0',
 					'{{WRAPPER}} .e--animation-shutter-in-horizontal .elementor-item:after' => 'border-radius: 0 0 {{SIZE}}{{UNIT}} {{SIZE}}{{UNIT}}',
 					'{{WRAPPER}} .e--animation-shutter-in-vertical .elementor-item:before' => 'border-radius: 0 {{SIZE}}{{UNIT}} {{SIZE}}{{UNIT}} 0',
 					'{{WRAPPER}} .e--animation-shutter-in-vertical .elementor-item:after' => 'border-radius: {{SIZE}}{{UNIT}} 0 0 {{SIZE}}{{UNIT}}',
 				],
-				'condition' => [
+				'condition'  => [
 					'hover_style' => 'background',
 				],
 			]
@@ -606,15 +606,15 @@ class Micemade_Nav extends Widget_Base {
 			'section_style_submenus',
 			[
 				'label' => __( 'Sub menus', 'micemade-elements' ),
-				'tab' => Controls_Manager::TAB_STYLE,
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$this->add_control(
 			'submenus_description',
 			[
-				'raw' => __( 'On desktop, this will affect the submenu. On mobile, this will affect the entire menu.', 'micemade-elements' ),
-				'type' => Controls_Manager::RAW_HTML,
+				'raw'             => __( 'On desktop, this will affect the submenu. On mobile, this will affect the entire menu.', 'micemade-elements' ),
+				'type'            => Controls_Manager::RAW_HTML,
 				'content_classes' => 'elementor-descriptor',
 			]
 		);
@@ -631,9 +631,9 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'color_submenu_item',
 			[
-				'label' => __( 'Text Color', 'micemade-elements' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '',
+				'label'     => __( 'Text Color', 'micemade-elements' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '',
 				'selectors' => [
 					'{{WRAPPER}} .elementor-nav-menu--dropdown a, {{WRAPPER}} .elementor-menu-toggle' => 'color: {{VALUE}}',
 				],
@@ -643,9 +643,9 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'background_color_submenu_item',
 			[
-				'label' => __( 'Background Color', 'micemade-elements' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '',
+				'label'     => __( 'Background Color', 'micemade-elements' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '',
 				'selectors' => [
 					'{{WRAPPER}} .elementor-nav-menu--dropdown' => 'background-color: {{VALUE}}',
 				],
@@ -665,9 +665,9 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'color_submenu_item_hover',
 			[
-				'label' => __( 'Text Color', 'micemade-elements' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '',
+				'label'     => __( 'Text Color', 'micemade-elements' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '',
 				'selectors' => [
 					'{{WRAPPER}} .elementor-nav-menu--dropdown a:hover, {{WRAPPER}} .elementor-menu-toggle:hover' => 'color: {{VALUE}}',
 				],
@@ -677,9 +677,9 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'background_color_submenu_item_hover',
 			[
-				'label' => __( 'Background Color', 'micemade-elements' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '',
+				'label'     => __( 'Background Color', 'micemade-elements' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '',
 				'selectors' => [
 					'{{WRAPPER}} .elementor-nav-menu--dropdown a:hover,
 					{{WRAPPER}} .elementor-nav-menu--dropdown a.highlighted' => 'background-color: {{VALUE}}',
@@ -695,11 +695,11 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name' => 'submenu_typography',
-				'label' => __( 'Typography', 'micemade-elements' ),
-				'scheme' => Scheme_Typography::TYPOGRAPHY_4,
-				'exclude' => [ 'line_height' ],
-				'selector' => '{{WRAPPER}} .elementor-nav-menu--dropdown',
+				'name'      => 'submenu_typography',
+				'label'     => __( 'Typography', 'micemade-elements' ),
+				'scheme'    => Scheme_Typography::TYPOGRAPHY_4,
+				'exclude'   => [ 'line_height' ],
+				'selector'  => '{{WRAPPER}} .elementor-nav-menu--dropdown',
 				'separator' => 'before',
 			]
 		);
@@ -707,9 +707,9 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name' => 'submenu_border',
-				'label' => __( 'Border', 'micemade-elements' ),
-				'selector' => '{{WRAPPER}} .elementor-nav-menu--dropdown',
+				'name'      => 'submenu_border',
+				'label'     => __( 'Border', 'micemade-elements' ),
+				'selector'  => '{{WRAPPER}} .elementor-nav-menu--dropdown',
 				'separator' => 'before',
 			]
 		);
@@ -717,10 +717,10 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_responsive_control(
 			'submenu_border_radius',
 			[
-				'label' => __( 'Border Radius', 'micemade-elements' ),
-				'type' => Controls_Manager::DIMENSIONS,
+				'label'      => __( 'Border Radius', 'micemade-elements' ),
+				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
-				'selectors' => [
+				'selectors'  => [
 					'{{WRAPPER}} .elementor-nav-menu--dropdown' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					'{{WRAPPER}} .elementor-nav-menu--dropdown li:first-child' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}};',
 					'{{WRAPPER}} .elementor-nav-menu--dropdown li:last-child' => 'border-radius: {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
@@ -731,8 +731,8 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Box_Shadow::get_type(),
 			[
-				'name' => 'submenu_box_shadow',
-				'exclude' => [
+				'name'     => 'submenu_box_shadow',
+				'exclude'  => [
 					'box_shadow_position',
 				],
 				'selector' => '{{WRAPPER}} .elementor-nav-menu--main .elementor-nav-menu--dropdown, {{WRAPPER}} .elementor-nav-menu__container.elementor-nav-menu--dropdown',
@@ -742,8 +742,8 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_responsive_control(
 			'padding_horizontal_submenu_item',
 			[
-				'label' => __( 'Horizontal Padding', 'micemade-elements' ),
-				'type' => Controls_Manager::SLIDER,
+				'label'     => __( 'Horizontal Padding', 'micemade-elements' ),
+				'type'      => Controls_Manager::SLIDER,
 				'selectors' => [
 					'{{WRAPPER}} .elementor-nav-menu--dropdown a' => 'padding-left: {{SIZE}}{{UNIT}}; padding-right: {{SIZE}}{{UNIT}}',
 				],
@@ -755,9 +755,9 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_responsive_control(
 			'padding_vertical_submenu_item',
 			[
-				'label' => __( 'Vertical Padding', 'micemade-elements' ),
-				'type' => Controls_Manager::SLIDER,
-				'range' => [
+				'label'     => __( 'Vertical Padding', 'micemade-elements' ),
+				'type'      => Controls_Manager::SLIDER,
+				'range'     => [
 					'px' => [
 						'max' => 50,
 					],
@@ -771,8 +771,8 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'heading_submenu_divider',
 			[
-				'label' => __( 'Divider', 'micemade-elements' ),
-				'type' => Controls_Manager::HEADING,
+				'label'     => __( 'Divider', 'micemade-elements' ),
+				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
 		);
@@ -780,19 +780,19 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name' => 'submenu_divider',
-				'label' => __( 'Divider', 'micemade-elements' ),
+				'name'     => 'submenu_divider',
+				'label'    => __( 'Divider', 'micemade-elements' ),
 				'selector' => '{{WRAPPER}} .elementor-nav-menu--dropdown li:not(:last-child)',
-				'exclude' => [ 'width' ],
+				'exclude'  => [ 'width' ],
 			]
 		);
 
 		$this->add_control(
 			'submenu_divider_width',
 			[
-				'label' => __( 'Border Width', 'micemade-elements' ),
-				'type' => Controls_Manager::SLIDER,
-				'range' => [
+				'label'     => __( 'Border Width', 'micemade-elements' ),
+				'type'      => Controls_Manager::SLIDER,
+				'range'     => [
 					'px' => [
 						'max' => 50,
 					],
@@ -809,9 +809,9 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_responsive_control(
 			'submenu_top_distance',
 			[
-				'label' => __( 'Distance', 'micemade-elements' ),
-				'type' => Controls_Manager::SLIDER,
-				'range' => [
+				'label'     => __( 'Distance', 'micemade-elements' ),
+				'type'      => Controls_Manager::SLIDER,
+				'range'     => [
 					'px' => [
 						'min' => -100,
 						'max' => 100,
@@ -826,10 +826,11 @@ class Micemade_Nav extends Widget_Base {
 
 		$this->end_controls_section();
 
-		$this->start_controls_section( 'style_toggle',
+		$this->start_controls_section(
+			'style_toggle',
 			[
-				'label' => __( 'Toggle Button', 'micemade-elements' ),
-				'tab' => Controls_Manager::TAB_STYLE,
+				'label'     => __( 'Toggle Button', 'micemade-elements' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'toggle!' => '',
 				],
@@ -848,8 +849,8 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'toggle_color',
 			[
-				'label' => __( 'Color', 'micemade-elements' ),
-				'type' => Controls_Manager::COLOR,
+				'label'     => __( 'Color', 'micemade-elements' ),
+				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} div.elementor-menu-toggle' => 'color: {{VALUE}}', // Harder selector to override text color control
 				],
@@ -859,8 +860,8 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'toggle_background_color',
 			[
-				'label' => __( 'Background Color', 'micemade-elements' ),
-				'type' => Controls_Manager::COLOR,
+				'label'     => __( 'Background Color', 'micemade-elements' ),
+				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .elementor-menu-toggle' => 'background-color: {{VALUE}}',
 				],
@@ -879,8 +880,8 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'toggle_color_hover',
 			[
-				'label' => __( 'Color', 'micemade-elements' ),
-				'type' => Controls_Manager::COLOR,
+				'label'     => __( 'Color', 'micemade-elements' ),
+				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} div.elementor-menu-toggle:hover' => 'color: {{VALUE}}', // Harder selector to override text color control
 				],
@@ -890,8 +891,8 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'toggle_background_color_hover',
 			[
-				'label' => __( 'Background Color', 'micemade-elements' ),
-				'type' => Controls_Manager::COLOR,
+				'label'     => __( 'Background Color', 'micemade-elements' ),
+				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .elementor-menu-toggle:hover' => 'background-color: {{VALUE}}',
 				],
@@ -905,9 +906,9 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'toggle_size',
 			[
-				'label' => __( 'Size', 'micemade-elements' ),
-				'type' => Controls_Manager::SLIDER,
-				'range' => [
+				'label'     => __( 'Size', 'micemade-elements' ),
+				'type'      => Controls_Manager::SLIDER,
+				'range'     => [
 					'px' => [
 						'min' => 15,
 					],
@@ -922,9 +923,9 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'toggle_border_width',
 			[
-				'label' => __( 'Border Width', 'micemade-elements' ),
-				'type' => Controls_Manager::SLIDER,
-				'range' => [
+				'label'     => __( 'Border Width', 'micemade-elements' ),
+				'type'      => Controls_Manager::SLIDER,
+				'range'     => [
 					'px' => [
 						'max' => 10,
 					],
@@ -938,10 +939,10 @@ class Micemade_Nav extends Widget_Base {
 		$this->add_control(
 			'toggle_border_radius',
 			[
-				'label' => __( 'Border Radius', 'micemade-elements' ),
-				'type' => Controls_Manager::SLIDER,
+				'label'      => __( 'Border Radius', 'micemade-elements' ),
+				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%' ],
-				'selectors' => [
+				'selectors'  => [
 					'{{WRAPPER}} .elementor-menu-toggle' => 'border-radius: {{SIZE}}{{UNIT}}',
 				],
 			]

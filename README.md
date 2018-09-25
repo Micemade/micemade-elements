@@ -55,6 +55,10 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 
 **Changelog**
 
+*** v.0.6.9.1 ***
+* Added single products selection in WC products slider, WC products and WC product tabs
+* WP Coding Standards tweaks
+
 *** v.0.6.9 ***
 * pre 0.7.0 (Header CPT and elements)
 * lots of fixes and tweaks

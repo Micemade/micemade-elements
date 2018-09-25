@@ -3,7 +3,7 @@ namespace Elementor;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
-} 
+}
 
 class Micemade_Rev_Slider extends Widget_Base {
 
@@ -32,20 +32,18 @@ class Micemade_Rev_Slider extends Widget_Base {
 				'label' => esc_html__( 'Micemade Revolution Slider', 'micemade-elements' ),
 			]
 		);
-		
-		
+
 		$this->add_control(
 			'slider',
 			[
-				'label'		=> esc_html__( 'Select revolution slider', 'micemade-elements' ),
-				'type'		=> Controls_Manager::SELECT2,
-				'default'	=> array(),
-				'options'	=> apply_filters('micemade_elements_rev_sliders',''),
-				'multiple'	=> false
+				'label'    => esc_html__( 'Select revolution slider', 'micemade-elements' ),
+				'type'     => Controls_Manager::SELECT2,
+				'default'  => array(),
+				'options'  => apply_filters( 'micemade_elements_rev_sliders', '' ),
+				'multiple' => false,
 			]
 		);
-		
-		
+
 		$this->end_controls_section();
 
 	}
@@ -53,22 +51,22 @@ class Micemade_Rev_Slider extends Widget_Base {
 	protected function render() {
 
 		// get our input from the widget settings.
-		$settings	= $this->get_settings();
-		
-		$slider		= ! empty( $settings['slider'] ) ? $settings['slider'] : '';
-		
-		if( $slider ) {
-					
-			$slider_shortcode = '[rev_slider alias="'. $slider .'"]';
-			
+		$settings = $this->get_settings();
+
+		$slider = ! empty( $settings['slider'] ) ? $settings['slider'] : '';
+
+		if ( $slider ) {
+
+			$slider_shortcode = '[rev_slider alias="' . $slider . '"]';
+
 			echo do_shortcode( $slider_shortcode );
-			
+
 		}
 
 	}
 
 	protected function content_template() {}
-	
+
 	public function render_plain_content( $instance = [] ) {}
 
 }

@@ -4,58 +4,56 @@
  *  - class for automatic plugin updates via Github
  *  - used code from https://code.tutsplus.com/tutorials/distributing-your-plugins-in-github-with-automatic-updates--wp-34817
  */
-if( ! class_exists('Micemade_GitHub_Plugin_Updater') ) {
-	
+if ( ! class_exists( 'Micemade_GitHub_Plugin_Updater' ) ) {
+
 	class Micemade_GitHub_Plugin_Updater {
-	 
+
 		private $slug;
 
-		private $pluginData;
+		private $plugin_data;
 
 		private $username;
 
 		private $repo;
 
-		private $pluginFile;
+		private $plugin_file;
 
-		private $githubAPIResult;
+		private $github_api_result;
 
-		private $accessToken;
+		private $access_token;
 
-		private $pluginActivated;
+		private $plugin_activated;
 
 		/**
 		 * Class constructor.
 		 *
-		 * @param  string $pluginFile
-		 * @param  string $gitHubUsername
-		 * @param  string $gitHubProjectName
-		 * @param  string $accessToken
+		 * @param  string $plugin_file
+		 * @param  string $github_username
+		 * @param  string $github_project_name
+		 * @param  string $access_token
 		 * @return null
 		 */
-	   function __construct( $pluginFile, $gitHubUsername, $gitHubProjectName, $accessToken = '' )
-		{
-			add_filter( "pre_set_site_transient_update_plugins", array( $this, "setTransitent" ) );
-			add_filter( "plugins_api", array( $this, "setPluginInfo" ), 10, 3 );
-			add_filter( "upgrader_pre_install", array( $this, "preInstall" ), 10, 3 );
-			add_filter( "upgrader_post_install", array( $this, "postInstall" ), 10, 3 );
+		function __construct( $plugin_file, $github_username, $github_project_name, $access_token = '' ) {
+			add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'set_transient' ) );
+			add_filter( 'plugins_api', array( $this, 'set_plugin_info' ), 10, 3 );
+			add_filter( 'upgrader_pre_install', array( $this, 'pre_install' ), 10, 3 );
+			add_filter( 'upgrader_post_install', array( $this, 'post_install' ), 10, 3 );
 
-			$this->pluginFile 	= $pluginFile;
-			$this->username 	= $gitHubUsername;
-			$this->repo 		= $gitHubProjectName;
-			$this->accessToken 	= $accessToken;
+			$this->plugin_file  = $plugin_file;
+			$this->username     = $github_username;
+			$this->repo         = $github_project_name;
+			$this->access_token = $access_token;
 		}
 
 		/**
 		 * Get information regarding our plugin from WordPress
 		 *
-		 * @return null
+		 * @return void
 		 */
-		private function initPluginData()
-		{
-			$this->slug = plugin_basename( $this->pluginFile );
+		private function init_plugin_data() {
+			$this->slug = plugin_basename( $this->plugin_file );
 
-			$this->pluginData = get_plugin_data( $this->pluginFile );
+			$this->plugin_data = get_plugin_data( $this->plugin_file );
 		}
 
 		/**
@@ -63,33 +61,28 @@ if( ! class_exists('Micemade_GitHub_Plugin_Updater') ) {
 		 *
 		 * @return null
 		 */
-		private function getRepoReleaseInfo()
-		{
-			if ( ! empty( $this->githubAPIResult ) )
-			{
+		private function get_repo_release_info() {
+			if ( ! empty( $this->github_api_result ) ) {
 				return;
 			}
 
-			// Query the GitHub API
+			// Query the GitHub API.
 			$url = "https://api.github.com/repos/{$this->username}/{$this->repo}/releases";
 
-			if ( ! empty( $this->accessToken ) )
-			{
-				$url = add_query_arg( array( "access_token" => $this->accessToken ), $url );
+			if ( ! empty( $this->access_token ) ) {
+				$url = add_query_arg( array( 'access_token' => $this->access_token ), $url );
 			}
 
-			// Get the results
-			$this->githubAPIResult = wp_remote_retrieve_body( wp_remote_get( $url ) );
+			// Get the results.
+			$this->github_api_result = wp_remote_retrieve_body( wp_remote_get( $url ) );
 
-			if ( ! empty( $this->githubAPIResult ) )
-			{
-				$this->githubAPIResult = @json_decode( $this->githubAPIResult );
+			if ( ! empty( $this->github_api_result ) ) {
+				$this->github_api_result = @json_decode( $this->github_api_result );
 			}
 
-			// Use only the latest release
-			if ( is_array( $this->githubAPIResult ) )
-			{
-				$this->githubAPIResult = $this->githubAPIResult[0];
+			// Use only the latest release.
+			if ( is_array( $this->github_api_result ) ) {
+				$this->github_api_result = $this->github_api_result[0];
 			}
 		}
 
@@ -99,36 +92,32 @@ if( ! class_exists('Micemade_GitHub_Plugin_Updater') ) {
 		 * @param  object $transient
 		 * @return object
 		 */
-		public function setTransitent( $transient )
-		{
-			if ( empty( $transient->checked ) )
-			{
+		public function set_transient( $transient ) {
+			if ( empty( $transient->checked ) ) {
 				return $transient;
 			}
 
-			// Get plugin & GitHub release information
-			$this->initPluginData();
-			$this->getRepoReleaseInfo();
+			// Get plugin & GitHub release information.
+			$this->init_plugin_data();
+			$this->get_repo_release_info();
 
-			$doUpdate = version_compare( $this->githubAPIResult->tag_name, $transient->checked[$this->slug], '>' );
+			$doUpdate = version_compare( $this->github_api_result->tag_name, $transient->checked[ $this->slug ], '>' );
 
-			if ( $doUpdate )
-			{
-				$package = $this->githubAPIResult->zipball_url;
+			if ( $doUpdate ) {
+				$package = $this->github_api_result->zipball_url;
 
-				if ( ! empty( $this->accessToken ) )
-				{
-					$package = add_query_arg( array( "access_token" => $this->accessToken ), $package );
+				if ( ! empty( $this->access_token ) ) {
+					$package = add_query_arg( array( 'access_token' => $this->access_token ), $package );
 				}
 
-				// Plugin object
-				$obj = new stdClass();
-				$obj->slug = $this->slug;
-				$obj->new_version = $this->githubAPIResult->tag_name;
-				$obj->url = $this->pluginData["PluginURI"];
-				$obj->package = $package;
+				// Plugin object.
+				$obj              = new stdClass();
+				$obj->slug        = $this->slug;
+				$obj->new_version = $this->github_api_result->tag_name;
+				$obj->url         = $this->plugin_data['PluginURI'];
+				$obj->package     = $package;
 
-				$transient->response[$this->slug] = $obj;
+				$transient->response[ $this->slug ] = $obj;
 			}
 
 			return $transient;
@@ -142,50 +131,48 @@ if( ! class_exists('Micemade_GitHub_Plugin_Updater') ) {
 		 * @param  object $response
 		 * @return object
 		 */
-		public function setPluginInfo( $false, $action, $response )
-		{
-			$this->initPluginData();
-			$this->getRepoReleaseInfo();
+		public function set_plugin_info( $false, $action, $response ) {
+			$this->init_plugin_data();
+			$this->get_repo_release_info();
 
-			if ( !isset($response->slug ) || ( $response->slug != $this->slug ) ) {
+			if ( ! isset( $response->slug ) || ( $response->slug != $this->slug ) ) {
 				return $false;
 			}
 
-			// Add our plugin information
-			$response->last_updated	= $this->githubAPIResult->published_at;
-			$response->slug			= $this->slug;
-			$response->name			= $this->pluginData["Name"];
-			$response->version		= $this->githubAPIResult->tag_name;
-			$response->author		= $this->pluginData["AuthorName"];
-			$response->homepage		= $this->pluginData["PluginURI"];
+			// Add our plugin information.
+			$response->last_updated = $this->github_api_result->published_at;
+			$response->slug         = $this->slug;
+			$response->name         = $this->plugin_data['Name'];
+			$response->version      = $this->github_api_result->tag_name;
+			$response->author       = $this->plugin_data['AuthorName'];
+			$response->homepage     = $this->plugin_data['PluginURI'];
 
-			// This is our release download zip file
-			$downloadLink = $this->githubAPIResult->zipball_url;
+			// This is our release download zip file.
+			$download_link = $this->github_api_result->zipball_url;
 
-			if ( !empty( $this->accessToken ) )
-			{
-				$downloadLink = add_query_arg(
-					array( "access_token" => $this->accessToken ),
-					$downloadLink
+			if ( ! empty( $this->access_token ) ) {
+				$download_link = add_query_arg(
+					array( 'access_token' => $this->access_token ),
+					$download_link
 				);
 			}
 
-			$response->download_link = $downloadLink;
+			$response->download_link = $download_link;
 
-			// Load Parsedown
+			// Load Parsedown.
 			require_once __DIR__ . DIRECTORY_SEPARATOR . 'includes/Parsedown.php';
 
-			// Create tabs in the lightbox
+			// Create tabs in the lightbox.
 			$response->sections = array(
-				'Description' 	=> $this->pluginData["Description"],
-				'changelog' 	=> class_exists( "Parsedown" )
-					? Parsedown::instance()->parse( $this->githubAPIResult->body )
-					: $this->githubAPIResult->body
+				'Description' => $this->plugin_data['Description'],
+				'changelog'   => class_exists( 'Parsedown' )
+					? Parsedown::instance()->parse( $this->github_api_result->body )
+					: $this->github_api_result->body,
 			);
 
-			// Gets the required version of WP if available
+			// Gets the required version of WP if available.
 			$matches = null;
-			preg_match( "/requires:\s([\d\.]+)/i", $this->githubAPIResult->body, $matches );
+			preg_match( '/requires:\s([\d\.]+)/i', $this->github_api_result->body, $matches );
 			if ( ! empty( $matches ) ) {
 				if ( is_array( $matches ) ) {
 					if ( count( $matches ) > 1 ) {
@@ -194,9 +181,9 @@ if( ! class_exists('Micemade_GitHub_Plugin_Updater') ) {
 				}
 			}
 
-			// Gets the tested version of WP if available
+			// Gets the tested version of WP if available.
 			$matches = null;
-			preg_match( "/tested:\s([\d\.]+)/i", $this->githubAPIResult->body, $matches );
+			preg_match( '/tested:\s([\d\.]+)/i', $this->github_api_result->body, $matches );
 			if ( ! empty( $matches ) ) {
 				if ( is_array( $matches ) ) {
 					if ( count( $matches ) > 1 ) {
@@ -215,13 +202,12 @@ if( ! class_exists('Micemade_GitHub_Plugin_Updater') ) {
 		 * @param  array   $args
 		 * @return null
 		 */
-		public function preInstall( $true, $args )
-		{
+		public function pre_install( $true, $args ) {
 			// Get plugin information
-			$this->initPluginData();
+			$this->init_plugin_data();
 
-			// Check if the plugin was installed before...
-			$this->pluginActivated = is_plugin_active( $this->slug );
+			// Check if the plugin was installed before.
+			$this->plugin_activated = is_plugin_active( $this->slug );
 		}
 
 		/**
@@ -232,24 +218,21 @@ if( ! class_exists('Micemade_GitHub_Plugin_Updater') ) {
 		 * @param  object $result
 		 * @return object
 		 */
-		public function postInstall( $true, $hook_extra, $result )
-		{
+		public function post_install( $true, $hook_extra, $result ) {
 			global $wp_filesystem;
 
 			// Since we are hosted in GitHub, our plugin folder would have a dirname of
-			// reponame-tagname change it to our original one:
-			$pluginFolder = WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . dirname( $this->slug );
-			$wp_filesystem->move( $result['destination'], $pluginFolder );
-			$result['destination'] = $pluginFolder;
+			// reponame-tagname change it to our original one.
+			$plugin_folder = WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . dirname( $this->slug );
+			$wp_filesystem->move( $result['destination'], $plugin_folder );
+			$result['destination'] = $plugin_folder;
 
-			// Re-activate plugin if needed
-			if ( $this->pluginActivated )
-			{
+			// Re-activate plugin if needed.
+			if ( $this->plugin_activated ) {
 				$activate = activate_plugin( $this->slug );
 			}
 
 			return $result;
 		}
-	}	
+	}
 }
-?>

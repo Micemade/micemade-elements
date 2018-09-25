@@ -38,6 +38,15 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		);
 
 		$this->add_control(
+			'heading_product_query_basic',
+			[
+				'label'     => __( 'Basic product query options', 'micemade-elements' ),
+				'type'      => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
 			'posts_per_page',
 			[
 				'label'   => __( 'Total products', 'micemade-elements' ),
@@ -64,7 +73,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$this->add_control(
 			'heading_filtering',
 			[
-				'label'     => __( 'Products filtering options', 'micemade-elements' ),
+				'label'     => __( 'Additional query options', 'micemade-elements' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -109,6 +118,17 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 					'on_sale'      => __( 'Products on sale', 'micemade-elements' ),
 					'random'       => __( 'Random products', 'micemade-elements' ),
 				],
+			]
+		);
+
+		$this->add_control(
+			'products_in',
+			[
+				'label'    => esc_html__( 'Select products', 'micemade-elements' ),
+				'type'     => Controls_Manager::SELECT2,
+				'default'  => 3,
+				'options'  => apply_filters( 'micemade_posts_array', 'product' ),
+				'multiple' => true,
 			]
 		);
 
@@ -1006,6 +1026,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$categories     = ! empty( $settings['categories'] ) ? $settings['categories'] : array();
 		$exclude_cats   = ! empty( $settings['exclude_cats'] ) ? $settings['exclude_cats'] : array();
 		$filters        = ! empty( $settings['filters'] ) ? $settings['filters'] : '';
+		$products_in    = ! empty( $settings['products_in'] ) ? $settings['products_in'] : '';
 		$img_format     = ! empty( $settings['img_format'] ) ? $settings['img_format'] : 'thumbnail';
 		$style          = ! empty( $settings['style'] ) ? $settings['style'] : 'style_1';
 		$short_desc     = ! empty( $settings['short_desc'] ) ? $settings['short_desc'] : '';
@@ -1020,7 +1041,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$grid = micemade_elements_grid_class( intval( $pps ), intval( $pps_tab ), intval( $pps_mob ) );
 
 		// Query posts: ( hook in includes/wc-functions.php ).
-		$args     = apply_filters( 'micemade_elements_wc_query_args', $posts_per_page, $categories, $exclude_cats, $filters, $offset );
+		$args     = apply_filters( 'micemade_elements_wc_query_args', $posts_per_page, $categories, $exclude_cats, $filters, $offset, $products_in );
 		$products = get_posts( $args );
 
 		if ( ! empty( $products ) ) {
@@ -1039,11 +1060,13 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 
 			// If style as in WC content-product template.
 			if ( 'catalog' === $style ) {
-				add_filter( 'post_class', function( $classes ) {
-					$classes[] = 'swiper-slide';
-					$classes[] = 'item';
-					return $classes;
-				}, 10 );
+				add_filter(
+					'post_class', function( $classes ) {
+						$classes[] = 'swiper-slide';
+						$classes[] = 'item';
+						return $classes;
+					}, 10
+				);
 			}
 
 			foreach ( $products as $post ) {
@@ -1053,10 +1076,9 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 				// If style as in WC content-product template.
 				if ( 'catalog' === $style ) {
 					wc_get_template_part( 'content', 'product' );
-					//echo do_action( 'micemade_elements_wc_content_product' );
-					// else, use plugin styling
+					// else, use plugin styling.
 				} else {
-					apply_filters( 'micemade_elements_loop_product', $style, $img_format, $posted_in, $short_desc, $price, $add_to_cart, $css_class );// hook in includes/wc-functions.php
+					apply_filters( 'micemade_elements_loop_product', $style, $img_format, $posted_in, $short_desc, $price, $add_to_cart, $css_class );// hook in includes/wc-functions.php.
 				}
 			}
 
@@ -1066,11 +1088,13 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 			if ( 'catalog' === $style ) {
 				// "Clean" or "reset" post_class
 				// avoid conflict with other "post_class" functions
-				add_filter( 'post_class', function( $classes ) {
-					$classes_to_clean = array( 'swiper-slide', 'item' );
-					$classes          = array_diff( $classes, $classes_to_clean );
-					return $classes;
-				}, 10 );
+				add_filter(
+					'post_class', function( $classes ) {
+						$classes_to_clean = array( 'swiper-slide', 'item' );
+						$classes          = array_diff( $classes, $classes_to_clean );
+						return $classes;
+					}, 10
+				);
 			}
 
 			if ( 'none' !== $pagination ) {
