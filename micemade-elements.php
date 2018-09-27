@@ -3,10 +3,13 @@
  * Plugin Name: Micemade Elements
  * Description: Extension plugin with custom elements for Elementor, created by Micemade. Elementor plugin required.
  * Plugin URI: https://github.com/Micemade/micemade-elements/
- * Version: 0.6.9.1
+ * Version: 0.6.9.2
  * Author: micemade
  * Author URI: http://micemade.com
  * Text Domain: micemade-elements
+ *
+ * @package WordPress
+ * @subpackage Micemade Elements
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -17,10 +20,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( ! defined( 'MICEMADE_ELEMENTS_PLUGIN_FILE' ) ) {
 	define( 'MICEMADE_ELEMENTS_PLUGIN_FILE', __FILE__ );
 }
-
+/**
+ * Micemade Elements Class
+ */
 class Micemade_Elements {
 
 	private static $instance = null;
+
+	/**
+	 * Micemade elements version.
+	 *
+	 * @var string
+	 */
+	public $version = '0.6.9.2';
 
 	public static function get_instance() {
 		if ( ! self::$instance ) {
@@ -38,8 +50,9 @@ class Micemade_Elements {
 
 		if ( self::$instance->elementor_activation_check() ) {
 
-			define( 'MICEMADE_ELEMENTS_DIR', plugin_dir_path( __FILE__ ) );
-			define( 'MICEMADE_ELEMENTS_URL', plugin_dir_url( __FILE__ ) );
+			$this->define( 'MICEMADE_ELEMENTS_DIR', plugin_dir_path( __FILE__ ) );
+			$this->define( 'MICEMADE_ELEMENTS_URL', plugin_dir_url( __FILE__ ) );
+			$this->define( 'MICEMADE_ELEMENTS_VERSION', $this->version );
 
 			self::$instance->includes();
 
@@ -62,7 +75,7 @@ class Micemade_Elements {
 			add_action( 'init', array( self::$instance, 'register_custom_post_types' ) );
 
 			// Enqueue script and styles for Elementor editor.
-			add_action( 'elementor/editor/before_enqueue_scripts', array( self::$instance, 'editor_scripts' ) );
+			add_action( 'elementor/editor/before_enqueue_scripts', array( self::$instance, 'editor_scripts' ), 999 );
 			// add_action( 'admin_enqueue_scripts', array( self::$instance, 'micemade_elements_admin_js_css' ) );
 
 			// Enqueue scripts and styles for frontend.
@@ -79,6 +92,18 @@ class Micemade_Elements {
 	}
 
 	/**
+	 * Define constant if not already set.
+	 *
+	 * @param string      $name  Constant name.
+	 * @param string|bool $value Constant value.
+	 */
+	private function define( $name, $value ) {
+		if ( ! defined( $name ) ) {
+			define( $name, $value );
+		}
+	}
+
+	/**
 	 * Check for Elementor activation
 	 *
 	 * @return $micemade_elements_is_active
@@ -91,9 +116,9 @@ class Micemade_Elements {
 		if ( in_array( 'elementor/elementor.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
 
 			$micemade_elements_is_active = true;
-			define( 'ELEMENTOR_IS_ACTIVE', true );
+			$this->define( 'ELEMENTOR_IS_ACTIVE', true );
 		} else {
-			define( 'ELEMENTOR_IS_ACTIVE', false );
+			$this->define( 'ELEMENTOR_IS_ACTIVE', false );
 		}
 
 		return $micemade_elements_is_active;
@@ -239,6 +264,7 @@ class Micemade_Elements {
 	/**
 	 * Load Plugin Text Domain
 	 *
+	 * @return false
 	 * Looks for the plugin translation files in certain directories and loads
 	 * them to allow the plugin to be localised
 	 */
@@ -272,13 +298,12 @@ class Micemade_Elements {
 	public function micemade_elements_styles() {
 
 		// CSS styles.
-		wp_register_style( 'micemade-elements', MICEMADE_ELEMENTS_URL . 'assets/css/micemade-elements.css' );
+		wp_register_style( 'micemade-elements', MICEMADE_ELEMENTS_URL . 'assets/css/micemade-elements.css', array(), MICEMADE_ELEMENTS_VERSION );
 		wp_enqueue_style( 'micemade-elements' );
 
-		// Smartmenus styles.
-		wp_register_style( 'micemade-elements-smartmenus', MICEMADE_ELEMENTS_URL . 'assets/css/smartmenus.css' );
-		wp_enqueue_style( 'micemade-elements-smartmenus' );
-
+		// Smartmenus styles - postponed until v.0.7.0
+		// wp_register_style( 'micemade-elements-smartmenus', MICEMADE_ELEMENTS_URL . 'assets/css/smartmenus.css', array(), MICEMADE_ELEMENTS_VERSION  );
+		// wp_enqueue_style( 'micemade-elements-smartmenus' );
 	}
 
 	/**
@@ -289,10 +314,11 @@ class Micemade_Elements {
 	public function micemade_elements_scripts() {
 
 		// Register and enqueue plugin JS scripts.
-		wp_register_script( 'micemade-elements-js', MICEMADE_ELEMENTS_URL . 'assets/js/micemade-elements.min.js' );
-		wp_enqueue_script( 'micemade-elements-js', MICEMADE_ELEMENTS_URL . 'assets/js/micemade-elements.min.js', array( 'jQuery' ), '1.0', true );
+		wp_register_script( 'micemade-elements-js', MICEMADE_ELEMENTS_URL . 'assets/js/micemade-elements.min.js', '', MICEMADE_ELEMENTS_VERSION, true );
+		wp_enqueue_script( 'micemade-elements-js', MICEMADE_ELEMENTS_URL . 'assets/js/micemade-elements.min.js', array( 'jQuery' ), MICEMADE_ELEMENTS_VERSION, true );
 
-		wp_register_script( 'smartmenus', MICEMADE_ELEMENTS_URL . 'assets/js/jquery.smartmenus.min.js' );
+		// Smartmenus scripts - postponed until v.0.7.0
+		//wp_register_script( 'smartmenus', MICEMADE_ELEMENTS_URL . 'assets/js/jquery.smartmenus.min.js' );
 
 		$ajaxurl = '';
 		if ( MICEMADE_ELEMENTS_WPML_ON ) {
@@ -331,6 +357,7 @@ class Micemade_Elements {
 	/**
 	 * Admin notice for plugin activation
 	 *
+	 * @return void
 	 */
 	public function admin_notice() {
 
@@ -340,12 +367,17 @@ class Micemade_Elements {
 
 	}
 
+	/**
+	 * Register custom post types
+	 *
+	 * @return false
+	 */
 	public function register_custom_post_types() {
 
-		// Array of supported Micemade Themes
+		// Array of supported Micemade Themes.
 		$micemade_themes = array( 'natura', 'beautify', 'ayame', 'lillabelle', 'inspace' );
 
-		// To deprecate
+		// To deprecate.
 		if ( is_child_theme() ) {
 			$parent_theme = wp_get_theme();
 			$active_theme = $parent_theme->get( 'Template' );
@@ -353,12 +385,12 @@ class Micemade_Elements {
 			$active_theme = get_option( 'template' );
 		}
 		$current_theme_supported = in_array( $active_theme, $micemade_themes );
-		// end deprecate.
+		// end deprecate (also remove the || $current_theme_supported from conditional bellow ).
 
 		if ( ( current_theme_supports( 'micemade-elements-cpt' ) || $current_theme_supported ) && ELEMENTOR_IS_ACTIVE ) {
 
-			// include file with Custom Post Types registration:
-			// MM Mega Menu, MM Header, MM Footer
+			// include file with Custom Post Types registration
+			// MM Mega Menu, MM Header, MM Footer.
 			require MICEMADE_ELEMENTS_DIR . '/includes/cpt.php';
 
 		}
@@ -375,7 +407,7 @@ class Micemade_Elements {
 	 * class for GitHub automatic plugin updates - will be removed once
 	 * the plugin will be available on WP.org repo
 	 */
-	function updater() {
+	public function updater() {
 
 		require_once( plugin_dir_path( __FILE__ ) . 'github_updater.php' );
 		if ( is_admin() ) {

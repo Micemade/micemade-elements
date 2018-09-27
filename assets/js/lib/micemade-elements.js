@@ -128,26 +128,23 @@ jQuery.noConflict();
 					pagin    = config.data('pagin'),
 					autoplay = config.data('autoplay'),
 					loop     = config.data('loop');
-				
-				var swiper = new Swiper( $_this, {
-					//init: false,
-					//centeredSlides: true,
-					paginationClickable: true,
-					pagination: '.swiper-pagination',
+
+				var mainSwiperArgs = {
 					effect: 'slide',
 					slidesPerView: pps,
-					paginationClickable: true,
 					spaceBetween: space,
 					grabCursor: true,
-					pagination: '.swiper-pagination',
-					paginationType: pagin,
-					autoplay: autoplay,
-					autoplayDisableOnInteraction: true,
 					loop: loop,
-					nextButton: $_this.find(".swiper-button-next")[0],
-					prevButton: $_this.find(".swiper-button-prev")[0],
+					pagination: {
+						el: '.swiper-pagination',
+						type: pagin,
+						clickable: true
+					},
+					navigation: {
+						prevEl: $_this.find('.swiper-button-prev')[0],
+						nextEl: $_this.find('.swiper-button-next')[0]
+					},
 					breakpoints: {
-				
 						768: {
 							slidesPerView: ppst,
 						},
@@ -156,7 +153,21 @@ jQuery.noConflict();
 						},
 
 					}
-				});
+				}
+				// If autoplay is enabled.
+				var autoplayArgs = {}
+				if( autoplay != '0' ) {
+					var autoplayArgs = {
+						autoplay: {
+							delay: autoplay
+						}
+					}
+				}
+				// Join arg objects.
+				var swiperArgs = $.extend( mainSwiperArgs, autoplayArgs );
+				// Initialize Swiper.
+				var swiper = new Swiper( $_this, swiperArgs );
+
 				//swiper.on('init', function() { /* do something */});
 				//swiper.init();
 

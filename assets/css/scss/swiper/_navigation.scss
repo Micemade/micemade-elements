@@ -116,11 +116,14 @@
 		}
 	}
 	/* Progress */
-	.swiper-pagination-progress {
+	.swiper-pagination-progressbar {
 		background: rgba(0,0,0,0.25);
 		position: absolute;
-		.swiper-pagination-progressbar {
-			background: #007aff;
+		width: 100%;
+		height: 5px;
+		top: 0;
+		.swiper-pagination-progressbar-fill {
+			background: #007aff; // Default progress color
 			position: absolute;
 			left: 0;
 			top: 0;

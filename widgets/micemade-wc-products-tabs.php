@@ -57,9 +57,9 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 		$this->add_control(
 			'tabs',
 			[
-				'label'       => __( 'Tabs Items', 'micemade-elements' ),
-				'type'        => Controls_Manager::REPEATER,
-				'default'     => [
+				'label'   => __( 'Tabs Items', 'micemade-elements' ),
+				'type'    => Controls_Manager::REPEATER,
+				'default' => [
 					[
 						'tab_title'            => __( 'Tab #1', 'micemade-elements' ),
 						'posts_per_page'       => 4,
@@ -72,7 +72,8 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 						'filters'              => '',
 					],
 				],
-				'fields'      => [
+				'title_field' => '{{{ tab_title }}}',
+				'fields'  => [
 					[
 						'name'        => 'tab_title',
 						'label'       => __( 'Tab title', 'micemade-elements' ),
@@ -94,7 +95,7 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 						'name'    => 'offset',
 						'label'   => __( 'Offset', 'micemade-elements' ),
 						'type'    => Controls_Manager::NUMBER,
-						'default' => '6',
+						'default' => '',
 						'title'   => __( 'Offset is a number of skipped products', 'micemade-elements' ),
 					],
 
@@ -183,7 +184,7 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 					],
 
 				],
-				'title_field' => '{{{ tab_title }}}',
+
 			]
 		);
 
@@ -545,19 +546,15 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 					if ( ! empty( $products ) ) {
 
 						echo '<div class="woocommerce woocommerce-page micemade-elements_wc-catalog tab-content elementor-clearfix tab-' . esc_attr( $counter . $content_status ) . '">';
-
 						echo '<ul class="products mme-row">';
 
 						foreach ( $products as $post ) {
 
 							setup_postdata( $post );
-
 							wc_get_template_part( 'content', 'product' );
-
 						}
 
 						echo '</ul>';
-
 						echo '</div>';
 					}
 

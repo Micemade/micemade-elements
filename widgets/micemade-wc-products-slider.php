@@ -208,10 +208,10 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'bullets',
 				'options' => [
-					'none'     => __( 'None', 'micemade-elements' ),
-					'bullets'  => __( 'Bullets', 'micemade-elements' ),
-					'progress' => __( 'Progress bar', 'micemade-elements' ),
-					'fraction' => __( 'Fraction', 'micemade-elements' ),
+					'none'        => __( 'None', 'micemade-elements' ),
+					'bullets'     => __( 'Bullets', 'micemade-elements' ),
+					'progressbar' => __( 'Progress bar', 'micemade-elements' ),
+					'fraction'    => __( 'Fraction', 'micemade-elements' ),
 				],
 			]
 		);
@@ -222,7 +222,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 				'label'     => __( 'Pagination color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .swiper-pagination-progressbar'   => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .swiper-pagination-progressbar-fill'   => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} .swiper-pagination-bullet-active' => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} .swiper-pagination-fraction'      => 'color: {{VALUE}};',
 				],
@@ -232,7 +232,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 			]
 		);
 
-		// Slider navigation
+		// Slider navigation.
 		$this->add_control(
 			'buttons',
 			[
@@ -257,7 +257,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 				],
 			]
 		);
-		// Autoplay
+		// Autoplay.
 		$this->add_control(
 			'autoplay',
 			[
@@ -265,11 +265,11 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 0,
 				'min'     => 0,
-				'step'    => 100,
-				'title'   => __( 'Leave 0 (zero) do discard autoplay', 'micemade-elements' ),
+				'step'    => 1000,
+				'title'   => __( 'Enter value in miliseconds (1s. = 1000ms.). Leave 0 (zero) do discard autoplay', 'micemade-elements' ),
 			]
 		);
-		// Loop the slider
+		// Loop the slider.
 		$this->add_control(
 			'loop',
 			[
@@ -519,7 +519,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		);
 
 		$this->end_controls_tab();
-		// HOVER
+		// HOVER.
 		$this->start_controls_tab(
 			'tab_product_background_hover',
 			[
@@ -753,7 +753,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 
 		// HOVER TABS.
 		$this->start_controls_tabs( 'tabs_button_style' );
-		// NORMAL
+		// NORMAL.
 		$this->start_controls_tab(
 			'tab_button_normal',
 			[
@@ -786,7 +786,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 
 		$this->end_controls_tab();
 
-		// HOVER
+		// HOVER.
 		$this->start_controls_tab(
 			'tab_title_hover',
 			[
@@ -819,7 +819,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 
 		$this->end_controls_tab();
 		$this->end_controls_tabs();
-		// end tabs
+		// end tabs.
 
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
@@ -931,7 +931,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 			]
 		);
 
-		// Short desc typography
+		// Short desc typography.
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
@@ -942,7 +942,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 			]
 		);
 
-		// Price controls
+		// Price controls.
 		$this->add_control(
 			'price_options',
 			[
@@ -1005,7 +1005,6 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 
 		$this->end_controls_section();
 		// end of section_text.
-
 	}
 
 	protected function render() {
@@ -1054,7 +1053,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 			echo '<div ' . $this->get_render_attribute_string( 'container' ) . '>';
 
 			// Slider settings for JS function.
-			echo '<input type="hidden" data-pps="' . esc_attr( $pps ) . '" data-ppst="' . esc_attr( $pps_tab ) . '" data-ppsm="' . esc_attr( $pps_mob ) . '" data-space="' . esc_attr( $space ) . '" data-pagin="' . esc_attr( $pagination ) . '" data-autoplay="' . esc_attr( $autoplay ) . '" ' . ( $loop ? 'data-loop="true"' : '' ) . ' class="slider-config">';
+			echo '<input type="hidden" data-pps="' . esc_attr( $pps ) . '" data-ppst="' . esc_attr( $pps_tab ) . '" data-ppsm="' . esc_attr( $pps_mob ) . '" data-space="' . esc_attr( $space ) . '" data-pagin="' . esc_attr( $pagination ) . '" data-autoplay="' . esc_attr( (int) $autoplay ) . '" ' . ( $loop ? 'data-loop="true"' : '' ) . ' class="slider-config">';
 
 			echo '<ul class="swiper-wrapper products woocommerce">';
 
@@ -1102,7 +1101,8 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 			}
 
 			if ( $buttons ) {
-				echo '<div class="swiper-button-next"></div><div class="swiper-button-prev"></div>';
+				echo '<div class="swiper-button-next" screen-reader>' . esc_html__( 'Next', 'micemade-elements') . '</div>';
+				echo '<div class="swiper-button-prev" screen-reader>' . esc_html__( 'Previous', 'micemade-elements') . '</div>';
 			}
 			echo '</div>';
 		}

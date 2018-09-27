@@ -16,9 +16,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WC Query Arguments
  *
  * @param integer $posts_per_page - total posts number.
- * @param array $categories - WC categories for filtering.
- * @param string $filters - WC filters - latest/sales/rated/best seller.
+ * @param array   $categories - WC categories for filtering.
+ * @param array   $exclude_cats categories - exclude WC categories for filtering.
+ * @param string  $filters - WC filters - latest/sales/rated/best seller/random.
  * @param integer $offset - offset number skips first items in query.
+ * @param array   $products_in - an array of products to use with "post_name__in".
  * @return $args
  *
  * function for filtering WooCommerce posts.
@@ -103,18 +105,18 @@ add_filter( 'micemade_elements_wc_query_args', 'micemade_elements_wc_query_args_
 /**
  * PRODUCT FOR LOOP
  *
- * @param string $style - slides style.
- * @param string $img_format - registered image format.
+ * @param string  $style - slides style.
+ * @param string  $img_format - registered image format.
  * @param boolean $posted_in - to show "Posted in" (categories), or not.
  * @param boolean $short_desc - to show Short product description or not.
  * @param boolean $price - to show product price or not.
  * @param boolean $add_to_cart - to show "Add to Cart" button or not.
- * @param string $css_class - string with custom CSS classes.
+ * @param string  $css_class - string with custom CSS classes.
  * @return void
  * DRY effort ...
  */
 function micemade_elements_loop_product_func( $style = 'style_1', $img_format = 'thumbnail', $posted_in = true, $short_desc = false, $price = true, $add_to_cart = true, $css_class = '' ) {
-?>
+	?>
 	<li class="post swiper-slide">
 
 		<div class="inner-wrap">
@@ -177,7 +179,8 @@ add_filter( 'micemade_elements_loop_product', 'micemade_elements_loop_product_fu
 /**
  * SIMPLE PRODUCT DATA (as in WC catalog)
  *
- * @return html
+ * @param boolean $short_desc - if Short product description will be displayed.
+ * @return void
  */
 function micemade_elements_simple_prod_data_func( $short_desc = true ) {
 
@@ -197,8 +200,8 @@ add_filter( 'micemade_elements_simple_prod_data', 'micemade_elements_simple_prod
 /**
  * PRODUCT COUNT PER CATEGORY
  *
- * @param [int] $term_id Parameter_Description
- * @return html
+ * @param integer $term_id Parameter_Description.
+ * @return $prod_count
  * @details html with count of products in category
  */
 function micemade_elements_product_count_f( $term_id ) {
@@ -221,7 +224,7 @@ add_filter( 'micemade_elements_product_count', 'micemade_elements_product_count_
 /**
  * Product categories query arguments
  *
- * @param [type] $query - query object.
+ * @param object $query - query object.
  * @return void
  */
 function micemade_elements_cat_args( $query ) {
@@ -233,7 +236,8 @@ function micemade_elements_cat_args( $query ) {
 			$query->set( 'post__in', $product_ids_on_sale );
 		}
 		if ( isset( $_GET['featured'] ) ) {
-			$query->set( 'tax_query',
+			$query->set(
+				'tax_query',
 				array(
 					array(
 						'taxonomy' => 'product_visibility',
