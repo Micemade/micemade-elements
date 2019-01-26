@@ -1101,8 +1101,8 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 			}
 
 			if ( $buttons ) {
-				echo '<div class="swiper-button-next" screen-reader>' . esc_html__( 'Next', 'micemade-elements') . '</div>';
-				echo '<div class="swiper-button-prev" screen-reader>' . esc_html__( 'Previous', 'micemade-elements') . '</div>';
+				echo '<div class="swiper-button-next" screen-reader>' . esc_html__( 'Next', 'micemade-elements' ) . '</div>';
+				echo '<div class="swiper-button-prev" screen-reader>' . esc_html__( 'Previous', 'micemade-elements' ) . '</div>';
 			}
 			echo '</div>';
 		}
@@ -1110,13 +1110,11 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		wp_reset_postdata();
 
 		echo '
-		<script>
+		<script type=text/javascript" defer="defer">
 		(function( $ ){
 			"use strict";
 			jQuery(document).ready( function($) {
-				
-				var swiper = window.micemade_elements_swiper();
-				//var slider = window.micemade_elements_slider();
+				var products_slider = window.micemade_elements_swiper();
 			});
 		})( jQuery );
 		</script>';

@@ -1,8 +1,20 @@
 <?php
 /**
+ * Functions to run only on Elementor editor
+ *
+ * @since 0.0.1
+ * @package WordPress
+ * @subpackage Micemade Elements
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
  * GET POSTS ARRAY (by post type)
  *
- * @param string $post_type
+ * @param string $post_type - type of post.
  * @return $posts_arr
  */
 function micemade_posts_array_func( $post_type = 'post' ) {
@@ -11,7 +23,7 @@ function micemade_posts_array_func( $post_type = 'post' ) {
 		'post_type'        => $post_type,
 		'posts_per_page'   => -1,
 		'suppress_filters' => true,
-		'cache_results'    => false, // suppress errors when large number of posts (memory)
+		'cache_results'    => false, // suppress errors when large number of posts (memory).
 	);
 
 	$posts_arr = array();
@@ -24,7 +36,7 @@ function micemade_posts_array_func( $post_type = 'post' ) {
 				continue;
 			}
 
-			$posts_arr[ $single_post->post_name ] = strip_tags( $single_post->post_title );
+			$posts_arr[ $single_post->post_name ] = wp_strip_all_tags( $single_post->post_title );
 		}
 	} else {
 		$posts_arr[] = '';
@@ -34,11 +46,12 @@ function micemade_posts_array_func( $post_type = 'post' ) {
 
 }
 add_filter( 'micemade_posts_array', 'micemade_posts_array_func', 10, 1 );
+
 /**
- * MICEMADE ELEMENTS TERMS ( micemade_elements_terms hook )
- * get terms array from taxonomy
+ * Get terms array
  *
- * return array $terms_arr
+ * @param string $taxonomy - taxonomy from which to get terms.
+ * @return $terms_arr
  */
 function micemade_elements_terms_func( $taxonomy ) {
 
@@ -75,10 +88,14 @@ function micemade_elements_terms_func( $taxonomy ) {
 
 }
 add_filter( 'micemade_elements_terms', 'micemade_elements_terms_func', 10, 1 );
+
 /**
- * IMAGE SIZES hook
- * - create array of all registered image sizes
- * - dependency - function micemade_title_slug()
+ * Get array of all image sizes
+ *
+ * @param string $size - registered image size.
+ * @return $sizes
+ * create array of all registered image sizes.
+ * dependency - function micemade_title_slug().
  */
 function micemade_elements_image_sizes_arr( $size = '' ) {
 
@@ -105,7 +122,7 @@ if ( ! function_exists( 'micemade_title_slug' ) ) {
 	/**
 	 * Title from slug
 	 *
-	 * @param string $slug
+	 * @param string $slug - slug string.
 	 * @return $title
 	 */
 	function micemade_title_slug( $slug ) {
@@ -117,11 +134,11 @@ if ( ! function_exists( 'micemade_title_slug' ) ) {
 		return $title;
 	}
 }
+
 /**
  * GET LIST OF REVOLUTION SLIDERS
  *
- * @param [in] 10 hook priority
- * @return [array] $slider_arr
+ * @return $slider_arr
  */
 function micemade_elements_rev_sliders_f() {
 

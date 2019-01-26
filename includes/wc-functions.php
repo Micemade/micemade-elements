@@ -33,12 +33,13 @@ function micemade_elements_wc_query_args_func( $posts_per_page, $categories = ar
 		return;
 	}
 
-	// Default variables.
+	// Default arguments.
 	$args = array(
-		'posts_per_page' => $posts_per_page,
-		'post_type'      => 'product',
-		'offset'         => $offset,
-		'order'          => 'DESC',
+		'posts_per_page'   => $posts_per_page,
+		'post_type'        => 'product',
+		'offset'           => $offset,
+		'order'            => 'DESC',
+		'suppress_filters' => false,
 	);
 
 	$args['orderby'] = 'date menu_order';
@@ -98,6 +99,15 @@ function micemade_elements_wc_query_args_func( $posts_per_page, $categories = ar
 		$args['post_name__in'] = $products_in;
 	}
 
+	// Polylang (and WPML) support.
+	if ( function_exists( 'pll_current_language' ) ) {
+		$current_lang = pll_current_language();
+		$args['lang'] = $current_lang;
+	} elseif ( defined( 'ICL_LANGUAGE_CODE' ) ) {
+		$current_lang = ICL_LANGUAGE_CODE;
+		$args['lang'] = $current_lang;
+	}
+
 	return $args;
 
 }
@@ -123,7 +133,7 @@ function micemade_elements_loop_product_func( $style = 'style_1', $img_format = 
 
 			<?php
 			if ( 'style_3' === $style || 'style_4' === $style ) {
-				echo do_action( 'micemade_elements_thumb_back', $img_format );
+				do_action( 'micemade_elements_thumb_back', $img_format );
 				echo '<div class="post-overlay"></div>';
 			} else {
 				do_action( 'micemade_elements_thumb', $img_format );
@@ -141,7 +151,7 @@ function micemade_elements_loop_product_func( $style = 'style_1', $img_format = 
 				<?php if ( $posted_in ) { ?>
 				<div class="meta">
 
-					<?php echo apply_filters( 'micemade_elements_posted_in', 'product_cat' ); ?>
+					<?php do_action( 'micemade_elements_posted_in', 'product_cat' ); ?>
 
 				</div>
 				<?php } ?>
@@ -163,7 +173,7 @@ function micemade_elements_loop_product_func( $style = 'style_1', $img_format = 
 
 					the_excerpt();
 
-					echo '<a href="' . get_permalink() . '" title="' . the_title_attribute( 'echo=0' ) . '" class="micemade-elements-readmore ' . esc_attr( $css_class ) . ' ">' . apply_filters( 'micemade_elements_prod_details', esc_html__( 'Product details', 'micemade-elements' ) ) . '</a>';
+					echo '<a href="' . get_permalink() . '" title="' . the_title_attribute( 'echo=0' ) . '" class="micemade-elements-readmore ' . esc_attr( $css_class ) . ' ">' . esc_html( apply_filters( 'micemade_elements_prod_details', esc_html__( 'Product details', 'micemade-elements' ) ) ) . '</a>';
 				}
 				?>
 				</div>
@@ -231,11 +241,14 @@ function micemade_elements_cat_args( $query ) {
 
 	if ( ! is_admin() && $query->is_main_query() && ( $query->is_post_type_archive( 'product' ) || $query->is_tax( get_object_taxonomies( 'product' ) ) ) ) {
 
-		if ( isset( $_GET['on_sale'] ) ) {
+		if ( isset( $_GET['on_sale'] ) && '' === $_GET['on_sale'] ) {
+
 			$product_ids_on_sale = wc_get_product_ids_on_sale();
 			$query->set( 'post__in', $product_ids_on_sale );
+
 		}
-		if ( isset( $_GET['featured'] ) ) {
+		if ( isset( $_GET['featured'] ) && '' === $_GET['featured'] ) {
+
 			$query->set(
 				'tax_query',
 				array(
@@ -246,16 +259,23 @@ function micemade_elements_cat_args( $query ) {
 					),
 				)
 			);
+
 		}
-		if ( isset( $_GET['best_sellers'] ) ) {
+
+		if ( isset( $_GET['best_sellers'] ) && '' === $_GET['best_sellers'] ) {
+
 			$query->set( 'meta_key', 'total_sales' );
 			$query->set( 'orderby', 'meta_value_num' );
 			$query->set( 'order', 'DESC' );
+
 		}
-		if ( isset( $_GET['best_rated'] ) ) {
+
+		if ( isset( $_GET['best_rated'] ) && '' === $_GET['best_rated'] ) {
+
 			$query->set( 'meta_key', '_wc_average_rating' );
 			$query->set( 'orderby', 'meta_value_num' );
 			$query->set( 'order', 'DESC' );
+
 		}
 	}
 

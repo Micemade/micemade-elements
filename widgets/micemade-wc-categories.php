@@ -578,7 +578,7 @@ class Micemade_WC_Categories extends Widget_Base {
 			return;
 		}
 
-		// Catgories holder
+		// Categories holder.
 		echo '<div ' . $this->get_render_attribute_string( 'categories-holder-css' ) . '>';
 
 		foreach ( $categories as $index => $cat ) {
@@ -596,7 +596,7 @@ class Micemade_WC_Categories extends Widget_Base {
 			$term_link  = isset( $term_data['term_link'] ) ? $term_data['term_link'] . $args : '#';
 			$image_url  = isset( $term_data['image_url'] ) ? $term_data['image_url'] : '';
 
-			// Category item data-id / data-delay
+			// Category item data-id / data-delay.
 			$this->add_render_attribute( 'data-id' . $count, 'data-id', $id . '-' . $count );
 			$this->add_render_attribute( 'data-delay' . $count, 'data-delay', $item_anim_delay * $count );
 

@@ -14,9 +14,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * COLUMN CSS SELECTORS FOR FLEX GRID
  *
- * @param [in] $items_desktop
- * @param [in] $items_mobile
- * @param [in] $no_margin
+ * @param integer $items_desktop - number of items in row on desktop.
+ * @param integer $items_tablet - number of items in row on tablet.
+ * @param integer $items_mobile - number of items in row on mobile.
+ * @param boolean $no_margin - to show margin or not.
  * @return selector
  */
 function micemade_elements_grid_class( $items_desktop = 3, $items_tablet = 1, $items_mobile = 1, $no_margin = false ) {
@@ -71,8 +72,12 @@ function micemade_elements_grid_class( $items_desktop = 3, $items_tablet = 1, $i
 	// Added fixed full width to small screen - to do controls for small devices (?).
 	return $style_class;
 }
-/*
+
+/**
  * Converting string to boolean
+ *
+ * @param string $value - may be a boolean.
+ * @return $value
  */
 function micemade_elements_to_boolean( $value ) {
 	if ( ! isset( $value ) ) {
@@ -84,15 +89,15 @@ function micemade_elements_to_boolean( $value ) {
 		$value = false;
 	}
 
-	return (bool) $value; // Make sure you do not touch the value if the value is not a string
+	return (bool) $value; // Make sure you do not touch the value if the value is not a string.
 }
 /**
  * POSTED META ( posted in / post date / post author )
  *
  * @param string $taxonomy Parameter_Description.
- * @return $posted_in string with term links list for current post/taxonomy, html formatted.
+ * @return void
+ * echo string html term links list for current post/taxonomy.
  */
-add_filter( 'micemade_elements_posted_in', 'micemade_elements_posted_in_f', 10, 1 );
 function micemade_elements_posted_in_f( $taxonomy ) {
 
 	$terms     = get_the_terms( get_the_ID(), $taxonomy );
@@ -112,7 +117,7 @@ function micemade_elements_posted_in_f( $taxonomy ) {
 			$style      = ' style="background-color: '. $back_color .'; color: '.$text_color.'"'; // insert in <a href ...
 			 */
 			$separator  = ( $term == $last_term ) ? '' : ', ';
-			$posted_in .= '<a href="' . esc_url( get_term_link( $term->slug, $taxonomy ) ) . '" rel="tag" tabindex="0">' . esc_html( $term->name . ' ' . $term->ID ) . '</a>' . wp_kses_post( $separator );
+			$posted_in .= '<a href="' . esc_url( get_term_link( $term->slug, $taxonomy ) ) . '" rel="tag" tabindex="0">' . esc_html( $term->name . ' ' . $term->ID ) . '</a>' . esc_html( $separator );
 
 		}
 
@@ -120,43 +125,58 @@ function micemade_elements_posted_in_f( $taxonomy ) {
 
 	}
 
-	return $posted_in;
+	echo wp_kses_post( $posted_in );
 
 }
-add_filter( 'micemade_elements_date', 'micemade_elements_date_f', 10, 1 );
-function micemade_elements_date_f( $date ) {
+add_action( 'micemade_elements_posted_in', 'micemade_elements_posted_in_f', 10, 1 );
+/**
+ * Date for post meta function
+ *
+ * @return void
+ */
+function micemade_elements_date_f() {
 
 	$date = '<span class="published"><time datetime="' . sprintf( get_the_time( esc_html__( 'Y-m-d', 'micemade_elements' ) ) ) . '">' . sprintf( get_the_time( get_option( 'date_format', 'M d, Y' ) ) ) . '</time></span>';
 
-	return $date;
+	echo wp_kses_post( $date );
 }
-add_filter( 'micemade_elements_author', 'micemade_elements_author_f', 10, 1 );
-function micemade_elements_author_f( $author ) {
+add_action( 'micemade_elements_date', 'micemade_elements_date_f', 10 );
+/**
+ * Author for post meta
+ *
+ * @return void
+ */
+function micemade_elements_author_f() {
 	$author = '<span class="author vcard">' . esc_html__( 'By ', 'micemade_elements' ) . '<a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '" title="' . esc_attr( get_the_author_meta( 'display_name' ) ) . '">' . esc_html( get_the_author_meta( 'display_name' ) ) . '</a></span>';
 
-	return $author;
+	echo wp_kses_post( $author );
 }
-// end post meta.
+add_action( 'micemade_elements_author', 'micemade_elements_author_f', 10 );
+
 /**
  * PLACEHOLDER IMAGE
+ *
+ * @param string $placeholder_img_url - url string.
+ * @return $placeholder_img_url
  */
-add_filter( 'micemade_elements_no_image', 'micemade_elements_no_image_f' );
 function micemade_elements_no_image_f( $placeholder_img_url ) {
-
 	$placeholder_img_url = MICEMADE_ELEMENTS_URL . 'assets/images/no-image.svg';
-
 	return $placeholder_img_url;
 }
+add_filter( 'micemade_elements_no_image', 'micemade_elements_no_image_f' );
+
 /**
- *  POST THUMB
+ * Post thumbnail
+ *
+ * @param string $img_format - selected predefined image format.
+ * @return void
  */
-add_action( 'micemade_elements_thumb', 'micemade_elements_thumb_f', 10, 1 );
 function micemade_elements_thumb_f( $img_format = 'thumbnail' ) {
 
 	$gallery_shortcode = apply_filters( 'micemade_elements_gallery_ids', '' );
 
 	$atts = array(
-		'alt' => get_the_title(),
+		'alt' => the_title_attribute( 'echo=0' ),
 	);
 
 	echo '<div class="post-thumb">';
@@ -178,11 +198,13 @@ function micemade_elements_thumb_f( $img_format = 'thumbnail' ) {
 	}
 	echo '</div>';
 }
+add_action( 'micemade_elements_thumb', 'micemade_elements_thumb_f', 10, 1 );
+
 /**
  * POST THUMB BACKGROUND
  *
- * @param string $img_format
- * @return echo html
+ * @param string $img_format - image format string.
+ * @return void
  */
 function micemade_elements_thumb_back_f( $img_format = 'thumbnail' ) {
 
@@ -205,7 +227,7 @@ function micemade_elements_thumb_back_f( $img_format = 'thumbnail' ) {
 		$img_url = apply_filters( 'micemade_elements_no_image', '' );
 	}
 
-	echo '<div class="post-thumb-back" style="background-image: url(' . esc_url( $img_url ) . ');"></div>';
+	echo '<div class="post-thumb-back" style="background-image: url(' . esc_url( $img_url ) . ');"></div><div class="post-overlay"></div>';
 
 }
 add_action( 'micemade_elements_thumb_back', 'micemade_elements_thumb_back_f', 10, 1 );
@@ -213,7 +235,7 @@ add_action( 'micemade_elements_thumb_back', 'micemade_elements_thumb_back_f', 10
  * GET GALLERY IMAGES ID's
  * get id's from WP gallery shortcode
  *
- * @return array $ids
+ * @return $ids
  */
 function micemade_elements_gallery_ids_f() {
 	global $post;
@@ -223,7 +245,8 @@ function micemade_elements_gallery_ids_f() {
 	$attachment_ids = array();
 	$pattern        = get_shortcode_regex();
 	$ids            = array();
-	//finds the "gallery" shortcode and puts the image ids in an associative array at $matches[3]
+
+	//finds the "gallery" shortcode and puts the image ids in an associative array at $matches[3].
 	if ( preg_match_all( '/' . $pattern . '/s', $post->post_content, $matches ) ) {
 		$count = count( $matches[3] ); //in case there is more than one gallery in the post.
 		for ( $i = 0; $i < $count; $i++ ) {
@@ -237,19 +260,26 @@ function micemade_elements_gallery_ids_f() {
 	return $ids;
 }
 add_filter( 'micemade_elements_gallery_ids', 'micemade_elements_gallery_ids_f' );
+
 /**
  * POSTS QUERY ARGS
  *
- * @return array $args
- * arguments for get_posts() - DRY effort, mostly because of ajax posts.
+ * @param integer $posts_per_page - posts per query.
+ * @param array   $categories - categories to filter posts.
+ * @param boolean $sticky - to show sticky or not.
+ * @param integer $offset - posts offset.
+ * @return $args
+ * arguments for get_posts() - DRY effort, mostly because of ajax posts
  */
 function micemade_elements_query_args_func( $posts_per_page = 3, $categories = array(), $sticky = false, $offset = 0 ) {
 
 	// Defaults.
 	$args = array(
-		'posts_per_page' => $posts_per_page,
-		'post_type'      => 'post',
-		'offset'         => $offset,
+		'posts_per_page'   => $posts_per_page,
+		'post_type'        => 'post',
+		'offset'           => $offset,
+		'order'            => 'DESC',
+		'suppress_filters' => false,
 	);
 
 	$args['orderby'] = 'menu_order date';
@@ -271,14 +301,31 @@ function micemade_elements_query_args_func( $posts_per_page = 3, $categories = a
 		}
 	}
 
+	// Polylang (and WPML) support.
+	if ( function_exists( 'pll_current_language' ) ) {
+		$current_lang = pll_current_language();
+		$args['lang'] = $current_lang;
+	} elseif ( defined( 'ICL_LANGUAGE_CODE' ) ) {
+		$current_lang = ICL_LANGUAGE_CODE;
+		$args['lang'] = $current_lang;
+	}
+
 	return $args;
 
 }
 add_filter( 'micemade_elements_query_args', 'micemade_elements_query_args_func', 10, 4 );
+
 /**
  * POST FOR LOOP
  *
- * @return (html)
+ * @param string  $style - posts style.
+ * @param string  $grid - posts grid.
+ * @param string  $img_format - image format.
+ * @param boolean $meta - to show post meta or not.
+ * @param boolean $excerpt - to show excerpt or not.
+ * @param integer $excerpt_limit - excerpt length.
+ * @param string  $css_class - additional css selector.
+ * @return void
  * DRY effort, mostly because of ajax posts.
  */
 function micemade_elements_loop_post_func( $style = 'style_1', $grid = '', $img_format = 'thumbnail', $meta = true, $excerpt = true, $excerpt_limit = 20, $css_class = '' ) {
@@ -289,8 +336,7 @@ function micemade_elements_loop_post_func( $style = 'style_1', $grid = '', $img_
 
 			<?php
 			if ( 'style_3' === $style || 'style_4' === $style ) {
-				echo do_action( 'micemade_elements_thumb_back', $img_format );
-				echo '<div class="post-overlay"></div>';
+				do_action( 'micemade_elements_thumb_back', $img_format );
 			} else {
 				do_action( 'micemade_elements_thumb', $img_format );
 			}
@@ -303,25 +349,25 @@ function micemade_elements_loop_post_func( $style = 'style_1', $grid = '', $img_
 				<?php
 				if ( $meta ) {
 					?>
-				<div class="meta">
+					<div class="meta">
 
-					<?php echo apply_filters( 'micemade_elements_date', '' ); ?>
-					<?php echo apply_filters( 'micemade_elements_author', '' ); ?><br>
-					<?php echo apply_filters( 'micemade_elements_posted_in', 'category' ); ?>
+						<?php do_action( 'micemade_elements_date' ); ?>
+						<?php do_action( 'micemade_elements_author' ); ?><br>
+						<?php do_action( 'micemade_elements_posted_in', 'category' ); ?>
 
-				</div>
+					</div>
 				<?php } ?>
 
 				<?php
 				if ( $excerpt ) {
-				?>
-				<p>
-					<?php echo micemade_elements_excerpt( $excerpt_limit ); ?>
-				</p>
+					?>
+					<p>
+						<?php do_action( 'micemade_elements_excerpt', $excerpt_limit ); ?>
+					</p>
 
-				<?php
-				echo '<a href="' . get_permalink() . '" title="' . the_title_attribute( 'echo=0' ) . '" class="micemade-elements-readmore ' . esc_attr( $css_class ) . ' ">' . esc_html__( 'Read more', 'micemade-elements' ) . '</a>';
-				?>
+					<?php
+					echo '<a href="' . get_permalink() . '" title="' . the_title_attribute( 'echo=0' ) . '" class="micemade-elements-readmore ' . esc_attr( $css_class ) . ' ">' . esc_html__( 'Read more', 'micemade-elements' ) . '</a>';
+					?>
 
 				<?php } ?>
 
@@ -333,7 +379,14 @@ function micemade_elements_loop_post_func( $style = 'style_1', $grid = '', $img_
 	<?php
 }
 add_filter( 'micemade_elements_loop_post', 'micemade_elements_loop_post_func', 10, 6 );
-function micemade_elements_excerpt( $limit = 20 ) {
+
+/**
+ * Custom post excerpt
+ *
+ * @param integer $limit - words limit for excerpt.
+ * @return void
+ */
+function micemade_elements_excerpt_f( $limit = 20 ) {
 	$excerpt = explode( ' ', get_the_excerpt(), $limit );
 	if ( count( $excerpt ) >= $limit ) {
 		array_pop( $excerpt );
@@ -342,15 +395,16 @@ function micemade_elements_excerpt( $limit = 20 ) {
 		$excerpt = implode( ' ', $excerpt );
 	}
 	$excerpt = preg_replace( '`[[^]]*]`', '', $excerpt );
-	return $excerpt;
+	echo wp_kses_post( $excerpt );
 }
+add_action( 'micemade_elements_excerpt', 'micemade_elements_excerpt_f', 10, 1 );
 /**
  * TERM DATA
  *
- * @param string $taxonomy Parameter_Description
- * @param string $term Parameter_Description
- * @param string $img_format Parameter_Description
- * @return array term data - term ID, term title, term link, term image url
+ * @param string $taxonomy - taxonomy object.
+ * @param string $term - term from taxonomy.
+ * @param string $img_format - image format.
+ * @return $term_data - array containing: term ID, term title, term link, term image url
  * @details retrieve term data by taxonomy and term slug
  */
 function micemade_elements_term_data_f( $taxonomy, $term, $img_format = 'thumbnail' ) {
@@ -364,11 +418,11 @@ function micemade_elements_term_data_f( $taxonomy, $term, $img_format = 'thumbna
 	// Term data.
 	$term_obj = get_term_by( 'slug', $term, $taxonomy );
 
-	if ( is_wp_error( $term_obj ) ) {
+	if ( is_wp_error( $term_obj ) || ! is_object( $term_obj ) ) {
 		return array();
 	}
 
-	// Get term ID for term name, link and term meta for thumbnail ( WC meta "thumbnail_id ")
+	// Get term ID for term name, link and term meta for thumbnail ( WC meta "thumbnail_id ").
 	$term_id      = $term_obj->term_id;
 	$meta         = get_term_meta( $term_id );
 	$thumbnail_id = isset( $meta['thumbnail_id'] ) ? $meta['thumbnail_id'][0] : '';

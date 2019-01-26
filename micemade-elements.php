@@ -3,7 +3,7 @@
  * Plugin Name: Micemade Elements
  * Description: Extension plugin with custom elements for Elementor, created by Micemade. Elementor plugin required.
  * Plugin URI: https://github.com/Micemade/micemade-elements/
- * Version: 0.6.9.2
+ * Version: 0.7.0
  * Author: micemade
  * Author URI: http://micemade.com
  * Text Domain: micemade-elements
@@ -25,6 +25,11 @@ if ( ! defined( 'MICEMADE_ELEMENTS_PLUGIN_FILE' ) ) {
  */
 class Micemade_Elements {
 
+	/**
+	 * This Class instance
+	 *
+	 * @var object
+	 */
 	private static $instance = null;
 
 	/**
@@ -32,8 +37,13 @@ class Micemade_Elements {
 	 *
 	 * @var string
 	 */
-	public $version = '0.6.9.2';
+	public $version = '0.7.0';
 
+	/**
+	 * Get instance
+	 *
+	 * @return $instance
+	 */
 	public static function get_instance() {
 		if ( ! self::$instance ) {
 			self::$instance = new self;
@@ -131,7 +141,7 @@ class Micemade_Elements {
 	 * @return void
 	 */
 	public function plugins_dependency_checks() {
-		// VARIOUS PLUGINS ACTIVATION CHECKS:
+		// VARIOUS PLUGINS ACTIVATION CHECKS.
 		require_once MICEMADE_ELEMENTS_DIR . 'includes/plugins.php';
 
 	}
@@ -152,7 +162,7 @@ class Micemade_Elements {
 			],
 			1
 		);
-		/* // Header CPT and header elements postponed for 0.7.0
+		/* // Header CPT and header elements postponed for 0.8.0
 		$elements_manager->add_category(
 			'micemade_elements_header',
 			[
@@ -198,7 +208,10 @@ class Micemade_Elements {
 		// Instagram element.
 		require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-instagram.php';
 
-		// Micemade header elements - for v.0.7.0
+		// Micemade slider.
+		require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-slider.php';
+
+		// Micemade header elements - for v.0.8.0
 		// require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-header-logo.php';
 		// require_once MICEMADE_ELEMENTS_DIR . 'widgets/class-micemade-nav.php';
 
@@ -207,9 +220,9 @@ class Micemade_Elements {
 	/**
 	 * Custom controls for section
 	 *
-	 * @param object $element - element type.
-	 * @param integer $section_id - id of section element.
-	 * @param array $args - section argumets.
+	 * @param  object $element - element type.
+	 * @param  integer $section_id - id of section element.
+	 * @param  array $args - section argumets.
 	 * @return void
 	 */
 	public function custom_section_controls( $element, $section_id, $args ) {
@@ -301,7 +314,7 @@ class Micemade_Elements {
 		wp_register_style( 'micemade-elements', MICEMADE_ELEMENTS_URL . 'assets/css/micemade-elements.css', array(), MICEMADE_ELEMENTS_VERSION );
 		wp_enqueue_style( 'micemade-elements' );
 
-		// Smartmenus styles - postponed until v.0.7.0
+		// Smartmenus styles - postponed until v.0.8.0
 		// wp_register_style( 'micemade-elements-smartmenus', MICEMADE_ELEMENTS_URL . 'assets/css/smartmenus.css', array(), MICEMADE_ELEMENTS_VERSION  );
 		// wp_enqueue_style( 'micemade-elements-smartmenus' );
 	}
@@ -317,7 +330,7 @@ class Micemade_Elements {
 		wp_register_script( 'micemade-elements-js', MICEMADE_ELEMENTS_URL . 'assets/js/micemade-elements.min.js', '', MICEMADE_ELEMENTS_VERSION, true );
 		wp_enqueue_script( 'micemade-elements-js', MICEMADE_ELEMENTS_URL . 'assets/js/micemade-elements.min.js', array( 'jQuery' ), MICEMADE_ELEMENTS_VERSION, true );
 
-		// Smartmenus scripts - postponed until v.0.7.0
+		// Smartmenus scripts - postponed until v.0.8.0
 		//wp_register_script( 'smartmenus', MICEMADE_ELEMENTS_URL . 'assets/js/jquery.smartmenus.min.js' );
 
 		$ajaxurl = '';

@@ -35,7 +35,7 @@ class Micemade_Header_Logo extends Widget_Base {
 		$this->add_control(
 			'image',
 			[
-				'label'     => __( 'Choose logo image', 'elementor' ),
+				'label'     => __( 'Choose logo image', 'micemade-elements' ),
 				'type'      => Controls_Manager::MEDIA,
 				'default'   => [
 					'url' => Utils::get_placeholder_image_src(),
@@ -51,8 +51,8 @@ class Micemade_Header_Logo extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Hide logo (show site title)', 'micemade-elements' ),
 				'type'      => Controls_Manager::SWITCHER,
-				'label_off' => __( 'No', 'elementor' ),
-				'label_on'  => __( 'Yes', 'elementor' ),
+				'label_off' => __( 'No', 'micemade-elements' ),
+				'label_on'  => __( 'Yes', 'micemade-elements' ),
 				'default'   => '',
 			]
 		);

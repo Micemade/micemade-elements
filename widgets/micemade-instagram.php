@@ -355,7 +355,7 @@ class Micemade_Instagram extends Widget_Base {
 						$this->add_render_attribute(
 							'link' . $i,
 							[
-								'href'  => ( $lightbox == 'yes' ) ? $item['original'] : $item['link'],
+								'href'  => ( 'yes' === $lightbox ) ? $item['original'] : $item['link'],
 								'class' => 'image-link elementor-clickable',
 								'data-elementor-open-lightbox' => $settings['open_lightbox'],
 								'data-elementor-lightbox-slideshow' => $this->get_id(),
@@ -368,7 +368,7 @@ class Micemade_Instagram extends Widget_Base {
 								'src'   => $item[ $size ],
 								'alt'   => $item['description'],
 								'title' => $item['description'],
-								'class' => ( $stretch == 'yes' ) ? 'stretch' : '',
+								'class' => ( 'yes' === $stretch ) ? 'stretch' : '',
 
 							]
 						);

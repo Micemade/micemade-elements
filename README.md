@@ -54,6 +54,11 @@ Our tests indicate that the elements work well with most themes that are well co
 Time will tell. When we estimate plugin has enough added functionalities to Elementor, or some other reason, it will be available on wp.org. So far, install it from GitHub (Download zip or clone the repository) .
 
 **Changelog**
+
+*** v.0.7.0 ***
+* Added support for WPML and Polylang for custom queries (Posts Grid, WC Product elements)
+* Added custom content slider
+
 *** v.0.6.9.2 ***
 * Fixed missing Elementor Pro's Global Widget feature - editor hook priority issue
 * Fixed swiper slider (WC products slider) arrows navigation
