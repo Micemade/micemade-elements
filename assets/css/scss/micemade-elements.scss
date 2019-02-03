@@ -221,7 +221,7 @@
 				
 				padding: 20px;
 				
-				> * { display: block; }
+				> *:not(.micemade-elements-readmore) { display: block; }
 				
 				* { @include transition-global( all ); }
 				

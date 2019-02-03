@@ -28,23 +28,28 @@ gulp.task('browser-sync', function() {
     ];
     // Initialize BrowserSync with a PHP server
     browserSync.init(files, {
-        proxy: 'http://localhost/haumea/'
+        proxy: 'http://localhost/Petko/'
     });
-    gulp.watch([
-        'assets/css/scss/**/*.scss',
-    ],['styles']);
+    gulp.watch(
+        [
+            'assets/css/scss/**/*.scss',
+        ], gulp.series('styles')
+    );
 
 });
 
-gulp.task('styles', function () {
-    
-    // Process main css file(s) - style.scss and other scss files
-    gulp.src('assets/css/scss/**/*.scss')
-        .pipe(sass({
-            'outputStyle' : 'compressed'
-        }).on('error', sass.logError))
+// Process main css file(s) - style.scss and other scss files
+gulp.task(
+    'styles', function () {
+    return gulp.src('assets/css/scss/**/*.scss')
+        .pipe(
+            sass({
+                'outputStyle' : 'compressed'
+            })
+            .on('error', sass.logError)
+        )
         .pipe(autoprefixer({
-            browsers: ['last 2 versions'],
+            browsers: ['> 1%', 'last 3 versions', 'Firefox >= 20', 'iOS >=7'],
             cascade: false
         }))
         .pipe(gulp.dest('./assets/css'))
@@ -108,16 +113,25 @@ gulp.task('copy', function() {
 // The DEFAULT task will process sass,
 // run browser-sync and start watchin for changes
 //
-gulp.task( 'default',['browser-sync'] );
+gulp.task( 'default', gulp.series( 'browser-sync' ) );
 //
 // #######################################
 
 
 // Process JS SCRIPTS,
 // run browser-sync 'serve' and start watchin for changes
-gulp.task('js',['scripts','browser-sync'], function() {
-    gulp.watch('assets/js/lib/**/*.js',['scripts']);
-});
+gulp.task( 'js', 
+    gulp.series( 
+        'scripts',
+        'browser-sync', 
+        function() {
+            gulp.watch(
+                'assets/js/lib/**/*.js',
+                gulp.series('scripts')
+            );
+        }
+    )
+);
 
 
 // PACK EVERYTHING FOR INSTALLATION READY WP THEME ZIP

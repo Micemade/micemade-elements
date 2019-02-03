@@ -6,7 +6,7 @@ jQuery.noConflict();
 	 *	var function filterItems
 	 *	var arg container
 	 *	var arg filter
-	 */ 
+	 */
 	(function( $ ){
 		
 		window.filterItems = function( container, filter ) {
@@ -380,21 +380,23 @@ jQuery.noConflict();
 			
 			var $_posts_holder = $(this);
 			
-			var	$loader = $_posts_holder.next('.micemade-elements_more-posts-wrap').find('.more_posts'),
-				$settings     = $_posts_holder.find('.posts-grid-settings'),
-				ppp           = $settings.data('ppp'),
-				sticky        = $settings.data('sticky'),
-				categories    = $settings.data('categories'),
-				style         = $settings.data('style'),
-				img_format    = $settings.data('img_format'),
-				excerpt       = $settings.data('excerpt'),
-				excerpt_limit = $settings.data('exc_limit'),
-				meta          = $settings.data('meta'),
-				css_class     = $settings.data('css_class'),
-				grid          = $settings.data('grid'),
-				startoffset   = $settings.data('startoffset'),
+			var	$loader       = $_posts_holder.next('.micemade-elements_more-posts-wrap').find('.more_posts'),
+				postoptions   = $_posts_holder.find('.posts-grid-settings' ).data( 'postoptions' ),
+				ppp           = postoptions.ppp,
+				sticky        = postoptions.sticky,
+				categories    = postoptions.categories,
+				style         = postoptions.style,
+				show_thumb    = postoptions.show_thumb,
+				img_format    = postoptions.img_format,
+				excerpt       = postoptions.excerpt,
+				excerpt_limit = postoptions.excerpt,
+				meta          = postoptions.meta,
+				meta_ordering = postoptions.meta_ordering,
+				css_class     = postoptions.css_class,
+				grid          = postoptions.grid,
+				startoffset   = postoptions.startoffset,
 				offset        = $_posts_holder.find('.post').length;
-			 
+			
 			$loader.on( 'click', load_ajax_posts );
 			 
 			function load_ajax_posts(e) {
@@ -412,10 +414,12 @@ jQuery.noConflict();
 							'sticky': sticky,
 							'categories': categories,
 							'style': style,
+							'show_thumb': show_thumb,
 							'img_format': img_format,
 							'excerpt': excerpt,
 							'excerpt_limit': excerpt_limit,
 							'meta': meta,
+							'meta_ordering': meta_ordering,
 							'css_class': css_class,
 							'grid': grid,
 							'offset': offset + startoffset,

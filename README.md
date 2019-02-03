@@ -33,6 +33,7 @@ Micemade Elements features a collection of premium, easy to use yet highly funct
 * **Micemade MailChimp 4 WP forms** - display one of newsletter forms created with "MailChimp 4 WP forms" plugin
 * **Micemade Buttons** - add buttons to group in single element, stacked horizontally or vertically
 * **Micemade Instagram** - display images from Instagram using @username or #hashtag
+* **Micemade Slider** - custom content slider
 
 Do you have suggestions to make or want to be notified of important updates? Reach out to us on [Twitter](http://twitter.com/themicemade)
 
@@ -58,6 +59,8 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 *** v.0.7.0 ***
 * Added support for WPML and Polylang for custom queries (Posts Grid, WC Product elements)
 * Added custom content slider
+* Main plugin class moved to separate file
+* "Micemade Posts grid" element - added post meta ordering and toggling
 
 *** v.0.6.9.2 ***
 * Fixed missing Elementor Pro's Global Widget feature - editor hook priority issue

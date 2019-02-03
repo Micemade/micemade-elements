@@ -30,18 +30,20 @@ if ( ! function_exists( 'micemade_elements_more_post_ajax' ) ) {
 
 		$posts_per_page = ( isset( $_POST['ppp'] ) ) ? $_POST['ppp'] : 3;
 		$sticky         = ( isset( $_POST['sticky'] ) ) ? $_POST['sticky'] : false;
-		$categories     = ( isset( $_POST['categories'] ) ) ? json_decode( $_POST['categories'] ) : array();
+		$categories     = ( isset( $_POST['categories'] ) ) ? json_decode( $_POST['categories'] ) : [];
 		$style          = ( isset( $_POST['style'] ) ) ? $_POST['style'] : 'style_1';
+		$show_thumb     = ( isset( $_POST['show_thumb'] ) ) ? $_POST['show_thumb'] : true;
 		$img_format     = ( isset( $_POST['img_format'] ) ) ? $_POST['img_format'] : 'thumbnail';
 		$excerpt        = ( isset( $_POST['excerpt'] ) ) ? $_POST['excerpt'] : true;
 		$excerpt_limit  = ( isset( $_POST['excerpt_limit'] ) ) ? $_POST['excerpt_limit'] : 20;
 		$meta           = ( isset( $_POST['meta'] ) ) ? $_POST['meta'] : true;
+		$meta_ordering  = ( isset( $_POST['meta_ordering'] ) ) ? $_POST['meta_ordering'] : [];
 		$css_class      = ( isset( $_POST['css_class'] ) ) ? $_POST['css_class'] : '';
 		$grid           = ( isset( $_POST['grid'] ) ) ? $_POST['grid'] : '';
 		$offset         = ( isset( $_POST['offset'] ) ) ? $_POST['offset'] : 0;
 
-		// Query posts.
-		$args  = apply_filters( 'micemade_elements_query_args', $posts_per_page, $categories, $sticky, $offset ); // hook in includes/helpers.php
+		// Query posts - 'micemade_elements_query_args' hook in includes/helpers.php.
+		$args  = apply_filters( 'micemade_elements_query_args', $posts_per_page, $categories, $sticky, $offset );
 		$posts = get_posts( $args );
 
 		if ( empty( $posts ) ) {
@@ -52,7 +54,8 @@ if ( ! function_exists( 'micemade_elements_more_post_ajax' ) ) {
 
 			setup_postdata( $post );
 
-			apply_filters( 'micemade_elements_loop_post', $style, $grid, $img_format, $meta, $excerpt, $excerpt_limit, $css_class );// hook in includes/helpers.php
+			// Title, post thumb, excerpt, meta - 'micemade_elements_loop_post' hook in includes/helpers.php.
+			apply_filters( 'micemade_elements_loop_post', $style, $grid, $show_thumb, $img_format, $meta, $meta_ordering, $excerpt, $excerpt_limit, $css_class );
 
 		} // end foreach
 

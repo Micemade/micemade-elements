@@ -64,7 +64,7 @@ class Micemade_Nav_Html {
 			return;
 		}
 
-		// If menu is vertical
+		// If menu is vertical.
 		$menu_class = ( 'vertical' === $layout ) ? ' sm-vertical' : '';
 
 		// Start menu html output.
@@ -95,7 +95,7 @@ class Micemade_Nav_Html {
 
 			if ( $children || isset( $mega ) ) {
 
-				// If megamenu is set in nav_menu_item custom meta
+				// If megamenu is set in nav_menu_item custom meta.
 				if ( $mega ) {
 					echo '<ul class="mega-menu" data-subtype="megamenu">';
 					echo apply_filters( 'haumea_render_mega_menu', $mega );

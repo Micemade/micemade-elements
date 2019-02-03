@@ -98,7 +98,7 @@ function micemade_elements_to_boolean( $value ) {
  * @return void
  * echo string html term links list for current post/taxonomy.
  */
-function micemade_elements_posted_in_f( $taxonomy ) {
+function micemade_elements_posted_in( $taxonomy ) {
 
 	$terms     = get_the_terms( get_the_ID(), $taxonomy );
 	$posted_in = '';
@@ -118,40 +118,62 @@ function micemade_elements_posted_in_f( $taxonomy ) {
 			 */
 			$separator  = ( $term == $last_term ) ? '' : ', ';
 			$posted_in .= '<a href="' . esc_url( get_term_link( $term->slug, $taxonomy ) ) . '" rel="tag" tabindex="0">' . esc_html( $term->name . ' ' . $term->ID ) . '</a>' . esc_html( $separator );
-
 		}
 
 		$posted_in .= '</span>';
-
 	}
 
 	echo wp_kses_post( $posted_in );
 
 }
-add_action( 'micemade_elements_posted_in', 'micemade_elements_posted_in_f', 10, 1 );
+
 /**
  * Date for post meta function
  *
  * @return void
  */
-function micemade_elements_date_f() {
+function micemade_elements_date() {
 
 	$date = '<span class="published"><time datetime="' . sprintf( get_the_time( esc_html__( 'Y-m-d', 'micemade_elements' ) ) ) . '">' . sprintf( get_the_time( get_option( 'date_format', 'M d, Y' ) ) ) . '</time></span>';
 
 	echo wp_kses_post( $date );
 }
-add_action( 'micemade_elements_date', 'micemade_elements_date_f', 10 );
+
 /**
  * Author for post meta
  *
  * @return void
  */
-function micemade_elements_author_f() {
+function micemade_elements_author() {
 	$author = '<span class="author vcard">' . esc_html__( 'By ', 'micemade_elements' ) . '<a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '" title="' . esc_attr( get_the_author_meta( 'display_name' ) ) . '">' . esc_html( get_the_author_meta( 'display_name' ) ) . '</a></span>';
 
 	echo wp_kses_post( $author );
 }
-add_action( 'micemade_elements_author', 'micemade_elements_author_f', 10 );
+
+/**
+ * Post meta ordering (using WP hook priorities)
+ *
+ * @param array $meta_ordering - array created with Elementor Repeater Control
+ * @return void
+ */
+function micemade_elements_postmeta_order( $meta_ordering ) {
+
+	foreach ( $meta_ordering as $key => $single_meta ) {
+
+		$label    = $single_meta['meta_sorter_label'];
+		$enabled  = $single_meta['meta_part_enabled'];
+		$priority = $key . '0';
+
+		if ( 'Date' === $label && $enabled ) {
+			add_action( 'micemade_elements_postmeta', 'micemade_elements_date', $priority );
+		} elseif ( 'Author' === $label && $enabled ) {
+			add_action( 'micemade_elements_postmeta', 'micemade_elements_author', $priority );
+		} elseif ( 'Posted in' === $label && $enabled ) {
+			add_action( 'micemade_elements_postmeta', 'micemade_elements_posted_in', $priority, 1 );
+		}
+	}
+
+}
 
 /**
  * PLACEHOLDER IMAGE
@@ -316,29 +338,36 @@ function micemade_elements_query_args_func( $posts_per_page = 3, $categories = a
 add_filter( 'micemade_elements_query_args', 'micemade_elements_query_args_func', 10, 4 );
 
 /**
- * POST FOR LOOP
+ * POST TEMPLATE FOR LOOP
  *
  * @param string  $style - posts style.
  * @param string  $grid - posts grid.
+ * @param string  $show_thumb - to show featured thumb image od not.
  * @param string  $img_format - image format.
  * @param boolean $meta - to show post meta or not.
+ * @param boolean $meta_ordering - array of meta for display.
  * @param boolean $excerpt - to show excerpt or not.
  * @param integer $excerpt_limit - excerpt length.
  * @param string  $css_class - additional css selector.
  * @return void
  * DRY effort, mostly because of ajax posts.
  */
-function micemade_elements_loop_post_func( $style = 'style_1', $grid = '', $img_format = 'thumbnail', $meta = true, $excerpt = true, $excerpt_limit = 20, $css_class = '' ) {
+function micemade_elements_loop_post_func( $style = 'style_1', $grid = '', $show_thumb = true, $img_format = 'thumbnail', $meta = true, $meta_ordering = [], $excerpt = true, $excerpt_limit = 20, $css_class = '' ) {
 	?>
 	<div class="post <?php echo esc_attr( $grid ); ?> mme-col-xs-12">
 
 		<div class="inner-wrap">
 
 			<?php
-			if ( 'style_3' === $style || 'style_4' === $style ) {
-				do_action( 'micemade_elements_thumb_back', $img_format );
+			if ( $show_thumb ) {
+
+				if ( 'style_3' === $style || 'style_4' === $style ) {
+					do_action( 'micemade_elements_thumb_back', $img_format );
+				} else {
+					do_action( 'micemade_elements_thumb', $img_format );
+				}
 			} else {
-				do_action( 'micemade_elements_thumb', $img_format );
+				echo '<div class="post-overlay"></div>';
 			}
 			?>
 
@@ -351,9 +380,8 @@ function micemade_elements_loop_post_func( $style = 'style_1', $grid = '', $img_
 					?>
 					<div class="meta">
 
-						<?php do_action( 'micemade_elements_date' ); ?>
-						<?php do_action( 'micemade_elements_author' ); ?><br>
-						<?php do_action( 'micemade_elements_posted_in', 'category' ); ?>
+						<?php micemade_elements_postmeta_order( $meta_ordering ); ?>
+						<?php do_action( 'micemade_elements_postmeta', 'category' ); ?>
 
 					</div>
 				<?php } ?>
@@ -366,7 +394,7 @@ function micemade_elements_loop_post_func( $style = 'style_1', $grid = '', $img_
 					</p>
 
 					<?php
-					echo '<a href="' . get_permalink() . '" title="' . the_title_attribute( 'echo=0' ) . '" class="micemade-elements-readmore ' . esc_attr( $css_class ) . ' ">' . esc_html__( 'Read more', 'micemade-elements' ) . '</a>';
+					echo '<a href="' . esc_url( get_permalink() ) . '" title="' . the_title_attribute( 'echo=0' ) . '" class="micemade-elements-readmore ' . esc_attr( $css_class ) . ' ">' . esc_html__( 'Read more', 'micemade-elements' ) . '</a>';
 					?>
 
 				<?php } ?>
@@ -378,7 +406,7 @@ function micemade_elements_loop_post_func( $style = 'style_1', $grid = '', $img_
 	</div>
 	<?php
 }
-add_filter( 'micemade_elements_loop_post', 'micemade_elements_loop_post_func', 10, 6 );
+add_filter( 'micemade_elements_loop_post', 'micemade_elements_loop_post_func', 10, 9 );
 
 /**
  * Custom post excerpt
