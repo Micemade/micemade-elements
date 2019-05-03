@@ -14,15 +14,20 @@
 		
 		ul.products {
 			opacity: 1;
+
+			body.woocommerce & {
+				margin: 0;
+			}
 			
-			// Micemade themes only
+			// Micemade themes only.
+			// Check out https://micemade.com/
 			.item {
 				margin-bottom: 0;
 				.anim-wrap {
 					opacity: 1;
 				}
 			}
-			// end mm themes
+			// end mm themes.
 		}
 	 
 	 }
@@ -55,6 +60,8 @@
 				position: relative;
 				padding: 3em;
 				align-self: center;
+				display: flex;
+				flex-direction: column;
 				
 				> * {
 					display: block;
@@ -164,6 +171,12 @@
 				.entry-summary {
 					position: absolute;
 					z-index: 1;
+					top: 0px;
+					right: 0px;
+					bottom: 0px;
+					left: 0px;
+					width: auto; // "reset"
+					margin: 0; // "reset"
 				}
 				.product-thumb {
 					position: absolute;
@@ -183,9 +196,9 @@
 	} // single product element
 	
 	/**
-	 *	POSTS GRID & PRODUCTS SLIDER ELEMENTS
-	 *	.micemade-elements_posts-grid
-	 *	.micemade-elements_products_slider
+	 * POSTS GRID & PRODUCTS SLIDER ELEMENTS
+	 * .micemade-elements_posts-grid
+	 * .micemade-elements_products_slider
 	 */
 	
 	&_posts-grid, &_products_slider {
@@ -203,7 +216,7 @@
 			}
 			
 			.inner-wrap, .post-overlay {
-				@include transition-global( background-color );
+				@include transition-global( all );
 			}
 			
 			.post-thumb {
@@ -226,7 +239,6 @@
 				* { @include transition-global( all ); }
 				
 				h4 {
-					font-size: 22px;
 					margin: 0;
 					margin-bottom: 0 !important;
 					padding: 0 0 15px;
@@ -275,7 +287,7 @@
 			
 			
 		} // .post
-		
+
 		// STYLE 2
 		&.style_2 {
 		
@@ -329,12 +341,12 @@
 					height: 100%;
 				}
 				.post-overlay {
-					z-index:1;
+					z-index:5;
 
 				}
 				.post-text {
 					position: absolute;
-					z-index: 2;
+					z-index: 10;
 					display: flex;
 					flex-direction: column;
 					justify-content: center;
@@ -356,12 +368,13 @@
 
 		}// style_3 only
 
-
+		// style_4 only
 		&.style_4 {
 			
 			.inner-wrap {
 				position: relative;
-				background-color: transparent !important;
+				background-color: none !important;
+				background-image: none !important;
 				
 				.post-thumb-back {
 					width: 60%;
@@ -386,10 +399,11 @@
 		}
 		
 	
-	} // posts grid element
+	} // .micemade-elements_posts-grid , .micemade-elements_products_slider
+	
 	
 	&_slider, &_products_slider {
-		
+
 		.swiper-button-next {
 			.elementor & { 
 				right: 20px;
@@ -422,7 +436,28 @@
 			}
 		}
 
+		@include breakpoint(laptop-down) {
+			.swiper-button-next, .swiper-button-prev {
+				.elementor & {
+					opacity: 1;
+				}
+			}
+		}
+
 	} // slider elements
+
+	&_products_slider {
+		&.woocommerce {
+			ul.products {
+				margin: 0;
+				flex-wrap: nowrap;
+				li, li.product {
+					padding:0;
+				}
+			}
+		}
+		
+	}
 
 	//.micemade-elements_button 
 	&_more-posts-wrap {
@@ -700,78 +735,52 @@
 	} // product-categories
 	
 	/**
-	 *	Micemade WC Products Tabs
+	 * Micemade WC Products Tabs
 	 */
 	&_tabs {
-	
-		.tabs-wrapper, .tabs-content-wrapper {
+		
+		.tabs-wrapper {
 			
-			display: block;
+			display: flex;
+			flex-direction: row;
 			text-align: center;
 			overflow: hidden;
+
+			.mm-wc-tabs-align-left & {
+				justify-content: flex-start;
+			}
+			.mm-wc-tabs-align-center & {
+				justify-content: center;
+			}
+			.mm-wc-tabs-align-right & {
+				justify-content: flex-end;
+			}
 			
 			.tab-title {
-				display: inline-block;
-				padding: 1em;
 				position: relative;
 				z-index: 0;
+				transition: all 0.4s ease-in-out;
+				
+				> span {
+					position: relative;
+					display: inline-flex;
+					align-items: center;
+					/* 
+					&:before {
+						@include triangle(bottom);
+						position: absolute;
+						left: 50%;
+						top: 100%;
+						transform: translateX(-50%);
+					} */
+				}
 				
 				&:hover {
 					cursor: pointer
 				}
-
-				&.tab-mobile-title {
-					display: none;
-					border-width: 1px;
-					border:{
-						left: 0;
-						right: 0;
-						top: 0;
-					}
-					&:before,
-					&:after {
-						display: block;
-						content: "";
-						position: absolute;
-						height: 0;
-						right: 100%;
-						width: 100%;
-						border-bottom-style: solid;
-					}
-					
-					&:before {
-						right: 0;
-						top: 0;
-					}
-					&:after {
-						left: 0;
-						bottom: 0;
-					}
-					&:first-of-type:before {
-						display: none;
-					}
-					&:last-of-type:after {
-						display: none;
-					}
-
-					&.active {
-						&:before {
-							display: none;
-						}
-						&:after {
-							display: none;
-						}
-					} 
-					
-					@include breakpoint(mobileonly) {
-						display: block;
-					}
-					
-				}
 				
 				@include breakpoint(mobileonly) {
 					display: none;
-					//border-style: solid;
 				}
 				
 			} //.tab-title
@@ -780,6 +789,9 @@
 		
 		.tabs-content-wrapper {
 			
+			display: block;
+			text-align: center;
+			overflow: hidden;
 			border-style: solid;
 			
 			@include breakpoint(mobileonly) {
@@ -797,6 +809,49 @@
 				}
 			}
 			
+			.tab-mobile-title {
+				display: none;
+				border-width: 0 !important;
+
+				&:before,
+				&:after {
+					display: block;
+					content: "";
+					position: absolute;
+					height: 0;
+					right: 100%;
+					width: 100%;
+					border-bottom-style: solid;
+				}
+				
+				&:before {
+					right: 0;
+					top: 0;
+				}
+				&:after {
+					left: 0;
+					bottom: 0;
+				}
+				&:first-of-type:before {
+					display: none;
+				}
+				&:last-of-type:after {
+					display: none;
+				}
+
+				&.active {
+					
+					&:after {
+						display: none;
+					}
+				} 
+				
+				@include breakpoint(mobileonly) {
+					display: flex;
+				}
+				
+			}
+
 			.tab-content {
 				padding: 2em;
 				display: none;
@@ -807,7 +862,8 @@
 		
 		} //.tabs-content-wrapper
 		
-		&.horizontal {
+		// Horizontal tabs type.
+		.mm-wc-tabs-type-horizontal & {
 			
 			.tabs-wrapper {
 				
@@ -839,14 +895,13 @@
 			}
 			
 			.tabs-content-wrapper {
-				@include breakpoint(phablet) {
-					border-top-width: 0 !important;
-				}
+				border-top-width: 0 !important;
 			}
 			
 		}
 		
-		&.vertical {
+		// Vertical tabs type
+		.mm-wc-tabs-type-vertical & {
 			
 			display: flex;
 			flex-direction: row;
@@ -895,19 +950,37 @@
 			} 
 			.tabs-content-wrapper {
 				flex-basis: 80%;
+				border-left-width: 0 !important;
 				
-				@include breakpoint(phablet) {
-					border-left-width: 0 !important;
-				}
 				@include breakpoint(mobileonly) {
 					flex-basis: 100% !important;
 				}
 				
 			}
 		}
+
+		// Tab icons position.
+		.mm-wc-tabs-icon-left & {
+			.tab-title span {
+				.tab-icon {
+					margin-left: 0 !important;
+				}
+			}
+		}
+		.mm-wc-tabs-icon-right & {
+			.tab-title span {
+				flex-direction: row-reverse;
+				.tab-icon {
+					margin-right: 0 !important;
+				}
+			}
+		}
 	
-	} // end micemade-elements_tabs
-	
+	}
+	/**
+	 * end micemade-elements_tabs
+	 */
+
 	/**
 	 * Micemade Instagram
 	 */
@@ -1052,6 +1125,23 @@
 			width: 100%;
 			align-items: center;
 			justify-content: center;
+
+			&.template {
+				align-items: stretch;
+				justify-content: flex-start;
+				text-align: initial;
+			}
+
+			&.active {
+				> .elementor {
+					display: block;
+				}
+			}
+			&.swiper-slide-prev, &.swiper-slide-next {
+				> .elementor {
+					display: none;
+				}
+			}
 			
 			.slide-title, .slide-content, .slide-buttons {
 				position: relative;
@@ -1087,7 +1177,114 @@
 			}
 		}
 		
-	}
+	}// end .micemade-elements_slider
+
+
+	// MICEMADE WC CATEGORIES MENU
+	&_wc_cat_menu {
+		
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		list-style: none !important;
+		margin: 0;
+		padding: 0;
+		z-index: 1;
+
+		.children {
+			position: absolute;
+			z-index: 100;
+			top: 0;
+			left: 100%;
+			opacity: 0;
+			visibility: hidden;
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			transform: scale(1, 0);
+			max-height: 0;
+			transition: all 0.3s ease-in-out;
+			transform-origin: center top;
+		}
+		
+		.cat-item {
+			
+			position: relative;
+			list-style: none;
+
+			a {
+				position: relative;
+				display: block;
+			}
+
+			i.fa {
+				position: absolute;
+				right: 10px;
+				top: 50%;
+				transform: translateY(-50%);
+				background: rgba(229,229,229,0.5);
+				height: 20px;
+				width: 20px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				z-index: 10;
+			}
+		}
+
+		@include breakpoint(laptop) {
+			.cat-item:hover {
+				.children {
+					opacity: 1;
+					visibility: visible;
+					transform: scale(1, 1);
+					max-height: none;
+				}
+			}
+		}
+
+		@include breakpoint(laptop-down) {
+			
+			i.fa {
+				cursor: pointer;
+			}
+			
+			.children {
+				position: relative;
+				left: 0;
+
+				&.active {
+					opacity: 1;
+					visibility: visible;
+					transform: scale(1, 1);
+					max-height: none;
+				}
+			}
+		}
+		
+		&.no-last-border {
+			.cat-item:last-child {
+				border-bottom: none !important;
+			}
+		}
+
+		&.horizontal {
+			
+			flex-direction: row;
+			flex-wrap: wrap;
+
+			.children {
+				top: 100%;
+				left: 0;
+			}
+
+			@include breakpoint(laptop-down) {
+				flex-direction: column;
+			}
+
+		}
+
+	} // end wc_cat_menu
 
 } // END .micemade-elements
 

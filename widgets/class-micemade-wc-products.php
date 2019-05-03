@@ -79,22 +79,24 @@ class Micemade_WC_Products extends Widget_Base {
 		$this->add_control(
 			'categories',
 			[
-				'label'    => esc_html__( 'Select product categories', 'micemade-elements' ),
-				'type'     => Controls_Manager::SELECT2,
-				'default'  => array(),
-				'options'  => apply_filters( 'micemade_elements_terms', 'product_cat' ),
-				'multiple' => true,
+				'label'       => esc_html__( 'Select product categories', 'micemade-elements' ),
+				'type'        => Controls_Manager::SELECT2,
+				'default'     => array(),
+				'options'     => apply_filters( 'micemade_elements_terms', 'product_cat' ),
+				'multiple'    => true,
+				'label_block' => true,
 			]
 		);
 
 		$this->add_control(
 			'exclude_cats',
 			[
-				'label'    => esc_html__( 'Exclude product categories', 'micemade-elements' ),
-				'type'     => Controls_Manager::SELECT2,
-				'default'  => array(),
-				'options'  => apply_filters( 'micemade_elements_terms', 'product_cat' ),
-				'multiple' => true,
+				'label'       => esc_html__( 'Exclude product categories', 'micemade-elements' ),
+				'type'        => Controls_Manager::SELECT2,
+				'default'     => array(),
+				'options'     => apply_filters( 'micemade_elements_terms', 'product_cat' ),
+				'multiple'    => true,
+				'label_block' => true,
 				/* 'condition' => [
 					'categories' => [],
 				], */
@@ -239,23 +241,22 @@ class Micemade_WC_Products extends Widget_Base {
 
 	protected function render() {
 
-		// get our input from the widget settings.
-		$settings = $this->get_settings();
+		// Get our input from the widget settings.
+		$settings = $this->get_settings_for_display();
 
-		$posts_per_page = ! empty( $settings['posts_per_page'] ) ? (int) $settings['posts_per_page'] : 6;
-		$offset         = ! empty( $settings['offset'] ) ? (int) $settings['offset'] : 0;
-		$categories     = ! empty( $settings['categories'] ) ? $settings['categories'] : array();
-		$exclude_cats   = ! empty( $settings['exclude_cats'] ) ? $settings['exclude_cats'] : array();
-		$filters        = ! empty( $settings['filters'] ) ? $settings['filters'] : 'latest';
-		$products_in    = ! empty( $settings['products_in'] ) ? $settings['products_in'] : '';
-		$ppr            = ! empty( $settings['products_per_row'] ) ? (int) $settings['products_per_row'] : 3;
-		$ppr_tab        = ! empty( $settings['products_per_row_tab'] ) ? (int) $settings['products_per_row_tab'] : 2;
-		$ppr_mob        = ! empty( $settings['products_per_row_mob'] ) ? (int) $settings['products_per_row_mob'] : 2;
-
-		global $post;
+		$posts_per_page = (int) $settings['posts_per_page'];
+		$offset         = (int) $settings['offset'];
+		$categories     = $settings['categories'];
+		$exclude_cats   = $settings['exclude_cats'];
+		$filters        = $settings['filters'];
+		$products_in    = $settings['products_in'];
+		$ppr            = (int) $settings['products_per_row'];
+		$ppr_tab        = (int) $settings['products_per_row_tab'];
+		$ppr_mob        = (int) $settings['products_per_row_mob'];
 
 		$this->mm_products_grid = micemade_elements_grid_class( intval( $ppr ), intval( $ppr_tab ), intval( $ppr_mob ) );
 
+		// Query args: ( hook in includes/wc-functions.php ).
 		$args = apply_filters( 'micemade_elements_wc_query_args', $posts_per_page, $categories, $exclude_cats, $filters, $offset, $products_in ); // hook in includes/wc-functions.php.
 
 		// Add (inject) grid classes to products in loop.
@@ -269,17 +270,17 @@ class Micemade_WC_Products extends Widget_Base {
 			}, 10
 		);
 
-		$products = get_posts( $args );
+		$products_query = new \WP_Query( $args );
 
-		if ( ! empty( $products ) ) {
+		if ( $products_query->have_posts() ) {
 
 			echo '<div class="woocommerce woocommerce-page micemade-elements_wc-catalog">';
 
 			echo '<ul class="products mme-row">';
 
-			foreach ( $products as $post ) {
+			while ( $products_query->have_posts() ) {
 
-				setup_postdata( $post );
+				$products_query->the_post();
 
 				wc_get_template_part( 'content', 'product' );
 

@@ -41,7 +41,7 @@
 
 	/* Pagination Styles */
 	.swiper-pagination {
-		position: absolute;
+		position: relative;
 		text-align: center;
 		-webkit-transition: 300ms;
 		-moz-transition: 300ms;
@@ -52,6 +52,7 @@
 		-o-transform: translate3d(0,0,0);
 		transform: translate3d(0,0,0);
 		z-index: 10;
+		bottom: 0 !important;
 		&.swiper-pagination-hidden {
 			opacity: 0;
 		}

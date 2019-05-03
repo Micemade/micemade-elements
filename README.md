@@ -6,7 +6,7 @@ Contributors: Micemade
 Tags: elementor, elementor addon, elementor extension, elements, widgets, posts grid, woocommerce, catalog, products, product, micemade  
 Requires at least: 4.3  
 Tested up to: 4.9.1  
-Stable Tag: 0.5.0  
+Stable Tag: 0.7.0  
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,7 +33,7 @@ Micemade Elements features a collection of premium, easy to use yet highly funct
 * **Micemade MailChimp 4 WP forms** - display one of newsletter forms created with "MailChimp 4 WP forms" plugin
 * **Micemade Buttons** - add buttons to group in single element, stacked horizontally or vertically
 * **Micemade Instagram** - display images from Instagram using @username or #hashtag
-* **Micemade Slider** - custom content slider
+* **Micemade Slider** - Elementor templates and custom content slider
 
 Do you have suggestions to make or want to be notified of important updates? Reach out to us on [Twitter](http://twitter.com/themicemade)
 
@@ -58,7 +58,8 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 
 *** v.0.7.0 ***
 * Added support for WPML and Polylang for custom queries (Posts Grid, WC Product elements)
-* Added custom content slider
+* Added Slider element with Elementor templates / custom content 
+* Added WC Categories menu element
 * Main plugin class moved to separate file
 * "Micemade Posts grid" element - added post meta ordering and toggling
 

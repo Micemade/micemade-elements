@@ -82,25 +82,24 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$this->add_control(
 			'categories',
 			[
-				'label'    => esc_html__( 'Select product categories', 'micemade-elements' ),
-				'type'     => Controls_Manager::SELECT2,
-				'default'  => array(),
-				'options'  => apply_filters( 'micemade_elements_terms', 'product_cat' ),
-				'multiple' => true,
+				'label'       => esc_html__( 'Select product categories', 'micemade-elements' ),
+				'type'        => Controls_Manager::SELECT2,
+				'default'     => array(),
+				'options'     => apply_filters( 'micemade_elements_terms', 'product_cat' ),
+				'multiple'    => true,
+				'label_block' => true,
 			]
 		);
 
 		$this->add_control(
 			'exclude_cats',
 			[
-				'label'    => esc_html__( 'Exclude product categories', 'micemade-elements' ),
-				'type'     => Controls_Manager::SELECT2,
-				'default'  => array(),
-				'options'  => apply_filters( 'micemade_elements_terms', 'product_cat' ),
-				'multiple' => true,
-				/* 'condition' => [
-					'categories' => '',
-				], */
+				'label'       => esc_html__( 'Exclude product categories', 'micemade-elements' ),
+				'type'        => Controls_Manager::SELECT2,
+				'default'     => array(),
+				'options'     => apply_filters( 'micemade_elements_terms', 'product_cat' ),
+				'multiple'    => true,
+				'label_block' => true,
 			]
 		);
 
@@ -236,7 +235,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$this->add_control(
 			'buttons',
 			[
-				'label'     => esc_html__( 'Show navigation buttons', 'micemade-elements' ),
+				'label'     => esc_html__( 'Show navigation arrows', 'micemade-elements' ),
 				'type'      => Controls_Manager::SWITCHER,
 				'label_off' => __( 'No', 'elementor' ),
 				'label_on'  => __( 'Yes', 'elementor' ),
@@ -246,7 +245,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$this->add_control(
 			'buttons_color',
 			[
-				'label'     => __( 'Navigation buttons color', 'micemade-elements' ),
+				'label'     => __( 'Navigation arrows color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .swiper-button-next' => 'background-color: {{VALUE}};',
@@ -257,6 +256,38 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 				],
 			]
 		);
+
+		$this->add_responsive_control(
+			'nav_arrows_vert_position',
+			[
+				'label'       => __( 'Arrows vertical position', 'micemade-elements' ),
+				'type'        => Controls_Manager::SLIDER,
+				'label_block' => true,
+				'size_units'  => [ '%', 'px' ],
+				'default'     => [
+					'size' => 50,
+					'unit' => '%',
+				],
+				'range'       => [
+					'%' => [
+						'max'  => 100,
+						'min'  => 0,
+						'step' => 1,
+					],
+					'px' => [
+						'min' => 0,
+						'max' => 1000,
+					],
+				],
+				'selectors'   => [
+					'{{WRAPPER}} .swiper-button-prev, {{WRAPPER}} .swiper-button-next' => 'top: {{SIZE}}{{UNIT}};',
+				],
+				'condition'   => [
+					'buttons!' => '',
+				],
+			]
+		);
+
 		// Autoplay.
 		$this->add_control(
 			'autoplay',
@@ -265,8 +296,8 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 0,
 				'min'     => 0,
-				'step'    => 1000,
-				'title'   => __( 'Enter value in miliseconds (1s. = 1000ms.). Leave 0 (zero) do discard autoplay', 'micemade-elements' ),
+				'step'    => 500,
+				'title'   => __( 'Enter value in miliseconds (1s. = 1000ms.). Any value under 1000 (including empty) will turn off autoplay.', 'micemade-elements' ),
 			]
 		);
 		// Loop the slider.
@@ -295,7 +326,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$this->add_control(
 			'style',
 			[
-				'label'   => __( 'Product base style', 'micemade-elements' ),
+				'label'   => __( 'Base style', 'micemade-elements' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'style_1',
 				'options' => [
@@ -304,6 +335,32 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 					'style_2' => __( 'Style two', 'micemade-elements' ),
 					'style_3' => __( 'Style three', 'micemade-elements' ),
 					'style_4' => __( 'Style four', 'micemade-elements' ),
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'wc_catalog_align',
+			[
+				'label'     => __( 'Elements alignment', 'micemade-elements' ),
+				'type'      => Controls_Manager::CHOOSE,
+				'options'   => [
+					'left'   => [
+						'title' => __( 'Left', 'micemade-elements' ),
+						'icon'  => 'fa fa-align-left',
+					],
+					'center' => [
+						'title' => __( 'Center', 'micemade-elements' ),
+						'icon'  => 'fa fa-align-center',
+					],
+					'right'  => [
+						'title' => __( 'Right', 'micemade-elements' ),
+						'icon'  => 'fa fa-align-right',
+					],
+				],
+				'default'   => '',
+				'selectors' => [
+					'{{WRAPPER}} ul.products' => 'text-align: {{VALUE}};',
 				],
 			]
 		);
@@ -342,6 +399,30 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 				'condition' => [
 					'style' => [ 'style_3', 'style_4' ],
 				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'product_bottom_margin',
+			[
+				'label'     => __( 'Product bottom margin', 'micemade-elements' ),
+				'type'      => Controls_Manager::SLIDER,
+				'default'   => [
+					'size' => 0,
+				],
+				'range'     => [
+					'px' => [
+						'max'  => 200,
+						'min'  => 0,
+						'step' => 1,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .swiper-slide' => 'margin-bottom: {{SIZE}}px;',
+				],
+				/* 'condition' => [
+					'style' => [ 'style_3', 'style_4' ],
+				], */
 			]
 		);
 
@@ -474,7 +555,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$this->start_controls_section(
 			'section_info_styling',
 			[
-				'label'     => esc_html__( 'Product info box styling', 'micemade-elements' ),
+				'label'     => esc_html__( 'Product elements styling', 'micemade-elements' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'style!' => [ 'catalog' ],
@@ -560,7 +641,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$this->add_responsive_control(
 			'content_vertical_alignment',
 			[
-				'label'     => __( 'Vertical Align Product Info', 'micemade-elements' ),
+				'label'     => __( 'Vertical Alignment', 'micemade-elements' ),
 				'type'      => Controls_Manager::SELECT,
 				'options'   => [
 					'flex-start' => __( 'Top', 'micemade-elements' ),
@@ -632,13 +713,14 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$this->add_responsive_control(
 			'thumb_width',
 			[
-				'label'     => __( 'Image container width', 'elementor' ),
-				'type'      => Controls_Manager::NUMBER,
-				'default'   => '',
-				'min'       => 0,
-				'max'       => 100,
-				'step'      => 5,
-				'selectors' => [
+				'label'       => __( 'Image container width', 'elementor' ),
+				'type'        => Controls_Manager::NUMBER,
+				'default'     => '',
+				'min'         => 0,
+				'max'         => 100,
+				'step'        => 5,
+				'label_block' => true,
+				'selectors'   => [
 					'{{WRAPPER}} .post-thumb-back' => 'width: {{VALUE}}%;',
 				],
 			]
@@ -647,13 +729,14 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$this->add_responsive_control(
 			'thumb_as_back_height',
 			[
-				'label'     => esc_html__( 'Image container height', 'micemade-elements' ),
-				'type'      => Controls_Manager::NUMBER,
-				'default'   => '',
-				'min'       => 0,
-				'max'       => 100,
-				'step'      => 5,
-				'selectors' => [
+				'label'       => esc_html__( 'Image container height', 'micemade-elements' ),
+				'type'        => Controls_Manager::NUMBER,
+				'default'     => '',
+				'min'         => 0,
+				'max'         => 100,
+				'step'        => 5,
+				'label_block' => true,
+				'selectors'   => [
 					'{{WRAPPER}} .post-thumb-back' => 'height: {{VALUE}}%;',
 				],
 			]
@@ -661,10 +744,11 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$this->add_responsive_control(
 			'img_container_pos',
 			[
-				'label'   => esc_html__( 'Image container position', 'micemade-elements' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => 'top__left',
-				'options' => [
+				'label'       => esc_html__( 'Image container position', 'micemade-elements' ),
+				'type'        => Controls_Manager::SELECT,
+				'default'     => 'top__left',
+				'label_block' => true,
+				'options'     => [
 					'top__left'      => esc_html__( 'Top left', 'micemade-elements' ),
 					'top__center'    => esc_html__( 'Top center', 'micemade-elements' ),
 					'top__right'     => esc_html__( 'Top right', 'micemade-elements' ),
@@ -680,10 +764,11 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$this->add_responsive_control(
 			'back_image_position',
 			[
-				'label'     => esc_html__( 'Image background position', 'micemade-elements' ),
-				'type'      => Controls_Manager::SELECT,
-				'default'   => 'center',
-				'options'   => [
+				'label'       => esc_html__( 'Image background position', 'micemade-elements' ),
+				'type'        => Controls_Manager::SELECT,
+				'default'     => 'center',
+				'label_block' => true,
+				'options'     => [
 					'left top'      => esc_html__( 'Top left', 'micemade-elements' ),
 					'center top'    => esc_html__( 'Top center', 'micemade-elements' ),
 					'right top'     => esc_html__( 'Top right', 'micemade-elements' ),
@@ -694,7 +779,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 					'center bottom' => esc_html__( 'Bottom center ', 'micemade-elements' ),
 					'right bottom'  => esc_html__( 'Bottom right ', 'micemade-elements' ),
 				],
-				'selectors' => [
+				'selectors'   => [
 					'{{WRAPPER}} .post-thumb-back' => 'background-position: {{VALUE}};',
 				],
 			]
@@ -703,16 +788,17 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$this->add_responsive_control(
 			'thumb_background_size',
 			[
-				'label'     => esc_html__( 'Image background size', 'micemade-elements' ),
-				'type'      => Controls_Manager::SELECT,
-				'default'   => 'cover',
-				'options'   => [
+				'label'       => esc_html__( 'Image background size', 'micemade-elements' ),
+				'type'        => Controls_Manager::SELECT,
+				'default'     => 'cover',
+				'label_block' => true,
+				'options'     => [
 					'auto'    => esc_html__( 'Auto', 'micemade-elements' ),
 					'cover'   => esc_html__( 'Cover', 'micemade-elements' ),
 					'contain' => esc_html__( 'Contain', 'micemade-elements' ),
 					'custom'  => esc_html__( 'Custom', 'micemade-elements' ),
 				],
-				'selectors' => [
+				'selectors'   => [
 					'{{WRAPPER}} .post-thumb-back' => 'background-size: {{VALUE}};',
 				],
 			]
@@ -721,16 +807,17 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$this->add_responsive_control(
 			'thumb_background_size_custom',
 			[
-				'label'     => esc_html__( 'Custom image size', 'micemade-elements' ),
-				'type'      => Controls_Manager::NUMBER,
-				'default'   => '',
-				'min'       => 0,
-				'max'       => 200,
-				'step'      => 5,
-				'selectors' => [
+				'label'       => esc_html__( 'Custom image size', 'micemade-elements' ),
+				'type'        => Controls_Manager::NUMBER,
+				'default'     => '',
+				'min'         => 0,
+				'max'         => 200,
+				'step'        => 5,
+				'label_block' => true,
+				'selectors'   => [
 					'{{WRAPPER}} .post-thumb-back' => 'background-size: {{VALUE}}% !important;',
 				],
-				'condition' => [
+				'condition'   => [
 					//'layout' => 'image_background',
 					'thumb_background_size' => 'custom',
 				],
@@ -875,6 +962,9 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 				'label'     => __( 'Categories', 'micemade-elements' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
+				'condition' => [
+					'posted_in!' => '',
+				],
 			]
 		);
 
@@ -886,27 +976,21 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .post-text .meta span, {{WRAPPER}} .post-text .meta a' => 'color: {{VALUE}};',
 				],
+				'condition' => [
+					'posted_in!' => '',
+				],
 			]
 		);
 
-		$this->add_responsive_control(
-			'categories_font_size',
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
 			[
-				'label'     => esc_html__( 'Categories font size (%)', 'micemade-elements' ),
-				'type'      => Controls_Manager::SLIDER,
-				'selectors' => [
-					'{{WRAPPER}} .post-text .meta' => 'font-size: {{SIZE}}{{UNIT}};',
+				'name'      => 'categories_typography',
+				'label'     => __( 'Categories typography', 'micemade-elements' ),
+				'selector'  => '{{WRAPPER}} .post-text .meta',
+				'condition' => [
+					'posted_in!' => '',
 				],
-				'default'   => [
-					'unit' => 'px',
-				],
-				'range'     => [
-					'px' => [
-						'min' => 0,
-						'max' => 100,
-					],
-				],
-
 			]
 		);
 
@@ -916,6 +1000,9 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 				'label'     => __( 'Short description', 'micemade-elements' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
+				'condition' => [
+					'short_desc!' => '',
+				],
 			]
 		);
 
@@ -928,6 +1015,9 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 					'{{WRAPPER}} .post-text p' => 'color: {{VALUE}};',
 					'{{WRAPPER}} .post-text .micemade-elements-readmore' => 'color: {{VALUE}};',
 				],
+				'condition' => [
+					'short_desc!' => '',
+				],
 			]
 		);
 
@@ -935,10 +1025,13 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
-				'name'     => 'text_typography',
-				'label'    => __( 'Short description typography', 'micemade-elements' ),
-				'scheme'   => Scheme_Typography::TYPOGRAPHY_4,
-				'selector' => '{{WRAPPER}} .post-text p',
+				'name'      => 'text_typography',
+				'label'     => __( 'Short description typography', 'micemade-elements' ),
+				'scheme'    => Scheme_Typography::TYPOGRAPHY_4,
+				'selector'  => '{{WRAPPER}} .post-text p',
+				'condition' => [
+					'short_desc!' => '',
+				],
 			]
 		);
 
@@ -949,6 +1042,9 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 				'label'     => __( 'Price', 'micemade-elements' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
+				'condition' => [
+					'price!' => '',
+				],
 			]
 		);
 
@@ -960,27 +1056,21 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} .post-text .meta span, {{WRAPPER}} .post-text .price' => 'color: {{VALUE}};',
 				],
+				'condition' => [
+					'price!' => '',
+				],
 			]
 		);
 
-		$this->add_responsive_control(
-			'price_font_size',
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
 			[
-				'label'     => esc_html__( 'Price font size (%)', 'micemade-elements' ),
-				'type'      => Controls_Manager::SLIDER,
-				'selectors' => [
-					'{{WRAPPER}} .post-text .price' => 'font-size: {{SIZE}}{{UNIT}};',
+				'name'      => 'price_typography',
+				'label'     => __( 'Price typography', 'micemade-elements' ),
+				'selector'  => '{{WRAPPER}} .post-text .price',
+				'condition' => [
+					'price!' => '',
 				],
-				'default'   => [
-					'unit' => 'px',
-				],
-				'range'     => [
-					'px' => [
-						'min' => 0,
-						'max' => 100,
-					],
-				],
-
 			]
 		);
 
@@ -1009,73 +1099,86 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 
 	protected function render() {
 
-		// get our input from the widget settings.
-		$settings = $this->get_settings();
+		// Get our input from the widget settings.
+		$settings = $this->get_settings_for_display();
 
-		$posts_per_page = ! empty( $settings['posts_per_page'] ) ? (int) $settings['posts_per_page'] : 6;
-		$offset         = ! empty( $settings['offset'] ) ? (int) $settings['offset'] : 0;
-		$pps            = ! empty( $settings['posts_per_slide'] ) ? (int) $settings['posts_per_slide'] : 3;
-		$pps_tab        = ! empty( $settings['posts_per_slide_tab'] ) ? (int) $settings['posts_per_slide_tab'] : 2;
-		$pps_mob        = ! empty( $settings['posts_per_slide_mob'] ) ? (int) $settings['posts_per_slide_mob'] : 1;
-		$space          = ! empty( $settings['space'] ) ? (int) $settings['space'] : 0;
-		$pagination     = ! empty( $settings['pagination'] ) ? $settings['pagination'] : 'bullets';
-		$buttons        = ! empty( $settings['buttons'] ) ? $settings['buttons'] : '';
-		$autoplay       = ! empty( $settings['autoplay'] ) ? $settings['autoplay'] : 0;
-		$loop           = ! empty( $settings['loop'] ) ? $settings['loop'] : 0;
-		$categories     = ! empty( $settings['categories'] ) ? $settings['categories'] : array();
-		$exclude_cats   = ! empty( $settings['exclude_cats'] ) ? $settings['exclude_cats'] : array();
-		$filters        = ! empty( $settings['filters'] ) ? $settings['filters'] : '';
-		$products_in    = ! empty( $settings['products_in'] ) ? $settings['products_in'] : '';
-		$img_format     = ! empty( $settings['img_format'] ) ? $settings['img_format'] : 'thumbnail';
-		$style          = ! empty( $settings['style'] ) ? $settings['style'] : 'style_1';
-		$short_desc     = ! empty( $settings['short_desc'] ) ? $settings['short_desc'] : '';
-		$price          = ! empty( $settings['price'] ) ? $settings['price'] : '';
-		$add_to_cart    = ! empty( $settings['add_to_cart'] ) ? $settings['add_to_cart'] : '';
-		$posted_in      = ! empty( $settings['posted_in'] ) ? $settings['posted_in'] : '';
-		$css_class      = ! empty( $settings['css_class'] ) ? $settings['css_class'] : '';
-		$img_cont_pos   = ! empty( $settings['img_container_pos'] ) ? $settings['img_container_pos'] : 'center';
+		$posts_per_page = (int) $settings['posts_per_page'];
+		$offset         = (int) $settings['offset'];
+		$pps            = (int) $settings['posts_per_slide'];
+		$pps_tab        = (int) $settings['posts_per_slide_tab'];
+		$pps_mob        = (int) $settings['posts_per_slide_mob'];
+		$space          = (int) $settings['space'];
+		$pagination     = $settings['pagination'];
+		$buttons        = $settings['buttons'];
+		$autoplay       = $settings['autoplay'];
+		$loop           = $settings['loop'];
+		$categories     = $settings['categories'];
+		$exclude_cats   = $settings['exclude_cats'];
+		$filters        = $settings['filters'];
+		$products_in    = $settings['products_in'];
+		$img_format     = $settings['img_format'];
+		$style          = $settings['style'];
+		$short_desc     = $settings['short_desc'];
+		$price          = $settings['price'];
+		$add_to_cart    = $settings['add_to_cart'];
+		$posted_in      = $settings['posted_in'];
+		$css_class      = $settings['css_class'];
+		$img_cont_pos   = $settings['img_container_pos'];
 
 		global $post;
 
 		$grid = micemade_elements_grid_class( intval( $pps ), intval( $pps_tab ), intval( $pps_mob ) );
 
-		// Query posts: ( hook in includes/wc-functions.php ).
-		$args     = apply_filters( 'micemade_elements_wc_query_args', $posts_per_page, $categories, $exclude_cats, $filters, $offset, $products_in );
-		$products = get_posts( $args );
+		// Query args: ( hook in includes/wc-functions.php ).
+		$args = apply_filters( 'micemade_elements_wc_query_args', $posts_per_page, $categories, $exclude_cats, $filters, $offset, $products_in );
 
-		if ( ! empty( $products ) ) {
+		$products_query = new \WP_Query( $args );
+
+		if ( $products_query->have_posts() ) {
 
 			// CSS classes for main slider container.
-			$this->add_render_attribute( 'container', 'class', 'micemade-elements_products_slider swiper-container' );
+			$this->add_render_attribute( 'container', 'class', 'micemade-elements_products_slider swiper-container woocommerce' );
 			$this->add_render_attribute( 'container', 'class', $style );
-			$this->add_render_attribute( 'container', 'class', 'container-' . $img_cont_pos );
+			if ( $img_cont_pos ) {
+				$this->add_render_attribute( 'container', 'class', 'container-' . $img_cont_pos );
+			}
 
 			echo '<div ' . $this->get_render_attribute_string( 'container' ) . '>';
 
 			// Slider settings for JS function.
-			echo '<input type="hidden" data-pps="' . esc_attr( $pps ) . '" data-ppst="' . esc_attr( $pps_tab ) . '" data-ppsm="' . esc_attr( $pps_mob ) . '" data-space="' . esc_attr( $space ) . '" data-pagin="' . esc_attr( $pagination ) . '" data-autoplay="' . esc_attr( (int) $autoplay ) . '" ' . ( $loop ? 'data-loop="true"' : '' ) . ' class="slider-config">';
+			$slideroptions = wp_json_encode(
+				array(
+					'pps'      => $pps,
+					'ppst'     => $pps_tab,
+					'ppsm'     => $pps_mob,
+					'space'    => $space,
+					'pagin'    => $pagination,
+					'autoplay' => $autoplay,
+					'loop'     => $loop,
+				)
+			);
 
-			echo '<ul class="swiper-wrapper products woocommerce">';
+			echo '<input type="hidden" data-slideroptions="' . esc_js( $slideroptions ) . '" class="slider-config">';
+
+			echo '<ul class="swiper-wrapper products">';
 
 			// If style as in WC content-product template.
 			if ( 'catalog' === $style ) {
 				add_filter(
 					'post_class', function( $classes ) {
-						$classes[] = 'swiper-slide';
-						$classes[] = 'item';
-						return $classes;
+						return apply_filters( 'micemade_elements_product_item_classes', $classes, 'add', ['swiper-slide', 'item'] );
 					}, 10
 				);
 			}
 
-			foreach ( $products as $post ) {
+			while ( $products_query->have_posts() ) {
 
-				setup_postdata( $post );
+				$products_query->the_post();
 
 				// If style as in WC content-product template.
 				if ( 'catalog' === $style ) {
 					wc_get_template_part( 'content', 'product' );
-					// else, use plugin styling.
+					// else, use plugin loop items.
 				} else {
 					apply_filters( 'micemade_elements_loop_product', $style, $img_format, $posted_in, $short_desc, $price, $add_to_cart, $css_class );// hook in includes/wc-functions.php.
 				}
@@ -1086,12 +1189,10 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 			// If style as in WC content-product template.
 			if ( 'catalog' === $style ) {
 				// "Clean" or "reset" post_class
-				// avoid conflict with other "post_class" functions
+				// avoid conflict with other "post_class" functions.
 				add_filter(
 					'post_class', function( $classes ) {
-						$classes_to_clean = array( 'swiper-slide', 'item' );
-						$classes          = array_diff( $classes, $classes_to_clean );
-						return $classes;
+						return apply_filters( 'micemade_elements_product_item_classes', $classes, '', ['swiper-slide', 'item'] );
 					}, 10
 				);
 			}
@@ -1108,16 +1209,6 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		}
 
 		wp_reset_postdata();
-
-		echo '
-		<script type=text/javascript" defer="defer">
-		(function( $ ){
-			"use strict";
-			jQuery(document).ready( function($) {
-				var products_slider = window.micemade_elements_swiper();
-			});
-		})( jQuery );
-		</script>';
 
 	}
 

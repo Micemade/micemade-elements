@@ -57,12 +57,12 @@ class Micemade_Elements {
 
 			// Load textdomain.
 			add_action( 'plugins_loaded', array( self::$instance, 'load_plugin_textdomain' ) );
-
 			// Check for plugin dependecies.
 			add_action( 'plugins_loaded', array( self::$instance, 'plugins_dependency_checks' ) );
 
-			// Register CPT's.
-			add_action( 'init', array( self::$instance, 'register_custom_post_types' ) );
+			// Register CPT's and enabling WC functions in Elementor editor.
+			add_action( 'init', array( self::$instance, 'register_cpts' ) );
+			add_action( 'init', array( self::$instance, 'enable_wc_frontend_in_editor' ) );
 
 			// Enqueue script and styles for Elementor editor.
 			add_action( 'elementor/editor/before_enqueue_scripts', array( self::$instance, 'editor_scripts' ), 999 );
@@ -161,39 +161,43 @@ class Micemade_Elements {
 	 */
 	public function widgets_registered() {
 
-		require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-posts-grid.php';
-		require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-buttons.php';
+		// Widgets directory plus widget prefix "class-micemade".
+		$prefix = MICEMADE_ELEMENTS_DIR . 'widgets/class-micemade-';
 
-		// Revolution Slider plugin element.
+		require_once $prefix . 'posts-grid.php';
+		require_once $prefix . 'buttons.php';
+
+		// "Revolution Slider" plugin widget.
 		if ( MICEMADE_ELEMENTS_REVSLIDER_ON ) {
-			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-rev-slider.php';
+			require_once $prefix . 'rev-slider.php';
 		}
-		// WooCommerce plugin elements.
+		// "WooCommerce" plugin widgets.
 		if ( MICEMADE_ELEMENTS_WOO_ACTIVE ) {
-			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-wc-categories.php';
-			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-wc-products.php';
-			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-wc-products-slider.php';
-			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-wc-single-product.php';
-			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-wc-products-tabs.php';
+			require_once $prefix . 'wc-categories.php';
+			require_once $prefix . 'wc-products.php';
+			require_once $prefix . 'wc-products-slider.php';
+			require_once $prefix . 'wc-single-product.php';
+			require_once $prefix . 'wc-products-tabs.php';
+			require_once $prefix . 'wc-cat-menu.php';
 		}
-		// Contact Form 7 plugin element.
+
+		// "Contact Form 7" plugin widget.
 		if ( MICEMADE_ELEMENTS_CF7_ON ) {
-			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-contact-form-7.php';
+			require_once $prefix . 'contact-form-7.php';
 		}
-		// MailChimp 4 WP plugin element.
+		// "MailChimp 4 WP" plugin widget.
 		if ( MICEMADE_ELEMENTS_MC4WP_ON ) {
-			require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-mailchimp.php';
+			require_once $prefix . 'mailchimp.php';
 		}
 
-		// Instagram element.
-		require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-instagram.php';
-
+		// Instagram widget.
+		require_once $prefix . 'instagram.php';
 		// Micemade slider.
-		require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-slider.php';
+		require_once $prefix . 'slider.php';
 
-		// Micemade header elements - for v.0.8.0
-		// require_once MICEMADE_ELEMENTS_DIR . 'widgets/micemade-header-logo.php';
-		// require_once MICEMADE_ELEMENTS_DIR . 'widgets/class-micemade-nav.php';
+		// Micemade header widgets - for v.1.0
+		// require_once $prefix . 'header-logo.php';
+		// require_once $prefix . 'nav.php';
 
 	}
 
@@ -373,7 +377,7 @@ class Micemade_Elements {
 	 *
 	 * @return false
 	 */
-	public function register_custom_post_types() {
+	public function register_cpts() {
 
 		// Array of supported Micemade Themes.
 		$micemade_themes = array( 'natura', 'beautify', 'ayame', 'lillabelle', 'inspace' );
@@ -398,6 +402,27 @@ class Micemade_Elements {
 
 		return false;
 
+	}
+
+	/**
+	 * Make WooCommerce functions work in editor
+	 *
+	 * @return void
+	 */
+	public function enable_wc_frontend_in_editor() {
+		// WooCommerce frontend functionalities in Elementor editor.
+		if ( MICEMADE_ELEMENTS_WOO_ACTIVE ) {
+			add_action( 'admin_action_elementor', array( self::$instance, 'wc_frontend_includes' ), 5 );
+		}
+	}
+
+	/**
+	 * WooCommerce frontend functions
+	 *
+	 * @return void
+	 */
+	public function wc_frontend_includes() {
+		WC()->frontend_includes();
 	}
 
 	/**

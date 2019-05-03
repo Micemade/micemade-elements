@@ -1,4 +1,5 @@
-.micemade-elements_products_slider {
+.micemade-elements_products_slider,
+.micemade-elements_slider {
 	.swiper-container {
 		margin-left: auto;
 		margin-right: auto;
@@ -29,6 +30,7 @@
 		display: -ms-flexbox;
 		display: -webkit-flex;
 		display: flex;
+		flex-wrap: nowrap;
 
 		-webkit-transition-property:-webkit-transform;
 		-moz-transition-property:-moz-transform;

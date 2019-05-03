@@ -258,59 +258,6 @@ class Micemade_Posts_Grid extends Widget_Base {
 			]
 		);
 
-		$repeater = new \Elementor\Repeater();
-
-		$repeater->add_control(
-			'meta_sorter_label',
-			[
-				'label'      => esc_html__( 'Sort meta info', 'micemade-elements' ),
-				'type'       => 'sorter_label', // Custom type - class Micemade_Control_Setting.
-				'show_label' => false,
-			]
-		);
-		$repeater->add_control(
-			'meta_part_enabled',
-			[
-				'label'     => esc_html__( 'Enable', 'micemade-elements' ),
-				'type'      => Controls_Manager::SWITCHER,
-				'label_off' => __( 'No', 'elementor' ),
-				'label_on'  => __( 'Yes', 'elementor' ),
-				'default'   => 'yes',
-			]
-		);
-
-		$this->add_control(
-			'meta_ordering',
-			[
-				'label'        => __( 'Meta selection and ordering', 'micemade-elements' ),
-				'type'         => \Elementor\Controls_Manager::REPEATER,
-				'fields'       => $repeater->get_controls(),
-				'item_actions' => [
-					'duplicate' => false,
-					'add'       => false,
-					'remove'    => false,
-				],
-				'default'      => [
-					[
-						'meta_sorter_label' => 'Date',
-						'meta_part_enabled' => 'yes',
-					],
-					[
-						'meta_sorter_label' => 'Author',
-						'meta_part_enabled' => 'yes',
-					],
-					[
-						'meta_sorter_label' => 'Posted in',
-						'meta_part_enabled' => 'yes',
-					],
-				],
-				'title_field'  => '{{{ meta_sorter_label }}}',
-				'condition'    => [
-					'meta!' => '',
-				],
-			]
-		);
-
 		$this->add_responsive_control(
 			'post_overal_padding',
 			[
@@ -334,7 +281,28 @@ class Micemade_Posts_Grid extends Widget_Base {
 			]
 		);
 
+		$this->add_responsive_control(
+			'background_type',
+			[
+				'label'       => __( 'Post background type', 'micemade-elements' ),
+				'type'        => Controls_Manager::CHOOSE,
+				'label_block' => false,
+				'default'     => 'solid',
+				'options'     => [
+					'solid'    => [
+						'title' => __( 'Solid color', 'micemade-elements' ),
+						'icon'  => 'fa fa-eyedropper',
+					],
+					'gradient' => [
+						'title' => __( 'Gradient', 'micemade-elements' ),
+						'icon'  => 'fa fa-list-ul',
+					],
+				],
+			]
+		);
+
 		$this->start_controls_tabs( 'tabs_post_background' );
+
 		$this->start_controls_tab(
 			'tab_post_background_normal',
 			[
@@ -345,14 +313,31 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_control(
 			'post_text_background_color',
 			[
-				'label'     => __( 'Post text background', 'micemade-elements' ),
+				'label'     => __( 'Background color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .inner-wrap'   => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} .post-overlay' => 'background-color: {{VALUE}};',
 				],
+				'condition' => [
+					'background_type' => 'solid',
+				],
 			]
 		);
+
+		$this->add_group_control(
+			Group_Control_Background::get_type(),
+			[
+				'name'      => 'post_text_background_gradient',
+				'label'     => __( 'Background gradient', 'micemade-elements' ),
+				'types'     => [ 'gradient' ],
+				'selector'  => '{{WRAPPER}} .inner-wrap, {{WRAPPER}} .post-overlay',
+				'condition' => [
+					'background_type' => 'gradient',
+				],
+			]
+		);
+
 		$this->end_controls_tab();
 
 		// HOVER.
@@ -371,11 +356,25 @@ class Micemade_Posts_Grid extends Widget_Base {
 					'{{WRAPPER}} .inner-wrap:hover' => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} .inner-wrap:hover .post-overlay' => 'background-color: {{VALUE}};',
 				],
-				/* 'condition' => [
-					'style' => ['style_3','style_4'],
-				], */
+				'condition' => [
+					'background_type' => 'solid',
+				],
 			]
 		);
+
+		$this->add_group_control(
+			Group_Control_Background::get_type(),
+			[
+				'name'      => 'post_text_background_gradient_hover',
+				'label'     => __( 'Background gradient', 'micemade-elements' ),
+				'types'     => [ 'gradient' ],
+				'selector'  => '{{WRAPPER}} .inner-wrap:hover, {{WRAPPER}} .inner-wrap:hover .post-overlay',
+				'condition' => [
+					'background_type' => 'gradient',
+				],
+			]
+		);
+
 		$this->end_controls_tab();
 		$this->end_controls_tabs();
 
@@ -496,7 +495,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 
 			]
 		);
-
+		/*
 		$this->add_responsive_control(
 			'content_vertical_alignment',
 			[
@@ -513,6 +512,37 @@ class Micemade_Posts_Grid extends Widget_Base {
 					'{{WRAPPER}} .inner-wrap' => 'align-items: {{VALUE}};',
 				],
 				'condition' => [
+					'style' => [ 'style_2', 'style_3', 'style_4' ],
+				],
+			]
+		);
+		*/
+		$this->add_responsive_control(
+			'content_vertical_alignment',
+			[
+				'label'       => __( 'Vertical Align', 'micemade-elements' ),
+				'type'        => Controls_Manager::CHOOSE,
+				'label_block' => false,
+				'options'     => [
+					'flex-start' => [
+						'title' => __( 'Start', 'micemade-elements' ),
+						'icon'  => 'eicon-v-align-top',
+					],
+					'center'     => [
+						'title' => __( 'Center', 'micemade-elements' ),
+						'icon'  => 'eicon-v-align-middle',
+					],
+					'flex-end'   => [
+						'title' => __( 'End', 'micemade-elements' ),
+						'icon'  => 'eicon-v-align-bottom',
+					],
+				],
+				'default'     => 'center',
+				'selectors'   => [
+					'{{WRAPPER}} .post-text'  => 'justify-content: {{VALUE}};',
+					'{{WRAPPER}} .inner-wrap' => 'align-items: {{VALUE}};',
+				],
+				'condition'   => [
 					'style' => [ 'style_2', 'style_3', 'style_4' ],
 				],
 			]
@@ -655,7 +685,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', '%' ],
 				'selectors'  => [
-					'{{WRAPPER}} .post-text h4' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .post-text h4' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
 				],
 			]
 		);
@@ -751,26 +781,71 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->end_controls_tab();
 		$this->end_controls_tabs();
 
-		$this->add_responsive_control(
-			'meta_font_size',
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
 			[
-				'label'     => esc_html__( 'Meta font size (%)', 'micemade-elements' ),
-				'type'      => Controls_Manager::SLIDER,
-				'selectors' => [
-					'{{WRAPPER}} .post-text .meta' => 'font-size: {{SIZE}}{{UNIT}};',
+				'name'      => 'meta_typography',
+				'label'     => __( 'Meta typography', 'micemade-elements' ),
+				'selector'  => '{{WRAPPER}} .post-text .meta',
+				'condition' => [
+					'meta!' => '',
 				],
-				'default'   => [
-					'unit' => 'px',
-				],
-				'range'     => [
-					'px' => [
-						'min' => 0,
-						'max' => 100,
-					],
-				],
-
 			]
 		);
+
+		$repeater = new \Elementor\Repeater();
+
+		$repeater->add_control(
+			'meta_sorter_label',
+			[
+				'label'      => esc_html__( 'Sort meta info', 'micemade-elements' ),
+				'type'       => 'sorter_label', // Custom type - class Micemade_Control_Setting.
+				'show_label' => false,
+			]
+		);
+		$repeater->add_control(
+			'meta_part_enabled',
+			[
+				'label'     => esc_html__( 'Enable', 'micemade-elements' ),
+				'type'      => Controls_Manager::SWITCHER,
+				'label_off' => __( 'No', 'elementor' ),
+				'label_on'  => __( 'Yes', 'elementor' ),
+				'default'   => 'yes',
+			]
+		);
+
+		$this->add_control(
+			'meta_ordering',
+			[
+				'label'        => __( 'Meta selection and ordering', 'micemade-elements' ),
+				'type'         => \Elementor\Controls_Manager::REPEATER,
+				'fields'       => $repeater->get_controls(),
+				'item_actions' => [
+					'duplicate' => false,
+					'add'       => false,
+					'remove'    => false,
+				],
+				'default'      => [
+					[
+						'meta_sorter_label' => 'Date',
+						'meta_part_enabled' => 'yes',
+					],
+					[
+						'meta_sorter_label' => 'Author',
+						'meta_part_enabled' => 'yes',
+					],
+					[
+						'meta_sorter_label' => 'Posted in',
+						'meta_part_enabled' => 'yes',
+					],
+				],
+				'title_field'  => '{{{ meta_sorter_label }}}',
+				'condition'    => [
+					'meta!' => '',
+				],
+			]
+		);
+
 		$this->end_controls_section();
 
 		// Excerpt controls.
@@ -973,29 +1048,29 @@ class Micemade_Posts_Grid extends Widget_Base {
 		// Get our input from the widget settings.
 		$settings = $this->get_settings_for_display();
 
-		$posts_per_page    = (int) $settings['posts_per_page'];
-		$sticky            = $settings['sticky'];
-		$offset            = (int) $settings['offset'];
-		$posts_per_row     = (int) $settings['posts_per_row'];
-		$posts_per_row_tab = (int) $settings['posts_per_row_tab'];
-		$posts_per_row_mob = (int) $settings['posts_per_row_mob'];
-		$categories        = $settings['categories'];
-		$show_thumb        = $settings['show_thumb'];
-		$img_format        = $settings['img_format'];
-		$style             = $settings['style'];
-		$excerpt           = $settings['excerpt'];
-		$excerpt_limit     = $settings['excerpt_limit'];
-		$meta              = $settings['meta'];
-		$meta_ordering     = $settings['meta_ordering'];
-		$css_class         = $settings['css_class'];
-		$use_load_more     = $settings['use_load_more'];
+		$ppp           = (int) $settings['posts_per_page'];
+		$sticky        = $settings['sticky'];
+		$offset        = (int) $settings['offset'];
+		$ppr           = (int) $settings['posts_per_row'];
+		$ppr_tab       = (int) $settings['posts_per_row_tab'];
+		$ppr_mob       = (int) $settings['posts_per_row_mob'];
+		$categories    = $settings['categories'];
+		$show_thumb    = $settings['show_thumb'];
+		$img_format    = $settings['img_format'];
+		$style         = $settings['style'];
+		$excerpt       = $settings['excerpt'];
+		$excerpt_limit = $settings['excerpt_limit'];
+		$meta          = $settings['meta'];
+		$meta_ordering = $settings['meta_ordering'];
+		$css_class     = $settings['css_class'];
+		$use_load_more = $settings['use_load_more'];
 
 		global $post;
 
-		$grid = micemade_elements_grid_class( intval( $posts_per_row ), intval( $posts_per_row_tab ), intval( $posts_per_row_mob ) );
+		$grid = micemade_elements_grid_class( intval( $ppr ), intval( $ppr_tab ), intval( $ppr_mob ) );
 
 		// Query posts - "micemade_elements_query_args" hook in includes/helpers.php.
-		$args  = apply_filters( 'micemade_elements_query_args', $posts_per_page, $categories, $sticky, $offset ); 
+		$args  = apply_filters( 'micemade_elements_query_args', $ppp, $categories, $sticky, $offset );
 		$posts = get_posts( $args );
 
 		if ( ! empty( $posts ) ) {
@@ -1007,10 +1082,11 @@ class Micemade_Posts_Grid extends Widget_Base {
 
 				$postoptions = wp_json_encode(
 					array(
-						'ppp'           => $posts_per_page,
+						'ppp'           => $ppp,
 						'sticky'        => $sticky,
 						'categories'    => $categories,
 						'style'         => $style,
+						'show_thumb'    => $show_thumb,
 						'img_format'    => $img_format,
 						'excerpt'       => $excerpt,
 						'excerpt_limit' => $excerpt_limit,

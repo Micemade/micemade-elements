@@ -1,6 +1,9 @@
 jQuery.noConflict();
 ( function( $ ) {
 	"use strict";
+	
+	var isEditMode = false;
+	
 	/**
 	 *	FILTER ITEMS (Isotope) :
 	 *	var function filterItems
@@ -50,22 +53,20 @@ jQuery.noConflict();
 			
 			var root = rootElement || $('body');
 
-			console.log( root );
-
 			var sliderContainers = root.find( '.slick-slider' );
 		
 			sliderContainers.each( function(index, element) {
 				
 				var $_this   = $(this),
-					config   = $_this.parent().find('.slider-config'),
-					pps      = config.data('pps'),
-					ppst     = config.data('ppst'),
-					ppsm     = config.data('ppsm'),
-					space    = config.data('space'),
-					pagin    = config.data('pagin'),
-					autoPlay = config.data('autoplay'),
-					loop     = config.data('loop');
-				
+					slideroptions = $_this.parent().find('.slider-config').data('slideroptions'),
+					pps      = slideroptions.pps,
+					ppst     = slideroptions.ppst,
+					ppsm     = slideroptions.ppsm,
+					space    = slideroptions.space,
+					pagin    = slideroptions.pagin,
+					autoPlay = slideroptions.autoplay,
+					loop     = slideroptions.loop;
+
 				$_this.not(".slick-initialized").slick({
 					autoplay: autoPlay,
 					infinite: loop,
@@ -102,80 +103,113 @@ jQuery.noConflict();
 
 	})( jQuery );
 	
+	/**
+	 * Micemade Tabs - display WC products in tabs
+	 */
+	var micemadeElementsTabs = function() {
+		
+		var tabs = $('.micemade-elements_tabs');
+		tabs.each( function(){
+			
+			var $_Tabs = $(this); // Single tabs holder
+			
+			var tabsWrapper = $_Tabs.find('.tabs-wrapper'),
+				tabTitles   = tabsWrapper.find('.tab-title'),
+				tabsContent = $_Tabs.find('.tabs-content-wrapper'),
+				content     = tabsContent.find('.tab-content');
+			
+			tabTitles.on( 'click touchstart', function(event) {
+
+				$(this).addClass('active');
+				$(this).siblings().removeClass('active');
+				
+				// Hide inactive tab titles and show active one and content
+				var tab = $(this).data('tab');
+				content.not('.tab-'+ tab).css('display', 'none').removeClass('active');
+				tabsContent.find('.tab-' + tab).fadeIn().addClass('active');
+			});
+			
+		});
+	}
+
 	
 	/**
 	 *  SWIPER SLIDER
 	 */
-	( function( $ ){
+	var micemadeElementsSwiper = function( rootElement ) {
+		
+		var root = $('body');
+		if( rootElement ) {
+			root = $( rootElement );
+		}
+
+		var swiperContainers = root.find( '.swiper-container' );
+
+		swiperContainers.each( function(index, element) {
 			
-		window.micemade_elements_swiper = function( rootElement ) {
-			
-			var root = $('body');
-			if( rootElement ) {
-				root = $( rootElement );
+			var thisContainer   = $(this),
+				slideroptions = thisContainer.find('.slider-config').data('slideroptions'),
+				pps      = slideroptions.pps,
+				ppst     = slideroptions.ppst,
+				ppsm     = slideroptions.ppsm,
+				space    = slideroptions.space,
+				pagin    = slideroptions.pagin,
+				autoplay = slideroptions.autoplay,
+				loop     = slideroptions.loop;
+
+
+			var mainSwiperArgs = {
+				slideActiveClass: 'active',
+				autoHeight: true,
+				effect: 'slide',
+				slidesPerView: pps,
+				spaceBetween: space,
+				grabCursor: true,
+				loop: loop,
+				pagination: {
+					el: '.swiper-pagination',
+					type: pagin,
+					clickable: true
+				},
+				navigation: {
+					prevEl: thisContainer.find('.swiper-button-prev')[0],
+					nextEl: thisContainer.find('.swiper-button-next')[0]
+				},
+				breakpoints: {
+					768: {
+						slidesPerView: ppst,
+					},
+					480: {
+						slidesPerView: ppsm,
+					},
+
+				},
+				on: {
+					transitionStart: function() {
+					}
+				}
 			}
-
-			var swiperContainers = root.find( '.swiper-container' );
-
-			swiperContainers.each( function(index, element) {
-				
-				var $_this   = $(this),
-					config   = $_this.find('.slider-config'),
-					pps      = config.data('pps'),
-					ppst     = config.data('ppst'),
-					ppsm     = config.data('ppsm'),
-					space    = config.data('space'),
-					pagin    = config.data('pagin'),
-					autoplay = config.data('autoplay'),
-					loop     = config.data('loop');
-
-				var mainSwiperArgs = {
-					effect: 'slide',
-					slidesPerView: pps,
-					spaceBetween: space,
-					grabCursor: true,
-					loop: loop,
-					pagination: {
-						el: '.swiper-pagination',
-						type: pagin,
-						clickable: true
-					},
-					navigation: {
-						prevEl: $_this.find('.swiper-button-prev')[0],
-						nextEl: $_this.find('.swiper-button-next')[0]
-					},
-					breakpoints: {
-						768: {
-							slidesPerView: ppst,
-						},
-						480: {
-							slidesPerView: ppsm,
-						},
-
+			// If autoplay is enabled.
+			var autoplayArgs = {}
+			if( autoplay && autoplay >= 1000 ) {
+				var autoplayArgs = {
+					autoplay: {
+						delay: autoplay
 					}
 				}
-				// If autoplay is enabled.
-				var autoplayArgs = {}
-				if( autoplay != '0' ) {
-					var autoplayArgs = {
-						autoplay: {
-							delay: autoplay
-						}
-					}
-				}
-				// Join arg objects.
-				var swiperArgs = $.extend( mainSwiperArgs, autoplayArgs );
-				// Initialize Swiper.
-				var swiper = new Swiper( $_this, swiperArgs );
+			}
+			// Join arg objects.
+			var swiperArgs = $.extend( mainSwiperArgs, autoplayArgs );
+			// Initialize Swiper.
+			var swiper = new Swiper( thisContainer, swiperArgs );
 
-				//swiper.on('init', function() { /* do something */});
-				//swiper.init();
+			//swiper.on('init', function() { /* do something */});
+			//swiper.init();
 
-			});
+		});
 
-		};
-
-	})( jQuery );
+	};
+	
 	
 	( function( $ ){
 		/**
@@ -192,49 +226,6 @@ jQuery.noConflict();
 		}
 	})( jQuery );
 
-	( function( $ ) {
-		/**
-		 * Micemade Tabs - display WC products in tabs
-		 */
-		window.initMicemadeElementsTabs =function micemadeElementsTabs() {
-			
-			var tabs = $('.micemade-elements_tabs');
-			tabs.each( function(){
-				
-				var $_Tabs = $(this); // Single tabs holder
-				
-				var tabsWrapper = $_Tabs.find('.tabs-wrapper'),
-					tabTitles   = tabsWrapper.find('.tab-title'),
-					tabsContent = $_Tabs.find('.tabs-content-wrapper'),
-					content     = tabsContent.find('.tab-content');
-
-				// clear old random "id"'s
-				// "randomid" - unique identifier for tab elements
-				tabsWrapper.data('randomid',null);
-				
-				// create new random "id"
-				var randId = window.mmMakeId();
-				tabsWrapper.data('randomid', randId );
-				
-				//tabTitles.click( function(event) {
-				$( document ).on( 'click', '.tab-title', function(event) {
-
-					if( tabsWrapper.data('randomid') !== randId ) {
-						return;
-					}
-
-					$(this).addClass('active');
-					$(this).siblings().removeClass('active');
-					
-					// Hide inactive tab titles and show active one and content
-					var tab = $(this).data('tab');
-					content.not('.tab-'+ tab).css('display', 'none').removeClass('active');
-					tabsContent.find('.tab-' + tab).fadeIn().addClass('active');
-				});
-				
-			});
-		}
-	})( jQuery );
 
 	( function( $ ){
 		/**
@@ -254,6 +245,7 @@ jQuery.noConflict();
 			});
 		}
 	})( jQuery );
+
 
 	( function( $ ){
 		window.initMicemadeMenuNav = function micemadeMenuNav() {
@@ -276,18 +268,6 @@ jQuery.noConflict();
 
 
 	( function( $ ){
-		window.initMicemadeElements = function() {
-			
-			var startMicemadeElementsTabs  = window.initMicemadeElementsTabs();
-			var startMicemadeElementSwiper = window.micemade_elements_swiper();
-			var startMicemadeInViewport    = window.micemadeInViewport();
-			var startMicemadeMenuNav       = window.initMicemadeMenuNav();
-			var startMicemadeMegaMenuWatch = window.megaMenuWatch();
-		}
-
-	})( jQuery );
-
-	( function( $ ){
 		
 		window.megaMenuWatch = function() {
 			
@@ -298,7 +278,7 @@ jQuery.noConflict();
 						value = target.getAttribute(name);
 					
 					if( value == 'true' ) {
-						var restartMicemadeElementSwiper = window.micemade_elements_swiper('.mega-menu');
+						var restartMicemadeElementSwiper = window.micemadeElementsSwiper('.mega-menu');
 					}else{
 						mutationObserver.disconnect();
 					}
@@ -312,12 +292,77 @@ jQuery.noConflict();
 					attributeFilter: ['aria-expanded'],
 				});
 			})
+
 		}
 
 	})( jQuery );
 
-	//( function( $ ){})( jQuery );
+	/**
+	 * Micemade WC Categories Menu.
+	 */
+	var wcCategoriesMenu = function() {
+		
+		var wcCatMenuToggle = $( '.micemade-elements_wc_cat_menu' ).find( '.sub-toggler' );
+		wcCatMenuToggle.each( function() {
+
+			var $_this   = $(this),
+				liItem   = $_this.parent().parent(),
+				submenu  = liItem.find(".children"),
+				siblings = liItem.siblings().find(".sub-toggler");
 	
+			$_this.on( 'click', function(e) {
+				
+				e.preventDefault();
+	
+				siblings.removeClass("activeparent");
+				siblings.parent().next(".children").removeClass("active");
+	
+				if( ! $_this.hasClass("activeparent") ) {
+					submenu.addClass("active");
+					$_this.addClass("activeparent");
+	
+				}else{
+					submenu.removeClass("active").delay(200);
+					$_this.removeClass("activeparent");
+				}
+	
+			});
+		});
+
+	}
+
+	//( function( $ ){})( jQuery );
+
+	// Hook into Elementor JS hooks.
+	$( window ).on( 'elementor/frontend/init', function () {
+		if ( elementorFrontend.isEditMode() ) {
+			isEditMode = true;
+		}
+		// Start Micemade Slider
+		elementorFrontend.hooks.addAction( 'frontend/element_ready/micemade-slider.default', micemadeElementsSwiper );
+
+		// Start Micemade Products Slider
+		elementorFrontend.hooks.addAction( 'frontend/element_ready/micemade-wc-products-slider.default', micemadeElementsSwiper );
+
+		// Start Micemade Products Tab
+		elementorFrontend.hooks.addAction( 'frontend/element_ready/micemade-wc-products-tabs.default', micemadeElementsTabs );
+
+		// Start Micemade Product Categories Menu
+		elementorFrontend.hooks.addAction( 'frontend/element_ready/micemade-wc-cat-menu.default', wcCategoriesMenu );
+
+	});
+	
+	( function( $ ){
+		window.initMicemadeElements = function() {
+			
+			var startMicemadeInViewport    = window.micemadeInViewport();
+			var startMicemadeMenuNav       = window.initMicemadeMenuNav();
+			var startMicemadeMegaMenuWatch = window.megaMenuWatch();
+
+		}
+
+	})( jQuery );
+
 	$(document).ready(function() {
 	
 		
@@ -380,7 +425,7 @@ jQuery.noConflict();
 			
 			var $_posts_holder = $(this);
 			
-			var	$loader       = $_posts_holder.next('.micemade-elements_more-posts-wrap').find('.more_posts'),
+			var $loader       = $_posts_holder.next('.micemade-elements_more-posts-wrap').find('.more_posts'),
 				postoptions   = $_posts_holder.find('.posts-grid-settings' ).data( 'postoptions' ),
 				ppp           = postoptions.ppp,
 				sticky        = postoptions.sticky,
@@ -389,7 +434,7 @@ jQuery.noConflict();
 				show_thumb    = postoptions.show_thumb,
 				img_format    = postoptions.img_format,
 				excerpt       = postoptions.excerpt,
-				excerpt_limit = postoptions.excerpt,
+				excerpt_limit = postoptions.excerpt_limit,
 				meta          = postoptions.meta,
 				meta_ordering = postoptions.meta_ordering,
 				css_class     = postoptions.css_class,
@@ -398,13 +443,13 @@ jQuery.noConflict();
 				offset        = $_posts_holder.find('.post').length;
 			
 			$loader.on( 'click', load_ajax_posts );
-			 
+
 			function load_ajax_posts(e) {
-						
+
 				e.preventDefault();
 				
 				if ( !($loader.hasClass('post_loading_loader') || $loader.hasClass('no_more_posts')) ) {
-					
+
 					$.ajax({
 						type: 'POST',
 						dataType: 'html',

@@ -339,19 +339,19 @@ class Micemade_Instagram extends Widget_Base {
 				// Slice list down to required total number of pics.
 				$media_array = array_slice( $media_array, 0, $number );
 
-				// Element attributes
+				// Element attributes.
 				$this->add_render_attribute( 'ul-class', 'class', 'mme-row instagram-size-' . $size );
 				$this->add_render_attribute( 'li-class', 'class', 'pic ' . $grid );
 				?>
-				
+
 				<div class="micemade-elements_instagram">
-			   
-					<ul <?php echo $this->get_render_attribute_string( 'ul-class' ); ?>>
+
+					<div <?php echo $this->get_render_attribute_string( 'ul-class' ); ?>>
 					<?php
 					foreach ( $media_array as $index => $item ) {
 
 						$i = $index + 1;
-						// Link attributes
+						// Link attributes.
 						$this->add_render_attribute(
 							'link' . $i,
 							[
@@ -361,7 +361,7 @@ class Micemade_Instagram extends Widget_Base {
 								'data-elementor-lightbox-slideshow' => $this->get_id(),
 							]
 						);
-						// Thumb attributes
+						// Thumb attributes.
 						$this->add_render_attribute(
 							'img' . $i,
 							[
@@ -375,18 +375,18 @@ class Micemade_Instagram extends Widget_Base {
 
 						$this->add_render_attribute( 'title' . $i, 'title', $item['description'] );
 
-						echo '<li ' . $this->get_render_attribute_string( 'li-class' ) . '>';
+						echo '<div ' . $this->get_render_attribute_string( 'li-class' ) . '>';
 
 						echo '<a ' . $this->get_render_attribute_string( 'link' . $i ) . '>';
 
 						echo '<img ' . $this->get_render_attribute_string( 'img' . $i ) . '/>';
 
 						echo '</a>';
-						echo '</li>';
+						echo '</div>';
 
 					} // end foreach
 					?>
-					</ul>
+					</div>
 					<?php
 					if ( 'yes' === $link ) {
 						switch ( substr( $username, 0, 1 ) ) {

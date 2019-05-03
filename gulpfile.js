@@ -1,26 +1,28 @@
-var gulp = require("gulp"),
-    sass = require('gulp-sass'),
+var gulp         = require("gulp"),
+    sass         = require('gulp-sass'),
     autoprefixer = require('gulp-autoprefixer'),
-    concat = require('gulp-concat'),
-    uglify = require('gulp-uglify'),
-    fsCache = require('gulp-fs-cache'),
-    rename = require("gulp-rename"),
-    browserSync = require('browser-sync'),
-    wpPot = require('gulp-wp-pot'),
-    runSequence = require('run-sequence'),
-    dos2unix = require('gulp-dos2unix-js');
+    concat       = require('gulp-concat'),
+    uglify       = require('gulp-uglify'),
+    fsCache      = require('gulp-fs-cache'),
+    rename       = require("gulp-rename"),
+    browserSync  = require('browser-sync'),
+    wpPot        = require('gulp-wp-pot'),
+    runSequence  = require('run-sequence'),
+    dos2unix     = require('gulp-dos2unix-js'),
+    zip          = require('gulp-zip'),
+    del          = require('del');
 
-// Get project name from json file
+// Get project name from json file.
 var jsonData = require('./package.json');
 
-// Project variables
-var $plugin_name = jsonData.name,
-    $project_version = jsonData.version,
-    $packDest = 'C:/PROJEKTI/MICEMADE-PLUGIN-'+ $plugin_name + '/',
-    $packTemp = $packDest + $plugin_name;
+// Project variables.
+var $plugin_name    = jsonData.name,
+    $plugin_version = jsonData.version,
+    $packDest       = 'C:/PROJEKTI/MICEMADE-PLUGIN-'+ $plugin_name + '/',
+    $packTemp       = $packDest + $plugin_name;
 
 
-// Configure browsersync
+// Configure browsersync.
 gulp.task('browser-sync', function() {
     var files = [
         './assets/css/scss/micemade-elements.scss',
@@ -28,7 +30,7 @@ gulp.task('browser-sync', function() {
     ];
     // Initialize BrowserSync with a PHP server
     browserSync.init(files, {
-        proxy: 'http://localhost/Petko/'
+        proxy: 'http://localhost/clothy/'
     });
     gulp.watch(
         [
@@ -81,15 +83,16 @@ gulp.task('makepot', function () {
         } ))
         .pipe(gulp.dest('./languages/'+ $plugin_name +'.pot'));
 });
-// dos2unix
+
+// dos2unix.
 gulp.task('eol', function () {
     return gulp.src(
     [
         //$packTemp + '/**/*.{css,js,php}',
         $packTemp + '/**/**',
     ])
-    .pipe(dos2unix()) // This defaults to {feedback: false, write: false}
-    .pipe(gulp.dest($packTemp))
+    .pipe( dos2unix() ) // This defaults to {feedback: false, write: false}
+    .pipe( gulp.dest( $packTemp ) )
   });
 // end dos2unix
 
@@ -133,25 +136,41 @@ gulp.task( 'js',
     )
 );
 
+// Zip the [$plugin_name] folder in pack desitnation
+gulp.task('zipit', function() {
+	return gulp.src( $packTemp + '**/**' )
+	.pipe(zip( $plugin_name + '.' + $plugin_version +'.zip'))
+	.pipe( gulp.dest( $packDest ) )
+});
+// Delete tempoarary folder ( copied theme folder in $packDest directory )
+gulp.task('clean-temp', function () {
+	del(
+		$packTemp,
+		{force: true }
+	);
+});
+
 
 // PACK EVERYTHING FOR INSTALLATION READY WP THEME ZIP
-gulp.task('pack', function(){
-    return runSequence(
+gulp.task(
+    'pack',
+    gulp.series(
         'makepot',
         'styles',
         'scripts',
         'copy',
-        'eol'//,
-        //'zipit',
-        //'clean-temp'
-    );
-});
+        'eol',
+        'zipit',
+        'clean-temp'
+    )
+);
 
 // Additional useful tasks
 // RUN CSS AND JS FILES
-gulp.task('cssjs', function(){
-    return runSequence(
+gulp.task(
+    'cssjs',
+    gulp.series(
         'styles',
         'scripts'
-    );
-});
+    )
+);

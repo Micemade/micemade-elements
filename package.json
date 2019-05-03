@@ -22,7 +22,9 @@
     "gulp-uglify-cli": "^1.0.1",
     "gulp-wp-pot": "^2.0.7",
     "gulp-zip": "^4.0.0",
+    "jquery": "^3.4.0",
     "run-sequence": "^2.2.1",
+    "tar": "^4.4.2",
     "wp-pot": "^1.3.5"
   },
   "dependencies": {

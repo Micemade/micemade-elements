@@ -1,6 +1,6 @@
 ( function($) {
 	"use strict";
-	
+
 	$(document).ready(function() {
 	
 		// Example of Elementor editor JS hooks

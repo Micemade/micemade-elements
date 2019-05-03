@@ -37,6 +37,7 @@ function micemade_elements_wc_query_args_func( $posts_per_page, $categories = ar
 	$args = array(
 		'posts_per_page'   => $posts_per_page,
 		'post_type'        => 'product',
+		'post_status'      => 'publish',
 		'offset'           => $offset,
 		'order'            => 'DESC',
 		'suppress_filters' => false,
@@ -112,6 +113,7 @@ function micemade_elements_wc_query_args_func( $posts_per_page, $categories = ar
 
 }
 add_filter( 'micemade_elements_wc_query_args', 'micemade_elements_wc_query_args_func', 10, 6 );
+
 /**
  * PRODUCT FOR LOOP
  *
@@ -123,11 +125,13 @@ add_filter( 'micemade_elements_wc_query_args', 'micemade_elements_wc_query_args_
  * @param boolean $add_to_cart - to show "Add to Cart" button or not.
  * @param string  $css_class - string with custom CSS classes.
  * @return void
- * DRY effort ...
+ * an DRY effort ...
  */
 function micemade_elements_loop_product_func( $style = 'style_1', $img_format = 'thumbnail', $posted_in = true, $short_desc = false, $price = true, $add_to_cart = true, $css_class = '' ) {
+
+	$item_class = apply_filters( 'micemade_elements_product_item_class', [ 'post', 'swiper-slide', 'product' ] );
+	echo '<li class="' . esc_attr( implode( ' ', $item_class ) ) . '">';
 	?>
-	<li class="post swiper-slide">
 
 		<div class="inner-wrap">
 
@@ -151,7 +155,7 @@ function micemade_elements_loop_product_func( $style = 'style_1', $img_format = 
 				<?php if ( $posted_in ) { ?>
 				<div class="meta">
 
-					<?php do_action( 'micemade_elements_posted_in', 'product_cat' ); ?>
+					<?php micemade_elements_posted_in( 'product_cat' ); ?>
 
 				</div>
 				<?php } ?>
@@ -183,6 +187,7 @@ function micemade_elements_loop_product_func( $style = 'style_1', $img_format = 
 		</div>
 
 	</li>
+
 	<?php
 }
 add_filter( 'micemade_elements_loop_product', 'micemade_elements_loop_product_func', 10, 7 );
@@ -207,6 +212,7 @@ function micemade_elements_simple_prod_data_func( $short_desc = true ) {
 
 }
 add_filter( 'micemade_elements_simple_prod_data', 'micemade_elements_simple_prod_data_func', 10, 1 );
+
 /**
  * PRODUCT COUNT PER CATEGORY
  *
@@ -216,7 +222,7 @@ add_filter( 'micemade_elements_simple_prod_data', 'micemade_elements_simple_prod
  */
 function micemade_elements_product_count_f( $term_id ) {
 
-	$products_count = get_woocommerce_term_meta( intval( $term_id ), 'product_count_product_cat' );
+	$products_count = get_term_meta( intval( $term_id ), 'product_count_product_cat', true );
 
 	if ( is_wp_error( $products_count ) || ! $products_count ) {
 		return;
@@ -228,9 +234,9 @@ function micemade_elements_product_count_f( $term_id ) {
 
 	$prod_count .= '</span>';
 
-	return $prod_count;
+	echo wp_kses_post( $prod_count );
 }
-add_filter( 'micemade_elements_product_count', 'micemade_elements_product_count_f', 100, 3 );
+add_action( 'micemade_elements_product_count', 'micemade_elements_product_count_f', 100, 3 );
 /**
  * Product categories query arguments
  *
@@ -281,3 +287,23 @@ function micemade_elements_cat_args( $query ) {
 
 }
 add_action( 'pre_get_posts', 'micemade_elements_cat_args', 999 );
+
+/**
+ * Add product items css classes
+ * used for products slider
+ *
+ * @param array  $classes - array of post classes.
+ * @param string $add_remove - if "add", then add classes to array.
+ * @return $classes
+ */
+function micemade_elements_product_item_classes_f( $classes, $add_remove, $additional_classes ) {
+
+	if ( 'add' === $add_remove ) {
+		$classes = array_merge( $classes, $additional_classes );
+	} else {
+		$classes = array_diff( $classes, $additional_classes );
+	}
+
+	return $classes;
+}
+add_filter( 'micemade_elements_product_item_classes', 'micemade_elements_product_item_classes_f', 5, 3 );

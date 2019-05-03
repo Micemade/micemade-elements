@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param string $post_type - type of post.
  * @return $posts_arr
  */
-function micemade_posts_array_func( $post_type = 'post' ) {
+function micemade_posts_array_func( $post_type = 'post', $id_or_slug = 'slug' ) {
 
 	$args = array(
 		'post_type'        => $post_type,
@@ -35,8 +35,11 @@ function micemade_posts_array_func( $post_type = 'post' ) {
 			if ( ! is_object( $single_post ) ) {
 				continue;
 			}
-
-			$posts_arr[ $single_post->post_name ] = wp_strip_all_tags( $single_post->post_title );
+			if ( 'slug' === $id_or_slug ) {
+				$posts_arr[ $single_post->post_name ] = wp_strip_all_tags( $single_post->post_title );
+			} elseif ( 'id' === $id_or_slug ) {
+				$posts_arr[ $single_post->ID ] = wp_strip_all_tags( $single_post->post_title );
+			}
 		}
 	} else {
 		$posts_arr[] = '';
@@ -45,7 +48,7 @@ function micemade_posts_array_func( $post_type = 'post' ) {
 	return $posts_arr;
 
 }
-add_filter( 'micemade_posts_array', 'micemade_posts_array_func', 10, 1 );
+add_filter( 'micemade_posts_array', 'micemade_posts_array_func', 10, 2 );
 
 /**
  * Get terms array

@@ -18,7 +18,7 @@ class Micemade_Slider extends Widget_Base {
 	}
 
 	public function get_icon() {
-		return 'eicon-slider';
+		return 'eicon-slideshow';
 	}
 
 	public function get_categories() {
@@ -47,16 +47,7 @@ class Micemade_Slider extends Widget_Base {
 
 		$repeater = new \Elementor\Repeater();
 
-		$repeater->start_controls_tabs( 'slides_repeater' );
-
-		// Content tab.
-		$repeater->start_controls_tab(
-			'slide_text_tab',
-			[
-				'label' => __( 'Text', 'micemade-elements' ),
-			]
-		);
-
+		// Title - won't appear in templates content.
 		$repeater->add_control(
 			'slide_title',
 			[
@@ -64,6 +55,49 @@ class Micemade_Slider extends Widget_Base {
 				'type'        => \Elementor\Controls_Manager::TEXT,
 				'default'     => __( 'Slide Title', 'micemade-elements' ),
 				'label_block' => true,
+			]
+		);
+
+		$repeater->add_control(
+			'content_type',
+			[
+				'label'   => __( 'Content Type', 'micemade-elements' ),
+				'type'    => Controls_Manager::SELECT,
+				'options' => [
+					'custom'   => __( 'Custom content', 'micemade-elements' ),
+					'template' => __( 'Saved Templates', 'micemade-elements' ),
+				],
+				'default' => 'content',
+			]
+		);
+
+		$repeater->add_control(
+			'elementor_template',
+			[
+				'label'       => esc_html__( 'Select Elementor Template', 'micemade-elements' ),
+				'type'        => Controls_Manager::SELECT2,
+				'options'     => apply_filters( 'micemade_posts_array', 'elementor_library', 'id' ),
+				'label_block' => true,
+				'condition' => [
+					'content_type' => 'template',
+				]
+			]
+		);
+
+		$repeater->start_controls_tabs(
+			'slides_repeater',
+			[
+				'condition' => [
+					'content_type' => 'custom',
+				]
+			]
+		);
+
+		// Text content tab.
+		$repeater->start_controls_tab(
+			'slide_text_tab',
+			[
+				'label' => __( 'Text', 'micemade-elements' ),
 			]
 		);
 
@@ -212,6 +246,32 @@ class Micemade_Slider extends Widget_Base {
 			]
 		);
 
+		$repeater->add_responsive_control(
+			'slide_height',
+			[
+				'label'     => __( 'Slider height', 'micemade-elements' ),
+				'type'      => Controls_Manager::SLIDER,
+				'default'   => [
+					'size' => '400',
+				],
+				'range'     => [
+					'px' => [
+						'max'  => 1500,
+						'min'  => 0,
+						'step' => 1,
+					],
+					'vh' => [
+						'min' => 0,
+						'max' => 100,
+					],
+				],
+				'size_units' => [ 'px', 'vh' ],
+				'selectors' => [
+					'{{WRAPPER}} {{CURRENT_ITEM}}' => 'height:{{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
 		$repeater->add_control(
 			'heading_content_alignment',
 			[
@@ -301,7 +361,7 @@ class Micemade_Slider extends Widget_Base {
 						'slide_content' => __( 'Item content. Click the edit button to change this text.', 'micemade-elements' ),
 					],
 					[
-						'slide_title'   => __( 'Slide #2', 'micemade-elements' ),
+						'slide_title'   => __( 'Slide 2 Title', 'micemade-elements' ),
 						'slide_content' => __( 'Item content. Click the edit button to change this text.', 'micemade-elements' ),
 					],
 				],
@@ -315,32 +375,6 @@ class Micemade_Slider extends Widget_Base {
 				'label'     => __( 'Slider settings', 'micemade-elements' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
-			]
-		);
-
-		$this->add_responsive_control(
-			'slider_height',
-			[
-				'label'     => __( 'Slider height', 'micemade-elements' ),
-				'type'      => Controls_Manager::SLIDER,
-				'default'   => [
-					'size' => '400',
-				],
-				'range'     => [
-					'px' => [
-						'max'  => 1500,
-						'min'  => 0,
-						'step' => 1,
-					],
-					'vh' => [
-						'min' => 0,
-						'max' => 100,
-					],
-				],
-				'size_units' => [ 'px', 'vh' ],
-				'selectors' => [
-					'{{WRAPPER}} .swiper-slide' => 'height:{{SIZE}}{{UNIT}};',
-				],
 			]
 		);
 
@@ -389,9 +423,9 @@ class Micemade_Slider extends Widget_Base {
 
 		// Slider navigation.
 		$this->add_control(
-			'buttons',
+			'slider_arrows',
 			[
-				'label'     => esc_html__( 'Show navigation buttons', 'micemade-elements' ),
+				'label'     => esc_html__( 'Show navigation arrows', 'micemade-elements' ),
 				'type'      => Controls_Manager::SWITCHER,
 				'label_off' => __( 'No', 'elementor' ),
 				'label_on'  => __( 'Yes', 'elementor' ),
@@ -722,31 +756,67 @@ class Micemade_Slider extends Widget_Base {
 	 */
 	protected function render() {
 
-		$settings = $this->get_settings_for_display();
+		$settings      = $this->get_settings_for_display();
+		$space         = (int) $settings['space'];
+		$pagination    = $settings['pagination'];
+		$slider_arrows = $settings['slider_arrows'];
+		$autoplay      = $settings['autoplay'];
+		$loop          = $settings['loop'];
 
 		if ( $settings['slides'] ) {
 			echo '<div class="micemade-elements_slider swiper-container">';
 
-			echo '<input type="hidden" data-pps="1" data-ppst="1" data-ppsm="1" data-space="' . esc_attr( $settings['space'] ) . '" data-pagin="' . esc_attr( $settings['pagination'] ) . '" data-autoplay="' . esc_attr( (int) $settings['autoplay'] ) . '" ' . ( $settings['loop'] ? 'data-loop="true"' : '' ) . ' class="slider-config">';
+			// Slider settings for JS function.
+			$slideroptions = wp_json_encode(
+				array(
+					'pps'      => 1,
+					'ppst'     => 1,
+					'ppsm'     => 1,
+					'space'    => $space,
+					'pagin'    => $pagination,
+					'autoplay' => $autoplay,
+					'loop'     => $loop,
+				)
+			);
+
+			echo '<input type="hidden" data-slideroptions="' . esc_js( $slideroptions ) . '" class="slider-config">';
 
 			echo '<div class="swiper-wrapper">';
 
 			foreach ( $settings['slides'] as $index => $item ) {
-				echo '<div class="elementor-repeater-item-' . esc_attr( $item['_id'] ) . ' swiper-slide">';
-				echo '<h2 class="slide-title">' . esc_html( $item['slide_title'] ) . '</h2>';
-				echo '<div class="slide-content">' . wp_kses_post( $item['slide_content'] ) . '</div>';
 
-				echo '<div class="slide-buttons">';
-				if ( $item['button_1_text'] ) {
-					$this->_render_buttons( $index, $item['button_1_link'], $item['button_1_text'], 'button-1' );
-				}
-				if ( $item['button_2_text'] ) {
-					$this->_render_buttons( $index, $item['button_2_link'], $item['button_2_text'], 'button-2' );
-				}
-				echo '</div>';
+				$type = $item['content_type'];
 
-				echo '<div class="slide-overlay"></div>';
-				echo '<div class="slide-background"></div>';
+				echo '<div class="elementor-repeater-item-' . esc_attr( $item['_id'] ) . ' swiper-slide ' . esc_attr( $type ) . '">';
+
+				if ( 'template' === $type ) {
+
+					if ( ! empty( $item['elementor_template'] ) ) {
+						$template_id = $item['elementor_template'];
+						$frontend    = new Frontend;
+						echo $frontend->get_builder_content( $template_id, true );
+					}
+
+				} elseif ( 'custom' === $type ) {
+
+					// Slide title and text.
+					echo '<h2 class="slide-title">' . esc_html( $item['slide_title'] ) . '</h2>';
+					echo '<div class="slide-content">' . wp_kses_post( $item['slide_content'] ) . '</div>';
+
+					// Slide buttons.
+					echo '<div class="slide-buttons">';
+					if ( $item['button_1_text'] ) {
+						$this->_render_buttons( $index, $item['button_1_link'], $item['button_1_text'], 'button-1' );
+					}
+					if ( $item['button_2_text'] ) {
+						$this->_render_buttons( $index, $item['button_2_link'], $item['button_2_text'], 'button-2' );
+					}
+					echo '</div>';
+
+					echo '<div class="slide-overlay"></div>';
+					echo '<div class="slide-background"></div>';
+
+				}
 
 				echo '</div>';
 			}
@@ -754,25 +824,16 @@ class Micemade_Slider extends Widget_Base {
 			echo '</div>'; // .swiper-wrapper
 
 			// Pagination and arrows.
-			if ( 'none' !== $settings['pagination'] ) {
+			if ( 'none' !== $pagination ) {
 				echo '<div class="swiper-pagination"></div>';
 			}
-			if ( $settings['buttons'] ) {
+			if ( $slider_arrows ) {
 				echo '<div class="swiper-button-next" screen-reader>' . esc_html__( 'Next', 'micemade-elements' ) . '</div>';
 				echo '<div class="swiper-button-prev" screen-reader>' . esc_html__( 'Previous', 'micemade-elements' ) . '</div>';
 			}
 
 			echo '</div>'; // .swiper-container
 
-			echo '
-			<script>
-			(function( $ ){
-				"use strict";
-				jQuery(document).ready( function($) {
-					var micemade_slider = window.micemade_elements_swiper();
-				});
-			})( jQuery );
-			</script>';
 		}
 		?>
 

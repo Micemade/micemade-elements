@@ -158,7 +158,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		$this->add_responsive_control(
 			'align',
 			[
-				'label'     => __( 'Align product info', 'micemade-elements' ),
+				'label'     => __( 'Horizontal align', 'micemade-elements' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'options'   => [
 					'left'   => [
@@ -183,9 +183,35 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
+			'vertical_align',
+			[
+				'label'       => __( 'Vertical Align', 'micemade-elements' ),
+				'type'        => Controls_Manager::CHOOSE,
+				'label_block' => false,
+				'options'     => [
+					'flex-start' => [
+						'title' => __( 'Start', 'micemade-elements' ),
+						'icon'  => 'eicon-v-align-top',
+					],
+					'center'     => [
+						'title' => __( 'Center', 'micemade-elements' ),
+						'icon'  => 'eicon-v-align-middle',
+					],
+					'flex-end'   => [
+						'title' => __( 'End', 'micemade-elements' ),
+						'icon'  => 'eicon-v-align-bottom',
+					],
+				],
+				'selectors'   => [
+					'{{WRAPPER}} .entry-summary' => 'justify-content: {{VALUE}}',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
 			'text_box_position',
 			[
-				'label'      => esc_html__( 'Product info position', 'micemade-elements' ),
+				'label'      => esc_html__( 'Text position', 'micemade-elements' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', '%' ],
 				'selectors'  => [
@@ -200,7 +226,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		$this->add_responsive_control(
 			'padding',
 			[
-				'label'      => esc_html__( 'Product info padding', 'micemade-elements' ),
+				'label'      => esc_html__( 'Text padding', 'micemade-elements' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', '%' ],
 				'selectors'  => [
@@ -212,7 +238,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		$this->add_responsive_control(
 			'summary_width',
 			[
-				'label'     => __( 'Product info width (%)', 'elementor' ),
+				'label'     => __( 'Text wrapper width (%)', 'micemade-elements' ),
 				'type'      => Controls_Manager::NUMBER,
 				'default'   => '',
 				'min'       => 0,
@@ -265,7 +291,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		$this->add_responsive_control(
 			'thumb_width',
 			[
-				'label'     => __( 'Image container width', 'elementor' ),
+				'label'     => __( 'Image container width', 'micemade-elements' ),
 				'type'      => Controls_Manager::NUMBER,
 				'default'   => '',
 				'min'       => 0,

@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param integer $items_tablet - number of items in row on tablet.
  * @param integer $items_mobile - number of items in row on mobile.
  * @param boolean $no_margin - to show margin or not.
- * @return selector
+ * @return $style_class
  */
 function micemade_elements_grid_class( $items_desktop = 3, $items_tablet = 1, $items_mobile = 1, $no_margin = false ) {
 
@@ -354,7 +354,7 @@ add_filter( 'micemade_elements_query_args', 'micemade_elements_query_args_func',
  */
 function micemade_elements_loop_post_func( $style = 'style_1', $grid = '', $show_thumb = true, $img_format = 'thumbnail', $meta = true, $meta_ordering = [], $excerpt = true, $excerpt_limit = 20, $css_class = '' ) {
 	?>
-	<div class="post <?php echo esc_attr( $grid ); ?> mme-col-xs-12">
+	<div class="post <?php echo esc_attr( $grid ); ?>">
 
 		<div class="inner-wrap">
 
@@ -426,6 +426,7 @@ function micemade_elements_excerpt_f( $limit = 20 ) {
 	echo wp_kses_post( $excerpt );
 }
 add_action( 'micemade_elements_excerpt', 'micemade_elements_excerpt_f', 10, 1 );
+
 /**
  * TERM DATA
  *
