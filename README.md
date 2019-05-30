@@ -6,7 +6,7 @@ Contributors: Micemade
 Tags: elementor, elementor addon, elementor extension, elements, widgets, posts grid, woocommerce, catalog, products, product, micemade  
 Requires at least: 4.3  
 Tested up to: 4.9.1  
-Stable Tag: 0.7.0  
+Stable Tag: 0.7.1  
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -62,6 +62,8 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 * Added WC Categories menu element
 * Main plugin class moved to separate file
 * "Micemade Posts grid" element - added post meta ordering and toggling
+* Fixed - Instagram widget "Unable to communicate with Instagram."
+* Fixed - updated package.json and package-lock.json to remove vunerable dependencies
 
 *** v.0.6.9.2 ***
 * Fixed missing Elementor Pro's Global Widget feature - editor hook priority issue

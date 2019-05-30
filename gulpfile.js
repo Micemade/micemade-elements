@@ -7,7 +7,6 @@ var gulp         = require("gulp"),
     rename       = require("gulp-rename"),
     browserSync  = require('browser-sync'),
     wpPot        = require('gulp-wp-pot'),
-    runSequence  = require('run-sequence'),
     dos2unix     = require('gulp-dos2unix-js'),
     zip          = require('gulp-zip'),
     del          = require('del');
@@ -18,7 +17,7 @@ var jsonData = require('./package.json');
 // Project variables.
 var $plugin_name    = jsonData.name,
     $plugin_version = jsonData.version,
-    $packDest       = 'C:/PROJEKTI/MICEMADE-PLUGIN-'+ $plugin_name + '/',
+    $packDest       = '/home/alen/Documents/'+ $plugin_name + '/',
     $packTemp       = $packDest + $plugin_name;
 
 
@@ -30,8 +29,9 @@ gulp.task('browser-sync', function() {
     ];
     // Initialize BrowserSync with a PHP server
     browserSync.init(files, {
-        proxy: 'http://localhost/clothy/'
+        proxy: 'http://clothy.loc/'
     });
+    
     gulp.watch(
         [
             'assets/css/scss/**/*.scss',

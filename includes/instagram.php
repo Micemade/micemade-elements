@@ -37,7 +37,12 @@ function micemade_elements_instagram( $username ) {
 				break;
 		}
 
-		$remote = wp_remote_get( $url );
+		$args = array(
+			'timeout'   => 10,
+			'sslverify' => false,
+		);
+
+		$remote = wp_remote_get( $url, $args );
 
 		if ( is_wp_error( $remote ) ) {
 			return new WP_Error( 'site_down', esc_html__( 'Unable to communicate with Instagram.', 'micemade-elements' ) );
