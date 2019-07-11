@@ -41,7 +41,7 @@ class Micemade_Slider extends Widget_Base {
 			'section_slides',
 			[
 				'label' => __( 'Slides', 'micemade-elements' ),
-				'tab'  => Controls_Manager::TAB_CONTENT,
+				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
 
@@ -172,12 +172,12 @@ class Micemade_Slider extends Widget_Base {
 		);
 
 		$repeater->add_group_control(
-			\Elementor\Group_Control_Background::get_type(),
+			Group_Control_Background::get_type(),
 			[
 				'name'     => 'slide_image',
 				'label'    => __( 'Slide image', 'micemade-elements' ),
 				// 'types'    => [ 'classic', 'gradient', 'video' ],
-				'types'    => [ 'classic', 'video' ],
+				//'types'    => [ 'classic', 'video' ],
 				'selector' => '{{WRAPPER}} {{CURRENT_ITEM}} .slide-background',
 			]
 		);
@@ -483,11 +483,11 @@ class Micemade_Slider extends Widget_Base {
 		$this->add_responsive_control(
 			'slide_content_padding',
 			[
-				'label'      => esc_html__( 'Content padding', 'micemade-elements' ),
+				'label'      => esc_html__( 'Content padding (custom content)', 'micemade-elements' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', '%' ],
 				'selectors'  => [
-					'{{WRAPPER}} .swiper-slide' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .swiper-slide.custom' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);

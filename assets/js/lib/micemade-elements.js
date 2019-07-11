@@ -186,6 +186,10 @@ jQuery.noConflict();
 				},
 				on: {
 					transitionStart: function() {
+						
+					},
+					transitionEnd: function() {
+
 					}
 				}
 			}
@@ -201,7 +205,37 @@ jQuery.noConflict();
 			// Join arg objects.
 			var swiperArgs = $.extend( mainSwiperArgs, autoplayArgs );
 			// Initialize Swiper.
-			var swiper = new Swiper( thisContainer, swiperArgs );
+			var micemadeSwiper = new Swiper( thisContainer, swiperArgs );
+
+			micemadeSwiper.on( 'transitionStart', function() {
+				var slides  = this.slides,
+					current = this.realIndex;
+	
+				console.log(elementorFrontend);
+				slides.each( function( index, element ) {
+
+					var eachSlide = $(this),
+						elmData   = eachSlide.find('[data-settings]');
+						console.log(elementorFrontend.getItems);
+						/* elementorFrontend.waypoint(
+							element,
+							function() {
+								console.log($(this));
+							}
+						); */
+
+					/* 
+					if( ! eachSlide.hasClass( 'active' ) ) {
+						animatedEls.removeClass( 'animated' );
+					} else {
+						window.setTimeout( function () {
+							animatedEls.addClass( 'animated' ).addClass( animationName )
+						}, 1);
+					} */
+					/* if( index === this.activeIndex ) {*/
+				} );
+				
+			});
 
 			//swiper.on('init', function() { /* do something */});
 			//swiper.init();
@@ -209,6 +243,21 @@ jQuery.noConflict();
 		});
 
 	};
+
+	// Helper function for Micemade slider (Swiper).
+	/* var mmeAnimate = function( element, animationName ) {
+		if ( element.hasClass( 'animated' ) ) {
+			element .removeClass( 'animated' );
+		}
+	 
+		if ( element.hasClass( animationName )) {
+			element.removeClass( animationName );
+		}
+	 
+		window.setTimeout( function () {
+			element.addClass( 'animated' ).addClass( animationName )
+		}, 1);
+	} */
 	
 	
 	( function( $ ){
@@ -278,7 +327,7 @@ jQuery.noConflict();
 						value = target.getAttribute(name);
 					
 					if( value == 'true' ) {
-						var restartMicemadeElementSwiper = window.micemadeElementsSwiper('.mega-menu');
+						var restartMicemadeElementSwiper = micemadeElementsSwiper('.mega-menu');
 					}else{
 						mutationObserver.disconnect();
 					}
@@ -427,6 +476,8 @@ jQuery.noConflict();
 			
 			var $loader       = $_posts_holder.next('.micemade-elements_more-posts-wrap').find('.more_posts'),
 				postoptions   = $_posts_holder.find('.posts-grid-settings' ).data( 'postoptions' ),
+				post_type     = postoptions.post_type,
+				taxonomy      = postoptions.taxonomy,
 				ppp           = postoptions.ppp,
 				sticky        = postoptions.sticky,
 				categories    = postoptions.categories,
@@ -455,6 +506,8 @@ jQuery.noConflict();
 						dataType: 'html',
 						url: micemadeJsLocalize.ajaxurl,
 						data: {
+							'post_type': post_type,
+							'taxonomy': taxonomy,
 							'ppp': ppp,
 							'sticky': sticky,
 							'categories': categories,

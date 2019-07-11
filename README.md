@@ -61,6 +61,7 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 * Added Slider element with Elementor templates / custom content 
 * Added WC Categories menu element
 * Main plugin class moved to separate file
+* Added custom post type/taxonomies to Posts grid element
 * "Micemade Posts grid" element - added post meta ordering and toggling
 * Fixed - Instagram widget "Unable to communicate with Instagram."
 * Fixed - updated package.json and package-lock.json to remove vunerable dependencies

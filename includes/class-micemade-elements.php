@@ -128,7 +128,7 @@ class Micemade_Elements {
 
 	/**
 	 * Register categories for widgets (elements)
-	 * 
+	 *
 	 * @return void
 	 */
 	public function add_widget_categories() {
@@ -152,6 +152,15 @@ class Micemade_Elements {
 			2
 		);
 		*/
+	}
+
+	/**
+	 * Add new elementor group control
+	 *
+	 * @since v1.0.0
+	 */
+	public function register_controls_group( $controls_manager ) {
+		$controls_manager->add_group_control( 'mmposts', new Group_Control_Posts );
 	}
 
 	/**
@@ -332,12 +341,16 @@ class Micemade_Elements {
 			$ajaxurl .= admin_url( 'admin-ajax.php' );
 		}
 
-		wp_localize_script( 'micemade-elements-js', 'micemadeJsLocalize', array(
-			'ajaxurl'      => esc_url( $ajaxurl ),
-			'loadingposts' => esc_html__( 'Loading posts ...', 'micemade-elements' ),
-			'noposts'      => esc_html__( 'No more posts found', 'micemade-elements' ),
-			'loadmore'     => esc_html__( 'Load more posts', 'micemade-elements' ),
-		) );
+		wp_localize_script(
+			'micemade-elements-js',
+			'micemadeJsLocalize',
+			array(
+				'ajaxurl'      => esc_url( $ajaxurl ),
+				'loadingposts' => esc_html__( 'Loading ...', 'micemade-elements' ),
+				'noposts'      => esc_html__( 'No more items found', 'micemade-elements' ),
+				'loadmore'     => esc_html__( 'Load more', 'micemade-elements' ),
+			)
+		);
 
 	}
 
@@ -379,20 +392,7 @@ class Micemade_Elements {
 	 */
 	public function register_cpts() {
 
-		// Array of supported Micemade Themes.
-		$micemade_themes = array( 'natura', 'beautify', 'ayame', 'lillabelle', 'inspace' );
-
-		// To deprecate.
-		if ( is_child_theme() ) {
-			$parent_theme = wp_get_theme();
-			$active_theme = $parent_theme->get( 'Template' );
-		} else {
-			$active_theme = get_option( 'template' );
-		}
-		$current_theme_supported = in_array( $active_theme, $micemade_themes );
-		// end deprecate (also remove the || $current_theme_supported from conditional bellow ).
-
-		if ( ( current_theme_supports( 'micemade-elements-cpt' ) || $current_theme_supported ) && ELEMENTOR_IS_ACTIVE ) {
+		if ( current_theme_supports( 'micemade-elements-cpt' ) && ELEMENTOR_IS_ACTIVE ) {
 
 			// include file with Custom Post Types registration
 			// MM Mega Menu, MM Header, MM Footer.

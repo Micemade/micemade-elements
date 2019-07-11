@@ -28,22 +28,24 @@ if ( ! function_exists( 'micemade_elements_more_post_ajax' ) ) {
 
 		global $post;
 
-		$posts_per_page = ( isset( $_POST['ppp'] ) ) ? $_POST['ppp'] : 3;
-		$sticky         = ( isset( $_POST['sticky'] ) ) ? $_POST['sticky'] : false;
-		$categories     = ( isset( $_POST['categories'] ) ) ? json_decode( $_POST['categories'] ) : [];
-		$style          = ( isset( $_POST['style'] ) ) ? $_POST['style'] : 'style_1';
-		$show_thumb     = ( isset( $_POST['show_thumb'] ) ) ? $_POST['show_thumb'] : true;
-		$img_format     = ( isset( $_POST['img_format'] ) ) ? $_POST['img_format'] : 'thumbnail';
-		$excerpt        = ( isset( $_POST['excerpt'] ) ) ? $_POST['excerpt'] : true;
-		$excerpt_limit  = ( isset( $_POST['excerpt_limit'] ) ) ? $_POST['excerpt_limit'] : 20;
-		$meta           = ( isset( $_POST['meta'] ) ) ? $_POST['meta'] : true;
-		$meta_ordering  = ( isset( $_POST['meta_ordering'] ) ) ? $_POST['meta_ordering'] : [];
-		$css_class      = ( isset( $_POST['css_class'] ) ) ? $_POST['css_class'] : '';
-		$grid           = ( isset( $_POST['grid'] ) ) ? $_POST['grid'] : '';
-		$offset         = ( isset( $_POST['offset'] ) ) ? $_POST['offset'] : 0;
+		$post_type     = ( isset( $_POST['post_type'] ) ) ? $_POST['post_type'] : 'post';
+		$taxonomy      = ( isset( $_POST['taxonomy'] ) ) ? $_POST['taxonomy'] : '';
+		$ppp           = ( isset( $_POST['ppp'] ) ) ? $_POST['ppp'] : 3;
+		$categories    = ( isset( $_POST['categories'] ) ) ? $_POST['categories'] : [];
+		$sticky        = ( isset( $_POST['sticky'] ) ) ? $_POST['sticky'] : false;
+		$offset        = ( isset( $_POST['offset'] ) ) ? $_POST['offset'] : 0;
+		$style         = ( isset( $_POST['style'] ) ) ? $_POST['style'] : 'style_1';
+		$show_thumb    = ( isset( $_POST['show_thumb'] ) ) ? $_POST['show_thumb'] : true;
+		$img_format    = ( isset( $_POST['img_format'] ) ) ? $_POST['img_format'] : 'thumbnail';
+		$excerpt       = ( isset( $_POST['excerpt'] ) ) ? $_POST['excerpt'] : true;
+		$excerpt_limit = ( isset( $_POST['excerpt_limit'] ) ) ? $_POST['excerpt_limit'] : 20;
+		$meta          = ( isset( $_POST['meta'] ) ) ? $_POST['meta'] : true;
+		$meta_ordering = ( isset( $_POST['meta_ordering'] ) ) ? $_POST['meta_ordering'] : [];
+		$css_class     = ( isset( $_POST['css_class'] ) ) ? $_POST['css_class'] : '';
+		$grid          = ( isset( $_POST['grid'] ) ) ? $_POST['grid'] : '';
 
 		// Query posts - 'micemade_elements_query_args' hook in includes/helpers.php.
-		$args  = apply_filters( 'micemade_elements_query_args', $posts_per_page, $categories, $sticky, $offset );
+		$args  = apply_filters( 'micemade_elements_query_args', $post_type, $taxonomy, $ppp, $categories, $sticky, $offset );
 		$posts = get_posts( $args );
 
 		if ( empty( $posts ) ) {

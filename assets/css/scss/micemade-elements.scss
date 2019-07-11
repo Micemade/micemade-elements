@@ -1131,15 +1131,21 @@
 				justify-content: flex-start;
 				text-align: initial;
 			}
+ 
+			> .elementor {
+				transition: all 0.5s linear;
+			}
 
 			&.active {
 				> .elementor {
 					display: block;
+					opacity: 1;
 				}
 			}
 			&.swiper-slide-prev, &.swiper-slide-next {
 				> .elementor {
 					display: none;
+					opacity: 0;
 				}
 			}
 			

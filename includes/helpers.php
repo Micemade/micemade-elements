@@ -110,12 +110,6 @@ function micemade_elements_posted_in( $taxonomy ) {
 		$posted_in_terms = array();
 		$last_term       = end( $terms );
 		foreach ( $terms as $term ) {
-			/*
-			$term_color = micemade_elements_get_term_color( $term->term_id, true );
-			$text_color = $term_color ? micemade_elements_contrast( $term_color ) : '#333333';
-			$back_color = $term_color ? $term_color : '#ffffff';
-			$style      = ' style="background-color: '. $back_color .'; color: '.$text_color.'"'; // insert in <a href ...
-			 */
 			$separator  = ( $term == $last_term ) ? '' : ', ';
 			$posted_in .= '<a href="' . esc_url( get_term_link( $term->slug, $taxonomy ) ) . '" rel="tag" tabindex="0">' . esc_html( $term->name . ' ' . $term->ID ) . '</a>' . esc_html( $separator );
 		}
@@ -293,12 +287,12 @@ add_filter( 'micemade_elements_gallery_ids', 'micemade_elements_gallery_ids_f' )
  * @return $args
  * arguments for get_posts() - DRY effort, mostly because of ajax posts
  */
-function micemade_elements_query_args_func( $posts_per_page = 3, $categories = array(), $sticky = false, $offset = 0 ) {
+function micemade_elements_query_args_func( $post_type = 'post', $taxonomy = 'category', $ppp = 3, $categories = array(), $sticky = false, $offset = 0 ) {
 
 	// Defaults.
 	$args = array(
-		'posts_per_page'   => $posts_per_page,
-		'post_type'        => 'post',
+		'posts_per_page'   => $ppp,
+		'post_type'        => $post_type,
 		'offset'           => $offset,
 		'order'            => 'DESC',
 		'suppress_filters' => false,
@@ -308,7 +302,7 @@ function micemade_elements_query_args_func( $posts_per_page = 3, $categories = a
 
 	if ( ! empty( $categories ) ) {
 		$args['tax_query'][] = array(
-			'taxonomy'         => 'category',
+			'taxonomy'         => $taxonomy,
 			'field'            => 'slug',
 			'operator'         => 'IN',
 			'terms'            => $categories,
@@ -335,7 +329,7 @@ function micemade_elements_query_args_func( $posts_per_page = 3, $categories = a
 	return $args;
 
 }
-add_filter( 'micemade_elements_query_args', 'micemade_elements_query_args_func', 10, 4 );
+add_filter( 'micemade_elements_query_args', 'micemade_elements_query_args_func', 10, 6 );
 
 /**
  * POST TEMPLATE FOR LOOP

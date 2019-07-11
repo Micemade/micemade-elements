@@ -26,10 +26,24 @@ class Micemade_Posts_Grid extends Widget_Base {
 
 	protected function _register_controls() {
 
+		// We'll need this var only in this method.
+		$post_types = apply_filters( 'micemade_elements_post_types', '' );
+
 		$this->start_controls_section(
 			'section_main',
 			[
 				'label' => esc_html__( 'Micemade posts grid', 'micemade-elements' ),
+			]
+		);
+
+		$this->add_control(
+			'post_type',
+			[
+				'label'    => esc_html__( 'Post type', 'micemade-elements' ),
+				'type'     => Controls_Manager::SELECT2,
+				'default'  => 'post',
+				'options'  => $post_types,
+				'multiple' => false,
 			]
 		);
 
@@ -59,19 +73,71 @@ class Micemade_Posts_Grid extends Widget_Base {
 				'label'     => __( 'Posts filtering options', 'micemade-elements' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
+				'condition' => [
+					'post_type!' => 'page',
+				],
 			]
 		);
 
-		$this->add_control(
-			'categories',
-			[
-				'label'    => esc_html__( 'Select post categories', 'micemade-elements' ),
-				'type'     => Controls_Manager::SELECT2,
-				'default'  => array(),
-				'options'  => apply_filters( 'micemade_elements_terms', 'category' ),
-				'multiple' => true,
-			]
-		);
+		// Get all the post types with its taxonomies in array.
+		foreach ( $post_types as $post_type => $label ) {
+			$posttypes_and_its_taxonomies[ $post_type ] = get_cpt_taxonomies( $post_type );
+		}
+
+		foreach ( $posttypes_and_its_taxonomies as $post_type => $taxes ) {
+
+			if ( 'page' === $post_type || empty( $taxes ) ) {
+				continue;
+			}
+
+			// Create options from all publicly queryable taxonomies.
+			foreach ( $taxes as $tax ) {
+				$tax_object = get_taxonomy( $tax );
+				if ( ! $tax_object->publicly_queryable ) {
+					continue;
+				}
+				$tax_options[ $tax ] = $tax_object->label;
+			}
+
+			// Controls for selection of taxonomies per post type.
+			// -- correct "-" to "_" in taxonomies, JS issue in Elementor-conditional hiding.
+			$taxonomy_control = str_replace( '-', '_', $post_type ) . '_taxonomies';
+			$this->add_control(
+				$taxonomy_control,
+				[
+					'label'       => esc_html__( 'Select taxonomy', 'micemade-elements' ),
+					'type'        => Controls_Manager::SELECT2,
+					'default'     => '',
+					'options'     => $tax_options,
+					'multiple'    => false,
+					'label_block' => true,
+					'condition'   => [
+						'post_type' => $post_type,
+					],
+				]
+			);
+
+			foreach ( $tax_options as $taxonomy => $label ) {
+				$this->add_control(
+					$taxonomy . '_terms',
+					[
+						'label'       => esc_html__( 'Select ', 'micemade-elements' ) . strtolower( $label ),
+						'type'        => Controls_Manager::SELECT2,
+						'default'     => array(),
+						'options'     => apply_filters( 'micemade_elements_terms', $taxonomy ),
+						'multiple'    => true,
+						'label_block' => true,
+						'condition'   => [
+							$taxonomy_control => $taxonomy,
+							'post_type'       => $post_type,
+						],
+					]
+				);
+
+			}
+
+			unset( $tax_options );
+		}
 
 		$this->add_control(
 			'sticky',
@@ -80,7 +146,9 @@ class Micemade_Posts_Grid extends Widget_Base {
 				'type'      => Controls_Manager::SWITCHER,
 				'label_off' => __( 'No', 'elementor' ),
 				'label_on'  => __( 'Yes', 'elementor' ),
-				//'default' => 'yes',
+				'condition' => [
+					'post_type' => 'post',
+				],
 			]
 		);
 
@@ -1048,13 +1116,23 @@ class Micemade_Posts_Grid extends Widget_Base {
 		// Get our input from the widget settings.
 		$settings = $this->get_settings_for_display();
 
-		$ppp           = (int) $settings['posts_per_page'];
-		$sticky        = $settings['sticky'];
-		$offset        = (int) $settings['offset'];
-		$ppr           = (int) $settings['posts_per_row'];
-		$ppr_tab       = (int) $settings['posts_per_row_tab'];
-		$ppr_mob       = (int) $settings['posts_per_row_mob'];
-		$categories    = $settings['categories'];
+		// ---- QUERY SETTINGS
+		$post_type = $settings['post_type'];
+		// "Dynamic" setting.
+		$taxonomy = $settings[ $post_type . '_taxonomies' ];
+		$ppp      = (int) $settings['posts_per_page'];
+		// "Dynamic" setting.
+		$categories = isset( $settings[ $taxonomy . '_terms' ] ) ? $settings[ $taxonomy . '_terms' ] : [];
+		$sticky     = $settings['sticky'];
+		$offset     = (int) $settings['offset'];
+		// ---- end QUERY SETTINGS.
+
+		// Grid settings.
+		$ppr     = (int) $settings['posts_per_row'];
+		$ppr_tab = (int) $settings['posts_per_row_tab'];
+		$ppr_mob = (int) $settings['posts_per_row_mob'];
+
+		// Layout and style settings.
 		$show_thumb    = $settings['show_thumb'];
 		$img_format    = $settings['img_format'];
 		$style         = $settings['style'];
@@ -1070,7 +1148,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$grid = micemade_elements_grid_class( intval( $ppr ), intval( $ppr_tab ), intval( $ppr_mob ) );
 
 		// Query posts - "micemade_elements_query_args" hook in includes/helpers.php.
-		$args  = apply_filters( 'micemade_elements_query_args', $ppp, $categories, $sticky, $offset );
+		$args  = apply_filters( 'micemade_elements_query_args', $post_type, $taxonomy, $ppp, $categories, $sticky, $offset );
 		$posts = get_posts( $args );
 
 		if ( ! empty( $posts ) ) {
@@ -1082,6 +1160,8 @@ class Micemade_Posts_Grid extends Widget_Base {
 
 				$postoptions = wp_json_encode(
 					array(
+						'post_type'     => $post_type,
+						'taxonomy'      => $taxonomy,
 						'ppp'           => $ppp,
 						'sticky'        => $sticky,
 						'categories'    => $categories,
@@ -1116,7 +1196,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		wp_reset_postdata();
 
 		if ( $use_load_more ) {
-			echo '<div class="micemade-elements_more-posts-wrap"><a href="#" class="micemade-elements_more-posts more_posts button">' . __( 'Load more posts', 'micemade-elements' ) . '</a></div>';
+			echo '<div class="micemade-elements_more-posts-wrap"><a href="#" class="micemade-elements_more-posts more_posts button">' . __( 'Load more', 'micemade-elements' ) . '</a></div>';
 		}
 
 	}

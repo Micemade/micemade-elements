@@ -63,9 +63,9 @@ function micemade_elements_terms_func( $taxonomy ) {
 	}
 
 	$terms_arr = array();
-	if ( MICEMADE_ELEMENTS_WPML_ON ) { // IF WPML IS ACTIVATED.
-
-		$terms = get_terms( $taxonomy, 'hide_empty=1, hierarchical=0' );
+	$terms     = get_terms( $taxonomy, 'hide_empty=1, hierarchical=0' );
+	// If wpml is activated.
+	if ( MICEMADE_ELEMENTS_WPML_ON ) {
 		if ( ! empty( $terms ) ) {
 			foreach ( $terms as $term ) {
 				if ( icl_object_id( $term->term_id, $taxonomy, false, ICL_LANGUAGE_CODE ) === $term->term_id ) {
@@ -76,8 +76,6 @@ function micemade_elements_terms_func( $taxonomy ) {
 			$terms_arr = array();
 		}
 	} else {
-
-		$terms = get_terms( $taxonomy, 'hide_empty=1, hierarchical=0' );
 		if ( $terms ) {
 			foreach ( $terms as $term ) {
 				$terms_arr[ $term->slug ] = $term->name;
@@ -91,6 +89,47 @@ function micemade_elements_terms_func( $taxonomy ) {
 
 }
 add_filter( 'micemade_elements_terms', 'micemade_elements_terms_func', 10, 1 );
+
+/**
+ * Get post types
+ *
+ * @return $post_types
+ */
+function micemade_elements_post_types_f() {
+	$post_types = array();
+	$exclude    = array( 'attachment', 'elementor_library' ); // excluded post types
+
+	$args = array(
+		'public' => true,
+	);
+
+	foreach ( get_post_types( $args, 'objects' ) as $post_type ) {
+		// Check if post type name exists.
+		if ( ! isset( $post_type->name ) ) {
+			continue;
+		}
+
+		// Check if post type label exists.
+		if ( ! isset( $post_type->label ) ) {
+			continue;
+		}
+
+		// Check if post type is excluded.
+		if ( in_array( $post_type->name, $exclude, true ) === true ) {
+			continue;
+		}
+
+		$post_types[ $post_type->name ] = $post_type->label;
+	}
+
+	return $post_types;
+}
+add_filter( 'micemade_elements_post_types', 'micemade_elements_post_types_f', 10 );
+
+function get_cpt_taxonomies( $post_type ) {
+	$taxonomy_objects = get_object_taxonomies( $post_type );
+	return $taxonomy_objects;
+}
 
 /**
  * Get array of all image sizes
