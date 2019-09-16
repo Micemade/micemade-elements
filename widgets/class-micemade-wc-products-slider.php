@@ -1165,9 +1165,11 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 			// If style as in WC content-product template.
 			if ( 'catalog' === $style ) {
 				add_filter(
-					'post_class', function( $classes ) {
-						return apply_filters( 'micemade_elements_product_item_classes', $classes, 'add', ['swiper-slide', 'item'] );
-					}, 10
+					'post_class',
+					function( $classes ) {
+						return apply_filters( 'micemade_elements_product_item_classes', $classes, 'add', [ 'swiper-slide', 'item' ] );
+					},
+					10
 				);
 			}
 

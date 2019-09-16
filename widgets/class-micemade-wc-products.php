@@ -267,7 +267,8 @@ class Micemade_WC_Products extends Widget_Base {
 				$classes[] = $this->mm_products_grid;
 				$classes[] = 'item';
 				return $classes;
-			}, 10
+			},
+			10
 		);
 
 		$products_query = new \WP_Query( $args );
@@ -298,7 +299,8 @@ class Micemade_WC_Products extends Widget_Base {
 				$classes_to_clean = array( $this->mm_products_grid, 'item' );
 				$classes          = array_diff( $classes, $classes_to_clean );
 				return $classes;
-			}, 10
+			},
+			10
 		);
 
 		wp_reset_postdata();

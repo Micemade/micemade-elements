@@ -295,6 +295,7 @@ function micemade_elements_query_args_func( $post_type = 'post', $taxonomy = 'ca
 		'post_type'        => $post_type,
 		'offset'           => $offset,
 		'order'            => 'DESC',
+		'post_status'      => 'publish',
 		'suppress_filters' => false,
 	);
 

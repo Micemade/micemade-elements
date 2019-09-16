@@ -21,6 +21,7 @@ function micemade_posts_array_func( $post_type = 'post', $id_or_slug = 'slug' ) 
 
 	$args = array(
 		'post_type'        => $post_type,
+		'post_status'      => 'publish',
 		'posts_per_page'   => -1,
 		'suppress_filters' => true,
 		'cache_results'    => false, // suppress errors when large number of posts (memory).
