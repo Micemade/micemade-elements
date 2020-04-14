@@ -15,13 +15,20 @@
 		ul.products {
 			opacity: 1;
 
-			body.woocommerce & {
+			// Reset WC products holder margin.
+			.elementor-inner & {
 				margin: 0;
 			}
 			
 			// Micemade themes only.
 			// Check out https://micemade.com/
 			.item {
+				
+				// Remove WC/theme products margin
+				.elementor-inner & {
+					margin: 0;
+				}
+				
 				margin-bottom: 0;
 				.anim-wrap {
 					opacity: 1;
@@ -740,11 +747,11 @@
 	&_tabs {
 		
 		.tabs-wrapper {
-			
 			display: flex;
 			flex-direction: row;
 			text-align: center;
 			overflow: hidden;
+			border: none;
 
 			.mm-wc-tabs-align-left & {
 				justify-content: flex-start;

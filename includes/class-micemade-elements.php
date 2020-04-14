@@ -34,6 +34,8 @@ class Micemade_Elements {
 		return self::$instance;
 	}
 
+	public $debug;
+
 	/**
 	 * Initialize plugin
 	 *
@@ -71,6 +73,8 @@ class Micemade_Elements {
 			// Enqueue scripts and styles for frontend.
 			add_action( 'wp_enqueue_scripts', array( self::$instance, 'micemade_elements_styles' ) );
 			add_action( 'wp_enqueue_scripts', array( self::$instance, 'micemade_elements_scripts' ) );
+
+			$this->debug = apply_filters( 'micemade_elements_debug', true );
 
 			self::$instance->updater();
 
@@ -142,7 +146,7 @@ class Micemade_Elements {
 			],
 			1
 		);
-		/* // Header CPT and header elements postponed for 0.8.0
+		/* // Header CPT and header elements postponed for v. 1.0.0
 		$elements_manager->add_category(
 			'micemade_elements_header',
 			[
@@ -157,7 +161,7 @@ class Micemade_Elements {
 	/**
 	 * Add new elementor group control
 	 *
-	 * @since v1.0.0
+	 * @since v.0.7.0
 	 */
 	public function register_controls_group( $controls_manager ) {
 		$controls_manager->add_group_control( 'mmposts', new Group_Control_Posts );
@@ -204,7 +208,7 @@ class Micemade_Elements {
 		// Micemade slider.
 		require_once $prefix . 'slider.php';
 
-		// Micemade header widgets - for v.1.0
+		// Micemade header widgets - for v.1.0.0
 		// require_once $prefix . 'header-logo.php';
 		// require_once $prefix . 'nav.php';
 
@@ -327,9 +331,14 @@ class Micemade_Elements {
 	 */
 	public function micemade_elements_scripts() {
 
+		$prefix = '.min';
+		if ( $this->debug ) {
+			$prefix = '';
+		}
+
 		// Register and enqueue plugin JS scripts.
-		wp_register_script( 'micemade-elements-js', MICEMADE_ELEMENTS_URL . 'assets/js/micemade-elements.min.js', '', MICEMADE_ELEMENTS_VERSION, true );
-		wp_enqueue_script( 'micemade-elements-js', MICEMADE_ELEMENTS_URL . 'assets/js/micemade-elements.min.js', array( 'jQuery' ), MICEMADE_ELEMENTS_VERSION, true );
+		wp_register_script( 'micemade-elements-js', MICEMADE_ELEMENTS_URL . 'assets/js/micemade-elements' . $prefix . '.js', '', MICEMADE_ELEMENTS_VERSION, true );
+		wp_enqueue_script( 'micemade-elements-js', MICEMADE_ELEMENTS_URL . 'assets/js/micemade-elements' . $prefix . '.js', array( 'jquery', 'imagesloaded' ), MICEMADE_ELEMENTS_VERSION, true );
 
 		// Smartmenus scripts - postponed until v.1.0.0
 		//wp_register_script( 'smartmenus', MICEMADE_ELEMENTS_URL . 'assets/js/jquery.smartmenus.min.js' );
@@ -382,7 +391,6 @@ class Micemade_Elements {
 		$class   = 'error updated settings-error notice is-dismissible';
 		$message = __( '"Micemade elements" plugin is not effective without "Elementor" plugin activated. Please, either install and activate  "Elementor" plugin or deactivate "Micemade elements".', 'micemade-elements' );
 		echo '<div class="' . esc_attr( $class ) . '"><p>' . esc_html( $message ) . '</p></div>';
-
 	}
 
 	/**

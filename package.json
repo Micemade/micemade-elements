@@ -1,31 +1,50 @@
 {
   "name": "micemade-elements",
+  "description": "A WPGulp based project.",
   "version": "0.7.0",
-  "description": "Micemade Elements plugin Gulp and node tasks",
-  "main": "gulpfile.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "author": "Micemade (https://github.com/micemade)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/micemade/micemade-elements"
   },
-  "author": "Micemade",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
-    "browser-sync": "^2.18.13",
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "beepbeep": "^1.2.2",
+    "browser-sync": "^2.11.1",
+    "eslint": "^5.5.0",
+    "eslint-config-wordpress": "^2.0.0",
     "gulp": "^4.0.0",
     "gulp-autoprefixer": "^6.0.0",
-    "gulp-concat": "^2.6.1",
-    "gulp-dos2unix-js": "^1.0.0",
-    "gulp-fs-cache": "^0.1.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-cache": "^1.0.2",
+    "gulp-concat": "^2.5.2",
+    "gulp-filter": "^5.1.0",
+    "gulp-imagemin": "^4.1.0",
+    "gulp-line-ending-corrector": "^1.0.1",
+    "gulp-merge-media-queries": "^0.2.1",
+    "gulp-notify": "^3.0.0",
+    "gulp-plumber": "^1.2.0",
+    "gulp-remember": "^1.0.1",
+    "gulp-rename": "^1.2.0",
+    "gulp-rtlcss": "^1.2.0",
+    "gulp-sass": "^4.0.1",
+    "gulp-sort": "^2.0.0",
+    "gulp-sourcemaps": "^2.6.2",
     "gulp-uglify": "^3.0.0",
-    "gulp-uglify-cli": "^1.0.1",
-    "gulp-wp-pot": "^2.0.7",
-    "gulp-zip": "^4.0.0",
-    "jquery": "^3.4.0",
-    "tar": "^4.4.2",
-    "wp-pot": "^1.3.5"
+    "gulp-uglifycss": "^1.0.6",
+    "gulp-wp-pot": "^2.0.7"
   },
-  "dependencies": {
-    "del": "^3.0.0"
+  "scripts": {
+    "start": "gulp",
+    "styles": "gulp styles",
+    "stylesRTL": "gulp stylesRTL",
+    "vendorsJS": "gulp vendorsJS",
+    "customJS": "gulp customJS",
+    "images": "gulp images",
+    "clearCache": "gulp clearCache",
+    "translate": "gulp translate"
   }
 }

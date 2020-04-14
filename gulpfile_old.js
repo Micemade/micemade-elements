@@ -12,22 +12,41 @@ var gulp         = require( "gulp" ),
 	del          = require( 'del' );
 
 // Get project name from json file.
-var jsonData = require( './package.json' );
+const jsonData = require( './package.json' );
 
 // Project variables.
-var $plugin_name    = jsonData.name,
-	$plugin_version = jsonData.version,
-	$packDest       = '/home/alen/Documents/' + $plugin_name + '/',
-	$packTemp       = $packDest + $plugin_name;
+// var $plugin_name    = jsonData.name,
+// 	$plugin_version = jsonData.version,
+// 	$packDest       = '/home/alen/Documents/' + $plugin_name + '/',
+// 	$packTemp       = $packDest + $plugin_name;
 
+// Project vars.
+const project = {
+	pluginName: jsonData.name,
+	pluginVersion: jsonData.version,
+	get packDest() { return '/home/alen/Documents/' + this.pluginName + '/'; },
+	get packTemp() { return this.packDest + this.pluginName }
+}
+
+// Build config vars.
+const config = {
+	jsDir:    'assets/js/lib/**/*.js', // Javascript files.
+	scssDir:  'assets/css/scss/**/*.scss', // SCSS files.
+	cssDir:   './assets/css/scss/micemade-elements.scss', // Main CSS file.
+	phpFiles: './**/*.php', // All the PHP files.
+	cssDest:  './assets/css', // Destination for CSS.
+	jsDest:   './assets/js', // Destintion for JS.
+	watchCSS: './assets/css/scss/**/*', // Watch CSS.
+	watchJS:  './assets/js/lib/**/*' // Watch JS.
+}
 
 // Configure browserSync.
-gulp.task(
+/* gulp.task(
 	'browser-sync',
 	function() {
 		var files = [
-		'./assets/css/scss/micemade-elements.scss',
-		'./**/*.php'
+			config.cssDir,
+			config.phpFiles
 		];
 		// Initialize BrowserSync with a PHP server
 		browserSync.init(
@@ -38,18 +57,20 @@ gulp.task(
 		);
 		gulp.watch(
 			[
-			'assets/css/scss/**/*.scss',
+			config.scssDir,
 			],
 			gulp.series( 'styles' )
 		);
 	}
-);
+); */
 //############################################################################
 // BrowserSync
 function browserSync(done) {
 	browserSync.init({
+		injectChanges: true,
 		server: {
 			baseDir: "./clothy/"
+			//baseDir: "/var/www/html/clothy/"
 		},
 		proxy: 'http://clothy.loc/',
 		port: 3000
@@ -61,13 +82,30 @@ function browserSyncReload(done) {
 	browserSync.reload();
 	done();
 }
+// Clean(?) task
+function clean() {
+
+} 
+// JS task
+function js() {
+	var jsFsCache = fsCache( '.tmp/jscache' ); // save cache to .tmp/jscache
+	return gulp
+	.src( config.jsDir )
+	.pipe( concat( 'micemade-elements.js' ) )
+	.pipe( rename( {suffix: '.min'} ) )
+	.pipe( jsFsCache )
+	.pipe(uglify())
+	.pipe( jsFsCache.restore )
+	.pipe( gulp.dest( config.jsDest ) )
+	.pipe( browserSync.stream() );
+} 
 // CSS task
 function css() {
 	return gulp
-	.src("assets/css/scss/**/*.scss")
-	.pipe(sass({ outputStyle: "compressed" }))
-	.pipe(gulp.dest("./assets/css"))
-	.pipe(rename({ suffix: ".min" }))
+	.src( config.scssDir )
+	.pipe( sass({ outputStyle: "compressed" } ) )
+	.pipe( gulp.dest( config.cssDest ) )
+	.pipe( rename({ suffix: ".min" }) )
 	.pipe(
 		autoprefixer(
 			{
@@ -76,17 +114,18 @@ function css() {
 			}
 		)
 	)
-	.pipe(gulp.dest("./assets/css"))
-	.pipe(browserSync.stream());
+	.pipe(gulp.dest( config.cssDest ))
+	//.pipe(browserSync.stream());
 }
 // Watch files
 function watchFiles() {
-	gulp.watch("./assets/css/scss/**/*", styles);
-	gulp.watch("./assets/js/lib/**/*", gulp.series(scripts));
-	gulp.series(browserSyncReload);
+	gulp.watch( config.watchCSS, css ).on('change', browserSync.reload);
+	gulp.watch( config.watchJS, gulp.series(js));
+	//gulp.series( browserSyncReload );
 }
-const build = gulp.series(clean, gulp.parallel(css, js));
-const watch = gulp.parallel(watchFiles, browserSync);
+const build = gulp.series( clean, gulp.parallel( css, js ) );
+const watch = gulp.parallel( watchFiles, browserSync );
+
 // export tasks
 exports.css = css;
 exports.js = js;
@@ -148,13 +187,13 @@ gulp.task(
 		.pipe(
 			wpPot(
 				{
-					domain: $plugin_name,
-					package: $plugin_name,
+					domain: project.pluginName,
+					package: project.pluginName,
 					team: 'Micemade <alen@micemade.com>'
 				}
 			)
 		)
-		.pipe( gulp.dest( './languages/' + $plugin_name + '.pot' ) );
+		.pipe( gulp.dest( './languages/' + project.pluginName + '.pot' ) );
 	}
 );
 
@@ -165,11 +204,11 @@ gulp.task(
 		return gulp.src(
 			[
 			//$packTemp + '/**/*.{css,js,php}',
-			$packTemp + '/**/**',
+			project.packTemp + '/**/**',
 			]
 		)
 		.pipe( dos2unix() ) // This defaults to {feedback: false, write: false}
-		.pipe( gulp.dest( $packTemp ) )
+		.pipe( gulp.dest( project.packTemp ) )
 	}
 );
 // end dos2unix
@@ -191,7 +230,7 @@ gulp.task(
 			'!./**/*.db' // remove Windows Thumbs.db files
 			]
 		)
-		.pipe( gulp.dest( $packTemp ) );
+		.pipe( gulp.dest( project.packTemp ) );
 	}
 )
 
@@ -199,7 +238,7 @@ gulp.task(
 // The DEFAULT task will process sass,
 // run browser-sync and start watchin for changes
 //
-gulp.task( 'default', gulp.series( 'browser-sync' ) );
+gulp.task( 'default', gulp.series( browserSync ) );
 //
 // #######################################
 
@@ -207,35 +246,35 @@ gulp.task( 'default', gulp.series( 'browser-sync' ) );
 // Process JS SCRIPTS,
 // run browser-sync 'serve' and start watchin for changes
 //#################################################################
-/* gulp.task(
-	'js',
-	gulp.series(
-		'scripts',
-		'browser-sync',
-		function() {
-			gulp.watch(
-				'assets/js/lib/**/*.js',
-				gulp.series( 'scripts' )
-			);
-		}
-	)
-);
- */
-// Zip the [$plugin_name] folder in pack desitnation
+// gulp.task(
+// 	'js',
+// 	gulp.series(
+// 		'scripts',
+// 		'browser-sync',
+// 		function() {
+// 			gulp.watch(
+// 				'assets/js/lib/**/*.js',
+// 				gulp.series( 'scripts' )
+// 			);
+// 		}
+// 	)
+// );
+
+// Zip the [project.pluginName] folder in pack desitnation
 gulp.task(
 	'zipit',
 	function() {
-		return gulp.src( $packTemp + '**/**' )
-		.pipe( zip( $plugin_name + '.' + $plugin_version + '.zip' ) )
-		.pipe( gulp.dest( $packDest ) )
+		return gulp.src( project.packTemp + '**/**' )
+		.pipe( zip( project.pluginName + '.' + project.pluginVersion + '.zip' ) )
+		.pipe( gulp.dest( project.packDest ) )
 	}
 );
-// Delete tempoarary folder ( copied theme folder in $packDest directory )
+// Delete tempoarary folder ( copied theme folder in project.packDest directory )
 gulp.task(
 	'clean-temp',
 	function () {
 		del(
-			$packTemp,
+			project.packTemp,
 			{force: true }
 		);
 	}
@@ -258,10 +297,4 @@ gulp.task(
 
 // Additional useful tasks
 // RUN CSS AND JS FILES
-gulp.task(
-	'cssjs',
-	gulp.series(
-		'styles',
-		'scripts'
-	)
-);
+gulp.task( 'cssjs', gulp.series( css, js ) );

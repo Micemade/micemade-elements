@@ -3,7 +3,6 @@ jQuery.noConflict();
 	"use strict";
 	
 	var isEditMode = false;
-	
 	/**
 	 *	FILTER ITEMS (Isotope) :
 	 *	var function filterItems
@@ -11,7 +10,7 @@ jQuery.noConflict();
 	 *	var arg filter
 	 */
 	(function( $ ){
-		
+
 		window.filterItems = function( container, filter ) {
 			
 			container.imagesLoaded( function(){
@@ -43,7 +42,7 @@ jQuery.noConflict();
 		};
 		
 	})( jQuery );
-	
+
 	/**
 	 *  SLICK SLIDER
 	 */
@@ -413,7 +412,6 @@ jQuery.noConflict();
 	})( jQuery );
 
 	$(document).ready(function() {
-	
 		
 		var initMicemadeElements = window.initMicemadeElements();
 		

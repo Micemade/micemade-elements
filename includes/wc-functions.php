@@ -191,6 +191,7 @@ function micemade_elements_loop_product_func( $style = 'style_1', $img_format = 
 	<?php
 }
 add_filter( 'micemade_elements_loop_product', 'micemade_elements_loop_product_func', 10, 7 );
+
 /**
  * SIMPLE PRODUCT DATA (as in WC catalog)
  *
@@ -237,6 +238,7 @@ function micemade_elements_product_count_f( $term_id ) {
 	echo wp_kses_post( $prod_count );
 }
 add_action( 'micemade_elements_product_count', 'micemade_elements_product_count_f', 100, 3 );
+
 /**
  * Product categories query arguments
  *
