@@ -5,7 +5,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-class Micemade_WC_Products_Slider extends Widget_Base {
+use Elementor\Core\Schemes;
+use Elementor\Core\Settings\Manager;
+
+/**
+ * Micemade Elements WC products slider.
+ *
+ * Elementor widget that displays a set of WC products in a rotating carousel or
+ * slider.
+ *
+ * @since 0.3.0
+ */
+class Micemade_WC_Products_Slider extends \Elementor\Widget_Base {
 
 	public function get_name() {
 		return 'micemade-wc-products-slider';
@@ -16,8 +27,21 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 	}
 
 	public function get_icon() {
-		// Icon name from the Elementor font file, as per http://dtbaker.net/web-development/creating-your-own-custom-elementor-widgets/
 		return 'eicon-woocommerce';
+	}
+
+	/**
+	 * Get widget keywords.
+	 *
+	 * Retrieve the list of keywords the widget belongs to.
+	 *
+	 * @since 2.1.0
+	 * @access public
+	 *
+	 * @return array Widget keywords.
+	 */
+	public function get_keywords() {
+		return [ 'micemade', 'woocommerce', 'products', 'carousel', 'slider' ];
 	}
 
 	public function get_categories() {
@@ -123,11 +147,12 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$this->add_control(
 			'products_in',
 			[
-				'label'    => esc_html__( 'Select products', 'micemade-elements' ),
-				'type'     => Controls_Manager::SELECT2,
-				'default'  => 3,
-				'options'  => apply_filters( 'micemade_posts_array', 'product' ),
-				'multiple' => true,
+				'label'       => esc_html__( 'Select products', 'micemade-elements' ),
+				'type'        => Controls_Manager::SELECT2,
+				'default'     => 3,
+				'options'     => apply_filters( 'micemade_posts_array', 'product' ),
+				'multiple'    => true,
+				'label_block' => true,
 			]
 		);
 
@@ -140,62 +165,59 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 			]
 		);
 
+		// Slides to show.
+		$slides_no = [
+			1 => __( 'One', 'micemade-elements' ),
+			2 => __( 'Two', 'micemade-elements' ),
+			3 => __( 'Three', 'micemade-elements' ),
+			4 => __( 'Four', 'micemade-elements' ),
+			6 => __( 'Six', 'micemade-elements' ),
+		];
+
 		$this->add_control(
 			'posts_per_slide',
 			[
-				'label'   => __( 'Products per slide', 'micemade-elements' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => 3,
-				'options' => [
-					1 => __( 'One', 'micemade-elements' ),
-					2 => __( 'Two', 'micemade-elements' ),
-					3 => __( 'Three', 'micemade-elements' ),
-					4 => __( 'Four', 'micemade-elements' ),
-					6 => __( 'Six', 'micemade-elements' ),
-				],
+				'label'              => __( 'Products per slide', 'micemade-elements' ),
+				'type'               => Controls_Manager::SELECT,
+				'default'            => 3,
+				'options'            => $slides_no,
+				'frontend_available' => true,
 			]
 		);
 
 		$this->add_control(
 			'posts_per_slide_tab',
 			[
-				'label'   => __( 'Products per slide (tablets)', 'micemade-elements' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => 2,
-				'options' => [
-					1 => __( 'One', 'micemade-elements' ),
-					2 => __( 'Two', 'micemade-elements' ),
-					3 => __( 'Three', 'micemade-elements' ),
-					4 => __( 'Four', 'micemade-elements' ),
-					6 => __( 'Six', 'micemade-elements' ),
-				],
+				'label'              => __( 'Products per slide (tablets)', 'micemade-elements' ),
+				'type'               => Controls_Manager::SELECT,
+				'default'            => 2,
+				'options'            => $slides_no,
+				'frontend_available' => true,
 			]
 		);
 
 		$this->add_control(
 			'posts_per_slide_mob',
 			[
-				'label'   => __( 'Products per slide (mobiles)', 'micemade-elements' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => 1,
-				'options' => [
-					1 => __( 'One', 'micemade-elements' ),
-					2 => __( 'Two', 'micemade-elements' ),
-					3 => __( 'Three', 'micemade-elements' ),
-					4 => __( 'Four', 'micemade-elements' ),
-					6 => __( 'Six', 'micemade-elements' ),
-				],
+				'label'              => __( 'Products per slide (mobiles)', 'micemade-elements' ),
+				'type'               => Controls_Manager::SELECT,
+				'default'            => 1,
+				'options'            => $slides_no,
+				'frontend_available' => true,
 			]
 		);
+		// end slides to show.
 
-		$this->add_control(
+		// Space between the slides.
+		$this->add_responsive_control(
 			'space',
 			[
-				'label'   => __( 'Space between slides', 'micemade-elements' ),
-				'type'    => Controls_Manager::NUMBER,
-				'default' => 30,
-				'min'     => 0,
-				'step'    => 10,
+				'label'              => __( 'Space between', 'micemade-elements' ),
+				'type'               => Controls_Manager::NUMBER,
+				'default'            => 30,
+				'min'                => 0,
+				'step'               => 10,
+				'frontend_available' => true,
 			]
 		);
 
@@ -203,15 +225,16 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$this->add_control(
 			'pagination',
 			[
-				'label'   => __( 'Slider pagination', 'micemade-elements' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => 'bullets',
-				'options' => [
+				'label'              => __( 'Slider pagination', 'micemade-elements' ),
+				'type'               => Controls_Manager::SELECT,
+				'default'            => 'bullets',
+				'options'            => [
 					'none'        => __( 'None', 'micemade-elements' ),
 					'bullets'     => __( 'Bullets', 'micemade-elements' ),
 					'progressbar' => __( 'Progress bar', 'micemade-elements' ),
 					'fraction'    => __( 'Fraction', 'micemade-elements' ),
 				],
+				'frontend_available' => true,
 			]
 		);
 
@@ -269,7 +292,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 					'unit' => '%',
 				],
 				'range'       => [
-					'%' => [
+					'%'  => [
 						'max'  => 100,
 						'min'  => 0,
 						'step' => 1,
@@ -292,23 +315,25 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$this->add_control(
 			'autoplay',
 			[
-				'label'   => __( 'Autoplay speed', 'micemade-elements' ),
-				'type'    => Controls_Manager::NUMBER,
-				'default' => 0,
-				'min'     => 0,
-				'step'    => 500,
-				'title'   => __( 'Enter value in miliseconds (1s. = 1000ms.). Any value under 1000 (including empty) will turn off autoplay.', 'micemade-elements' ),
+				'label'              => __( 'Autoplay speed', 'micemade-elements' ),
+				'type'               => Controls_Manager::NUMBER,
+				'default'            => 0,
+				'min'                => 0,
+				'step'               => 500,
+				'title'              => __( 'Enter value in miliseconds (1s. = 1000ms.). Any value under 1000 (including empty) will turn off autoplay.', 'micemade-elements' ),
+				'frontend_available' => true,
 			]
 		);
 		// Loop the slider.
 		$this->add_control(
 			'loop',
 			[
-				'label'     => esc_html__( 'Loop slides', 'micemade-elements' ),
-				'type'      => Controls_Manager::SWITCHER,
-				'label_off' => __( 'No', 'elementor' ),
-				'label_on'  => __( 'Yes', 'elementor' ),
-				'default'   => 'yes',
+				'label'              => esc_html__( 'Loop slides', 'micemade-elements' ),
+				'type'               => Controls_Manager::SWITCHER,
+				'label_off'          => __( 'No', 'elementor' ),
+				'label_on'           => __( 'Yes', 'elementor' ),
+				'default'            => 'yes',
+				'frontend_available' => true,
 			]
 		);
 
@@ -1108,6 +1133,8 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 		$pps_tab        = (int) $settings['posts_per_slide_tab'];
 		$pps_mob        = (int) $settings['posts_per_slide_mob'];
 		$space          = (int) $settings['space'];
+		$space_tablet   = (int) $settings['space_tablet'];
+		$space_mobile   = (int) $settings['space_mobile'];
 		$pagination     = $settings['pagination'];
 		$buttons        = $settings['buttons'];
 		$autoplay       = $settings['autoplay'];
@@ -1127,7 +1154,7 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 
 		global $post;
 
-		$grid = micemade_elements_grid_class( intval( $pps ), intval( $pps_tab ), intval( $pps_mob ) );
+		// $grid = micemade_elements_grid_class( intval( $pps ), intval( $pps_tab ), intval( $pps_mob ) );
 
 		// Query args: ( hook in includes/wc-functions.php ).
 		$args = apply_filters( 'micemade_elements_wc_query_args', $posts_per_page, $categories, $exclude_cats, $filters, $offset, $products_in );
@@ -1136,31 +1163,50 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 
 		if ( $products_query->have_posts() ) {
 
-			// CSS classes for main slider container.
-			$this->add_render_attribute( 'container', 'class', 'micemade-elements_products_slider swiper-container woocommerce' );
-			$this->add_render_attribute( 'container', 'class', $style );
+			$swiper_settings = [
+				'posts_per_slide'     => $pps,
+				'posts_per_slide_tab' => $pps_tab,
+				'posts_per_slide_mob' => $pps_mob,
+				'space'               => $space,
+				'space_tablet'        => $space_tablet,
+				'space_mobile'        => $space_mobile,
+				'pagin'               => $pagination,
+				'autoplay'            => $autoplay,
+				'loop'                => $loop,
+			];
+
+			// Main slider container - add CSS classes and data settings.
+			$this->add_render_attribute(
+				[
+					'container' => [
+						'class'         => [
+							'elementor-image-carousel-wrapper',
+							'swiper-container',
+							'micemade-elements_products_slider',
+							'micemade-elements__sliders',
+							'woocommerce',
+							$style,
+						],
+						'data-settings' => wp_json_encode( $swiper_settings ),
+					],
+				]
+			);
+
 			if ( $img_cont_pos ) {
 				$this->add_render_attribute( 'container', 'class', 'container-' . $img_cont_pos );
 			}
 
 			echo '<div ' . $this->get_render_attribute_string( 'container' ) . '>';
 
-			// Slider settings for JS function.
-			$slideroptions = wp_json_encode(
-				array(
-					'pps'      => $pps,
-					'ppst'     => $pps_tab,
-					'ppsm'     => $pps_mob,
-					'space'    => $space,
-					'pagin'    => $pagination,
-					'autoplay' => $autoplay,
-					'loop'     => $loop,
-				)
-			);
-
-			echo '<input type="hidden" data-slideroptions="' . esc_js( $slideroptions ) . '" class="slider-config">';
-
-			echo '<ul class="swiper-wrapper products">';
+			// Pick up catalog loop start, or MME styles loop start
+			if ( 'catalog' === $style ) {
+				$loop_start = woocommerce_product_loop_start( false );
+				// "Inject" 'swiper-wrapper' class to loop start classes.
+				$loop_start = str_replace( 'class="', 'class="swiper-wrapper ', $loop_start );
+				echo wp_kses_post( $loop_start );
+			} else {
+				echo '<ul class="swiper-wrapper products elementor-image-carousel">';
+			}
 
 			// If style as in WC content-product template.
 			if ( 'catalog' === $style ) {
@@ -1186,16 +1232,22 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 				}
 			}
 
-			echo '</ul>'; // .swipper-wrapper.
+			if ( 'catalog' === $style ) {
+				woocommerce_product_loop_end();
+			} else {
+				echo '</ul>'; // .swipper-wrapper.
+			}
 
 			// If style as in WC content-product template.
 			if ( 'catalog' === $style ) {
 				// "Clean" or "reset" post_class
 				// avoid conflict with other "post_class" functions.
 				add_filter(
-					'post_class', function( $classes ) {
-						return apply_filters( 'micemade_elements_product_item_classes', $classes, '', ['swiper-slide', 'item'] );
-					}, 10
+					'post_class',
+					function( $classes ) {
+						return apply_filters( 'micemade_elements_product_item_classes', $classes, '', [ 'swiper-slide', 'item' ] );
+					},
+					10
 				);
 			}
 
@@ -1214,9 +1266,9 @@ class Micemade_WC_Products_Slider extends Widget_Base {
 
 	}
 
-	protected function content_template() {}
+	//protected function content_template() {}
 
-	public function render_plain_content( $instance = [] ) {}
+	// public function render_plain_content( $instance = [] ) {}
 
 }
 

@@ -1118,8 +1118,10 @@ class Micemade_Posts_Grid extends Widget_Base {
 
 		// ---- QUERY SETTINGS
 		$post_type = $settings['post_type'];
+
 		// "Dynamic" setting.
-		$taxonomy = $settings[ $post_type . '_taxonomies' ];
+		$taxonomy = 'page' !== $post_type ? $settings[ $post_type . '_taxonomies' ] : '';
+
 		$ppp      = (int) $settings['posts_per_page'];
 		// "Dynamic" setting.
 		$categories = isset( $settings[ $taxonomy . '_terms' ] ) ? $settings[ $taxonomy . '_terms' ] : [];

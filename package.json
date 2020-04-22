@@ -1,7 +1,7 @@
 {
   "name": "micemade-elements",
-  "description": "A WPGulp based project.",
-  "version": "0.7.0",
+  "description": "Micemade Elements WP plugin gulp project",
+  "version": "1.0.0",
   "author": "Micemade (https://github.com/micemade)",
   "repository": {
     "type": "git",
@@ -9,11 +9,13 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.0.0",
+    "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/register": "^7.0.0",
+    "babelify": "^10.0.0",
     "beepbeep": "^1.2.2",
     "browser-sync": "^2.11.1",
+    "browserify": "^16.5.1",
     "eslint": "^5.5.0",
     "eslint-config-wordpress": "^2.0.0",
     "gulp": "^4.0.0",
@@ -46,5 +48,6 @@
     "images": "gulp images",
     "clearCache": "gulp clearCache",
     "translate": "gulp translate"
-  }
+  },
+  "dependencies": {}
 }

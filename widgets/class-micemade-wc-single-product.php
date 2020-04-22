@@ -16,7 +16,6 @@ class Micemade_WC_Single_Product extends Widget_Base {
 	}
 
 	public function get_icon() {
-		// Icon name from the Elementor font file, as per http://dtbaker.net/web-development/creating-your-own-custom-elementor-widgets/
 		return 'eicon-woocommerce';
 	}
 
@@ -36,10 +35,11 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		$this->add_control(
 			'post_name',
 			[
-				'label'   => esc_html__( 'Select a product', 'micemade-elements' ),
-				'type'    => Controls_Manager::SELECT2,
-				'default' => 3,
-				'options' => apply_filters( 'micemade_posts_array', 'product' ),
+				'label'       => esc_html__( 'Select a product', 'micemade-elements' ),
+				'type'        => Controls_Manager::SELECT2,
+				'default'     => 3,
+				'options'     => apply_filters( 'micemade_posts_array', 'product' ),
+				'label_block' => true,
 			]
 		);
 

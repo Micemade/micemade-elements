@@ -277,7 +277,11 @@ class Micemade_WC_Products extends Widget_Base {
 
 			echo '<div class="woocommerce woocommerce-page micemade-elements_wc-catalog">';
 
-			echo '<ul class="products mme-row">';
+			// Start looop.
+			$loop_start = woocommerce_product_loop_start();
+			// "Inject" 'mme-row' class to loop start classes.
+			$loop_start = str_replace( 'class="', 'class="mme-row ', $loop_start );
+			echo wp_kses_post( $loop_start );
 
 			while ( $products_query->have_posts() ) {
 
@@ -287,7 +291,8 @@ class Micemade_WC_Products extends Widget_Base {
 
 			}
 
-			echo '</ul>';
+			// End loop.
+			woocommerce_product_loop_end();
 
 			echo '</div>';
 		}

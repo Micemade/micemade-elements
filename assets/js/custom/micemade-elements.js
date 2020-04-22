@@ -9,7 +9,8 @@ jQuery.noConflict();
 	 *	var arg container
 	 *	var arg filter
 	 */
-	(function( $ ){
+	/* 
+	 (function( $ ){
 
 		window.filterItems = function( container, filter ) {
 			
@@ -42,66 +43,8 @@ jQuery.noConflict();
 		};
 		
 	})( jQuery );
+	*/
 
-	/**
-	 *  SLICK SLIDER
-	 */
-	( function( $ ){
-			
-		window.micemade_elements_slider = function( rootElement ) {
-			
-			var root = rootElement || $('body');
-
-			var sliderContainers = root.find( '.slick-slider' );
-		
-			sliderContainers.each( function(index, element) {
-				
-				var $_this   = $(this),
-					slideroptions = $_this.parent().find('.slider-config').data('slideroptions'),
-					pps      = slideroptions.pps,
-					ppst     = slideroptions.ppst,
-					ppsm     = slideroptions.ppsm,
-					space    = slideroptions.space,
-					pagin    = slideroptions.pagin,
-					autoPlay = slideroptions.autoplay,
-					loop     = slideroptions.loop;
-
-				$_this.not(".slick-initialized").slick({
-					autoplay: autoPlay,
-					infinite: loop,
-					//centerMode: true,
-					//centerPadding: '60px',
-					slidesToShow: parseInt(pps),
-					settings: "unslick",
-					responsive: [
-						{
-							breakpoint: 1025,
-							settings: {
-								arrows: true,
-								//centerMode: true,
-								//centerPadding: space + 'px',
-								slidesToShow: parseInt(ppsm)
-							}
-						},
-						{
-							breakpoint: 769,
-							settings: {
-								arrows: false,
-								//centerMode: true,
-								//centerPadding: space + 'px',
-								slidesToShow: parseInt(ppst)
-							}
-						}
-						
-					]
-				});
-
-			});
-
-		};
-
-	})( jQuery );
-	
 	/**
 	 * Micemade Tabs - display WC products in tabs
 	 */
@@ -131,7 +74,6 @@ jQuery.noConflict();
 		});
 	}
 
-	
 	/**
 	 *  SWIPER SLIDER
 	 */
@@ -142,27 +84,40 @@ jQuery.noConflict();
 			root = $( rootElement );
 		}
 
-		var swiperContainers = root.find( '.swiper-container' );
+		var swiperContainers = '',
+			swiperContainers = root.find( '.swiper-container' );
+
+		if ( ! swiperContainers.length ) {
+			return;
+		}
 
 		swiperContainers.each( function(index, element) {
 			
-			var thisContainer   = $(this),
-				slideroptions = thisContainer.find('.slider-config').data('slideroptions'),
-				pps      = slideroptions.pps,
-				ppst     = slideroptions.ppst,
-				ppsm     = slideroptions.ppsm,
-				space    = slideroptions.space,
-				pagin    = slideroptions.pagin,
-				autoplay = slideroptions.autoplay,
-				loop     = slideroptions.loop;
+			var sliderContainer   = $(this);
 
+			// Take only MM Elements sliders.
+			if ( ! sliderContainer.hasClass( 'micemade-elements__sliders' ) ) {
+				return true;
+			}
 
-			var mainSwiperArgs = {
+			// Slider settings (slides per view, space, pagination ...)
+			// var settings = sliderContainer.closest('.elementor-element').data('settings'),
+			var settings = sliderContainer.data('settings'),
+				pps      = settings.posts_per_slide,
+				pps_t    = settings.posts_per_slide_tab,
+				pps_m    = settings.posts_per_slide_mob,
+				space    = settings.space,
+				space_t  = settings.space_tablet,
+				space_m  = settings.space_mobile,
+				pagin    = settings.pagination,
+				autoplay = settings.autoplay,
+				loop     = settings.loop;
+
+				// Main swiper arguments
+				var mainSwiperArgs = {
 				slideActiveClass: 'active',
 				autoHeight: true,
 				effect: 'slide',
-				slidesPerView: pps,
-				spaceBetween: space,
 				grabCursor: true,
 				loop: loop,
 				pagination: {
@@ -171,25 +126,29 @@ jQuery.noConflict();
 					clickable: true
 				},
 				navigation: {
-					prevEl: thisContainer.find('.swiper-button-prev')[0],
-					nextEl: thisContainer.find('.swiper-button-next')[0]
+					prevEl: sliderContainer.find('.swiper-button-prev')[0],
+					nextEl: sliderContainer.find('.swiper-button-next')[0]
 				},
 				breakpoints: {
-					768: {
-						slidesPerView: ppst,
+					// when window width is >= 320px
+					320: {
+						slidesPerView: pps_m ? pps_m : 1,
+						spaceBetween: space_m ? space_m : 0
 					},
+					// when window width is >= 480px
 					480: {
-						slidesPerView: ppsm,
+						slidesPerView: pps_t ? pps_t : 2,
+						spaceBetween: space_t ? space_t : 20
 					},
-
+					// when window width is >= 640px
+					768: {
+						slidesPerView: pps ? pps : 1,
+						spaceBetween: space ? space : 30
+					}
 				},
 				on: {
-					transitionStart: function() {
-						
-					},
-					transitionEnd: function() {
-
-					}
+					transitionStart: function() {},
+					transitionEnd: function() {}
 				}
 			}
 			// If autoplay is enabled.
@@ -204,8 +163,9 @@ jQuery.noConflict();
 			// Join arg objects.
 			var swiperArgs = $.extend( mainSwiperArgs, autoplayArgs );
 			// Initialize Swiper.
-			var micemadeSwiper = new Swiper( thisContainer, swiperArgs );
+			var micemadeSwiper = new Swiper( sliderContainer, swiperArgs );
 
+			/*
 			micemadeSwiper.on( 'transitionStart', function() {
 				var slides  = this.slides,
 					current = this.realIndex;
@@ -216,26 +176,27 @@ jQuery.noConflict();
 					var eachSlide = $(this),
 						elmData   = eachSlide.find('[data-settings]');
 						console.log(elementorFrontend.getItems);
-						/* elementorFrontend.waypoint(
-							element,
-							function() {
-								console.log($(this));
-							}
-						); */
+						// elementorFrontend.waypoint(
+						// 	element,
+						// 	function() {
+						// 		console.log($(this));
+						// 	}
+						// );
 
-					/* 
-					if( ! eachSlide.hasClass( 'active' ) ) {
-						animatedEls.removeClass( 'animated' );
-					} else {
-						window.setTimeout( function () {
-							animatedEls.addClass( 'animated' ).addClass( animationName )
-						}, 1);
-					} */
-					/* if( index === this.activeIndex ) {*/
+					
+					// if( ! eachSlide.hasClass( 'active' ) ) {
+					// 	animatedEls.removeClass( 'animated' );
+					// } else {
+					// 	window.setTimeout( function () {
+					// 		animatedEls.addClass( 'animated' ).addClass( animationName )
+					// 	}, 1);
+					// }
+
+					// if( index === this.activeIndex ) {}
 				} );
 				
 			});
-
+			*/
 			//swiper.on('init', function() { /* do something */});
 			//swiper.init();
 
@@ -386,8 +347,6 @@ jQuery.noConflict();
 		if ( elementorFrontend.isEditMode() ) {
 			isEditMode = true;
 		}
-		// Start Micemade Slider
-		elementorFrontend.hooks.addAction( 'frontend/element_ready/micemade-slider.default', micemadeElementsSwiper );
 
 		// Start Micemade Products Slider
 		elementorFrontend.hooks.addAction( 'frontend/element_ready/micemade-wc-products-slider.default', micemadeElementsSwiper );

@@ -5,10 +5,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
+use Elementor\Core\Schemes;
+use Elementor\Core\Settings\Manager;
 
 class Micemade_Slider extends Widget_Base {
 
+	public function __construct($data = [], $args = null) {
+		parent::__construct($data, $args);
+		wp_register_script( 'micemade-slider-js', MICEMADE_ELEMENTS_URL . 'assets/js/custom/handlers/slider.js', [ 'elementor-frontend' ], '1.0.0', true );
+	}
 
+	public function get_script_depends() {
+		return [ 'micemade-slider-js', 'jquery-swiper' ];
+	}
+	
 	public function get_name() {
 		return 'micemade-slider';
 	}
@@ -25,9 +35,6 @@ class Micemade_Slider extends Widget_Base {
 		return [ 'micemade_elements' ];
 	}
 
-	public function get_script_depends() {
-		return [ 'imagesloaded', 'jquery-swiper' ];
-	}
 	/**
 	 * Register slides widget controls.
 	 *
@@ -67,7 +74,7 @@ class Micemade_Slider extends Widget_Base {
 					'custom'   => __( 'Custom content', 'micemade-elements' ),
 					'template' => __( 'Saved Templates', 'micemade-elements' ),
 				],
-				'default' => 'content',
+				'default' => 'custom',
 			]
 		);
 
@@ -78,9 +85,9 @@ class Micemade_Slider extends Widget_Base {
 				'type'        => Controls_Manager::SELECT2,
 				'options'     => apply_filters( 'micemade_posts_array', 'elementor_library', 'id' ),
 				'label_block' => true,
-				'condition' => [
+				'condition'   => [
 					'content_type' => 'template',
-				]
+				],
 			]
 		);
 
@@ -89,7 +96,7 @@ class Micemade_Slider extends Widget_Base {
 			[
 				'condition' => [
 					'content_type' => 'custom',
-				]
+				],
 			]
 		);
 
@@ -163,81 +170,6 @@ class Micemade_Slider extends Widget_Base {
 
 		$repeater->end_controls_tab();
 
-		// Background image tab.
-		$repeater->start_controls_tab(
-			'background_tab',
-			[
-				'label' => __( 'Back', 'micemade-elements' ),
-			]
-		);
-
-		$repeater->add_group_control(
-			Group_Control_Background::get_type(),
-			[
-				'name'     => 'slide_image',
-				'label'    => __( 'Slide image', 'micemade-elements' ),
-				// 'types'    => [ 'classic', 'gradient', 'video' ],
-				//'types'    => [ 'classic', 'video' ],
-				'selector' => '{{WRAPPER}} {{CURRENT_ITEM}} .slide-background',
-			]
-		);
-
-		$repeater->add_control(
-			'slide_overlay_color',
-			[
-				'label'     => __( 'Overlay color', 'micemade-elements' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '',
-				// 'conditions' => [
-				// 	'terms' => [
-				// 		[
-				// 			'name' => 'slide_overlay',
-				// 			'value' => 'yes',
-				// 		],
-				// 	],
-				// ],
-				'selectors' => [
-					'{{WRAPPER}} {{CURRENT_ITEM}} .slide-overlay' => 'background-color: {{VALUE}}',
-				],
-			]
-		);
-
-		$repeater->add_control(
-			'background_overlay_blend_mode',
-			[
-				'label'     => __( 'Blend Mode', 'micemade-elements' ),
-				'type'      => Controls_Manager::SELECT,
-				'options'   => [
-					''            => __( 'Normal', 'micemade-elements' ),
-					'multiply'    => 'Multiply',
-					'screen'      => 'Screen',
-					'overlay'     => 'Overlay',
-					'darken'      => 'Darken',
-					'lighten'     => 'Lighten',
-					'color-dodge' => 'Color Dodge',
-					'color-burn'  => 'Color Burn',
-					'hue'         => 'Hue',
-					'saturation'  => 'Saturation',
-					'color'       => 'Color',
-					'exclusion'   => 'Exclusion',
-					'luminosity'  => 'Luminosity',
-				],
-				// 'conditions' => [
-				// 	'terms' => [
-				// 		[
-				// 			'name' => 'background_overlay',
-				// 			'value' => 'yes',
-				// 		],
-				// 	],
-				// ],
-				'selectors' => [
-					'{{WRAPPER}} {{CURRENT_ITEM}} .slick-slide-inner .elementor-background-overlay' => 'mix-blend-mode: {{VALUE}}',
-				],
-			]
-		);
-
-		$repeater->end_controls_tab();
-
 		// Style tab.
 		$repeater->start_controls_tab(
 			'slide_style_tab',
@@ -247,27 +179,13 @@ class Micemade_Slider extends Widget_Base {
 		);
 
 		$repeater->add_responsive_control(
-			'slide_height',
+			'slide_content_padding',
 			[
-				'label'     => __( 'Slider height', 'micemade-elements' ),
-				'type'      => Controls_Manager::SLIDER,
-				'default'   => [
-					'size' => '400',
-				],
-				'range'     => [
-					'px' => [
-						'max'  => 1500,
-						'min'  => 0,
-						'step' => 1,
-					],
-					'vh' => [
-						'min' => 0,
-						'max' => 100,
-					],
-				],
-				'size_units' => [ 'px', 'vh' ],
-				'selectors' => [
-					'{{WRAPPER}} {{CURRENT_ITEM}}' => 'height:{{SIZE}}{{UNIT}};',
+				'label'      => esc_html__( 'Slide padding (custom content)', 'micemade-elements' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'em', '%' ],
+				'selectors'  => [
+					'{{WRAPPER}} {{CURRENT_ITEM}}.custom' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -349,6 +267,63 @@ class Micemade_Slider extends Widget_Base {
 
 		$repeater->end_controls_tabs();
 
+		// After tabs - each slide background and overlay controls.
+		$repeater->add_group_control(
+			\Elementor\Group_Control_Background::get_type(),
+			[
+				'name'      => 'slide_background',
+				'label'     => __( 'Slide background', 'micemade-elements' ),
+				'types'     => [ 'classic', 'gradient' ],
+				'selector'  => '{{WRAPPER}} {{CURRENT_ITEM}} .slide-background',
+				'condition' => [
+					'content_type' => 'custom',
+				],
+			]
+		);
+		$repeater->add_control(
+			'slide_overlay_color',
+			[
+				'label'     => __( 'Overlay color', 'micemade-elements' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '',
+				'condition' => [
+					'content_type' => 'custom',
+				],
+				'selectors' => [
+					'{{WRAPPER}} {{CURRENT_ITEM}} .slide-overlay' => 'background-color: {{VALUE}}',
+				],
+			]
+		);
+
+		$repeater->add_control(
+			'slide_overlay_blend_mode',
+			[
+				'label'     => __( 'Blend Mode', 'micemade-elements' ),
+				'type'      => Controls_Manager::SELECT,
+				'options'   => [
+					''            => __( 'Normal', 'micemade-elements' ),
+					'multiply'    => 'Multiply',
+					'screen'      => 'Screen',
+					'overlay'     => 'Overlay',
+					'darken'      => 'Darken',
+					'lighten'     => 'Lighten',
+					'color-dodge' => 'Color Dodge',
+					'color-burn'  => 'Color Burn',
+					'hue'         => 'Hue',
+					'saturation'  => 'Saturation',
+					'color'       => 'Color',
+					'exclusion'   => 'Exclusion',
+					'luminosity'  => 'Luminosity',
+				],
+				'condition' => [
+					'content_type' => 'custom',
+				],
+				'selectors' => [
+					'{{WRAPPER}} {{CURRENT_ITEM}} .slick-slide-inner .elementor-background-overlay' => 'mix-blend-mode: {{VALUE}}',
+				],
+			]
+		);
+
 		$this->add_control(
 			'slides',
 			[
@@ -378,30 +353,20 @@ class Micemade_Slider extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
-			'space',
-			[
-				'label'   => __( 'Space between slides', 'micemade-elements' ),
-				'type'    => Controls_Manager::NUMBER,
-				'default' => 0,
-				'min'     => 0,
-				'step'    => 1,
-			]
-		);
-
 		// Pagination.
 		$this->add_control(
 			'pagination',
 			[
-				'label'   => __( 'Slider pagination', 'micemade-elements' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => 'bullets',
-				'options' => [
+				'label'              => __( 'Slider pagination', 'micemade-elements' ),
+				'type'               => Controls_Manager::SELECT,
+				'default'            => 'bullets',
+				'options'            => [
 					'none'        => __( 'None', 'micemade-elements' ),
 					'bullets'     => __( 'Bullets', 'micemade-elements' ),
 					'progressbar' => __( 'Progress bar', 'micemade-elements' ),
 					'fraction'    => __( 'Fraction', 'micemade-elements' ),
 				],
+				'frontend_available' => true,
 			]
 		);
 
@@ -425,11 +390,12 @@ class Micemade_Slider extends Widget_Base {
 		$this->add_control(
 			'slider_arrows',
 			[
-				'label'     => esc_html__( 'Show navigation arrows', 'micemade-elements' ),
-				'type'      => Controls_Manager::SWITCHER,
-				'label_off' => __( 'No', 'elementor' ),
-				'label_on'  => __( 'Yes', 'elementor' ),
-				'default'   => 'yes',
+				'label'              => esc_html__( 'Show navigation arrows', 'micemade-elements' ),
+				'type'               => Controls_Manager::SWITCHER,
+				'label_off'          => __( 'No', 'micemade-elements' ),
+				'label_on'           => __( 'Yes', 'micemade-elements' ),
+				'default'            => 'yes',
+				'frontend_available' => true,
 			]
 		);
 		$this->add_control(
@@ -446,48 +412,141 @@ class Micemade_Slider extends Widget_Base {
 				],
 			]
 		);
-		// Autoplay.
+
 		$this->add_control(
 			'autoplay',
 			[
-				'label'   => __( 'Autoplay speed', 'micemade-elements' ),
-				'type'    => Controls_Manager::NUMBER,
-				'default' => 0,
-				'min'     => 0,
-				'step'    => 1000,
-				'title'   => __( 'Enter value in miliseconds (1s. = 1000ms.). Leave 0 (zero) do discard autoplay', 'micemade-elements' ),
+				'label' => __( 'Autoplay', 'micemade-elements' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 'yes',
+				'options' => [
+					'yes' => __( 'Yes', 'micemade-elements' ),
+					'no' => __( 'No', 'micemade-elements' ),
+				],
+				'frontend_available' => true,
 			]
 		);
-		// Loop the slider.
+
 		$this->add_control(
-			'loop',
+			'pause_on_hover',
 			[
-				'label'     => esc_html__( 'Loop slides', 'micemade-elements' ),
-				'type'      => Controls_Manager::SWITCHER,
-				'label_off' => __( 'No', 'elementor' ),
-				'label_on'  => __( 'Yes', 'elementor' ),
-				'default'   => 'yes',
+				'label' => __( 'Pause on Hover', 'micemade-elements' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 'yes',
+				'options' => [
+					'yes' => __( 'Yes', 'micemade-elements' ),
+					'no' => __( 'No', 'micemade-elements' ),
+				],
+				'condition' => [
+					'autoplay' => 'yes',
+				],
+				'frontend_available' => true,
+			]
+		);
+
+		$this->add_control(
+			'pause_on_interaction',
+			[
+				'label' => __( 'Pause on Interaction', 'micemade-elements' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 'yes',
+				'options' => [
+					'yes' => __( 'Yes', 'micemade-elements' ),
+					'no' => __( 'No', 'micemade-elements' ),
+				],
+				'condition' => [
+					'autoplay' => 'yes',
+				],
+				'frontend_available' => true,
+			]
+		);
+
+		$this->add_control(
+			'autoplay_speed',
+			[
+				'label' => __( 'Autoplay Speed', 'micemade-elements' ),
+				'type' => Controls_Manager::NUMBER,
+				'default' => 5000,
+				'condition' => [
+					'autoplay' => 'yes',
+				],
+				'frontend_available' => true,
+			]
+		);
+
+		$this->add_control(
+			'infinite',
+			[
+				'label' => __( 'Infinite Loop', 'micemade-elements' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 'yes',
+				'options' => [
+					'yes' => __( 'Yes', 'micemade-elements' ),
+					'no' => __( 'No', 'micemade-elements' ),
+				],
+				'frontend_available' => true,
+			]
+		);
+
+		$this->add_control(
+			'effect',
+			[
+				'label' => __( 'Effect', 'micemade-elements' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 'slide',
+				'options' => [
+					'slide' => __( 'Slide', 'micemade-elements' ),
+					'fade' => __( 'Fade', 'micemade-elements' ),
+				],
+				'condition' => [
+					'slides_to_show' => '1',
+				],
+				'frontend_available' => true,
+			]
+		);
+
+		$this->add_control(
+			'speed',
+			[
+				'label' => __( 'Animation Speed', 'micemade-elements' ),
+				'type' => Controls_Manager::NUMBER,
+				'default' => 500,
+				'frontend_available' => true,
+			]
+		);
+
+		$this->add_control(
+			'direction',
+			[
+				'label' => __( 'Direction', 'micemade-elements' ),
+				'type' => Controls_Manager::SELECT,
+				'default' => 'ltr',
+				'options' => [
+					'ltr' => __( 'Left', 'micemade-elements' ),
+					'rtl' => __( 'Right', 'micemade-elements' ),
+				],
+				'frontend_available' => true,
 			]
 		);
 
 		$this->end_controls_section();
 
 		$this->start_controls_section(
-			'section_slides_content_style',
+			'section_slides_global_style',
 			[
-				'label' => __( 'Slides content style', 'micemade-elements' ),
+				'label' => __( 'Slides global style', 'micemade-elements' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$this->add_responsive_control(
-			'slide_content_padding',
+			'slide_global_padding',
 			[
-				'label'      => esc_html__( 'Content padding (custom content)', 'micemade-elements' ),
+				'label'      => esc_html__( 'Global padding (custom content)', 'micemade-elements' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', '%' ],
 				'selectors'  => [
-					'{{WRAPPER}} .swiper-slide.custom' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}}' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -495,14 +554,14 @@ class Micemade_Slider extends Widget_Base {
 		$this->add_responsive_control(
 			'slide_content_spacing',
 			[
-				'label'     => __( 'Content elements spacing', 'micemade-elements' ),
-				'type'      => Controls_Manager::SLIDER,
-				'default'   => [
+				'label'      => __( 'Content elements spacing', 'micemade-elements' ),
+				'type'       => Controls_Manager::SLIDER,
+				'default'    => [
 					'size' => '20',
 				],
-				'range'     => [
+				'range'      => [
 					'px' => [
-						'max'  => 1500,
+						'max'  => 300,
 						'min'  => 0,
 						'step' => 1,
 					],
@@ -510,14 +569,14 @@ class Micemade_Slider extends Widget_Base {
 						'min' => 0,
 						'max' => 100,
 					],
-					'%' => [
+					'%'  => [
 						'min' => 0,
 						'max' => 100,
 					],
 				],
 				'size_units' => [ 'px', 'em', '%' ],
-				'selectors' => [
-					'{{WRAPPER}} .swiper-slide > *' => 'margin-bottom:{{SIZE}}{{UNIT}};',
+				'selectors'  => [
+					'{{WRAPPER}} .swiper-slide > *' => 'margin-top:{{SIZE}}{{UNIT}};margin-bottom:{{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -585,8 +644,8 @@ class Micemade_Slider extends Widget_Base {
 		$this->start_controls_section(
 			'section_buttons_style',
 			[
-				'label' => __( 'Buttons style', 'micemade-elements' ),
-				'tab'  => Controls_Manager::TAB_STYLE,
+				'label' => __( 'Buttons global style', 'micemade-elements' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
@@ -653,12 +712,12 @@ class Micemade_Slider extends Widget_Base {
 		$this->add_control(
 			'buttons_border_width',
 			[
-				'label'     => __( 'Buttons border width', 'micemade-elements' ),
-				'type'      => Controls_Manager::SLIDER,
-				'default'   => [
+				'label'      => __( 'Buttons border width', 'micemade-elements' ),
+				'type'       => Controls_Manager::SLIDER,
+				'default'    => [
 					'size' => '0',
 				],
-				'range'     => [
+				'range'      => [
 					'px' => [
 						'max'  => 200,
 						'min'  => 0,
@@ -666,7 +725,7 @@ class Micemade_Slider extends Widget_Base {
 					],
 				],
 				'size_units' => [ 'px' ],
-				'selectors' => [
+				'selectors'  => [
 					'{{WRAPPER}} .slide-buttons a' => 'border-width:{{SIZE}}{{UNIT}};',
 				],
 			]
@@ -675,12 +734,12 @@ class Micemade_Slider extends Widget_Base {
 		$this->add_control(
 			'buttons_border_radius',
 			[
-				'label'     => __( 'Buttons border radius', 'micemade-elements' ),
-				'type'      => Controls_Manager::SLIDER,
-				'default'   => [
+				'label'      => __( 'Buttons border radius', 'micemade-elements' ),
+				'type'       => Controls_Manager::SLIDER,
+				'default'    => [
 					'size' => '3',
 				],
-				'range'     => [
+				'range'      => [
 					'px' => [
 						'max'  => 200,
 						'min'  => 0,
@@ -688,12 +747,11 @@ class Micemade_Slider extends Widget_Base {
 					],
 				],
 				'size_units' => [ 'px' ],
-				'selectors' => [
+				'selectors'  => [
 					'{{WRAPPER}} .slide-buttons a' => 'border-radius:{{SIZE}}{{UNIT}};',
 				],
 			]
 		);
-
 
 		$this->add_control(
 			'buttons_border_color',
@@ -756,32 +814,30 @@ class Micemade_Slider extends Widget_Base {
 	 */
 	protected function render() {
 
-		$settings      = $this->get_settings_for_display();
-		$space         = (int) $settings['space'];
+		$settings = $this->get_settings_for_display();
+
 		$pagination    = $settings['pagination'];
 		$slider_arrows = $settings['slider_arrows'];
-		$autoplay      = $settings['autoplay'];
-		$loop          = $settings['loop'];
 
 		if ( $settings['slides'] ) {
-			echo '<div class="micemade-elements_slider swiper-container">';
 
-			// Slider settings for JS function.
-			$slideroptions = wp_json_encode(
-				array(
-					'pps'      => 1,
-					'ppst'     => 1,
-					'ppsm'     => 1,
-					'space'    => $space,
-					'pagin'    => $pagination,
-					'autoplay' => $autoplay,
-					'loop'     => $loop,
-				)
+			// CSS classes for main slider container.
+			$this->add_render_attribute(
+				[
+					'container' => [
+						'class' => [
+							'swiper-container',
+							'micemade-elements_slider',
+							//'micemade-elements__sliders',
+						],
+					],
+				]
 			);
 
-			echo '<input type="hidden" data-slideroptions="' . esc_js( $slideroptions ) . '" class="slider-config">';
+			// Slider container.
+			echo '<div ' . $this->get_render_attribute_string( 'container' ) . '>';
 
-			echo '<div class="swiper-wrapper">';
+			echo '<div class="swiper-wrapper elementor-image-carousel">';
 
 			foreach ( $settings['slides'] as $index => $item ) {
 
@@ -796,7 +852,6 @@ class Micemade_Slider extends Widget_Base {
 						$frontend    = new Frontend;
 						echo $frontend->get_builder_content( $template_id, true );
 					}
-
 				} elseif ( 'custom' === $type ) {
 
 					// Slide title and text.
@@ -847,6 +902,7 @@ class Micemade_Slider extends Widget_Base {
 	 *
 	 * @access protected
 	 */
-	protected function _content_template() {}
+	// protected function _content_template() {}
 }
+
 Plugin::instance()->widgets_manager->register_widget_type( new Micemade_Slider() );

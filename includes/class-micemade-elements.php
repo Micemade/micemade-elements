@@ -45,34 +45,34 @@ class Micemade_Elements {
 
 		if ( self::$instance->elementor_activation_check() ) {
 
-			self::$instance->includes();
+			$this->includes();
 
 			// Add "Micemade Elements" widget categories.
-			add_action( 'elementor/elements/categories_registered', array( $this, 'add_widget_categories' ) );
+			add_action( 'elementor/elements/categories_registered', [ $this, 'add_widget_categories' ] );
 
 			// Register "Micemade elements" widgets.
-			add_action( 'elementor/widgets/widgets_registered', array( $this, 'widgets_registered' ) );
+			add_action( 'elementor/widgets/widgets_registered', [ $this, 'widgets_registered' ] );
 
 			// Add custom controls to Elementor section.
 			add_action( 'elementor/element/after_section_end', [ $this, 'custom_section_controls' ], 10, 5 );
 			add_action( 'elementor/controls/controls_registered', [ $this, 'register_controls' ] );
 
 			// Load textdomain.
-			add_action( 'plugins_loaded', array( self::$instance, 'load_plugin_textdomain' ) );
+			add_action( 'plugins_loaded', [ $this, 'load_plugin_textdomain' ] );
 			// Check for plugin dependecies.
-			add_action( 'plugins_loaded', array( self::$instance, 'plugins_dependency_checks' ) );
+			add_action( 'plugins_loaded', [ $this, 'plugins_dependency_checks' ] );
 
 			// Register CPT's and enabling WC functions in Elementor editor.
-			add_action( 'init', array( self::$instance, 'register_cpts' ) );
-			add_action( 'init', array( self::$instance, 'enable_wc_frontend_in_editor' ) );
+			add_action( 'init', [ $this, 'register_cpts' ] );
+			add_action( 'init', [ $this, 'enable_wc_frontend_in_editor' ] );
 
 			// Enqueue script and styles for Elementor editor.
-			add_action( 'elementor/editor/before_enqueue_scripts', array( self::$instance, 'editor_scripts' ), 999 );
+			add_action( 'elementor/editor/before_enqueue_scripts', [ $this, 'editor_scripts' ], 999 );
 			// add_action( 'admin_enqueue_scripts', array( self::$instance, 'micemade_elements_admin_js_css' ) );
 
 			// Enqueue scripts and styles for frontend.
-			add_action( 'wp_enqueue_scripts', array( self::$instance, 'micemade_elements_styles' ) );
-			add_action( 'wp_enqueue_scripts', array( self::$instance, 'micemade_elements_scripts' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'micemade_elements_styles' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'micemade_elements_scripts' ) );
 
 			$this->debug = apply_filters( 'micemade_elements_debug', true );
 
@@ -336,9 +336,13 @@ class Micemade_Elements {
 			$prefix = '';
 		}
 
-		// Register and enqueue plugin JS scripts.
-		wp_register_script( 'micemade-elements-js', MICEMADE_ELEMENTS_URL . 'assets/js/micemade-elements' . $prefix . '.js', '', MICEMADE_ELEMENTS_VERSION, true );
-		wp_enqueue_script( 'micemade-elements-js', MICEMADE_ELEMENTS_URL . 'assets/js/micemade-elements' . $prefix . '.js', array( 'jquery', 'imagesloaded' ), MICEMADE_ELEMENTS_VERSION, true );
+		// Register and enqueue custom plugin JS scripts.
+		wp_register_script( 'micemade-elements-vendor-js', MICEMADE_ELEMENTS_URL . 'assets/js/vendor' . $prefix . '.js', '', MICEMADE_ELEMENTS_VERSION, true );
+		wp_enqueue_script( 'micemade-elements-vendor-js', MICEMADE_ELEMENTS_URL . 'assets/js/vendor' . $prefix . '.js', array( 'jquery' ), MICEMADE_ELEMENTS_VERSION, true );
+
+		// Register and enqueue vendor JS scripts.
+		wp_register_script( 'micemade-element-js', MICEMADE_ELEMENTS_URL . 'assets/js/micemade-elements' . $prefix . '.js', '', MICEMADE_ELEMENTS_VERSION, true );
+		wp_enqueue_script( 'micemade-elements-js', MICEMADE_ELEMENTS_URL . 'assets/js/micemade-elements' . $prefix . '.js', [ 'jquery', 'imagesloaded' ], MICEMADE_ELEMENTS_VERSION, true );
 
 		// Smartmenus scripts - postponed until v.1.0.0
 		//wp_register_script( 'smartmenus', MICEMADE_ELEMENTS_URL . 'assets/js/jquery.smartmenus.min.js' );
@@ -372,7 +376,7 @@ class Micemade_Elements {
 
 		wp_enqueue_script(
 			'micemade-elements-editor',
-			MICEMADE_ELEMENTS_URL . 'assets/js/editor.js',
+			MICEMADE_ELEMENTS_URL . 'assets/js/admin/editor.js',
 			[
 				'elementor-editor', // dependency.
 			],

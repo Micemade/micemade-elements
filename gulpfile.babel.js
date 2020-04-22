@@ -62,6 +62,9 @@ const remember = require( 'gulp-remember' ); //  Adds all the files it has ever 
 const plumber = require( 'gulp-plumber' ); // Prevent pipe breaking caused by errors from gulp plugins.
 const beep = require( 'beepbeep' );
 
+const browserify = require('browserify');
+const babelify = require('babelify');
+
 /**
  * Custom Error Handler.
  *

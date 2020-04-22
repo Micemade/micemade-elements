@@ -458,8 +458,12 @@
 			ul.products {
 				margin: 0;
 				flex-wrap: nowrap;
+				
 				li, li.product {
 					padding:0;
+				}
+				.elementor-editor-active & {
+					height: auto!important;
 				}
 			}
 		}
@@ -770,6 +774,7 @@
 				
 				> span {
 					position: relative;
+					padding: 10px 20px;
 					display: inline-flex;
 					align-items: center;
 					/* 
