@@ -119,7 +119,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 
 			foreach ( $tax_options as $taxonomy => $label ) {
 				$this->add_control(
-					$taxonomy . '_terms',
+					$taxonomy . '_terms_for_' . $post_type,
 					[
 						'label'       => esc_html__( 'Select ', 'micemade-elements' ) . strtolower( $label ),
 						'type'        => Controls_Manager::SELECT2,
