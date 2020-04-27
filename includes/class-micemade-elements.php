@@ -458,17 +458,30 @@ class Micemade_Elements {
 
 		if ( is_admin() ) {
 			$config = array(
-				'slug'               => plugin_basename(__FILE__), // this is the slug of your plugin
-				'proper_folder_name' => 'micemade-elements', // this is the name of the folder your plugin lives in
-				'api_url'            => 'https://api.github.com/repos/micemade/micemade-elements', // the GitHub API url of your GitHub repo
-				'raw_url'            => 'https://raw.github.com/micemade/micemade-elements/master', // the GitHub raw url of your GitHub repo
-				'github_url'         => 'https://github.com/micemade/micemade-elements', // the GitHub url of your GitHub repo
-				'zip_url'            => 'https://github.com/micemade/micemade-elements/zipball/master', // the zip url of the GitHub repo
-				'sslverify' => true, // whether WP should check the validity of the SSL cert when getting an update, see https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/2 and https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/4 for details
-				'requires'           => '5.0', // required WordPress version.
-				'tested'             => '5.4', // tested to WordPress version
-				'readme'             => 'README.md', // readme file for the version number
-				'access_token'       => '', // Access private repositories by authorizing under Appearance > GitHub Updates when this example plugin is installed
+				// The slug of plugin.
+				'slug' => MICEMADE_ELEMENTS_SLUG,
+				// The name of the folder your plugin lives in.
+				'proper_folder_name' => 'micemade-elements',
+				// The GitHub API url of plugin GitHub repo.
+				'api_url' => 'https://api.github.com/repos/Micemade/micemade-elements',
+				// The GitHub raw url of your GitHub repo.
+				'raw_url' => 'https://raw.github.com/Micemade/micemade-elements/master',
+				// The GitHub url of your GitHub repo.
+				'github_url' => 'https://github.com/Micemade/micemade-elements',
+				// The zip url of the GitHub repo.
+				'zip_url' => 'https://github.com/Micemade/micemade-elements/zipball/master',
+				// whether WP should check the validity of the SSL cert when getting an update
+				// See https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/2 and 
+				// https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/4 for details
+				'sslverify' => true,
+				// Required WordPress version.
+				'requires' => '5.0',
+				// Tested up to WordPress version.
+				'tested' => '5.4',
+				// Readme file for the version number.
+				'readme'             => 'README.md',
+				// Access private repositories by authorizing under Appearance > GitHub Updates when this plugin is installed
+				'access_token'       => '',
 			);
 			new WP_GitHub_Updater($config);
 		}

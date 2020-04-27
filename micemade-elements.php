@@ -36,6 +36,11 @@ if ( ! defined( 'MICEMADE_ELEMENTS_INCLUDES' ) ) {
 	define( 'MICEMADE_ELEMENTS_INCLUDES', MICEMADE_ELEMENTS_DIR . '/includes/' );
 }
 
+// Define plugin slug or a basename.
+if ( ! defined( 'MICEMADE_ELEMENTS_SLUG' ) ) {
+	define( 'MICEMADE_ELEMENTS_SLUG', plugin_basename(__FILE__) );
+}
+
 // Define plugin version.
 if ( ! defined( 'MICEMADE_ELEMENTS_VERSION' ) ) {
 	define( 'MICEMADE_ELEMENTS_VERSION', '0.7.1' );
