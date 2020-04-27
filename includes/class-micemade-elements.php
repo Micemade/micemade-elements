@@ -126,8 +126,7 @@ class Micemade_Elements {
 	 */
 	public function plugins_dependency_checks() {
 		// VARIOUS PLUGINS ACTIVATION CHECKS.
-		require_once MICEMADE_ELEMENTS_DIR . 'includes/plugins.php';
-
+		require_once MICEMADE_ELEMENTS_INCLUDES . 'plugins.php';
 	}
 
 	/**
@@ -256,7 +255,7 @@ class Micemade_Elements {
 
 	public function register_controls() {
 
-		require MICEMADE_ELEMENTS_DIR . '/includes/class-micemade-control-sorting.php';
+		require MICEMADE_ELEMENTS_INCLUDES . 'class-micemade-control-sorting.php';
 
 		$controls_manager = \Elementor\Plugin::$instance->controls_manager;
 		$controls_manager->register_control( 'sorter_label', new Micemade_Control_Sorter() );
@@ -269,13 +268,13 @@ class Micemade_Elements {
 	 */
 	public function includes() {
 
-		require MICEMADE_ELEMENTS_DIR . '/includes/Parsedown.php';
-		require MICEMADE_ELEMENTS_DIR . '/includes/admin.php';
-		require MICEMADE_ELEMENTS_DIR . '/includes/ajax_posts.php';
-		require MICEMADE_ELEMENTS_DIR . '/includes/helpers.php';
-		require MICEMADE_ELEMENTS_DIR . '/includes/wc-functions.php';
-		require MICEMADE_ELEMENTS_DIR . '/includes/instagram.php';
-		require MICEMADE_ELEMENTS_DIR . '/includes/class-micemade-nav-html.php';
+		require MICEMADE_ELEMENTS_INCLUDES . 'Parsedown.php';
+		require MICEMADE_ELEMENTS_INCLUDES . 'admin.php';
+		require MICEMADE_ELEMENTS_INCLUDES . 'ajax_posts.php';
+		require MICEMADE_ELEMENTS_INCLUDES . 'helpers.php';
+		require MICEMADE_ELEMENTS_INCLUDES . 'wc-functions.php';
+		require MICEMADE_ELEMENTS_INCLUDES . 'instagram.php';
+		require MICEMADE_ELEMENTS_INCLUDES . 'class-micemade-nav-html.php';
 
 	}
 
@@ -408,7 +407,7 @@ class Micemade_Elements {
 
 			// include file with Custom Post Types registration
 			// MM Mega Menu, MM Header, MM Footer.
-			require MICEMADE_ELEMENTS_DIR . '/includes/cpt.php';
+			require MICEMADE_ELEMENTS_INCLUDES . 'cpt.php';
 
 		}
 
@@ -445,12 +444,33 @@ class Micemade_Elements {
 	 * class for GitHub automatic plugin updates - will be removed once
 	 * the plugin will be available on WP.org repo
 	 */
-	public function updater() {
+	/* public function updater() {
 
 		require_once MICEMADE_ELEMENTS_DIR . 'github_updater.php';
 
 		if ( is_admin() ) {
 			new Micemade_GitHub_Plugin_Updater( MICEMADE_ELEMENTS_DIR . 'micemade-elements.php', 'Micemade', 'micemade-elements' );
+		}
+	} */
+	public function updater() {
+
+		require_once MICEMADE_ELEMENTS_INCLUDES . 'class-wp-github-updater.php';
+
+		if ( is_admin() ) {
+			$config = array(
+				'slug'               => plugin_basename(__FILE__), // this is the slug of your plugin
+				'proper_folder_name' => 'micemade-elements', // this is the name of the folder your plugin lives in
+				'api_url'            => 'https://api.github.com/repos/micemade/micemade-elements', // the GitHub API url of your GitHub repo
+				'raw_url'            => 'https://raw.github.com/micemade/micemade-elements/master', // the GitHub raw url of your GitHub repo
+				'github_url'         => 'https://github.com/micemade/micemade-elements', // the GitHub url of your GitHub repo
+				'zip_url'            => 'https://github.com/micemade/micemade-elements/zipball/master', // the zip url of the GitHub repo
+				'sslverify' => true, // whether WP should check the validity of the SSL cert when getting an update, see https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/2 and https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/4 for details
+				'requires'           => '5.0', // required WordPress version.
+				'tested'             => '5.4', // tested to WordPress version
+				'readme'             => 'README.md', // readme file for the version number
+				'access_token'       => '', // Access private repositories by authorizing under Appearance > GitHub Updates when this example plugin is installed
+			);
+			new WP_GitHub_Updater($config);
 		}
 	}
 

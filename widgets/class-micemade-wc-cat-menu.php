@@ -967,7 +967,7 @@ class Micemade_WC_Cat_Menu extends Widget_Base {
 		}
 
 		// Custom walker to change menu items output.
-		include_once MICEMADE_ELEMENTS_DIR . 'includes/class-micemade-custom-walker-category.php';
+		include_once MICEMADE_ELEMENTS_INCLUDES . 'class-micemade-custom-walker-category.php';
 
 		// Args for wp_list_categories function.
 		$list_args['walker']           = new Micemade_Custom_Walker_Category();
