@@ -56,6 +56,10 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 
 **Changelog**
 
+*** v.0.7.2 ***
+* Tweak - completely removed old Github libraries
+* Fix - Posts grid element - fixed background controls
+
 *** v.0.7.1 ***
 * Tweak - Changed library for Github plugin updates
 * Fix - Swiper slider compatibility issues

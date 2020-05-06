@@ -268,7 +268,6 @@ class Micemade_Elements {
 	 */
 	public function includes() {
 
-		require MICEMADE_ELEMENTS_INCLUDES . 'Parsedown.php';
 		require MICEMADE_ELEMENTS_INCLUDES . 'admin.php';
 		require MICEMADE_ELEMENTS_INCLUDES . 'ajax_posts.php';
 		require MICEMADE_ELEMENTS_INCLUDES . 'helpers.php';
@@ -444,14 +443,6 @@ class Micemade_Elements {
 	 * class for GitHub automatic plugin updates - will be removed once
 	 * the plugin will be available on WP.org repo
 	 */
-	/* public function updater() {
-
-		require_once MICEMADE_ELEMENTS_DIR . 'github_updater.php';
-
-		if ( is_admin() ) {
-			new Micemade_GitHub_Plugin_Updater( MICEMADE_ELEMENTS_DIR . 'micemade-elements.php', 'Micemade', 'micemade-elements' );
-		}
-	} */
 	public function updater() {
 
 		require_once MICEMADE_ELEMENTS_INCLUDES . 'class-wp-github-updater.php';

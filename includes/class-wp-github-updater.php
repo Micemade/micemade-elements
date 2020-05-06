@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) || class_exists( 'WPGitHubUpdater' ) || class_exists
  *
  * @version 1.6
  * @author Joachim Kudish <info@jkudish.com>
- * @link http://jkudish.com
+ * @link https://github.com/radishconcepts/WordPress-GitHub-Plugin-Updater
  * @package WP_GitHub_Updater
  * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
  * @copyright Copyright (c) 2011-2013, Joachim Kudish
@@ -390,11 +390,14 @@ class WP_GitHub_Updater {
 	public function get_plugin_info( $false, $action, $response ) {
 
 		// Check if this call API is for the right plugin
-		if ( !isset( $response->slug ) || $response->slug != $this->config['slug'] )
+		if ( !isset( $response->slug ) || $response->slug != $this->config['proper_folder_name'] )
 			return false;
+
+		$plugin_data = $this->get_plugin_data();
 
 		$response->slug = $this->config['slug'];
 		$response->plugin_name  = $this->config['plugin_name'];
+		$response->name  = $plugin_data['Name'];
 		$response->version = $this->config['new_version'];
 		$response->author = $this->config['author'];
 		$response->homepage = $this->config['homepage'];

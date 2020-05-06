@@ -248,7 +248,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 				],
 				'selectors' => [
 					'{{WRAPPER}} .mme-row .post' => 'margin-bottom:{{SIZE}}px;',
-					'{{WRAPPER}} .mme-row'       => 'margin-bottom:-{{SIZE}}px;',
+					//'{{WRAPPER}} .mme-row'       => 'margin-bottom:-{{SIZE}}px;',
 				],
 
 			]
@@ -260,7 +260,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->start_controls_section(
 			'section_style',
 			[
-				'label' => esc_html__( 'General style and layout', 'micemade-elements' ),
+				'label' => esc_html__( 'General', 'micemade-elements' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -268,7 +268,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_control(
 			'style',
 			[
-				'label'   => __( 'Style', 'micemade-elements' ),
+				'label'   => __( 'Layout style', 'micemade-elements' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'style_1',
 				'options' => [
@@ -326,6 +326,17 @@ class Micemade_Posts_Grid extends Widget_Base {
 			]
 		);
 
+		$this->add_control(
+			'use_load_more',
+			[
+				'label'     => esc_html__( 'Use load more', 'micemade-elements' ),
+				'type'      => Controls_Manager::SWITCHER,
+				'label_off' => __( 'No', 'elementor' ),
+				'label_on'  => __( 'Yes', 'elementor' ),
+				'default'   => 'yes',
+			]
+		);
+
 		$this->add_responsive_control(
 			'post_overal_padding',
 			[
@@ -344,33 +355,13 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->start_controls_section(
 			'section_post_text',
 			[
-				'label' => __( 'Post text styling', 'micemade-elements' ),
+				'label' => __( 'Post layout and style', 'micemade-elements' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
-		$this->add_responsive_control(
-			'background_type',
-			[
-				'label'       => __( 'Post background type', 'micemade-elements' ),
-				'type'        => Controls_Manager::CHOOSE,
-				'label_block' => false,
-				'default'     => 'solid',
-				'options'     => [
-					'solid'    => [
-						'title' => __( 'Solid color', 'micemade-elements' ),
-						'icon'  => 'fa fa-eyedropper',
-					],
-					'gradient' => [
-						'title' => __( 'Gradient', 'micemade-elements' ),
-						'icon'  => 'fa fa-list-ul',
-					],
-				],
-			]
-		);
-
+		// Normal / Hover tabs.
 		$this->start_controls_tabs( 'tabs_post_background' );
-
 		$this->start_controls_tab(
 			'tab_post_background_normal',
 			[
@@ -378,30 +369,46 @@ class Micemade_Posts_Grid extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
-			'post_text_background_color',
+		$this->add_group_control(
+			\Elementor\Group_Control_Background::get_type(),
 			[
-				'label'     => __( 'Background color', 'micemade-elements' ),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
-					'{{WRAPPER}} .inner-wrap'   => 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .post-overlay' => 'background-color: {{VALUE}};',
-				],
+				'name'       => 'post_text_background_color',
+				'label'      => __( 'Post background', 'micemade-elements' ),
+				'types'      => [ 'classic', 'gradient' ],
+				'selector'   => '{{WRAPPER}} .style_1 .inner-wrap, {{WRAPPER}} .style_2 .inner-wrap',
+				/* 
+				// The 'selectors'array is not working, but selector string (above) does (???)
+				'selectors'  => [
+					'{{WRAPPER}} .style_1 .inner-wrap',
+					'{{WRAPPER}} .style_2 .inner-wrap',
+				], */
 				'condition' => [
-					'background_type' => 'solid',
+					'style' => [
+						'style_1',
+						'style_2',
+					],
 				],
 			]
 		);
 
 		$this->add_group_control(
-			Group_Control_Background::get_type(),
+			\Elementor\Group_Control_Background::get_type(),
 			[
-				'name'      => 'post_text_background_gradient',
-				'label'     => __( 'Background gradient', 'micemade-elements' ),
-				'types'     => [ 'gradient' ],
-				'selector'  => '{{WRAPPER}} .inner-wrap, {{WRAPPER}} .post-overlay',
+				'name'      => 'post_text_overlay_color',
+				'label'     => __( 'Post overlay', 'micemade-elements' ),
+				'types'     => [ 'classic', 'gradient' ],
+				'selector'  => '{{WRAPPER}} .style_3 .inner-wrap .post-overlay, {{WRAPPER}} .style_4 .inner-wrap .post-overlay',
+				/* 
+				// The 'selectors'array is not working, but selector string (above) does (???)
+				'selectors'  => [
+					'{{WRAPPER}} .style_3 .post-overlay',
+					'{{WRAPPER}} .style_4 .post-overlay',
+				], */
 				'condition' => [
-					'background_type' => 'gradient',
+					'style' => [
+						'style_3',
+						'style_4',
+					],
 				],
 			]
 		);
@@ -415,36 +422,60 @@ class Micemade_Posts_Grid extends Widget_Base {
 				'label' => __( 'Hover', 'micemade-elements' ),
 			]
 		);
-		$this->add_control(
-			'post_text_background_color_hover',
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Background::get_type(),
 			[
-				'label'     => __( 'Post text background (hover)', 'micemade-elements' ),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
-					'{{WRAPPER}} .inner-wrap:hover' => 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .inner-wrap:hover .post-overlay' => 'background-color: {{VALUE}};',
-				],
+				'name'       => 'post_text_background_color_hover',
+				'label'      => __( 'Post background on hover', 'micemade-elements' ),
+				'types'      => [ 'classic', 'gradient' ],
+				'selector'   => '{{WRAPPER}} .style_1 .inner-wrap:hover, {{WRAPPER}} .style_2 .inner-wrap:hover',
+				/* 
+				// The 'selectors'array is not working, but selector string (above) does (???)
+				'selectors'  => [
+					'{{WRAPPER}} .style_1 .inner-wrap',
+					'{{WRAPPER}} .style_2 .inner-wrap',
+				], */
 				'condition' => [
-					'background_type' => 'solid',
+					'style' => [
+						'style_1',
+						'style_2',
+					],
 				],
 			]
 		);
 
 		$this->add_group_control(
-			Group_Control_Background::get_type(),
+			\Elementor\Group_Control_Background::get_type(),
 			[
-				'name'      => 'post_text_background_gradient_hover',
-				'label'     => __( 'Background gradient', 'micemade-elements' ),
-				'types'     => [ 'gradient' ],
-				'selector'  => '{{WRAPPER}} .inner-wrap:hover, {{WRAPPER}} .inner-wrap:hover .post-overlay',
+				'name'      => 'post_text_overlay_color_hover',
+				'label'     => __( 'Post overlay on hover', 'micemade-elements' ),
+				'types'     => [ 'classic', 'gradient' ],
+				'selector'  => '{{WRAPPER}} .style_3 .inner-wrap:hover .post-overlay, {{WRAPPER}} .style_4 .inner-wrap:hover .post-overlay',
+				/* 
+				// The 'selectors'array is not working, but selector string (above) does (???)
+				'selectors'  => [
+					'{{WRAPPER}} .style_3 .post-overlay',
+					'{{WRAPPER}} .style_4 .post-overlay',
+				], */
 				'condition' => [
-					'background_type' => 'gradient',
+					'style' => [
+						'style_3',
+						'style_4',
+					],
 				],
 			]
 		);
 
 		$this->end_controls_tab();
 		$this->end_controls_tabs();
+
+		$this->add_control(
+			'hr',
+			[
+				'type' => \Elementor\Controls_Manager::DIVIDER,
+			]
+		);
 
 		$this->add_responsive_control(
 			'post_text_height',
@@ -490,7 +521,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 					'{{WRAPPER}} .post-thumb'         => 'width:{{SIZE}}%;',
 					'{{WRAPPER}} .style_2 .post-text' => 'width: calc( 100% - {{SIZE}}%);',
 					// thumb style 4.
-					'{{WRAPPER}} .post-thumb-back'    => 'right: calc( 100% - {{SIZE}}%); width: auto;',
+					'{{WRAPPER}} .inner-wrap .post-thumb-back'    => 'right: calc( 100% - {{SIZE}}%); width: auto;',
 
 				],
 				'condition' => [
@@ -563,28 +594,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 
 			]
 		);
-		/*
-		$this->add_responsive_control(
-			'content_vertical_alignment',
-			[
-				'label'     => __( 'Vertical align', 'micemade-elements' ),
-				'type'      => Controls_Manager::SELECT,
-				'options'   => [
-					'flex-start' => __( 'Top', 'micemade-elements' ),
-					'center'     => __( 'Middle', 'micemade-elements' ),
-					'flex-end'   => __( 'Bottom', 'micemade-elements' ),
-				],
-				'default'   => 'center',
-				'selectors' => [
-					'{{WRAPPER}} .post-text'  => 'justify-content: {{VALUE}};',
-					'{{WRAPPER}} .inner-wrap' => 'align-items: {{VALUE}};',
-				],
-				'condition' => [
-					'style' => [ 'style_2', 'style_3', 'style_4' ],
-				],
-			]
-		);
-		*/
+
 		$this->add_responsive_control(
 			'content_vertical_alignment',
 			[
@@ -607,7 +617,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 				],
 				'default'     => 'center',
 				'selectors'   => [
-					'{{WRAPPER}} .post-text'  => 'justify-content: {{VALUE}};',
+					'{{WRAPPER}} .post-text'  => 'justify-content: {{VALUE}}!important;',
 					'{{WRAPPER}} .inner-wrap' => 'align-items: {{VALUE}};',
 				],
 				'condition'   => [
@@ -1050,17 +1060,9 @@ class Micemade_Posts_Grid extends Widget_Base {
 			[
 				'label' => __( 'Ajax LOAD MORE settings', 'micemade-elements' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
-			]
-		);
-
-		$this->add_control(
-			'use_load_more',
-			[
-				'label'     => esc_html__( 'Use load more', 'micemade-elements' ),
-				'type'      => Controls_Manager::SWITCHER,
-				'label_off' => __( 'No', 'elementor' ),
-				'label_on'  => __( 'Yes', 'elementor' ),
-				'default'   => 'yes',
+				'condition'  => [
+					'use_load_more!' => '',
+				],
 			]
 		);
 
@@ -1072,9 +1074,6 @@ class Micemade_Posts_Grid extends Widget_Base {
 				'size_units' => [ 'px', 'em', '%' ],
 				'selectors'  => [
 					'{{WRAPPER}} .micemade-elements_more-posts-wrap' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
-				'condition'  => [
-					'use_load_more!' => '',
 				],
 			]
 		);
@@ -1101,9 +1100,6 @@ class Micemade_Posts_Grid extends Widget_Base {
 				'default'   => '',
 				'selectors' => [
 					'{{WRAPPER}} .micemade-elements_more-posts-wrap' => 'text-align: {{VALUE}};',
-				],
-				'condition' => [
-					'use_load_more!' => '',
 				],
 			]
 		);

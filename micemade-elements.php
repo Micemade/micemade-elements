@@ -38,7 +38,7 @@ if ( ! defined( 'MICEMADE_ELEMENTS_INCLUDES' ) ) {
 
 // Define plugin slug or a basename.
 if ( ! defined( 'MICEMADE_ELEMENTS_SLUG' ) ) {
-	define( 'MICEMADE_ELEMENTS_SLUG', plugin_basename(__FILE__) );
+	define( 'MICEMADE_ELEMENTS_SLUG', plugin_basename( __FILE__ ) );
 }
 
 // Define plugin version.
