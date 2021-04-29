@@ -5,6 +5,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
+use Elementor\Core\Schemes\Typography;
+
 class Micemade_WC_Cat_Menu extends Widget_Base {
 
 	public function get_name() {
@@ -475,7 +477,7 @@ class Micemade_WC_Cat_Menu extends Widget_Base {
 			[
 				'name'     => 'top_level_typography',
 				'label'    => __( 'Top level typography', 'micemade-elements' ),
-				'scheme'   => Scheme_Typography::TYPOGRAPHY_4,
+				'scheme'   => Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} .product-categories > .cat-item a',
 			]
 		);
@@ -601,7 +603,7 @@ class Micemade_WC_Cat_Menu extends Widget_Base {
 			[
 				'name'     => 'submenu__typography',
 				'label'    => __( 'Submenu typography', 'micemade-elements' ),
-				'scheme'   => Scheme_Typography::TYPOGRAPHY_4,
+				'scheme'   => Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} .children > .cat-item a',
 			]
 		);

@@ -6,7 +6,7 @@ Contributors: Micemade
 Tags: elementor, elementor addon, elementor extension, elements, widgets, posts grid, woocommerce, catalog, products, product, micemade  
 Requires at least: 4.3  
 Tested up to: 4.9.1  
-Stable Tag: 0.7.0  
+Stable Tag: 0.8.0  
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,8 @@ Our tests indicate that the elements work well with most themes that are well co
 Time will tell. When we estimate plugin has enough added functionalities to Elementor, or some other reason, it will be available on wp.org. So far, install it from GitHub (Download zip or clone the repository) .
 
 **Changelog**
+*** v.0.8.0 ***
+* Added - Posts grid element - new custom meta, ordering, cherry pick from post types
 
 *** v.0.7.2 ***
 * Tweak - completely removed old Github libraries

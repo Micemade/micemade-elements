@@ -1,0 +1,4 @@
+
+.elementor-section-wrap section:first-child .elementor-editor-section-settings {
+    transform: scaleY(-1) translateX(-50%);
+}

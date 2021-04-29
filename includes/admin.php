@@ -98,20 +98,16 @@ add_filter( 'micemade_elements_terms', 'micemade_elements_terms_func', 10, 1 );
  */
 function micemade_elements_post_types_f() {
 	$post_types = array();
-	$exclude    = array( 'attachment', 'elementor_library' ); // excluded post types
+	$exclude    = array( 'attachment', 'elementor_library' ); // excluded post types.
 
 	$args = array(
 		'public' => true,
 	);
 
 	foreach ( get_post_types( $args, 'objects' ) as $post_type ) {
-		// Check if post type name exists.
-		if ( ! isset( $post_type->name ) ) {
-			continue;
-		}
 
-		// Check if post type label exists.
-		if ( ! isset( $post_type->label ) ) {
+		// Check if post type name or label exists.
+		if ( ! isset( $post_type->name ) || ! isset( $post_type->label ) ) {
 			continue;
 		}
 

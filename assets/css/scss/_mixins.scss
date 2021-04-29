@@ -76,3 +76,11 @@
 	  border-top:    $perpendicular-borders;
 	}
   }
+
+  @mixin clearfix {
+	&::after {
+		clear: both;
+		content: "";
+		display: block;
+	}
+  }

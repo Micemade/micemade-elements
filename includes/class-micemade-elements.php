@@ -34,6 +34,11 @@ class Micemade_Elements {
 		return self::$instance;
 	}
 
+	/**
+	 * Set debug for JS/CSS files
+	 *
+	 * @var boolean
+	 */
 	public $debug;
 
 	/**
@@ -67,14 +72,14 @@ class Micemade_Elements {
 			add_action( 'init', [ $this, 'enable_wc_frontend_in_editor' ] );
 
 			// Enqueue script and styles for Elementor editor.
-			add_action( 'elementor/editor/before_enqueue_scripts', [ $this, 'editor_scripts' ], 999 );
-			// add_action( 'admin_enqueue_scripts', array( self::$instance, 'micemade_elements_admin_js_css' ) );
+			add_action( 'elementor/editor/after_enqueue_scripts', [ $this, 'editor_scripts' ], 999 );
+			add_action( 'elementor/editor/before_enqueue_scripts', [ $this, 'editor_css' ] );
 
 			// Enqueue scripts and styles for frontend.
 			add_action( 'wp_enqueue_scripts', array( $this, 'micemade_elements_styles' ) );
-			add_action( 'wp_enqueue_scripts', array( $this, 'micemade_elements_scripts' ) );
+			add_action( 'elementor/frontend/after_enqueue_scripts', array( $this, 'micemade_elements_scripts' ) );
 
-			$this->debug = apply_filters( 'micemade_elements_debug', true );
+			$this->debug = apply_filters( 'micemade_elements_debug', false );
 
 			self::$instance->updater();
 
@@ -177,6 +182,7 @@ class Micemade_Elements {
 		$prefix = MICEMADE_ELEMENTS_DIR . 'widgets/class-micemade-';
 
 		require_once $prefix . 'posts-grid.php';
+		require_once $prefix . 'posts-slider.php';
 		require_once $prefix . 'buttons.php';
 
 		// "Revolution Slider" plugin widget.
@@ -259,6 +265,7 @@ class Micemade_Elements {
 
 		$controls_manager = \Elementor\Plugin::$instance->controls_manager;
 		$controls_manager->register_control( 'sorter_label', new Micemade_Control_Sorter() );
+
 	}
 
 	/**
@@ -313,8 +320,13 @@ class Micemade_Elements {
 	 */
 	public function micemade_elements_styles() {
 
+		$prefix = '.min';
+		if ( $this->debug ) {
+			$prefix = '';
+		}
+
 		// CSS styles.
-		wp_register_style( 'micemade-elements', MICEMADE_ELEMENTS_URL . 'assets/css/micemade-elements.css', array(), MICEMADE_ELEMENTS_VERSION );
+		wp_register_style( 'micemade-elements', MICEMADE_ELEMENTS_URL . 'assets/css/micemade-elements' . $prefix . '.css', array(), MICEMADE_ELEMENTS_VERSION );
 		wp_enqueue_style( 'micemade-elements' );
 
 		// Smartmenus styles - postponed until v.1.0.0
@@ -334,13 +346,13 @@ class Micemade_Elements {
 			$prefix = '';
 		}
 
-		// Register and enqueue custom plugin JS scripts.
+		// Register and enqueue custom vendor JS scripts.
 		wp_register_script( 'micemade-elements-vendor-js', MICEMADE_ELEMENTS_URL . 'assets/js/vendor' . $prefix . '.js', '', MICEMADE_ELEMENTS_VERSION, true );
 		wp_enqueue_script( 'micemade-elements-vendor-js', MICEMADE_ELEMENTS_URL . 'assets/js/vendor' . $prefix . '.js', array( 'jquery' ), MICEMADE_ELEMENTS_VERSION, true );
 
-		// Register and enqueue vendor JS scripts.
-		wp_register_script( 'micemade-element-js', MICEMADE_ELEMENTS_URL . 'assets/js/micemade-elements' . $prefix . '.js', '', MICEMADE_ELEMENTS_VERSION, true );
-		wp_enqueue_script( 'micemade-elements-js', MICEMADE_ELEMENTS_URL . 'assets/js/micemade-elements' . $prefix . '.js', [ 'jquery', 'imagesloaded' ], MICEMADE_ELEMENTS_VERSION, true );
+		// Register and enqueue plugin JS scripts.
+		wp_register_script( 'micemade-element-js', MICEMADE_ELEMENTS_URL . 'assets/js/micemade-elements' . $prefix . '.js', [ 'jquery', 'imagesloaded', 'elementor-frontend' ], MICEMADE_ELEMENTS_VERSION, true );
+		wp_enqueue_script( 'micemade-elements-js', MICEMADE_ELEMENTS_URL . 'assets/js/micemade-elements' . $prefix . '.js', [ 'jquery', 'imagesloaded', 'elementor-frontend' ], MICEMADE_ELEMENTS_VERSION, true );
 
 		// Smartmenus scripts - postponed until v.1.0.0
 		//wp_register_script( 'smartmenus', MICEMADE_ELEMENTS_URL . 'assets/js/jquery.smartmenus.min.js' );
@@ -357,6 +369,7 @@ class Micemade_Elements {
 			'micemadeJsLocalize',
 			array(
 				'ajaxurl'      => esc_url( $ajaxurl ),
+				'ajaxerror'    => esc_html__( 'Ajax error.', 'micemade-elements' ),
 				'loadingposts' => esc_html__( 'Loading ...', 'micemade-elements' ),
 				'noposts'      => esc_html__( 'No more items found', 'micemade-elements' ),
 				'loadmore'     => esc_html__( 'Load more', 'micemade-elements' ),
@@ -366,7 +379,7 @@ class Micemade_Elements {
 	}
 
 	/**
-	 * Enqueue editor scritps
+	 * Enqueue editor scripts
 	 *
 	 * @return void
 	 */
@@ -380,6 +393,21 @@ class Micemade_Elements {
 			],
 			'1.9.2',
 			true // in_footer
+		);
+	}
+
+	/**
+	 * Enqueue editor CSS
+	 *
+	 * @return void
+	 */
+	public function editor_css() {
+
+		wp_enqueue_style(
+			'micemade-elements-editor-css',
+			MICEMADE_ELEMENTS_URL . 'assets/css/admin/admin.css',
+			'',
+			'0.8.0'
 		);
 	}
 
@@ -422,7 +450,7 @@ class Micemade_Elements {
 	public function enable_wc_frontend_in_editor() {
 		// WooCommerce frontend functionalities in Elementor editor.
 		if ( MICEMADE_ELEMENTS_WOO_ACTIVE ) {
-			add_action( 'admin_action_elementor', array( self::$instance, 'wc_frontend_includes' ), 5 );
+			add_action( 'admin_action_elementor', [ $this, 'wc_frontend_includes' ], 5 );
 		}
 	}
 
@@ -433,6 +461,7 @@ class Micemade_Elements {
 	 */
 	public function wc_frontend_includes() {
 		WC()->frontend_includes();
+		// do_action( 'micemade_elements_single_product_scripts' );
 	}
 
 	/**

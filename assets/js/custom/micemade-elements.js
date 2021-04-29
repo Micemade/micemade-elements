@@ -3,222 +3,6 @@ jQuery.noConflict();
 	"use strict";
 	
 	var isEditMode = false;
-	/**
-	 *	FILTER ITEMS (Isotope) :
-	 *	var function filterItems
-	 *	var arg container
-	 *	var arg filter
-	 */
-	/* 
-	 (function( $ ){
-
-		window.filterItems = function( container, filter ) {
-			
-			container.imagesLoaded( function(){
-			// init Isotope
-				container.isotope({
-					itemSelector: '.item',
-					layoutMode: 'masonry',
-					containerStyle: {
-						position: 'relative',
-						overflow: 'hidden'
-					},
-					transitionDuration: '0.5s'
-				});
-				// filter items on button click
-				if( filter ) {
-					filter.on( 'click', 'a', function() {
-						var filterValue = $(this).attr('data-filter');
-						container.isotope({ filter: filterValue });
-					});
-				}
-				
-				container.on( 'arrangeComplete', function() { 
-					if( $.waypoints ) {
-						$.waypoints('refresh');
-					}
-				});
-			
-			});
-		};
-		
-	})( jQuery );
-	*/
-
-	/**
-	 * Micemade Tabs - display WC products in tabs
-	 */
-	var micemadeElementsTabs = function() {
-		
-		var tabs = $('.micemade-elements_tabs');
-		tabs.each( function(){
-			
-			var $_Tabs = $(this); // Single tabs holder
-			
-			var tabsWrapper = $_Tabs.find('.tabs-wrapper'),
-				tabTitles   = tabsWrapper.find('.tab-title'),
-				tabsContent = $_Tabs.find('.tabs-content-wrapper'),
-				content     = tabsContent.find('.tab-content');
-			
-			tabTitles.on( 'click touchstart', function(event) {
-
-				$(this).addClass('active');
-				$(this).siblings().removeClass('active');
-				
-				// Hide inactive tab titles and show active one and content
-				var tab = $(this).data('tab');
-				content.not('.tab-'+ tab).css('display', 'none').removeClass('active');
-				tabsContent.find('.tab-' + tab).fadeIn().addClass('active');
-			});
-			
-		});
-	}
-
-	/**
-	 *  SWIPER SLIDER
-	 */
-	var micemadeElementsSwiper = function( rootElement ) {
-		
-		var root = $('body');
-		if( rootElement ) {
-			root = $( rootElement );
-		}
-
-		var swiperContainers = '',
-			swiperContainers = root.find( '.swiper-container' );
-
-		if ( ! swiperContainers.length ) {
-			return;
-		}
-
-		swiperContainers.each( function(index, element) {
-			
-			var sliderContainer   = $(this);
-
-			// Take only MM Elements sliders.
-			if ( ! sliderContainer.hasClass( 'micemade-elements__sliders' ) ) {
-				return true;
-			}
-
-			// Slider settings (slides per view, space, pagination ...)
-			// var settings = sliderContainer.closest('.elementor-element').data('settings'),
-			var settings = sliderContainer.data('settings'),
-				pps      = settings.posts_per_slide,
-				pps_t    = settings.posts_per_slide_tab,
-				pps_m    = settings.posts_per_slide_mob,
-				space    = settings.space,
-				space_t  = settings.space_tablet,
-				space_m  = settings.space_mobile,
-				pagin    = settings.pagination,
-				autoplay = settings.autoplay,
-				loop     = settings.loop;
-
-				// Main swiper arguments
-				var mainSwiperArgs = {
-				slideActiveClass: 'active',
-				autoHeight: true,
-				effect: 'slide',
-				grabCursor: true,
-				loop: loop,
-				pagination: {
-					el: '.swiper-pagination',
-					type: pagin,
-					clickable: true
-				},
-				navigation: {
-					prevEl: sliderContainer.find('.swiper-button-prev')[0],
-					nextEl: sliderContainer.find('.swiper-button-next')[0]
-				},
-				breakpoints: {
-					// when window width is >= 320px
-					320: {
-						slidesPerView: pps_m ? pps_m : 1,
-						spaceBetween: space_m ? space_m : 0
-					},
-					// when window width is >= 480px
-					480: {
-						slidesPerView: pps_t ? pps_t : 2,
-						spaceBetween: space_t ? space_t : 20
-					},
-					// when window width is >= 640px
-					768: {
-						slidesPerView: pps ? pps : 1,
-						spaceBetween: space ? space : 30
-					}
-				},
-				on: {
-					transitionStart: function() {},
-					transitionEnd: function() {}
-				}
-			}
-			// If autoplay is enabled.
-			var autoplayArgs = {}
-			if( autoplay && autoplay >= 1000 ) {
-				var autoplayArgs = {
-					autoplay: {
-						delay: autoplay
-					}
-				}
-			}
-			// Join arg objects.
-			var swiperArgs = $.extend( mainSwiperArgs, autoplayArgs );
-			// Initialize Swiper.
-			var micemadeSwiper = new Swiper( sliderContainer, swiperArgs );
-
-			/*
-			micemadeSwiper.on( 'transitionStart', function() {
-				var slides  = this.slides,
-					current = this.realIndex;
-	
-				console.log(elementorFrontend);
-				slides.each( function( index, element ) {
-
-					var eachSlide = $(this),
-						elmData   = eachSlide.find('[data-settings]');
-						console.log(elementorFrontend.getItems);
-						// elementorFrontend.waypoint(
-						// 	element,
-						// 	function() {
-						// 		console.log($(this));
-						// 	}
-						// );
-
-					
-					// if( ! eachSlide.hasClass( 'active' ) ) {
-					// 	animatedEls.removeClass( 'animated' );
-					// } else {
-					// 	window.setTimeout( function () {
-					// 		animatedEls.addClass( 'animated' ).addClass( animationName )
-					// 	}, 1);
-					// }
-
-					// if( index === this.activeIndex ) {}
-				} );
-				
-			});
-			*/
-			//swiper.on('init', function() { /* do something */});
-			//swiper.init();
-
-		});
-
-	};
-
-	// Helper function for Micemade slider (Swiper).
-	/* var mmeAnimate = function( element, animationName ) {
-		if ( element.hasClass( 'animated' ) ) {
-			element .removeClass( 'animated' );
-		}
-	 
-		if ( element.hasClass( animationName )) {
-			element.removeClass( animationName );
-		}
-	 
-		window.setTimeout( function () {
-			element.addClass( 'animated' ).addClass( animationName )
-		}, 1);
-	} */
-	
 	
 	( function( $ ){
 		/**
@@ -241,12 +25,15 @@ jQuery.noConflict();
 		 * Detect Micemade Elements widgets when in viewport
 		 */
 		window.micemadeInViewport = function micemadeInViewportFunc() {
-			$('.mm-enter-animate').whenInViewport( function( $paragraph ) {
-				var animType = $paragraph.data('anim');
-				var delay = $paragraph.data('delay');
+			$('.mm-enter-animate').whenInViewport( function( $item ) {
+
+				var settings = $item.data('settings'),
+					animType = $item.data('anim'),
+					delay = $item.data('delay');
+
 				setTimeout(
 					function() {
-						$paragraph.addClass( animType ).addClass( 'anim-done' );
+						$item.addClass( animType ).addClass( 'anim-done' );
 					}
 					, delay
 				);
@@ -287,7 +74,7 @@ jQuery.noConflict();
 						value = target.getAttribute(name);
 					
 					if( value == 'true' ) {
-						var restartMicemadeElementSwiper = micemadeElementsSwiper('.mega-menu');
+						// var restartMicemadeElementSwiper = micemadeElementsSwiper('.mega-menu');
 					}else{
 						mutationObserver.disconnect();
 					}
@@ -305,6 +92,36 @@ jQuery.noConflict();
 		}
 
 	})( jQuery );
+
+	/**
+	 * Micemade Tabs - display WC products in tabs
+	 */
+	var micemadeElementsTabs = function() {
+		
+		var tabs = $('.micemade-elements_tabs');
+		if( ! tabs.length ) { return; }
+		tabs.each( function(){
+			
+			var $_Tabs = $(this); // Single tabs holder
+			
+			var tabsWrapper = $_Tabs.find('.tabs-wrapper'),
+				tabTitles   = tabsWrapper.find('.tab-title'),
+				tabsContent = $_Tabs.find('.tabs-content-wrapper'),
+				content     = tabsContent.find('.tab-content');
+			
+			tabTitles.on( 'click touchstart', function(event) {
+
+				$(this).addClass('active');
+				$(this).siblings().removeClass('active');
+				
+				// Hide inactive tab titles and show active one and content
+				var tab = $(this).data('tab');
+				content.not('.tab-'+ tab).css('display', 'none').removeClass('active');
+				tabsContent.find('.tab-' + tab).fadeIn().addClass('active');
+			});
+			
+		});
+	}
 
 	/**
 	 * Micemade WC Categories Menu.
@@ -340,6 +157,23 @@ jQuery.noConflict();
 
 	}
 
+	var mmWcGalleryJS = function() {
+		//console.log( wc_single_product_params );
+		
+		// wc_single_product_params and wc_product_gallery are required to continue.
+		if ( typeof wc_single_product_params === 'undefined' || ! jQuery().wc_product_gallery ) {
+			return false;
+		}
+		
+
+		$( '.woocommerce-product-gallery' ).each( function() {
+			$( this ).trigger( 'wc-product-gallery-before-init', [ this, wc_single_product_params ] );
+			$( this ).wc_product_gallery( wc_single_product_params );
+			$( this ).trigger( 'wc-product-gallery-after-init', [ this, wc_single_product_params ] );
+			console.log(this);
+		} );
+	}
+
 	//( function( $ ){})( jQuery );
 
 	// Hook into Elementor JS hooks.
@@ -348,14 +182,27 @@ jQuery.noConflict();
 			isEditMode = true;
 		}
 
-		// Start Micemade Products Slider
-		elementorFrontend.hooks.addAction( 'frontend/element_ready/micemade-wc-products-slider.default', micemadeElementsSwiper );
-
 		// Start Micemade Products Tab
 		elementorFrontend.hooks.addAction( 'frontend/element_ready/micemade-wc-products-tabs.default', micemadeElementsTabs );
 
 		// Start Micemade Product Categories Menu
 		elementorFrontend.hooks.addAction( 'frontend/element_ready/micemade-wc-cat-menu.default', wcCategoriesMenu );
+
+		// Start Micemade Single product
+		elementorFrontend.hooks.addAction( 'frontend/element_ready/micemade-wc-single-product.default', mmWcGalleryJS );
+
+		// Restart micemadeInViewport when element changes
+		// Elementor editor only
+		// var isEditor = $('.elementor-editor-active');
+		// if( isEditor.length ) {
+			
+			elementorFrontend.hooks.addAction( 'frontend/element_ready/micemade-wc-categories.default',
+			function( $scope ) {
+				var restartVieportAfterReload = window.micemadeInViewport();
+				
+			} );
+			
+		//}
 
 	});
 	
@@ -434,10 +281,16 @@ jQuery.noConflict();
 			var $loader       = $_posts_holder.next('.micemade-elements_more-posts-wrap').find('.more_posts'),
 				postoptions   = $_posts_holder.find('.posts-grid-settings' ).data( 'postoptions' ),
 				post_type     = postoptions.post_type,
+				order         = postoptions.order,
+				orderby       = postoptions.orderby,
+				orderby_meta  = postoptions.orderby_meta,
 				taxonomy      = postoptions.taxonomy,
 				ppp           = postoptions.ppp,
-				sticky        = postoptions.sticky,
 				categories    = postoptions.categories,
+				post__in      = postoptions.post__in,
+				sticky        = postoptions.sticky,
+				offset        = $_posts_holder.find('.post').length,
+				startoffset   = postoptions.startoffset,
 				style         = postoptions.style,
 				show_thumb    = postoptions.show_thumb,
 				img_format    = postoptions.img_format,
@@ -447,8 +300,10 @@ jQuery.noConflict();
 				meta_ordering = postoptions.meta_ordering,
 				css_class     = postoptions.css_class,
 				grid          = postoptions.grid,
-				startoffset   = postoptions.startoffset,
-				offset        = $_posts_holder.find('.post').length;
+				cm_fields     = postoptions.cm_fields,
+				elm_ordering  = postoptions.elm_ordering,
+				if_readmore   = postoptions.if_readmore,
+				readmore_text = postoptions.readmore_text;
 			
 			$loader.on( 'click', load_ajax_posts );
 
@@ -464,10 +319,15 @@ jQuery.noConflict();
 						url: micemadeJsLocalize.ajaxurl,
 						data: {
 							'post_type': post_type,
+							'order': order,
+							'orderby': orderby,
+							'orderby_meta': orderby_meta,
 							'taxonomy': taxonomy,
 							'ppp': ppp,
-							'sticky': sticky,
 							'categories': categories,
+							'post__in': post__in,
+							'sticky': sticky,
+							'offset': offset + startoffset,
 							'style': style,
 							'show_thumb': show_thumb,
 							'img_format': img_format,
@@ -477,7 +337,10 @@ jQuery.noConflict();
 							'meta_ordering': meta_ordering,
 							'css_class': css_class,
 							'grid': grid,
-							'offset': offset + startoffset,
+							'cm_fields': cm_fields,
+							'elm_ordering': elm_ordering,
+							'if_readmore': if_readmore,
+							'readmore_text': readmore_text,
 							'action': 'micemade_elements_more_post_ajax'
 						},
 						beforeSend : function () {
@@ -509,17 +372,144 @@ jQuery.noConflict();
 		}); // end $posts_holder.each
 		
 		
-		// Restart micemadeInViewport when element changes
-		// Elementor editor only
-		var isEditor = $('.elementor-editor-active');
-		if( isEditor.length ) {
-			elementorFrontend.hooks.addAction( 'frontend/element_ready/micemade-wc-categories.default',
-			function( $scope ) {
-				var restartVieportAfterReload = window.micemadeInViewport();
-			} );
+		
 
+		/**
+		 * AJAX - QUICK VIEW.
+		 *
+		 */
+		$(document).on("click", "a.mme-quick-view", function(e) {
 
-		}
+			e.preventDefault();
+			
+			// QV button attributes.
+			var qvLink  = $(this),
+				prod_ID = qvLink.attr("data-id"),
+				modalID = qvLink.closest( '.elementor-element' ).data( 'id' );
+			
+			// Append Quickview element to body.
+			$( 'body' ).append( '<div class="micemade-elements-quickview" id="mmqv-' + modalID + '"><div class="mmqv-holder woocommerce"><div class="mmqv-loading"><i class="fa fa-spinner fa-spin"></i><span>' + micemadeJsLocalize.loadingposts + ' </span></div></div></div>' )
+			
+			// Vars to popuate QV HOLDER with product data.
+			var lang           = qvLink.attr("data-lang"),
+				qvOverlay      = $( '.micemade-elements-quickview' ),
+				qvHolder       = $( '.mmqv-holder ' );
+
+			// Show Quick view (with loader, first)
+			qvOverlay.addClass('mmqv-active');
+
+			var xhr = $.ajax({
+			
+				type: "POST",
+				dataType: 'html',
+				// contentType: "application/json; charset=utf-8",
+				url: micemadeJsLocalize.ajaxurl,
+				data: { 
+					'action': 'mme_quick_view',
+					productID: prod_ID,
+					lang: lang
+				},
+				success: function( response ) {
+
+					qvHolder.html( response );
+					
+					$( window ).delay(200).trigger( 'resize' );
+					$( ".mmqv-wrapper" ).animate( { 'opacity': 1 },{ duration:1500 } );
+
+					// Append X (close) button for remove action.
+					qvHolder.append( '<div class="remove fa fa-times"></div>' );
+
+					// Fade in the product images
+					qvHolder.find( '.woocommerce-product-gallery' ).fadeTo( 0.2, 1 );
+					
+					// Remove Quick view with click on appended X.
+					qvHolder.find( '.remove' ).on( 'click', function(e) {
+						qvOverlay.removeClass( 'mmqv-active' );
+						setTimeout( function() {
+							$( '.micemade-elements-quickview' ).remove();
+						} ,300 );
+					});
+
+					// Remove Quick view with click on overlay.
+					qvOverlay.on( 'click', function(e) {
+						if( e.target == this ) {
+							$(this).removeClass( 'mmqv-active' );
+							setTimeout( function() {
+								$( '.micemade-elements-quickview' ).remove();
+							} ,300 );
+						}
+					});
+
+					// Load WC single product gallery JS scripts.
+					mmWcGalleryJS();
+
+					// Load single product JS and resize, center QV modal.
+					mmAfterQVModal();
+
+				},
+				error: function( xhr, status, error ){
+					var errorMessage = xhr.status + ': ' + xhr.statusText
+					alert( micemadeJsLocalize.ajaxerror + ': ' + errorMessage );
+				}
+			});
+
+		});
+
+		function mmAfterQVModal(event, request, settings) {
+
+			// MAIN vars.
+			var qvHolder  = $( '.mmqv-holder' ),
+				qvOverlay = $( '.micemade-elements-quickview' );
+
+			// Get those WC variations forms to work ;).
+			$( function() {
+				if ( typeof wc_add_to_cart_variation_params !== "undefined" ) {
+					$( ".variations_form" ).each( function() {
+						$( this ).wc_variation_form().find(".variations select:eq(0)").change();
+					});
+				}
+			});
+
+			// QUICK VIEW WINDOW VERTICAL CENTER POSITION.
+			$(window).resize(function() {
+				
+				var qvWrap      = qvHolder.find(".mmqv-wrapper"),
+					qvWrap_h    = qvWrap.outerHeight(),
+					qvOverlay_H = qvOverlay.outerHeight(true);
+						
+				var	qv_top   = (qvOverlay_H / 2) - (qvWrap_h/2);
+				// if modal goes off the top.
+				if ( qv_top <=  55 ) {
+					qv_top = 75;
+				}
+				
+				qvHolder.stop(true,false).animate({'top': qv_top },{ 
+					duration:400,
+					complete: function() {
+
+						qvWrap.stop(true,false).animate({'opacity': 1 },{ duration:200 });
+						qvHolder.stop(true,false).delay(200).animate({'height': qvWrap_h },
+						{
+							duration:400,
+						});
+					}
+				});
+					
+			});
+			// end resize.
+			
+			$( window ).on( "load", qvHolder, function(){
+				$( window ).trigger( "resize" );
+			});
+			
+			var imgLoad = qvHolder.find( "img" );
+			
+			imgLoad.on( "load",function() {
+				$( window ).trigger( "resize" );
+			});
+			
+		} // end mmAfterQVModal
+
 		
 
 	}); // end doc ready

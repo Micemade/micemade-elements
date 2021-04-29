@@ -5,6 +5,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+use Elementor\Core\Schemes\Typography;
+
 class Micemade_WC_Single_Product extends Widget_Base {
 
 	public function get_name() {
@@ -61,12 +63,29 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		);
 
 		$this->add_control(
+			'wc_image_gallery',
+			[
+				'label'       => esc_html__( 'Use WC image gallery', 'micemade-elements' ),
+				'label_block' => true,
+				'type'        => Controls_Manager::SWITCHER,
+				'label_off'   => __( 'No', 'elementor' ),
+				'label_on'    => __( 'Yes', 'elementor' ),
+				'condition' => [
+					'layout!' => [ 'image_background', 'no_image' ],
+				],
+			]
+		);
+
+		$this->add_control(
 			'img_format',
 			[
 				'label'   => esc_html__( 'Featured image format', 'micemade-elements' ),
 				'type'    => Controls_Manager::SELECT,
-				'default' => 'thumbnail',
+				'default' => 'shop_single',
 				'options' => apply_filters( 'micemade_elements_image_sizes', '' ),
+				'condition' => [
+					'layout!' => 'no_image',
+				],
 			]
 		);
 
@@ -156,6 +175,28 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
+			'product_elements_spacing',
+			[
+				'label'     => __( 'Product elements spacing', 'micemade-elements' ),
+				'type'      => Controls_Manager::SLIDER,
+				'default'   => [
+					'size' => '',
+				],
+				'range'     => [
+					'px' => [
+						'max'  => 200,
+						'min'  => 0,
+						'step' => 1,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .woocommerce div.single-product-container div.summary>*' => 'margin-top: {{SIZE}}px;margin-bottom: {{SIZE}}px;',
+					'{{WRAPPER}} .woocommerce div.single-product-container div.summary form.cart >*' => 'margin-bottom: {{SIZE}}px;',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
 			'align',
 			[
 				'label'     => __( 'Horizontal align', 'micemade-elements' ),
@@ -177,8 +218,13 @@ class Micemade_WC_Single_Product extends Widget_Base {
 				'default'   => 'left',
 				'selectors' => [
 					'{{WRAPPER}} .entry-summary' => 'text-align: {{VALUE}};',
-					'{{WRAPPER}} .star-rating'   => 'float: {{VALUE}};',
+					'{{WRAPPER}} .star-rating, {{WRAPPER}} .woocommerce-review-link' => 'float: {{VALUE}};',
 				],
+				'selectors_dictionary' => array(
+					'left'   => 'text-align: left; align-items: flex-start',
+					'center' => 'text-align: center; align-items: center',
+					'right'  => 'text-align: right; align-items: flex-end',
+				),
 			]
 		);
 
@@ -209,15 +255,57 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
-			'text_box_position',
+			'product_info_position',
 			[
-				'label'      => esc_html__( 'Text position', 'micemade-elements' ),
-				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', 'em', '%' ],
+				'label'     => esc_html__( 'Product info position', 'micemade-elements' ),
+				'type'      => Controls_Manager::CHOOSE,
+				'options'   => array(
+					'left' => array(
+						'title' => __( 'Left', 'micemade-elements' ),
+						'icon'  => 'fa fa-align-left',
+					),
+					'center'     => array(
+						'title' => __( 'Center', 'micemade-elements' ),
+						'icon'  => 'fa fa-align-center',
+					),
+					'right'   => array(
+						'title' => __( 'Right', 'micemade-elements' ),
+						'icon'  => 'fa fa-align-right',
+					),
+				),
 				'selectors'  => [
-					'{{WRAPPER}} .entry-summary' => 'top: {{TOP}}{{UNIT}}; right: {{RIGHT}}{{UNIT}}; bottom: {{BOTTOM}}{{UNIT}}; left: {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .woocommerce div.single-product-container div.entry-summary' => '{{VALUE}};',
 				],
+				'selectors_dictionary' => array(
+					'left'   => 'left: 0; transform: none; right: auto',
+					'center' => 'left: 50%; transform: translateX(-50%)',
+					'right'  => 'right: 0; transform: none; left: auto',
+				),
 				'condition'  => [
+					'layout' => 'image_background',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'product_info__width',
+			[
+				'label'     => __( 'Product info width (%)', 'micemade-elements' ),
+				'type'      => Controls_Manager::SLIDER,
+				'default'   => [
+					'size' => '100',
+				],
+				'range'     => [
+					'%' => [
+						'max'  => 100,
+						'min'  => 0,
+						'step' => 1,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .woocommerce div.single-product-container div.entry-summary' => 'width: {{SIZE}}%;',
+				],
+				'condition' => [
 					'layout' => 'image_background',
 				],
 			]
@@ -226,51 +314,11 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		$this->add_responsive_control(
 			'padding',
 			[
-				'label'      => esc_html__( 'Text padding', 'micemade-elements' ),
+				'label'      => esc_html__( 'Product info padding', 'micemade-elements' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', '%' ],
 				'selectors'  => [
-					'{{WRAPPER}} .entry-summary' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
-			]
-		);
-
-		$this->add_responsive_control(
-			'summary_width',
-			[
-				'label'     => __( 'Text wrapper width (%)', 'micemade-elements' ),
-				'type'      => Controls_Manager::NUMBER,
-				'default'   => '',
-				'min'       => 0,
-				'max'       => 100,
-				'step'      => 5,
-				'selectors' => [
-					'{{WRAPPER}} .entry-summary' => 'width: {{VALUE}}%;',
-				],
-				'condition' => [
-					'layout!' => 'image_background',
-				],
-			]
-		);
-
-		$this->add_responsive_control(
-			'product_elements_spacing',
-			[
-				'label'     => __( 'Product info vertical spacing', 'micemade-elements' ),
-				'type'      => Controls_Manager::SLIDER,
-				'default'   => [
-					'size' => '',
-				],
-				'range'     => [
-					'px' => [
-						'max'  => 200,
-						'min'  => 0,
-						'step' => 1,
-					],
-				],
-				'selectors' => [
-					'{{WRAPPER}} .woocommerce div.single-product-container div.summary>*' => 'margin-top: {{SIZE}}px;margin-bottom: {{SIZE}}px;',
-					'{{WRAPPER}} .woocommerce div.single-product-container div.summary form.cart >*' => 'margin-bottom: {{SIZE}}px;',
+					'{{WRAPPER}} div.entry-summary' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -292,13 +340,25 @@ class Micemade_WC_Single_Product extends Widget_Base {
 			'thumb_width',
 			[
 				'label'     => __( 'Image container width', 'micemade-elements' ),
-				'type'      => Controls_Manager::NUMBER,
-				'default'   => '',
-				'min'       => 0,
-				'max'       => 100,
-				'step'      => 5,
+				'type'      => Controls_Manager::SLIDER,
+				'default'   => [
+					'unit' => '%',
+					'size' => 100,
+				],
+				'range'     => [
+					'%' => [
+						'min'  => 0,
+						'max'  => 100,
+						'step' => 1,
+					],
+				],
 				'selectors' => [
-					'{{WRAPPER}} .product-thumb' => 'width: {{VALUE}}%;',
+					'{{WRAPPER}} div.single-product-container .entry-summary' => 'width: calc(100% - {{SIZE}}{{UNIT}} )',
+					'{{WRAPPER}} div.single-product-container .product-thumb' => 'width: {{SIZE}}{{UNIT}}',
+					'{{WRAPPER}} div.single-product-container .mm-wc-gallery' => 'width: {{SIZE}}{{UNIT}}',
+				],
+				'condition' => [
+					'layout' => ['image_left', 'image_right'],
 				],
 			]
 		);
@@ -309,7 +369,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 				'label'     => esc_html__( 'Image container height', 'micemade-elements' ),
 				'type'      => Controls_Manager::SLIDER,
 				'default'   => [
-					'size' => '',
+					'size' => 400,
 				],
 				'range'     => [
 					'px' => [
@@ -332,7 +392,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Image container height', 'micemade-elements' ),
 				'type'      => Controls_Manager::NUMBER,
-				'default'   => '',
+				'default'   => 100,
 				'min'       => 0,
 				'max'       => 100,
 				'step'      => 5,
@@ -449,7 +509,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 			[
 				'name'     => 'title_typography',
 				'label'    => __( 'Typography', 'micemade-elements' ),
-				'scheme'   => Scheme_Typography::TYPOGRAPHY_4,
+				'scheme'   => Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} .entry-summary h3, {{WRAPPER}} .entry-summary h4',
 			]
 		);
@@ -471,7 +531,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '',
 				'selectors' => [
-					'{{WRAPPER}} .entry-summary .price' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .entry-summary .woocommerce-Price-amount' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -481,8 +541,8 @@ class Micemade_WC_Single_Product extends Widget_Base {
 			[
 				'name'     => 'price_typography',
 				'label'    => __( 'Typography', 'micemade-elements' ),
-				'scheme'   => Scheme_Typography::TYPOGRAPHY_4,
-				'selector' => '{{WRAPPER}} .entry-summary .price',
+				'scheme'   => Typography::TYPOGRAPHY_4,
+				'selector' => '{{WRAPPER}} .entry-summary .woocommerce-Price-amount',
 			]
 		);
 		// Description options.
@@ -512,7 +572,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 			[
 				'name'     => 'desc_typography',
 				'label'    => __( 'Typography', 'micemade-elements' ),
-				'scheme'   => Scheme_Typography::TYPOGRAPHY_4,
+				'scheme'   => Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} .entry-summary .woocommerce-product-details__short-description',
 			]
 		);
@@ -526,15 +586,16 @@ class Micemade_WC_Single_Product extends Widget_Base {
 	protected function render() {
 
 		// get our input from the widget settings.
-		$settings = $this->get_settings();
+		$settings = $this->get_settings_for_display();
 
 		$this->add_render_attribute( 'summary', 'class', $settings['align'] . ' summary entry-summary' );
 
-		$post_name    = ! empty( $settings['post_name'] ) ? $settings['post_name'] : '';
-		$layout       = ! empty( $settings['layout'] ) ? $settings['layout'] : 'images_left';
-		$img_format   = ! empty( $settings['img_format'] ) ? $settings['img_format'] : 'thumbnail';
-		$product_data = ! empty( $settings['product_data'] ) ? $settings['product_data'] : 'full';
-		$short_desc   = ! empty( $settings['short_desc'] ) ? ( 'yes' === $settings['short_desc'] ) : '';
+		$post_name        = ! empty( $settings['post_name'] ) ? $settings['post_name'] : '';
+		$layout           = ! empty( $settings['layout'] ) ? $settings['layout'] : 'images_left';
+		$wc_image_gallery = ! empty( $settings['wc_image_gallery'] ) ? $settings['wc_image_gallery'] : '';
+		$img_format       = ! empty( $settings['img_format'] ) ? $settings['img_format'] : 'thumbnail';
+		$product_data     = ! empty( $settings['product_data'] ) ? $settings['product_data'] : 'full';
+		$short_desc       = ! empty( $settings['short_desc'] ) ? ( 'yes' === $settings['short_desc'] ) : '';
 
 		if ( is_array( $post_name ) ) {
 			$post_name = $post_name;
@@ -562,9 +623,9 @@ class Micemade_WC_Single_Product extends Widget_Base {
 			<div class="woocommerce woocommerce-page micemade-elements_single-product">	
 
 			<?php
-			foreach ( $product as $post ) {
-				setup_postdata( $post );
-				?>
+			$post = $product[0];
+			setup_postdata( $post );
+			?>
 
 			<div <?php post_class( esc_attr( $layout . ' single-product-container' ) ); ?>>
 
@@ -577,7 +638,13 @@ class Micemade_WC_Single_Product extends Widget_Base {
 					$img_src       = wp_get_attachment_image_src( $post_thumb_id, $img_format );
 					$img_url       = $img_src[0];
 
-					echo '<div class="product-thumb" style="background-image: url( ' . esc_url( $img_url ) . ' );"></div>';
+					if ( ! $wc_image_gallery || 'image_background' === $layout ) {
+						echo '<div class="product-thumb" style="background-image: url( ' . esc_url( $img_url ) . ' );"></div>';
+					} else {
+						echo '<div class="mm-wc-gallery">';
+						wc_get_template( 'product-image.php', false, false, MICEMADE_ELEMENTS_DIR . '/includes/templates/' );
+						echo '</div>';
+					}
 				}
 				?>
 
@@ -589,7 +656,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 						do_action( 'woocommerce_single_product_summary' );
 
 					} else {
-						// display price / short desc. / button.
+						// display price/short desc./button.
 						apply_filters( 'micemade_elements_simple_prod_data', $short_desc );
 					}
 					?>
@@ -598,8 +665,11 @@ class Micemade_WC_Single_Product extends Widget_Base {
 
 			</div>
 
-				<?php
-			} // end foreach
+			<?php
+			// Load WC single product JS scripts.
+			if ( $wc_image_gallery ) {
+				do_action( 'micemade_elements_single_product_scripts' );
+			}
 			?>
 
 			</div>

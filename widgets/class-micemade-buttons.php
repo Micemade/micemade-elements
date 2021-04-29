@@ -5,6 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+use Elementor\Core\Schemes\Typography;
+use Elementor\Core\Schemes\Color;
+
 class Micemade_Buttons extends Widget_Base {
 
 	public function get_name() {
@@ -20,391 +23,445 @@ class Micemade_Buttons extends Widget_Base {
 	}
 
 	public function get_categories() {
-		return [ 'micemade_elements' ];
+		return array( 'micemade_elements' );
 	}
 
 
 	protected function _register_controls() {
 		$this->start_controls_section(
 			'section_button',
-			[
+			array(
 				'label' => __( 'Buttons', 'micemade-elements' ),
-			]
+			)
 		);
 
 		$this->add_control(
 			'inherit',
-			[
+			array(
 				'label'     => __( 'Inherit theme buttons style', 'micemade-elements' ),
 				'type'      => Controls_Manager::SWITCHER,
 				'label_off' => __( 'No', 'micemade-elements' ),
 				'label_on'  => __( 'Yes', 'micemade-elements' ),
-			]
+			)
 		);
 
 		$this->add_control(
 			'style_selectors',
-			[
+			array(
 				'label'       => __( 'Add theme button style selectors', 'micemade-elements' ),
 				'type'        => Controls_Manager::TEXT,
 				'placeholder' => __( 'Add theme style selector(s) here', 'micemade-elements' ),
 				'default'     => __( 'button', 'micemade-elements' ),
 				'label_block' => true,
-				'condition'   => [
+				'condition'   => array(
 					'inherit!' => '',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_control(
 			'orientation',
-			[
+			array(
 				'label'   => __( 'Orientation', 'micemade-elements' ),
 				'type'    => Controls_Manager::SELECT,
-				'options' => [
+				'options' => array(
 					'horizontal' => __( 'Horizontal', 'micemade-elements' ),
 					'vertical'   => __( 'Vertical', 'micemade-elements' ),
-				],
+				),
 				'default' => 'horizontal',
+			)
+		);
 
-			]
+		$repeater = new Repeater();
+		$repeater->add_control(
+			'text',
+			array(
+				'label'       => __( 'Button text', 'micemade-elements' ),
+				'type'        => Controls_Manager::TEXT,
+				'label_block' => true,
+				'placeholder' => __( 'Button text', 'micemade-elements' ),
+				'default'     => __( 'Button text', 'micemade-elements' ),
+				'dynamic'     => array(
+					'active' => true,
+				),
+			)
+		);
+
+		$repeater->add_control(
+			'icon_new',
+			array(
+				'label'            => __( 'Button icon', 'micemade-elements' ),
+				'type'             => Controls_Manager::ICONS,
+				'label_block'      => true,
+				'fa4compatibility' => 'icon',
+				'default'          => array(
+					'value'   => 'fas fa-check',
+					'library' => 'solid',
+				),
+
+			)
+		);
+
+		$repeater->add_control(
+			'link',
+			array(
+				'label'       => __( 'Link', 'micemade-elements' ),
+				'type'        => Controls_Manager::URL,
+				'dynamic'     => array(
+					'active' => true,
+				),
+				'placeholder' => __( 'http://your-link.com', 'micemade-elements' ),
+			)
+		);
+
+		$repeater->add_control(
+			'text_color',
+			array(
+				'label'     => __( 'Text color', 'micemade-elements' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '',
+				'selectors' => array(
+					'{{WRAPPER}} a.micemade-button{{CURRENT_ITEM}}' => 'color: {{VALUE}};',
+				),
+			)
+		);
+
+		$repeater->add_control(
+			'back_color',
+			array(
+				'label'     => __( 'Background color', 'micemade-elements' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '',
+				'scheme'    => array(
+					'type'  => Color::get_type(),
+					'value' => Color::COLOR_4,
+				),
+				'selectors' => array(
+					'{{WRAPPER}} a.micemade-button{{CURRENT_ITEM}}' => 'background-color: {{VALUE}};',
+				),
+			)
+		);
+
+		$repeater->add_control(
+			'text_color_hover',
+			array(
+				'label'     => __( 'Text hover color', 'micemade-elements' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '',
+				'selectors' => array(
+					'{{WRAPPER}} a.micemade-button{{CURRENT_ITEM}}:hover' => 'color: {{VALUE}};',
+				),
+			)
+		);
+
+		$repeater->add_control(
+			'back_color_hover',
+			array(
+				'label'     => __( 'Background hover color', 'micemade-elements' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '',
+				'scheme'    => array(
+					'type'  => Color::get_type(),
+					'value' => Color::COLOR_4,
+				),
+				'selectors' => array(
+					'{{WRAPPER}} a.micemade-button{{CURRENT_ITEM}}:hover' => 'background-color: {{VALUE}};',
+				),
+			)
 		);
 
 		$this->add_control(
 			'button_list',
-			[
+			array(
 				'label'       => '',
 				'type'        => Controls_Manager::REPEATER,
-				'default'     => [
-					[
+				'default'     => array(
+					array(
 						'text' => __( 'Button #1', 'micemade-elements' ),
-						'icon' => 'fa fa-check',
-					],
-				],
-				'fields'      => [
-					[
-						'name'        => 'text',
-						'label'       => __( 'Button text', 'micemade-elements' ),
-						'type'        => Controls_Manager::TEXT,
-						'label_block' => true,
-						'placeholder' => __( 'Button Text', 'micemade-elements' ),
-						'default'     => __( 'Button Text', 'micemade-elements' ),
-					],
-					[
-						'name'        => 'icon',
-						'label'       => __( 'Button icon', 'micemade-elements' ),
-						'type'        => Controls_Manager::ICON,
-						'label_block' => true,
-						'default'     => 'fa fa-check',
-					],
-					[
-						'name'        => 'link',
-						'label'       => __( 'Button link', 'micemade-elements' ),
-						'type'        => Controls_Manager::URL,
-						'label_block' => true,
-						'placeholder' => __( 'http://your-link.com', 'micemade-elements' ),
-					],
-
-					[
-						'name'      => 'text_color',
-						'label'     => __( 'Text color', 'micemade-elements' ),
-						'type'      => Controls_Manager::COLOR,
-						'default'   => '',
-						'selectors' => [
-							'{{WRAPPER}} a.micemade-button{{CURRENT_ITEM}}' => 'color: {{VALUE}};',
-						],
-					],
-					[
-						'name'      => 'back_color',
-						'label'     => __( 'Background color', 'micemade-elements' ),
-						'type'      => Controls_Manager::COLOR,
-						'scheme'    => [
-							'type'  => Scheme_Color::get_type(),
-							'value' => Scheme_Color::COLOR_4,
-						],
-						'selectors' => [
-							'{{WRAPPER}} a.micemade-button{{CURRENT_ITEM}}' => 'background-color: {{VALUE}};',
-						],
-					],
-
-					[
-						'name'      => 'text_color_hover',
-						'label'     => __( 'Text hover color', 'micemade-elements' ),
-						'type'      => Controls_Manager::COLOR,
-						'default'   => '',
-						'selectors' => [
-							'{{WRAPPER}} a.micemade-button{{CURRENT_ITEM}}:hover' => 'color: {{VALUE}};',
-						],
-					],
-					[
-						'name'      => 'back_color_hover',
-						'label'     => __( 'Background hover color', 'micemade-elements' ),
-						'type'      => Controls_Manager::COLOR,
-						'scheme'    => [
-							'type'  => Scheme_Color::get_type(),
-							'value' => Scheme_Color::COLOR_4,
-						],
-						'selectors' => [
-							'{{WRAPPER}} a.micemade-button{{CURRENT_ITEM}}:hover' => 'background-color: {{VALUE}};',
-						],
-					],
-				],
-				'title_field' => '<i class="{{ icon }}"></i> {{{ text }}}',
-			]
+						'icon' => 'fas fa-check',
+					),
+				),
+				'fields'      => $repeater->get_controls(),
+				'title_field' => '{{{ elementor.helpers.renderIcon( this, icon_new, {}, "i", "panel" ) || \'<i class="{{ icon }}" aria-hidden="true"></i>\' }}} {{{ text }}}',
+			)
 		);
 
 		$this->add_control(
 			'view',
-			[
+			array(
 				'label'   => __( 'View', 'micemade-elements' ),
 				'type'    => Controls_Manager::HIDDEN,
 				'default' => 'traditional',
-			]
+			)
 		);
 
 		$this->end_controls_section();
 
 		$this->start_controls_section(
 			'section_style',
-			[
+			array(
 				'label' => __( 'Buttons settings', 'micemade-elements' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
-			]
+			)
 		);
 
 		$this->add_responsive_control(
 			'align',
-			[
+			array(
 				'label'     => __( 'Alignment', 'micemade-elements' ),
 				'type'      => Controls_Manager::CHOOSE,
-				'options'   => [
-					'flex-start'    => [
+				'options'   => array(
+					'flex-start'    => array(
 						'title' => __( 'Left', 'micemade-elements' ),
 						'icon'  => 'fa fa-align-left',
-					],
-					'center'        => [
+					),
+					'center'        => array(
 						'title' => __( 'Center', 'micemade-elements' ),
 						'icon'  => 'fa fa-align-center',
-					],
-					'flex-end'      => [
+					),
+					'flex-end'      => array(
 						'title' => __( 'Right', 'micemade-elements' ),
 						'icon'  => 'fa fa-align-right',
-					],
-					'space-between' => [
+					),
+					'space-between' => array(
 						'title' => __( 'Justified', 'micemade-elements' ),
 						'icon'  => 'fa fa-align-justify',
-					],
-				],
-				'selectors' => [
+					),
+				),
+				'selectors' => array(
 					'{{WRAPPER}} .micemade-elements_buttons' => 'justify-content: {{VALUE}};',
-				],
-				'condition' => [
+				),
+				'condition' => array(
 					'orientation' => 'horizontal',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_responsive_control(
 			'align_vertical',
-			[
+			array(
 				'label'     => __( 'Alignment', 'micemade-elements' ),
 				'type'      => Controls_Manager::CHOOSE,
-				'options'   => [
-					'flex-start' => [
+				'options'   => array(
+					'flex-start' => array(
 						'title' => __( 'Left', 'micemade-elements' ),
 						'icon'  => 'fa fa-align-left',
-					],
-					'center'     => [
+					),
+					'center'     => array(
 						'title' => __( 'Center', 'micemade-elements' ),
 						'icon'  => 'fa fa-align-center',
-					],
-					'flex-end'   => [
+					),
+					'flex-end'   => array(
 						'title' => __( 'Right', 'micemade-elements' ),
 						'icon'  => 'fa fa-align-right',
-					],
-					'stretch'    => [
+					),
+					'stretch'    => array(
 						'title' => __( 'Justified', 'micemade-elements' ),
 						'icon'  => 'fa fa-align-justify',
-					],
-				],
-				'selectors' => [
+					),
+				),
+				'selectors' => array(
 					'{{WRAPPER}} .micemade-elements_buttons' => 'align-items: {{VALUE}};',
-				],
-				'condition' => [
+				),
+				'condition' => array(
 					'orientation' => 'vertical',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_responsive_control(
 			'space_between',
-			[
+			array(
 				'label'     => __( 'Buttons Horizontal Spacing', 'micemade-elements' ),
-				'type'      => Controls_Manager::SLIDER,
-				'default'   => [
+				'type'      => \Elementor\Controls_Manager::SLIDER,
+				'default'   => array(
 					'unit' => 'px',
-				],
-				'range'     => [
-					'px' => [
+					'size' => 5,
+				),
+				'range'     => array(
+					'px' => array(
 						'min'  => 0,
 						'max'  => 100,
 						'step' => 1,
-					],
-				],
-				'selectors' => [
+					),
+				),
+				'selectors' => array(
 					'{{WRAPPER}} .micemade-button' => 'margin-left: {{SIZE}}{{UNIT}}; margin-right: {{SIZE}}{{UNIT}}',
-				],
-				'condition' => [
+				),
+				'condition' => array(
 					'orientation' => 'horizontal',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_responsive_control(
 			'space_between_vert',
-			[
+			array(
 				'label'     => __( 'Buttons Vertical Spacing', 'micemade-elements' ),
-				'type'      => Controls_Manager::SLIDER,
-				'default'   => [
+				'type'      => \Elementor\Controls_Manager::SLIDER,
+				'default'   => array(
 					'unit' => 'px',
-				],
-				'range'     => [
-					'px' => [
+					'size' => 5,
+				),
+				'range'     => array(
+					'px' => array(
 						'min'  => 0,
 						'max'  => 100,
 						'step' => 1,
-					],
-				],
-				'selectors' => [
+					),
+				),
+				'selectors' => array(
 					'{{WRAPPER}} .micemade-button' => 'margin-top: {{SIZE}}{{UNIT}}; margin-bottom: {{SIZE}}{{UNIT}}',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_responsive_control(
 			'icon_size',
-			[
+			array(
 				'label'     => __( 'Icon size', 'micemade-elements' ),
-				'type'      => Controls_Manager::SLIDER,
-				'default'   => [
+				'type'      => \Elementor\Controls_Manager::SLIDER,
+				'default'   => array(
 					'unit' => 'px',
-				],
-				'range'     => [
-					'px' => [
+					'size' => 18,
+				),
+				'range'     => array(
+					'px' => array(
 						'min'  => 0,
 						'max'  => 100,
 						'step' => 1,
-					],
-				],
-				'selectors' => [
-					'{{WRAPPER}} .micemade-button .button-icon .fa' => 'font-size: {{SIZE}}{{UNIT}};',
-				],
-
-			]
+					),
+				),
+				'selectors' => array(
+					'{{WRAPPER}} .micemade-button .button-icon [class*=" fa-"]' => 'font-size: {{SIZE}}{{UNIT}};',
+				),
+			)
 		);
 
 		$this->add_responsive_control(
 			'icon_spacing',
-			[
+			array(
 				'label'     => __( 'Icon Spacing', 'micemade-elements' ),
-				'type'      => Controls_Manager::SLIDER,
-				'default'   => [
+				'type'      => \Elementor\Controls_Manager::SLIDER,
+				'default'   => array(
 					'unit' => 'px',
-				],
-				'range'     => [
-					'px' => [
+				),
+				'range'     => array(
+					'px' => array(
 						'min'  => 0,
 						'max'  => 100,
 						'step' => 1,
-					],
-				],
-				'selectors' => [
-					'{{WRAPPER}} .micemade-button .button-icon' => 'margin-right: {{SIZE}}{{UNIT}};',
-				],
+					),
+				),
+				'selectors' => array(
+					'{{WRAPPER}}.micemade-button-icon-position-before .micemade-button .button-icon' => 'margin-right: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}}.micemade-button-icon-position-after .micemade-button .button-icon'  => 'margin-left: {{SIZE}}{{UNIT}};',
+				),
 
-			]
+			)
+		);
+
+		$this->add_control(
+			'icon_position',
+			array(
+				'label'                => __( 'Icon position', 'micemade-elements' ),
+				'type'                 => \Elementor\Controls_Manager::SELECT,
+				'options'              => array(
+					'before' => __( 'Before', 'micemade-elements' ),
+					'after'  => __( 'After', 'micemade-elements' ),
+				),
+				'default'              => 'before',
+				'selectors'            => array(
+					'{{WRAPPER}} .micemade-button' => '{{VALUE}};',
+				),
+				'selectors_dictionary' => array(
+					'before' => 'flex-direction: row',
+					'after'  => 'flex-direction: row-reverse',
+				),
+				'prefix_class'         => 'micemade-button-icon-position-',
+			)
 		);
 
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
-			[
+			array(
 				'name'     => 'typography',
 				'label'    => __( 'Typography', 'micemade-elements' ),
-				'scheme'   => Scheme_Typography::TYPOGRAPHY_4,
+				'scheme'   => Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} a.micemade-button .button-text',
-			]
+			)
 		);
 
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
-			[
+			array(
 				'name'        => 'border',
 				'label'       => __( 'Border', 'micemade-elements' ),
 				'placeholder' => '1px',
 				'default'     => '1px',
 				'selector'    => '{{WRAPPER}} .micemade-button',
-				'condition'   => [
+				'condition'   => array(
 					'inherit!' => 'yes',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_control(
 			'border_radius',
-			[
+			array(
 				'label'      => __( 'Border Radius', 'micemade-elements' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', '%' ],
-				'selectors'  => [
+				'size_units' => array( 'px', '%' ),
+				'selectors'  => array(
 					'{{WRAPPER}} a.micemade-button' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
-				'condition'  => [
+				),
+				'condition'  => array(
 					'inherit!' => 'yes',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_group_control(
 			Group_Control_Box_Shadow::get_type(),
-			[
+			array(
 				'name'      => 'button_box_shadow',
 				'selector'  => '{{WRAPPER}} .micemade-button',
-				'condition' => [
+				'condition' => array(
 					'inherit!' => 'yes',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_responsive_control(
 			'button_padding',
-			[
+			array(
 				'label'      => __( 'Button Padding', 'micemade-elements' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', 'em', '%' ],
-				'selectors'  => [
+				'size_units' => array( 'px', 'em', '%' ),
+				'selectors'  => array(
 					'{{WRAPPER}} a.micemade-button' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
+				),
 				'separator'  => 'before',
-				'condition'  => [
+				'condition'  => array(
 					'inherit!' => 'yes',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_control(
 			'hover_animation',
-			[
+			array(
 				'label' => __( 'Hover animation', 'micemade-elements' ),
 				'type'  => Controls_Manager::HOVER_ANIMATION,
-			]
+			)
 		);
 		$this->end_controls_section();
 
 	}
 
 	protected function render() {
-		$settings = $this->get_settings();
 
+		$settings = $this->get_settings();
 		// Buttons wrapper classes.
 		$this->add_render_attribute( 'wrapper', 'class', 'micemade-elements_buttons' );
 		$this->add_render_attribute( 'wrapper', 'class', $settings['orientation'] );
@@ -449,11 +506,22 @@ class Micemade_Buttons extends Widget_Base {
 					$this->add_render_attribute( $link_key, 'rel', 'nofollow' );
 				}
 
+				// Migration to newer version of ICON(s) control.
+				// Check if its already migrated
+				$migrated = isset( $item['__fa4_migrated']['icon_new'] );
+				// Check if its a new widget without previously selected icon using the old Icon control
+				$is_new = empty( $item['icon'] );
+
 				echo '<a ' . $this->get_render_attribute_string( $link_key ) . '>';
 
-				if ( $item['icon'] ) {
+				if ( $item['icon'] || $item['icon_new'] ) {
 					echo '<span ' . $this->get_render_attribute_string( 'icon' ) . '>';
+					if ( $is_new || $migrated ) {
+						\Elementor\Icons_Manager::render_icon( $item['icon_new'], array( 'aria-hidden' => 'true' ) );
+					} else {
 						echo '<i class="' . esc_attr( $item['icon'] ) . '"></i>';
+					}
+
 					echo '</span>';
 				}
 				?>
@@ -477,7 +545,10 @@ class Micemade_Buttons extends Widget_Base {
 
 	protected function _content_template() {
 		?>
-
+		<#
+			var iconsHTML = {},
+				migrated = {};
+		#>
 		<div class="micemade-elements_buttons {{ settings.orientation }}">
 			<#
 			var theme_style_inherit = hover_anim = '';
@@ -490,13 +561,22 @@ class Micemade_Buttons extends Widget_Base {
 
 			if ( settings.button_list ) {
 				_.each( settings.button_list, function( item, index ) { #>
+					
 					<a class="micemade-button elementor-repeater-item-{{{ item._id }}} {{{ theme_style_inherit }}} {{{ hover_anim }}}"
 					<# if ( item.link && item.link.url ) { #>
 					href="{{ item.link.url }}"
 					<# } #>
 					>
 						<span class="button-icon">
-							<i class="{{ item.icon }}"></i>
+							<#
+								iconsHTML[ index ] = elementor.helpers.renderIcon( view, item.icon_new, { 'aria-hidden': true }, 'i', 'object' );
+								migrated[ index ] = elementor.helpers.isIconMigrated( item, 'icon_new' );
+								if ( iconsHTML[ index ] && iconsHTML[ index ].rendered && ( ! item.icon || migrated[ index ] ) ) { #>
+									{{{ iconsHTML[ index ].value }}}
+								<# } else { #>
+									<i class="{{ item.icon }}" aria-hidden="true"></i>
+								<# }
+							#>
 						</span>
 						<span class="button-text elementor-inline-editing" data-elementor-setting-key="button_list.{{{ index }}}.text">{{{ item.text }}}</span>
 

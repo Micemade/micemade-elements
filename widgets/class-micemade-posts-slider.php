@@ -7,19 +7,29 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Elementor\Core\Schemes\Typography;
 
-class Micemade_Posts_Grid extends Widget_Base {
+class Micemade_Posts_Slider extends Widget_Base {
+
+	public function __construct( $data = array(), $args = null ) {
+		parent::__construct( $data, $args );
+		if ( ! wp_script_is( 'micemade-slider-js', 'registered' ) ) {
+			wp_register_script( 'micemade-slider-js', MICEMADE_ELEMENTS_URL . 'assets/js/custom/handlers/slider.js', array( 'elementor-frontend' ), '1.0.0', true );
+		}
+		if ( ! wp_script_is( 'micemade-slider-js', 'enqueued' ) ) {
+			wp_enqueue_script( 'micemade-slider-js' );
+		}
+	}
 
 	public function get_name() {
-		return 'micemade-posts-grid';
+		return 'micemade-posts-slider';
 	}
 
 	public function get_title() {
-		return __( 'Micemade Posts Grid', 'micemade-elements' );
+		return __( 'Micemade Posts Slider', 'micemade-elements' );
 	}
 
 	public function get_icon() {
 		// Icon name from the Elementor font file, as per http://dtbaker.net/web-development/creating-your-own-custom-elementor-widgets/
-		return 'eicon-posts-grid';
+		return 'eicon-carousel';
 	}
 
 	public function get_categories() {
@@ -34,7 +44,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->start_controls_section(
 			'section_main',
 			[
-				'label' => __( 'Micemade posts grid', 'micemade-elements' ),
+				'label' => __( 'Micemade posts slider', 'micemade-elements' ),
 			]
 		);
 
@@ -143,8 +153,8 @@ class Micemade_Posts_Grid extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Show only sticky posts', 'micemade-elements' ),
 				'type'      => Controls_Manager::SWITCHER,
-				'label_off' => __( 'No', 'micemade-elements' ),
-				'label_on'  => __( 'Yes', 'micemade-elements' ),
+				'label_off' => __( 'No', 'elementor' ),
+				'label_on'  => __( 'Yes', 'elementor' ),
 				'condition' => [
 					'post_type' => 'post',
 				],
@@ -239,114 +249,510 @@ class Micemade_Posts_Grid extends Widget_Base {
 		}
 
 		$this->add_control(
-			'heading_grid_options',
+			'heading_slider_options',
 			[
-				'label'     => __( 'Grid options', 'micemade-elements' ),
+				'label'     => __( 'Slider options', 'micemade-elements' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
 		);
 
-		$this->add_control(
-			'posts_per_row',
-			[
-				'label'   => __( 'Posts per row', 'micemade-elements' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => 3,
-				'options' => [
-					1 => __( 'One', 'micemade-elements' ),
-					2 => __( 'Two', 'micemade-elements' ),
-					3 => __( 'Three', 'micemade-elements' ),
-					4 => __( 'Four', 'micemade-elements' ),
-					6 => __( 'Six', 'micemade-elements' ),
-				],
-			]
+		// Items in grid row.
+		$items_num = array(
+			1 => __( 'One', 'micemade-elements' ),
+			2 => __( 'Two', 'micemade-elements' ),
+			3 => __( 'Three', 'micemade-elements' ),
+			4 => __( 'Four', 'micemade-elements' ),
+			6 => __( 'Six', 'micemade-elements' ),
 		);
 
 		$this->add_control(
-			'posts_per_row_tab',
-			[
-				'label'   => __( 'Posts per row (on tablets)', 'micemade-elements' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => 1,
-				'options' => [
-					1 => __( 'One', 'micemade-elements' ),
-					2 => __( 'Two', 'micemade-elements' ),
-					3 => __( 'Three', 'micemade-elements' ),
-					4 => __( 'Four', 'micemade-elements' ),
-					6 => __( 'Six', 'micemade-elements' ),
-				],
-			]
+			'posts_per_slide',
+			array(
+				'label'              => __( 'Items per slide', 'micemade-elements' ),
+				'type'               => Controls_Manager::SELECT,
+				'default'            => 3,
+				'options'            => $items_num,
+				'frontend_available' => true,
+				// 'condition'          => array(
+				// 	'grid_or_slider' => 'slider',
+				// ),
+			)
 		);
 
 		$this->add_control(
-			'posts_per_row_mob',
-			[
-				'label'   => __( 'Posts per row (on mobiles)', 'micemade-elements' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => 1,
-				'options' => [
-					1 => __( 'One', 'micemade-elements' ),
-					2 => __( 'Two', 'micemade-elements' ),
-					3 => __( 'Three', 'micemade-elements' ),
-					4 => __( 'Four', 'micemade-elements' ),
-					6 => __( 'Six', 'micemade-elements' ),
-				],
-			]
+			'posts_per_slide_tab',
+			array(
+				'label'              => __( 'Items per slide (tablets)', 'micemade-elements' ),
+				'type'               => Controls_Manager::SELECT,
+				'default'            => 2,
+				'options'            => $items_num,
+				'frontend_available' => true,
+				// 'condition'          => array(
+				// 	'grid_or_slider' => 'slider',
+				// ),
+			)
 		);
 
+		$this->add_control(
+			'posts_per_slide_mob',
+			array(
+				'label'              => __( 'Items per slide (mobiles)', 'micemade-elements' ),
+				'type'               => Controls_Manager::SELECT,
+				'default'            => 1,
+				'options'            => $items_num,
+				'frontend_available' => true,
+				// 'condition'          => array(
+				// 	'grid_or_slider' => 'slider',
+				// ),
+			)
+		);
+		// end slides to show.
+
+		// Space between the slides.
 		$this->add_responsive_control(
-			'horiz_spacing',
-			[
-				'label'     => __( 'Posts grid horizontal spacing', 'micemade-elements' ),
-				'type'      => Controls_Manager::SLIDER,
-				'default'   => [
-					'size' => '',
-				],
-				'range'     => [
-					'px' => [
-						'max'  => 50,
-						'min'  => 0,
-						'step' => 1,
-					],
-				],
-				'selectors' => [
-					'{{WRAPPER}} .mme-row .post' => 'padding-left:{{SIZE}}px;padding-right:{{SIZE}}px;',
-					'{{WRAPPER}} .mme-row'       => 'margin-left:-{{SIZE}}px; margin-right:-{{SIZE}}px;',
-				],
-
-			]
+			'space',
+			array(
+				'label'              => __( 'Space between', 'micemade-elements' ),
+				'type'               => Controls_Manager::NUMBER,
+				'default'            => 30,
+				'min'                => 0,
+				'step'               => 10,
+				'frontend_available' => true,
+				// 'condition'          => array(
+				// 	'grid_or_slider' => 'slider',
+				// ),
+			)
 		);
-		$this->add_responsive_control(
-			'vert_spacing',
-			[
-				'label'     => __( 'Posts grid vertical spacing', 'micemade-elements' ),
-				'type'      => Controls_Manager::SLIDER,
-				'default'   => [
-					'size' => '20',
-				],
-				'range'     => [
-					'px' => [
-						'max'  => 100,
-						'min'  => 0,
-						'step' => 1,
-					],
-				],
-				'selectors' => [
-					'{{WRAPPER}} .mme-row .post' => 'margin-bottom:{{SIZE}}px;',
-					//'{{WRAPPER}} .mme-row'       => 'margin-bottom:-{{SIZE}}px;',
-				],
 
-			]
+		// Pagination.
+		$this->add_control(
+			'pagination',
+			array(
+				'label'              => __( 'Slider pagination', 'micemade-elements' ),
+				'type'               => Controls_Manager::SELECT,
+				'default'            => 'bullets',
+				'options'            => array(
+					'none'        => __( 'None', 'micemade-elements' ),
+					'bullets'     => __( 'Bullets', 'micemade-elements' ),
+					'progressbar' => __( 'Progress bar', 'micemade-elements' ),
+					'fraction'    => __( 'Fraction', 'micemade-elements' ),
+				),
+				'frontend_available' => true,
+				// 'condition'          => array(
+				// 	'grid_or_slider' => 'slider',
+				// ),
+			)
+		);
+
+		// Slider navigation.
+		$this->add_control(
+			'buttons',
+			array(
+				'label'              => esc_html__( 'Show navigation arrows', 'micemade-elements' ),
+				'type'               => Controls_Manager::SWITCHER,
+				'label_off'          => __( 'No', 'elementor' ),
+				'label_on'           => __( 'Yes', 'elementor' ),
+				'default'            => 'yes',
+				'frontend_available' => true,
+				// 'condition'          => array(
+				// 	'grid_or_slider' => 'slider',
+				// ),
+			)
+		);
+
+		$this->add_control(
+			'autoplay',
+			array(
+				'label'              => __( 'Autoplay', 'micemade-elements' ),
+				'type'               => Controls_Manager::SELECT,
+				'default'            => 'yes',
+				'options'            => array(
+					'yes' => __( 'Yes', 'micemade-elements' ),
+					'no'  => __( 'No', 'micemade-elements' ),
+				),
+				'frontend_available' => true,
+				// 'condition'          => array(
+				// 	'grid_or_slider' => 'slider',
+				// ),
+			)
+		);
+
+		$this->add_control(
+			'autoplay_speed',
+			array(
+				'label'              => __( 'Autoplay Speed', 'micemade-elements' ),
+				'type'               => Controls_Manager::NUMBER,
+				'default'            => 5000,
+				'condition'          => array(
+					'autoplay'       => 'yes',
+					// 'grid_or_slider' => 'slider',
+				),
+				'frontend_available' => true,
+			)
+		);
+
+		$this->add_control(
+			'autplay_note',
+			array(
+				'type'            => \Elementor\Controls_Manager::RAW_HTML,
+				'raw'             => __( '<small>No value under 1000 (ms) will be accepted.</small>' ),
+				'content_classes' => 'your-class',
+				'condition'       => array(
+					'autoplay' => 'yes',
+				),
+				'separator'       => 'after',
+			)
+		);
+
+		$this->add_control(
+			'pause_on_hover',
+			array(
+				'label'              => __( 'Pause on Hover', 'micemade-elements' ),
+				'type'               => Controls_Manager::SELECT,
+				'default'            => 'yes',
+				'options'            => array(
+					'yes' => __( 'Yes', 'micemade-elements' ),
+					'no'  => __( 'No', 'micemade-elements' ),
+				),
+				'condition'          => array(
+					'autoplay' => 'yes',
+				),
+				'frontend_available' => true,
+			)
+		);
+
+		$this->add_control(
+			'pause_on_interaction',
+			array(
+				'label'              => __( 'Pause on Interaction', 'micemade-elements' ),
+				'type'               => Controls_Manager::SELECT,
+				'default'            => 'yes',
+				'options'            => array(
+					'yes' => __( 'Yes', 'micemade-elements' ),
+					'no'  => __( 'No', 'micemade-elements' ),
+				),
+				'condition'          => array(
+					'autoplay' => 'yes',
+				),
+				'frontend_available' => true,
+			)
+		);
+
+		// Loop the slider.
+		$this->add_control(
+			'infinite',
+			array(
+				'label'              => __( 'Infinite Loop', 'micemade-elements' ),
+				'type'               => Controls_Manager::SELECT,
+				'default'            => 'yes',
+				'options'            => array(
+					'yes' => __( 'Yes', 'micemade-elements' ),
+					'no'  => __( 'No', 'micemade-elements' ),
+				),
+				'frontend_available' => true,
+				// 'condition'          => array(
+				// 	'grid_or_slider' => 'slider',
+				// ),
+			)
+		);
+
+		$this->add_control(
+			'effect',
+			array(
+				'label'              => __( 'Effect', 'micemade-elements' ),
+				'type'               => Controls_Manager::SELECT,
+				'default'            => 'slide',
+				'options'            => array(
+					'slide' => __( 'Slide', 'micemade-elements' ),
+					'fade'  => __( 'Fade', 'micemade-elements' ),
+				),
+				'frontend_available' => true,
+				// 'condition'          => array(
+				// 	'grid_or_slider' => 'slider',
+				// ),
+			)
+		);
+
+		$this->add_control(
+			'speed',
+			array(
+				'label'              => __( 'Animation Speed', 'micemade-elements' ),
+				'type'               => Controls_Manager::NUMBER,
+				'default'            => 500,
+				'frontend_available' => true,
+				// 'condition'          => array(
+				// 	'grid_or_slider' => 'slider',
+				// ),
+			)
 		);
 
 		$this->end_controls_section();
 
+
 		// TAB 2 - STYLES FOR POSTS.
+		$this->start_controls_section(
+			'section_slider_elements_style',
+			array(
+				'label'     => esc_html__( 'Slider elements style', 'micemade-elements' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
+				// 'condition' => array(
+				// 	'grid_or_slider' => 'slider',
+				// ),
+			)
+		);
+
+		$this->add_control(
+			'pagination_color',
+			array(
+				'label'     => __( 'Pagination color', 'micemade-elements' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .swiper-pagination-progressbar-fill' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .swiper-pagination-bullet-active'    => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .swiper-pagination-fraction'         => 'color: {{VALUE}};',
+				),
+				'default'   => '#333333',
+				'separator' => 'after',
+				'condition' => array(
+					'pagination!' => 'none',
+				),
+			)
+		);
+
+		$this->add_control(
+			'buttons_color',
+			array(
+				'label'     => __( 'Arrows icon color', 'micemade-elements' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .swiper-button-prev:before' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .swiper-button-next:before' => 'color: {{VALUE}};',
+				),
+				'default'   => '#2F2E2EC7',
+				'condition' => array(
+					'buttons!' => '',
+				),
+			)
+		);
+		$this->add_control(
+			'buttons_bckcolor',
+			array(
+				'label'     => __( 'Arrows button color', 'micemade-elements' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .swiper-button-prev:after,{{WRAPPER}} .swiper-button-next:after' => 'background-color: {{VALUE}};',
+				),
+				'default'   => '#FFFFFF7A',
+				'separator' => 'after',
+				'condition' => array(
+					'buttons!' => '',
+				),
+			)
+		);
+
+		$this->add_responsive_control(
+			'nav_arrows_vert_position',
+			array(
+				'label'       => __( 'Arrows vertical position', 'micemade-elements' ),
+				'type'        => Controls_Manager::SLIDER,
+				'label_block' => true,
+				'size_units'  => array( '%', 'px' ),
+				'default'     => array(
+					'size' => 50,
+					'unit' => '%',
+				),
+				'range'       => array(
+					'%'  => array(
+						'max'  => 100,
+						'min'  => 0,
+						'step' => 1,
+					),
+					'px' => array(
+						'min' => 0,
+						'max' => 1000,
+					),
+				),
+				'selectors'   => array(
+					'{{WRAPPER}} .swiper-button-prev,{{WRAPPER}} .swiper-button-next' => 'top: {{SIZE}}{{UNIT}};',
+				),
+				'condition'   => array(
+					'buttons!' => '',
+				),
+			)
+		);
+
+		$this->add_control(
+			'arrow_icon',
+			array(
+				'label'       => __( 'Arrow icons', 'micemade-elements' ),
+				'type'        => \Elementor\Controls_Manager::ICON,
+				'label_block' => true,
+				'include'     => array(
+					'fa fa-arrow-left',
+					'fa fa-angle-left',
+					'fa fa-angle-double-left',
+					'fa fa-arrow-circle-left',
+					'fa fa-caret-left',
+					'fa fa-chevron-left',
+					'fa fa-chevron-circle-left',
+					'fa fa-long-arrow-left',
+				),
+				'default'     => 'fa fa-chevron-left',
+			)
+		);
+
+		$this->add_responsive_control(
+			'nav_arrows_size',
+			array(
+				'label'       => __( 'Arrows icon size', 'micemade-elements' ),
+				'type'        => Controls_Manager::SLIDER,
+				'label_block' => true,
+				'size_units'  => array( 'px' ),
+				'default'     => array(
+					'size' => 12,
+					'unit' => 'px',
+				),
+				'range'       => array(
+					'px' => array(
+						'min' => 0,
+						'max' => 100,
+					),
+				),
+				'selectors'   => array(
+					'{{WRAPPER}} .swiper-button-next:before, {{WRAPPER}} .swiper-button-prev:before' => 'font-size: {{SIZE}}{{UNIT}};',
+				),
+				'condition'   => array(
+					'buttons!' => '',
+				),
+			)
+		);
+
+		$this->add_responsive_control(
+			'nav_arrows_back_size',
+			array(
+				'label'       => __( 'Arrows button size', 'micemade-elements' ),
+				'type'        => Controls_Manager::SLIDER,
+				'label_block' => true,
+				'size_units'  => array( 'px' ),
+				'default'     => array(
+					'size' => 32,
+					'unit' => 'px',
+				),
+				'range'       => array(
+					'px' => array(
+						'min' => 0,
+						'max' => 100,
+					),
+				),
+				'selectors'   => array(
+					'{{WRAPPER}} .swiper-button-prev, {{WRAPPER}} .swiper-button-prev:after,{{WRAPPER}} .swiper-button-next, {{WRAPPER}} .swiper-button-next:after' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+				),
+				'condition'   => array(
+					'buttons!' => '',
+				),
+			)
+		);
+
+		$this->add_control(
+			'nav_arrows_back_roundness',
+			array(
+				'label'       => __( 'Arrows button roundness', 'micemade-elements' ),
+				'type'        => Controls_Manager::SLIDER,
+				'label_block' => true,
+				'size_units'  => array( 'px' ),
+				'default'     => array(
+					'size' => 12,
+					'unit' => 'px',
+				),
+				'range'       => array(
+					'px' => array(
+						'min' => 0,
+						'max' => 100,
+					),
+					'%'  => array(
+						'min' => 0,
+						'max' => 100,
+					),
+				),
+				'selectors'   => array(
+					'{{WRAPPER}} .swiper-button-prev:after,{{WRAPPER}} .swiper-button-next:after' => 'border-radius: {{SIZE}}{{UNIT}};',
+				),
+				'condition'   => array(
+					'buttons!' => '',
+				),
+			)
+		);
+
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			array(
+				'label'     => __( 'Arrow button border' ),
+				'name'      => 'arrow_button_border',
+				'selector'  => '{{WRAPPER}} .swiper-button-prev:after,{{WRAPPER}} .swiper-button-next:after',
+				'separator' => 'after',
+				'condition' => array(
+					'buttons!' => '',
+				),
+			)
+		);
+
+		// Slider navigation.
+		$this->add_control(
+			'show_icon_fix',
+			array(
+				'label'     => esc_html__( 'Fix icon position', 'micemade-elements' ),
+				'type'      => Controls_Manager::SWITCHER,
+				'label_off' => __( 'No', 'elementor' ),
+				'label_on'  => __( 'Yes', 'elementor' ),
+				'default'   => 'no',
+			)
+		);
+		$this->add_control(
+			'fix_icon_note',
+			array(
+				'type'            => \Elementor\Controls_Manager::RAW_HTML,
+				'raw'             => __( '<small>Some icons may misalign with it\'s button. Enable the control above to fix the arrow icon position.</small>' ),
+				'content_classes' => 'your-class',
+			)
+		);
+
+		$this->add_responsive_control(
+			'nav_arrows_fix_position',
+			array(
+				'label'       => __( 'Fix arrow position', 'micemade-elements' ),
+				'type'        => Controls_Manager::SLIDER,
+				'label_block' => true,
+				'size_units'  => array( '%', 'px' ),
+				'default'     => array(
+					'size' => 0,
+					'unit' => '%',
+				),
+				'range'       => array(
+					'%' => array(
+						'max'  => 50,
+						'min'  => -50,
+						'step' => 1,
+					),
+				),
+				'selectors'   => array(
+					'{{WRAPPER}} .swiper-button-prev:before' => 'margin-top: {{SIZE}}{{UNIT}};',
+					' {{WRAPPER}} .swiper-button-next:before' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+				),
+				'condition'   => array(
+					'buttons!'      => '',
+					'show_icon_fix' => 'yes',
+				),
+			)
+		);
+
+		$this->end_controls_section();
+
+		// STYLES FOR POSTS.
 		$this->start_controls_section(
 			'section_style',
 			[
-				'label' => esc_html__( 'General', 'micemade-elements' ),
+				'label' => esc_html__( 'General item settings', 'micemade-elements' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -371,8 +777,8 @@ class Micemade_Posts_Grid extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Show featured image (thumbnail)', 'micemade-elements' ),
 				'type'      => Controls_Manager::SWITCHER,
-				'label_off' => __( 'No', 'micemade-elements' ),
-				'label_on'  => __( 'Yes', 'micemade-elements' ),
+				'label_off' => __( 'No', 'elementor' ),
+				'label_on'  => __( 'Yes', 'elementor' ),
 				'default'   => 'yes',
 			]
 		);
@@ -395,8 +801,8 @@ class Micemade_Posts_Grid extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Show excerpt', 'micemade-elements' ),
 				'type'      => Controls_Manager::SWITCHER,
-				'label_off' => __( 'No', 'micemade-elements' ),
-				'label_on'  => __( 'Yes', 'micemade-elements' ),
+				'label_off' => __( 'No', 'elementor' ),
+				'label_on'  => __( 'Yes', 'elementor' ),
 				'default'   => 'yes',
 			]
 		);
@@ -406,8 +812,8 @@ class Micemade_Posts_Grid extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Show post meta', 'micemade-elements' ),
 				'type'      => Controls_Manager::SWITCHER,
-				'label_off' => __( 'No', 'micemade-elements' ),
-				'label_on'  => __( 'Yes', 'micemade-elements' ),
+				'label_off' => __( 'No', 'elementor' ),
+				'label_on'  => __( 'Yes', 'elementor' ),
 				'default'   => 'yes',
 			]
 		);
@@ -417,8 +823,8 @@ class Micemade_Posts_Grid extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Show custom meta (advanced)', 'micemade-elements' ),
 				'type'      => Controls_Manager::SWITCHER,
-				'label_off' => __( 'No', 'micemade-elements' ),
-				'label_on'  => __( 'Yes', 'micemade-elements' ),
+				'label_off' => __( 'No', 'elementor' ),
+				'label_on'  => __( 'Yes', 'elementor' ),
 				'default'   => 'no',
 			]
 		);
@@ -440,38 +846,6 @@ class Micemade_Posts_Grid extends Widget_Base {
 				'type'      => \Elementor\Controls_Manager::DIVIDER,
 				'condition' => [
 					'custom_meta' => 'yes',
-				],
-			]
-		);
-
-		$this->add_control(
-			'use_load_more',
-			[
-				'label'     => esc_html__( 'Use load more', 'micemade-elements' ),
-				'type'      => Controls_Manager::SWITCHER,
-				'label_off' => __( 'No', 'micemade-elements' ),
-				'label_on'  => __( 'Yes', 'micemade-elements' ),
-				'default'   => 'yes',
-			]
-		);
-		$this->add_control(
-			'loadmore_note',
-			[
-				'type'            => \Elementor\Controls_Manager::RAW_HTML,
-				'raw'             => __( '<small>If there are items in <strong>"Select items from [post type]"</strong>, Load more feature will be disabled.</small>', 'micemade-elements' ),
-				'content_classes' => 'your-class',
-				'condition'       => [
-					'use_load_more' => 'yes',
-				],
-			]
-		);
-		
-		$this->add_control(
-			'hr_loadmore',
-			[
-				'type'      => \Elementor\Controls_Manager::DIVIDER,
-				'condition'       => [
-					'use_load_more' => 'yes',
 				],
 			]
 		);
@@ -718,7 +1092,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_responsive_control(
 			'content_vertical_alignment',
 			[
-				'label'       => __( 'Vertical align', 'micemade-elements' ),
+				'label'       => __( 'Vertical Align', 'micemade-elements' ),
 				'type'        => Controls_Manager::CHOOSE,
 				'label_block' => false,
 				'options'     => [
@@ -990,7 +1364,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_control(
 			'meta_back_hover_color',
 			[
-				'label'     => __( 'Meta Back Color', 'micemade-elements' ),
+				'label'     => __( 'Meta Back Hover Color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '',
 				'selectors' => [
@@ -1042,8 +1416,8 @@ class Micemade_Posts_Grid extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Enable', 'micemade-elements' ),
 				'type'      => Controls_Manager::SWITCHER,
-				'label_off' => __( 'No', 'micemade-elements' ),
-				'label_on'  => __( 'Yes', 'micemade-elements' ),
+				'label_off' => __( 'No', 'elementor' ),
+				'label_on'  => __( 'Yes', 'elementor' ),
 				'default'   => 'yes',
 			]
 		);
@@ -1115,7 +1489,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 				'label_block' => true,
 				'type'        => \Elementor\Controls_Manager::SELECT2,
 				'options'     => micemade_get_meta_keys(),
-				'multiple'    => false,
+				'multiple' => false,
 			]
 		);
 		$repeater_cm->add_control(
@@ -1196,8 +1570,8 @@ class Micemade_Posts_Grid extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Show custom meta inline', 'micemade-elements' ),
 				'type'      => Controls_Manager::SWITCHER,
-				'label_off' => __( 'No', 'micemade-elements' ),
-				'label_on'  => __( 'Yes', 'micemade-elements' ),
+				'label_off' => __( 'No', 'elementor' ),
+				'label_on'  => __( 'Yes', 'elementor' ),
 			]
 		);
 
@@ -1314,8 +1688,8 @@ class Micemade_Posts_Grid extends Widget_Base {
 			[
 				'label'     => esc_html__( 'Show "Read more"', 'micemade-elements' ),
 				'type'      => Controls_Manager::SWITCHER,
-				'label_off' => __( 'No', 'micemade-elements' ),
-				'label_on'  => __( 'Yes', 'micemade-elements' ),
+				'label_off' => __( 'No', 'elementor' ),
+				'label_on'  => __( 'Yes', 'elementor' ),
 				'default'   => 'yes',
 			]
 		);
@@ -1357,69 +1731,6 @@ class Micemade_Posts_Grid extends Widget_Base {
 				'condition' => [
 					'if_readmore!' => '',
 				],
-			]
-		);
-
-		$this->end_controls_section();
-
-		// Ajax LOAD MORE settings.
-		$this->start_controls_section(
-			'section_ajax_load_more',
-			[
-				'label'     => __( 'Ajax LOAD MORE settings', 'micemade-elements' ),
-				'tab'       => Controls_Manager::TAB_STYLE,
-				'condition' => [
-					'use_load_more!' => '',
-				],
-			]
-		);
-
-		$this->add_responsive_control(
-			'load_more_padding',
-			[
-				'label'      => esc_html__( '"LOAD MORE" button margin', 'micemade-elements' ),
-				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', 'em', '%' ],
-				'selectors'  => [
-					'{{WRAPPER}} .micemade-elements_more-posts-wrap' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
-			]
-		);
-
-		$this->add_responsive_control(
-			'loadmore_align',
-			[
-				'label'     => __( 'Alignment', 'micemade-elements' ),
-				'type'      => Controls_Manager::CHOOSE,
-				'options'   => [
-					'left'   => [
-						'title' => __( 'Left', 'micemade-elements' ),
-						'icon'  => 'fa fa-align-left',
-					],
-					'center' => [
-						'title' => __( 'Center', 'micemade-elements' ),
-						'icon'  => 'fa fa-align-center',
-					],
-					'right'  => [
-						'title' => __( 'Right', 'micemade-elements' ),
-						'icon'  => 'fa fa-align-right',
-					],
-				],
-				'default'   => '',
-				'selectors' => [
-					'{{WRAPPER}} .micemade-elements_more-posts-wrap' => 'text-align: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->add_control(
-			'loadmore_text',
-			[
-				'label'       => __( '"Load more" with custom text', 'micemade-elements' ),
-				'type'        => Controls_Manager::TEXT,
-				'default'     => '',
-				'placeholder' => __( 'type your custom Load more text here', 'micemade-elements' ),
-				'label_block' => true,
 			]
 		);
 
@@ -1504,11 +1815,23 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$offset     = (int) $settings['offset'];
 		// ---- end QUERY SETTINGS.
 
-		// Grid settings.
-		$ppr     = (int) $settings['posts_per_row'];
-		$ppr_tab = (int) $settings['posts_per_row_tab'];
-		$ppr_mob = (int) $settings['posts_per_row_mob'];
-
+		// Slider settings.
+		$posts_per_slide      = (int) $settings['posts_per_slide'];
+		$posts_per_slide_tab  = (int) $settings['posts_per_slide_tab'];
+		$posts_per_slide_mob  = (int) $settings['posts_per_slide_mob'];
+		$space                = (int) $settings['space'];
+		$space_tablet         = (int) $settings['space_tablet'];
+		$space_mobile         = (int) $settings['space_mobile'];
+		$pagination           = $settings['pagination'];
+		$buttons              = $settings['buttons'];
+		$arrow_icon           = $settings['arrow_icon'];
+		$autoplay             = $settings['autoplay'];
+		$autoplay_speed       = $settings['autoplay_speed'];
+		$speed                = $settings['speed'];
+		$pause_on_hover       = $settings['pause_on_hover'];
+		$pause_on_interaction = $settings['pause_on_interaction'];
+		$effect               = $settings['effect'];
+		$infinite             = $settings['infinite'];
 		// Layout and style settings.
 		$show_thumb    = $settings['show_thumb'];
 		$img_format    = $settings['img_format'];
@@ -1518,17 +1841,15 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$meta          = $settings['meta'];
 		$meta_ordering = $settings['meta_ordering'];
 		$css_class     = $settings['css_class'];
-		$use_load_more = empty( $post__in ) ? $settings['use_load_more'] : '';
 		$cm_fields     = ( $settings['custom_meta'] && $settings['cm_fields'] ) ? $settings['cm_fields'] : '';
 		$cm_inline     = $settings['cm_inline'];
 		$elm_ordering  = $settings['elm_ordering'];
-		$readmore_text = $settings['readmore_text'];
 		$if_readmore   = $settings['if_readmore'];
-		$loadmore_text = $settings['loadmore_text'];
+		$readmore_text = $settings['readmore_text'];
 
 		global $post;
 
-		$grid  = micemade_elements_grid_class( intval( $ppr ), intval( $ppr_tab ), intval( $ppr_mob ) );
+		$grid  = 'swiper-slide';
 		$grid .= $cm_inline ? ' custom-meta-inline' : '';
 
 		// Query posts - "micemade_elements_query_args" hook in includes/helpers.php.
@@ -1537,14 +1858,14 @@ class Micemade_Posts_Grid extends Widget_Base {
 
 		if ( ! empty( $posts ) ) {
 
-			// CSS classes for posts grid container.
+			// CSS classes for posts slider container.
 			$this->add_render_attribute(
 				[
-					'posts-grid-container' => [
+					'posts-slider-container' => [
 						'class' => [
-							'micemade-elements_posts-grid',
-							'mme-row',
-							$use_load_more ? 'micemade-elements-load-more' : '',
+							'micemade-elements_posts-slider',
+							'micemade-elements_slider',
+							'swiper-container',
 							esc_attr( $style ),
 						],
 					],
@@ -1552,41 +1873,9 @@ class Micemade_Posts_Grid extends Widget_Base {
 			);
 
 			// Posts grid container.
-			echo '<div ' . $this->get_render_attribute_string( 'posts-grid-container' ) . '>';
+			echo '<div ' . $this->get_render_attribute_string( 'posts-slider-container' ) . '>';
 
-			// If "Load more" is selected, turn on the arguments for Ajax call.
-			if ( $use_load_more ) {
-
-				$postoptions = wp_json_encode(
-					array(
-						'post_type'     => $post_type,
-						'order'         => $order,
-						'orderby'       => $orderby,
-						'orderby_meta'  => $orderby_meta,
-						'taxonomy'      => $taxonomy,
-						'ppp'           => $ppp,
-						'categories'    => $categories,
-						'post__in'      => $post__in,
-						'sticky'        => $sticky,
-						'startoffset'   => $offset,
-						'style'         => $style,
-						'show_thumb'    => $show_thumb,
-						'img_format'    => $img_format,
-						'excerpt'       => $excerpt,
-						'excerpt_limit' => $excerpt_limit,
-						'meta'          => $meta,
-						'meta_ordering' => $meta_ordering,
-						'css_class'     => $css_class,
-						'grid'          => $grid,
-						'cm_fields'     => $cm_fields,
-						'elm_ordering'  => $elm_ordering,
-						'if_readmore'   => $if_readmore,
-						'readmore_text' => $readmore_text,
-					)
-				);
-
-				echo '<input type="hidden" class="posts-grid-settings" data-postoptions="' . esc_js( $postoptions ) . '">';
-			}
+			echo '<div class="swiper-wrapper">';
 
 			foreach ( $posts as $post ) {
 
@@ -1597,15 +1886,21 @@ class Micemade_Posts_Grid extends Widget_Base {
 
 			}
 
-			echo '</div>';
+			echo '</div>'; // end .swiper-wrapper.
+
+			if ( 'none' !== $pagination ) {
+				echo '<div class="swiper-pagination"></div>';
+			}
+
+			if ( $buttons ) {
+				echo '<div class="swiper-button-next ' . esc_attr( $arrow_icon ) . '" screen-reader><span>' . esc_html__( 'Next', 'micemade-elements' ) . '</span></div>';
+				echo '<div class="swiper-button-prev ' . esc_attr( $arrow_icon ) . '" screen-reader><span>' . esc_html__( 'Previous', 'micemade-elements' ) . '</span></div>';
+			}
+
+			echo '</div>';// end .swiper-container.
 		}
 
 		wp_reset_postdata();
-
-		if ( $use_load_more ) {
-			$loadmore = $loadmore_text ? $loadmore_text : __( 'Load more', 'micemade-elements' );
-			echo '<div class="micemade-elements_more-posts-wrap"><a href="#" class="micemade-elements_more-posts more_posts button">' . esc_html( $loadmore ) . '</a></div>';
-		}
 
 	}
 
@@ -1615,4 +1910,4 @@ class Micemade_Posts_Grid extends Widget_Base {
 
 }
 
-Plugin::instance()->widgets_manager->register_widget_type( new Micemade_Posts_Grid() );
+Plugin::instance()->widgets_manager->register_widget_type( new Micemade_Posts_Slider() );

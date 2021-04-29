@@ -5,6 +5,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+use Elementor\Core\Schemes\Typography;
+
 class Micemade_Instagram extends Widget_Base {
 
 	public function get_name() {
@@ -300,7 +302,7 @@ class Micemade_Instagram extends Widget_Base {
 			[
 				'name'      => 'usernme_typography',
 				'label'     => __( 'Typography', 'micemade-elements' ),
-				'scheme'    => Scheme_Typography::TYPOGRAPHY_4,
+				'scheme'    => Typography::TYPOGRAPHY_4,
 				'selector'  => '{{WRAPPER}} .instagram-username',
 				'condition' => [
 					'add_username_link' => [ 'yes' ],

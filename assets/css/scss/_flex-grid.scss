@@ -91,6 +91,7 @@ $fg-breakpoints: (
 	flex-direction: row;
 	flex-wrap: wrap;
 	@include spacing( ( -$fg-gutter ), margin, horizontal );
+	padding: 0; // reset row padding.
 }
 
 
@@ -139,7 +140,7 @@ $fg-breakpoints: (
 	@for $i from 1 through $fg-columns {
 		.#{ $fg-class-col }-#{$namespace}-#{$i} {
 			flex-basis: get-col-percent($i);
-			max-width:	get-col-percent($i);
+			max-width:	get-col-percent($i) !important;
 		}
 	}
 

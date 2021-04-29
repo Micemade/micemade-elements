@@ -5,6 +5,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+use Elementor\Core\Schemes\Typography;
+
 class Micemade_Header_Logo extends Widget_Base {
 
 	public function get_name() {
@@ -156,7 +158,7 @@ class Micemade_Header_Logo extends Widget_Base {
 			[
 				'name'      => 'typography',
 				'label'     => __( 'Typography', 'micemade-elements' ),
-				'scheme'    => Scheme_Typography::TYPOGRAPHY_1,
+				'scheme'    => Typography::TYPOGRAPHY_1,
 				'selector'  => '{{WRAPPER}} .micemade-elements_header-logo .logo-image.no-logo .site-title',
 				'condition' => [
 					'no_logo' => 'yes',

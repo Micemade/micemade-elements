@@ -11,5 +11,9 @@ body:not(.elementor-editor-active) {
 			width: 100% !important;
 			left: 0;
 		}
-	}	
+	}
+}
+
+.elementor-section-wrap section:first-child .elementor-editor-section-settings {
+	transform: scaleY(-1) translateX(-50%);
 }

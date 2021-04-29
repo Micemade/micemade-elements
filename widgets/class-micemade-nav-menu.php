@@ -5,6 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+use Elementor\Core\Schemes\Typography;
+use Elementor\Core\Schemes\Color;
+
 class Micemade_Nav_Menu extends Widget_Base {
 
 	protected $nav_menu_index = 1;
@@ -394,8 +397,8 @@ class Micemade_Nav_Menu extends Widget_Base {
 				'label'     => __( 'Text Color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'scheme'    => [
-					'type'  => Scheme_Color::get_type(),
-					'value' => Scheme_Color::COLOR_3,
+					'type'  => Color::get_type(),
+					'value' => Color::COLOR_3,
 				],
 				'default'   => '',
 				'selectors' => [
@@ -419,8 +422,8 @@ class Micemade_Nav_Menu extends Widget_Base {
 				'label'     => __( 'Text Color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'scheme'    => [
-					'type'  => Scheme_Color::get_type(),
-					'value' => Scheme_Color::COLOR_4,
+					'type'  => Color::get_type(),
+					'value' => Color::COLOR_4,
 				],
 				'selectors' => [
 					'{{WRAPPER}} .elementor-nav-menu--main .elementor-item:hover,
@@ -458,8 +461,8 @@ class Micemade_Nav_Menu extends Widget_Base {
 				'label'     => __( 'Pointer Color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'scheme'    => [
-					'type'  => Scheme_Color::get_type(),
-					'value' => Scheme_Color::COLOR_4,
+					'type'  => Color::get_type(),
+					'value' => Color::COLOR_4,
 				],
 				'default'   => '',
 				'selectors' => [
@@ -522,7 +525,7 @@ class Micemade_Nav_Menu extends Widget_Base {
 			[
 				'name'      => 'menu_typography',
 				'label'     => __( 'Typography', 'micemade-elements' ),
-				'scheme'    => Scheme_Typography::TYPOGRAPHY_1,
+				'scheme'    => Typography::TYPOGRAPHY_1,
 				'separator' => 'before',
 				'selector'  => '{{WRAPPER}} .elementor-nav-menu--main',
 			]
@@ -727,7 +730,7 @@ class Micemade_Nav_Menu extends Widget_Base {
 			[
 				'name'      => 'dropdown_typography',
 				'label'     => __( 'Typography', 'micemade-elements' ),
-				'scheme'    => Scheme_Typography::TYPOGRAPHY_4,
+				'scheme'    => Typography::TYPOGRAPHY_4,
 				'exclude'   => [ 'line_height' ],
 				'selector'  => '{{WRAPPER}} .elementor-nav-menu--dropdown',
 				'separator' => 'before',
