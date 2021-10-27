@@ -21,8 +21,11 @@ class Micemade_WC_Products_Slider extends \Elementor\Widget_Base {
 
 	public function __construct( $data = array(), $args = null ) {
 		parent::__construct( $data, $args );
+
+		$today = gmdate( 'YmdGi', time() );
+
 		if ( ! wp_script_is( 'micemade-slider-js', 'registered' ) ) {
-			wp_register_script( 'micemade-slider-js', MICEMADE_ELEMENTS_URL . 'assets/js/custom/handlers/slider.js', [ 'elementor-frontend' ], '1.0.0', true );
+			wp_register_script( 'micemade-slider-js', MICEMADE_ELEMENTS_URL . 'assets/js/custom/handlers/slider.js', [ 'elementor-frontend' ], $today, true );
 		}
 		if ( ! wp_script_is( 'micemade-slider-js', 'enqueued' ) ) {
 			wp_enqueue_script( 'micemade-slider-js' );
@@ -63,10 +66,11 @@ class Micemade_WC_Products_Slider extends \Elementor\Widget_Base {
 		return [ 'micemade_elements' ];
 	}
 
+
 	protected function _register_controls() {
 
 		$this->start_controls_section(
-			'section_main',
+			'section_content',
 			[
 				'label' => esc_html__( 'Micemade products slider', 'micemade-elements' ),
 			]
@@ -222,477 +226,23 @@ class Micemade_WC_Products_Slider extends \Elementor\Widget_Base {
 			]
 		);
 
-		$this->add_control(
-			'heading_slider',
-			[
-				'label'     => __( 'Slider settings', 'micemade-elements' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
-			]
-		);
-
-		// Slides to show.
-		$slides_no = [
-			1 => __( 'One', 'micemade-elements' ),
-			2 => __( 'Two', 'micemade-elements' ),
-			3 => __( 'Three', 'micemade-elements' ),
-			4 => __( 'Four', 'micemade-elements' ),
-			6 => __( 'Six', 'micemade-elements' ),
-		];
-
-		$this->add_control(
-			'posts_per_slide',
-			[
-				'label'              => __( 'Items per slide', 'micemade-elements' ),
-				'type'               => Controls_Manager::SELECT,
-				'default'            => 3,
-				'options'            => $slides_no,
-				'frontend_available' => true,
-			]
-		);
-
-		$this->add_control(
-			'posts_per_slide_tab',
-			[
-				'label'              => __( 'Items per slide (tablets)', 'micemade-elements' ),
-				'type'               => Controls_Manager::SELECT,
-				'default'            => 2,
-				'options'            => $slides_no,
-				'frontend_available' => true,
-			]
-		);
-
-		$this->add_control(
-			'posts_per_slide_mob',
-			[
-				'label'              => __( 'Items per slide (mobiles)', 'micemade-elements' ),
-				'type'               => Controls_Manager::SELECT,
-				'default'            => 1,
-				'options'            => $slides_no,
-				'frontend_available' => true,
-			]
-		);
-		// end slides to show.
-
-		// Space between the slides.
-		$this->add_responsive_control(
-			'space',
-			[
-				'label'              => __( 'Space between', 'micemade-elements' ),
-				'type'               => Controls_Manager::NUMBER,
-				'default'            => 30,
-				'min'                => 0,
-				'step'               => 10,
-				'frontend_available' => true,
-			]
-		);
-
-		// Pagination.
-		$this->add_control(
-			'pagination',
-			[
-				'label'              => __( 'Slider pagination', 'micemade-elements' ),
-				'type'               => Controls_Manager::SELECT,
-				'default'            => 'bullets',
-				'options'            => [
-					'none'        => __( 'None', 'micemade-elements' ),
-					'bullets'     => __( 'Bullets', 'micemade-elements' ),
-					'progressbar' => __( 'Progress bar', 'micemade-elements' ),
-					'fraction'    => __( 'Fraction', 'micemade-elements' ),
-				],
-				'frontend_available' => true,
-			]
-		);
-
-		// Slider navigation.
-		$this->add_control(
-			'buttons',
-			[
-				'label'              => esc_html__( 'Show navigation arrows', 'micemade-elements' ),
-				'type'               => Controls_Manager::SWITCHER,
-				'label_off'          => __( 'No', 'elementor' ),
-				'label_on'           => __( 'Yes', 'elementor' ),
-				'default'            => 'yes',
-				'frontend_available' => true,
-
-			]
-		);
-
-		$this->add_control(
-			'autoplay',
-			array(
-				'label'              => __( 'Autoplay', 'micemade-elements' ),
-				'type'               => Controls_Manager::SELECT,
-				'default'            => 'yes',
-				'options'            => array(
-					'yes' => __( 'Yes', 'micemade-elements' ),
-					'no'  => __( 'No', 'micemade-elements' ),
-				),
-				'frontend_available' => true,
-			)
-		);
-
-		$this->add_control(
-			'autoplay_speed',
-			array(
-				'label'              => __( 'Autoplay Speed', 'micemade-elements' ),
-				'type'               => Controls_Manager::NUMBER,
-				'default'            => 5000,
-				'condition'          => array(
-					'autoplay' => 'yes',
-				),
-				'frontend_available' => true,
-			)
-		);
-
-		$this->add_control(
-			'autplay_note',
-			array(
-				'type'            => \Elementor\Controls_Manager::RAW_HTML,
-				'raw'             => __( '<small>No value under 1000 (ms) will be accepted.</small>' ),
-				'content_classes' => 'your-class',
-				'condition'       => array(
-					'autoplay' => 'yes',
-				),
-				'separator'       => 'after',
-			)
-		);
-
-		$this->add_control(
-			'pause_on_hover',
-			array(
-				'label'              => __( 'Pause on Hover', 'micemade-elements' ),
-				'type'               => Controls_Manager::SELECT,
-				'default'            => 'yes',
-				'options'            => array(
-					'yes' => __( 'Yes', 'micemade-elements' ),
-					'no'  => __( 'No', 'micemade-elements' ),
-				),
-				'condition'          => array(
-					'autoplay' => 'yes',
-				),
-				'frontend_available' => true,
-			)
-		);
-
-		$this->add_control(
-			'pause_on_interaction',
-			array(
-				'label'              => __( 'Pause on Interaction', 'micemade-elements' ),
-				'type'               => Controls_Manager::SELECT,
-				'default'            => 'yes',
-				'options'            => array(
-					'yes' => __( 'Yes', 'micemade-elements' ),
-					'no'  => __( 'No', 'micemade-elements' ),
-				),
-				'condition'          => array(
-					'autoplay' => 'yes',
-				),
-				'frontend_available' => true,
-			)
-		);
-
-		// Loop the slider.
-		$this->add_control(
-			'infinite',
-			array(
-				'label'              => __( 'Infinite Loop', 'micemade-elements' ),
-				'type'               => Controls_Manager::SELECT,
-				'default'            => 'yes',
-				'options'            => array(
-					'yes' => __( 'Yes', 'micemade-elements' ),
-					'no'  => __( 'No', 'micemade-elements' ),
-				),
-				'frontend_available' => true,
-			)
-		);
-
-		$this->add_control(
-			'effect',
-			array(
-				'label'              => __( 'Effect', 'micemade-elements' ),
-				'type'               => Controls_Manager::SELECT,
-				'default'            => 'slide',
-				'options'            => array(
-					'slide' => __( 'Slide', 'micemade-elements' ),
-					'fade'  => __( 'Fade', 'micemade-elements' ),
-				),
-				'frontend_available' => true,
-			)
-		);
-
-		$this->add_control(
-			'speed',
-			array(
-				'label'              => __( 'Animation Speed', 'micemade-elements' ),
-				'type'               => Controls_Manager::NUMBER,
-				'default'            => 500,
-				'frontend_available' => true,
-			)
-		);
-
 		$this->end_controls_section();
+		// End "Content" tab with products query settings.
 
-		// Section elements style.
-		$this->start_controls_section(
-			'section_slider_elements_style',
-			[
-				'label'     => esc_html__( 'Slider elements style', 'micemade-elements' ),
-				'tab'       => Controls_Manager::TAB_STYLE,
-			]
-		);
+		/***************************************************
+		 * SHARED CONTROLS FOR SLIDER SETTINGS
+		 *
+		 * "elementor/element/{$section_name}/{$section_id}/after_section_end"
+		 * hooked in "class-micemade-elements" and file "includes/class-micemade-shared-controls.php
+		 * https://code.elementor.com/php-hooks/#elementorelementsection_namesection_idbefore_section_start
+		 * *************************************************
+		*/
 
-		$this->add_control(
-			'pagination_color',
-			[
-				'label'     => __( 'Pagination color', 'micemade-elements' ),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
-					'{{WRAPPER}} .swiper-pagination-progressbar-fill'   => 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .swiper-pagination-bullet-active' => 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .swiper-pagination-fraction'      => 'color: {{VALUE}};',
-				],
-				'default'   => '#333333',
-				'separator' => 'after',
-				'condition' => [
-					'pagination!' => 'none',
-				],
-			]
-		);
-
-		$this->add_control(
-			'buttons_color',
-			[
-				'label'     => __( 'Arrows icon color', 'micemade-elements' ),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
-					'{{WRAPPER}} .swiper-button-prev:before' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .swiper-button-next:before' => 'color: {{VALUE}};',
-				],
-				'default'   => '#2F2E2EC7',
-				'condition' => [
-					'buttons!' => '',
-				],
-			]
-		);
-		$this->add_control(
-			'buttons_bckcolor',
-			[
-				'label'     => __( 'Arrows button color', 'micemade-elements' ),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
-					'{{WRAPPER}} .swiper-button-prev:after,{{WRAPPER}} .swiper-button-next:after' => 'background-color: {{VALUE}};',
-				],
-				'default'   => '#FFFFFF7A',
-				'separator' => 'after',
-				'condition' => [
-					'buttons!' => '',
-				],
-			]
-		);
-
-		$this->add_responsive_control(
-			'nav_arrows_vert_position',
-			[
-				'label'       => __( 'Arrows vertical position', 'micemade-elements' ),
-				'type'        => Controls_Manager::SLIDER,
-				'label_block' => true,
-				'size_units'  => [ '%', 'px' ],
-				'default'     => [
-					'size' => 50,
-					'unit' => '%',
-				],
-				'range'       => [
-					'%'  => [
-						'max'  => 100,
-						'min'  => 0,
-						'step' => 1,
-					],
-					'px' => [
-						'min' => 0,
-						'max' => 1000,
-					],
-				],
-				'selectors'   => [
-					'{{WRAPPER}} .swiper-button-prev,{{WRAPPER}} .swiper-button-next' => 'top: {{SIZE}}{{UNIT}};',
-				],
-				'condition'   => [
-					'buttons!' => '',
-				],
-			]
-		);
-
-		$this->add_control(
-			'arrow_icon',
-			[
-				'label'       => __( 'Arrow icons', 'micemade-elements' ),
-				'type'        => \Elementor\Controls_Manager::ICON,
-				'label_block' => true,
-				'include' => [
-					'fa fa-arrow-left',
-					'fa fa-angle-left',
-					'fa fa-angle-double-left',
-					'fa fa-arrow-circle-left',
-					'fa fa-caret-left',
-					'fa fa-chevron-left',
-					'fa fa-chevron-circle-left',
-					'fa fa-long-arrow-left',
-				],
-				'default'     => 'fa fa-chevron-left',
-			]
-		);
-
-		$this->add_responsive_control(
-			'nav_arrows_size',
-			[
-				'label'       => __( 'Arrows icon size', 'micemade-elements' ),
-				'type'        => Controls_Manager::SLIDER,
-				'label_block' => true,
-				'size_units'  => [ 'px' ],
-				'default'     => [
-					'size' => 12,
-					'unit' => 'px',
-				],
-				'range'       => [
-					'px' => [
-						'min' => 0,
-						'max' => 100,
-					],
-				],
-				'selectors'   => [
-					'{{WRAPPER}} .swiper-button-next:before, {{WRAPPER}} .swiper-button-prev:before' => 'font-size: {{SIZE}}{{UNIT}};',
-				],
-				'condition'   => [
-					'buttons!' => '',
-				],
-			]
-		);
-
-		$this->add_responsive_control(
-			'nav_arrows_back_size',
-			[
-				'label'       => __( 'Arrows button size', 'micemade-elements' ),
-				'type'        => Controls_Manager::SLIDER,
-				'label_block' => true,
-				'size_units'  => [ 'px' ],
-				'default'     => [
-					'size' => 32,
-					'unit' => 'px',
-				],
-				'range'       => [
-					'px' => [
-						'min' => 0,
-						'max' => 100,
-					],
-				],
-				'selectors'   => [
-					'{{WRAPPER}} .swiper-button-prev, {{WRAPPER}} .swiper-button-prev:after,{{WRAPPER}} .swiper-button-next, {{WRAPPER}} .swiper-button-next:after' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
-				],
-				'condition'   => [
-					'buttons!' => '',
-				],
-			]
-		);
-
-		$this->add_control(
-			'nav_arrows_back_roundness',
-			[
-				'label'       => __( 'Arrows button roundness', 'micemade-elements' ),
-				'type'        => Controls_Manager::SLIDER,
-				'label_block' => true,
-				'size_units'  => [ 'px' ],
-				'default'     => [
-					'size' => 12,
-					'unit' => 'px',
-				],
-				'range'       => [
-					'px' => [
-						'min' => 0,
-						'max' => 100,
-					],
-					'%' => [
-						'min' => 0,
-						'max' => 100,
-					],
-				],
-				'selectors'   => [
-					'{{WRAPPER}} .swiper-button-prev:after,{{WRAPPER}} .swiper-button-next:after' => 'border-radius: {{SIZE}}{{UNIT}};',
-				],
-				'condition'   => [
-					'buttons!' => '',
-				],
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Border::get_type(),
-			[
-				'label'     => __( 'Arrow button border' ),
-				'name'      => 'arrow_button_border',
-				'selector'  => '{{WRAPPER}} .swiper-button-prev:after,{{WRAPPER}} .swiper-button-next:after',
-				'separator' => 'after',
-				'condition' => [
-					'buttons!' => '',
-				],
-			]
-		);
-
-		// Slider navigation.
-		$this->add_control(
-			'show_icon_fix',
-			[
-				'label'     => esc_html__( 'Fix icon position', 'micemade-elements' ),
-				'type'      => Controls_Manager::SWITCHER,
-				'label_off' => __( 'No', 'elementor' ),
-				'label_on'  => __( 'Yes', 'elementor' ),
-				'default'   => 'no',
-			]
-		);
-		$this->add_control(
-			'fix_icon_note',
-			[
-				'type'            => \Elementor\Controls_Manager::RAW_HTML,
-				'raw'             => __( '<small>Some icons may misalign with it\'s button. Enable the control above to fix the arrow icon position.' ),
-				'content_classes' => 'your-class',
-			]
-		);
-
-		$this->add_responsive_control(
-			'nav_arrows_fix_position',
-			[
-				'label'       => __( 'Fix arrow position', 'micemade-elements' ),
-				'type'        => Controls_Manager::SLIDER,
-				'label_block' => true,
-				'size_units'  => [ '%', 'px' ],
-				'default'     => [
-					'size' => 0,
-					'unit' => '%',
-				],
-				'range'       => [
-					'%'  => [
-						'max'  => 50,
-						'min'  => -50,
-						'step' => 1,
-					],
-				],
-				'selectors'   => [
-					'{{WRAPPER}} .swiper-button-prev:before' => 'margin-top: {{SIZE}}{{UNIT}};',
-					' {{WRAPPER}} .swiper-button-next:before' => 'margin-bottom: {{SIZE}}{{UNIT}};',
-				],
-				'condition'   => [
-					'buttons!'      => '',
-					'show_icon_fix' => 'yes',
-				],
-			]
-		);
-
-		$this->end_controls_section();
-
-		// TAB 2 - STYLES FOR POSTS.
+		// TAB 2 - STYLES FOR PRODUCTS.
 		$this->start_controls_section(
 			'section_style',
 			[
-				'label' => esc_html__( 'Basic settings', 'micemade-elements' ),
+				'label' => esc_html__( 'Layout general', 'micemade-elements' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -1673,14 +1223,14 @@ class Micemade_WC_Products_Slider extends \Elementor\Widget_Base {
 			$this->add_render_attribute(
 				[
 					'container' => [
-						'class'         => [
+						'class' => [
 							'swiper-container',
 							'micemade-elements_slider',
 							'micemade-elements_products_slider',
 							'woocommerce',
 							$style,
 						],
-						//'data-settings' => wp_json_encode( $swiper_settings ),
+						'id'    => 'slider_' . $this->get_id(),
 					],
 				]
 			);
@@ -1720,7 +1270,7 @@ class Micemade_WC_Products_Slider extends \Elementor\Widget_Base {
 
 				// If style as in WC content-product template.
 				if ( 'catalog' === $style ) {
-					//wc_get_template_part( 'content', 'product' );
+					wc_get_template_part( 'content', 'product' );
 					// else, use plugin loop items.
 				} else {
 					$item_classes = apply_filters( 'micemade_elements_product_item_class', 'swiper-slide post product' );

@@ -1,8 +1,8 @@
 <?php
 /**
- * Elementor emoji one area control.
+ * Elementor custom sorter control.
  *
- * A control for displaying a textarea with the ability to add emojis.
+ * sorting various elements in widgets..
  *
  * @since 1.0.0
  */
@@ -23,10 +23,10 @@ class Micemade_Control_Sorter extends \Elementor\Base_Data_Control {
 	}
 
 	/**
-	 * Get emoji one area control default settings.
+	 * Get control default settings.
 	 *
-	 * Retrieve the default settings of the emoji one area control. Used to return
-	 * the default settings while initializing the emoji one area control.
+	 * Retrieve the default settings of the control. Used to return
+	 * the default settings while initializing the control.
 	 *
 	 * @since 1.0.0
 	 * @access protected
@@ -41,7 +41,7 @@ class Micemade_Control_Sorter extends \Elementor\Base_Data_Control {
 	}
 
 	/**
-	 * Render emoji one area control output in the editor.
+	 * Render control output in the editor.
 	 *
 	 * Used to generate the control HTML in the editor using Underscore JS
 	 * template. The variables for the class are available using 'data' JS

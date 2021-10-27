@@ -18,6 +18,7 @@
 				z-index: 10;
 				position: absolute;
 				display: block;
+				transition: all .4s ease-in-out;
 			}
 			span {
 				text-indent: -1000px;
@@ -29,7 +30,7 @@
 				cursor: auto;
 				pointer-events: none;
 				&:after, &:before {
-					opacity: 0;
+					opacity: 0.5;
 				}
 			}
 
@@ -42,6 +43,7 @@
 				height: 30px;
 				z-index: 0;
 				cursor: pointer;
+				transition: all .2s linear;
 			}
 		}
 

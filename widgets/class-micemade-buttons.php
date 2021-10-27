@@ -72,6 +72,22 @@ class Micemade_Buttons extends Widget_Base {
 			)
 		);
 
+		$this->add_control(
+			'stacked',
+			array(
+				'label'     => __( 'Stacked', 'micemade-elements' ),
+				'type'      => Controls_Manager::SELECT,
+				'options'   => array(
+					'not-stacked' => __( 'Not', 'micemade-elements' ),
+					'stacked'     => __( 'Stacked', 'micemade-elements' ),
+				),
+				'default'   => 'not-stacked',
+				'condition' => array(
+					'orientation' => 'horizontal',
+				),
+			)
+		);
+
 		$repeater = new Repeater();
 		$repeater->add_control(
 			'text',
@@ -95,8 +111,8 @@ class Micemade_Buttons extends Widget_Base {
 				'label_block'      => true,
 				'fa4compatibility' => 'icon',
 				'default'          => array(
-					'value'   => 'fas fa-check',
-					'library' => 'solid',
+					'value'   => 'fa-check',
+					'library' => 'fa-solid',
 				),
 
 			)
@@ -463,11 +479,21 @@ class Micemade_Buttons extends Widget_Base {
 
 		$settings = $this->get_settings();
 		// Buttons wrapper classes.
-		$this->add_render_attribute( 'wrapper', 'class', 'micemade-elements_buttons' );
-		$this->add_render_attribute( 'wrapper', 'class', $settings['orientation'] );
+		// $this->add_render_attribute( 'wrapper', 'class', 'micemade-elements_buttons' );
+		// $this->add_render_attribute( 'wrapper', 'class', $settings['orientation'] );
+		$this->add_render_attribute(
+			[
+				'wrapper' => [
+					'class' => [
+						'micemade-elements_buttons',
+						$settings['orientation'],
+						$settings['stacked'],
+					],
+				],
+			]
+		);
 
 		// Add animation class to all buttons.
-		$this->add_render_attribute( 'buttons', 'class', 'elementor-button' );
 		?>
 
 		<div <?php echo $this->get_render_attribute_string( 'wrapper' ); ?>>
@@ -491,7 +517,7 @@ class Micemade_Buttons extends Widget_Base {
 				if ( $settings['inherit'] && $settings['style_selectors'] ) {
 					$this->add_render_attribute( $link_key, 'class', $settings['style_selectors'] );
 				}
-				// Add hover animation class
+				// Add hover animation class.
 				if ( $settings['hover_animation'] ) {
 					$this->add_render_attribute( $link_key, 'class', 'elementor-animation-' . $settings['hover_animation'] );
 				}
@@ -507,14 +533,14 @@ class Micemade_Buttons extends Widget_Base {
 				}
 
 				// Migration to newer version of ICON(s) control.
-				// Check if its already migrated
+				// Check if it's already migrated.
 				$migrated = isset( $item['__fa4_migrated']['icon_new'] );
-				// Check if its a new widget without previously selected icon using the old Icon control
+				// Check if it's a new widget without previously selected icon using the old Icon control.
 				$is_new = empty( $item['icon'] );
 
 				echo '<a ' . $this->get_render_attribute_string( $link_key ) . '>';
 
-				if ( $item['icon'] || $item['icon_new'] ) {
+				if ( isset( $item['icon'] ) || isset( $item['icon_new'] ) ) {
 					echo '<span ' . $this->get_render_attribute_string( 'icon' ) . '>';
 					if ( $is_new || $migrated ) {
 						\Elementor\Icons_Manager::render_icon( $item['icon_new'], array( 'aria-hidden' => 'true' ) );
@@ -543,13 +569,13 @@ class Micemade_Buttons extends Widget_Base {
 		<?php
 	}
 
-	protected function _content_template() {
+	protected function content_template() {
 		?>
 		<#
 			var iconsHTML = {},
 				migrated = {};
 		#>
-		<div class="micemade-elements_buttons {{ settings.orientation }}">
+		<div class="micemade-elements_buttons {{ settings.orientation }} {{ settings.stacked }}">
 			<#
 			var theme_style_inherit = hover_anim = '';
 			if( settings.inherit && settings.style_selectors ) {
@@ -561,7 +587,7 @@ class Micemade_Buttons extends Widget_Base {
 
 			if ( settings.button_list ) {
 				_.each( settings.button_list, function( item, index ) { #>
-					
+
 					<a class="micemade-button elementor-repeater-item-{{{ item._id }}} {{{ theme_style_inherit }}} {{{ hover_anim }}}"
 					<# if ( item.link && item.link.url ) { #>
 					href="{{ item.link.url }}"
@@ -588,6 +614,11 @@ class Micemade_Buttons extends Widget_Base {
 
 		<?php
 	}
+
+	public function on_import( $element ) {
+		return Icons_Manager::on_import_migration( $element, 'icon', 'icon_new', true );
+	}
+
 }
 
 Plugin::instance()->widgets_manager->register_widget_type( new Micemade_Buttons() );

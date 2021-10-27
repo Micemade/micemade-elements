@@ -58,9 +58,14 @@ class Micemade_Elements {
 			// Register "Micemade elements" widgets.
 			add_action( 'elementor/widgets/widgets_registered', [ $this, 'widgets_registered' ] );
 
-			// Add custom controls to Elementor section.
-			add_action( 'elementor/element/after_section_end', [ $this, 'custom_section_controls' ], 10, 5 );
+			// Custom Kenburns effect on Elementor Section background controls.
+			add_action( 'elementor/element/before_section_end', [ $this, 'kenburns_effect' ], 80, 3 );
+
+			// Register custom controls - sorting.
 			add_action( 'elementor/controls/controls_registered', [ $this, 'register_controls' ] );
+
+			// Shared controls between various widgets/elements.
+			$this->shared_controls();
 
 			// Load textdomain.
 			add_action( 'plugins_loaded', [ $this, 'load_plugin_textdomain' ] );
@@ -88,6 +93,33 @@ class Micemade_Elements {
 			add_action( 'admin_notices', array( self::$instance, 'admin_notice' ) );
 		}
 
+	}
+
+	/**
+	 * Shared controls for varoius widgets.
+	 *
+	 * @return void
+	 */
+	private function shared_controls() {
+		$shared_controls = new \Elementor\Micemade_Shared_Controls();
+		$controls        = array(
+			// Slider shared controls.
+			'products-slider' => array( 'micemade-wc-products-slider', 'section_content', 'after_section_end', 'slider_controls', 10 ),
+			'posts-slider'    => array( 'micemade-posts-slider', 'section_content', 'after_section_end', 'slider_controls', 10 ),
+			// Query posts shared controls.
+			'posts-slider-q'  => array( 'micemade-posts-slider', 'section_style', 'before_section_start', 'query_controls', 20 ),
+			'posts-grid-q'    => array( 'micemade-posts-grid', 'section_grid', 'before_section_start', 'query_controls', 20 ),
+		);
+
+		// Common controls for various widgets.
+		foreach ( $controls as $control => $args ) {
+			$widget_name = $args[0];
+			$section     = $args[1];
+			$where       = $args[2];
+			$method      = $args[3];
+			$priority    = $args[4];
+			add_action( "elementor/element/$widget_name/$section/$where", [ $shared_controls, $method ], $priority, 2 );
+		}
 	}
 
 	/**
@@ -219,48 +251,88 @@ class Micemade_Elements {
 
 	}
 
-	/**
-	 * Custom controls for section
-	 *
-	 * @param  object $element - element type.
-	 * @param  integer $section_id - id of section element.
-	 * @param  array $args - section argumets.
-	 * @return void
-	 */
-	public function custom_section_controls( $element, $section_id, $args ) {
+	public function kenburns_effect( $element, $section_id, $args ) {
+		/** @var \Elementor\Element_Base $element */
+		if ( 'section' === $element->get_name() && 'section_background' === $section_id ) {
 
-		if ( 'section' === $element->get_name() && 'section_typo' === $section_id ) {
+			$element->add_control(
+				'mme_kenburns',
+				array(
+					'label'              => __( 'Kenburns Effect', 'micemade-elements' ),
+					'type'               => \Elementor\Controls_Manager::SWITCHER,
+					'default'            => 'no',
+					'options'            => array(
+						'yes' => __( 'Yes', 'micemade-elements' ),
+						'no'  => __( 'No', 'micemade-elements' ),
+					),
+					'frontend_available' => true,
+					'separator'          => 'before',
+				)
+			);
 
-			$element->start_controls_section(
-				'micemade_elements_section_sticky',
+			$element->add_control(
+				'mme_kenburns_note',
 				[
-					'tab'   => \Elementor\Controls_Manager::TAB_STYLE,
-					'label' => __( 'Sticky section', 'micemade-elements' ),
+					'type'            => \Elementor\Controls_Manager::RAW_HTML,
+					'raw'             => __( '<small>Only if Micemade Elements plugin is active.</small>' ),
+					'content_classes' => 'your-class',
 				]
 			);
 
 			$element->add_control(
-				'micemade_elements_sticky',
+				'mme_kenburns_anim_type',
 				[
-					'label'        => __( 'Section sticky method', 'micemade-elements' ),
-					'type'         => \Elementor\Controls_Manager::SELECT,
-					'default'      => 'not-sticked',
-					'options'      => array(
-						'not-sticked'    => __( 'Not sticked', 'micemade-elements' ),
-						'sticked-header' => __( 'Sticked header', 'micemade-elements' ),
-						'sticked-inner'  => __( 'Sticked inside column', 'micemade-elements' ),
-						'sticked-footer' => __( 'Sticked footer', 'micemade-elements' ),
+					'label'              => __( 'Animation type', 'micemade-elements' ),
+					'type'               => \Elementor\Controls_Manager::SELECT,
+					'default'            => 'zoom-in',
+					'options'            => [
+						'zoom-in'     => __( 'Zoom In', 'micemade-elements' ),
+						'zoom-out'    => __( 'Zoom Out', 'micemade-elements' ),
+						'slide-left'  => __( 'Slide left', 'micemade-elements' ),
+						'slide-right' => __( 'Slide right', 'micemade-elements' ),
+					],
+					'prefix_class'       => 'micemade-kenburns-',
+					'frontend_available' => true,
+					'condition'          => array(
+						'mme_kenburns' => 'yes',
 					),
-					'prefix_class' => 'selection-is-',
 				]
 			);
-
-			$element->end_controls_section();
+			$element->add_control(
+				'mme_kernburns_anim_duration',
+				[
+					'label'     => __( 'Animation Duration', 'micemade-elements' ),
+					'type'      => \Elementor\Controls_Manager::SLIDER,
+					'default'   => [
+						'unit' => 's',
+						//'size' => 5,
+					],
+					'range'     => [
+						's' => [
+							'min'  => 0,
+							'max'  => 20,
+							'step' => 1,
+						],
+					],
+					'selectors' => [
+						'{{WRAPPER}}' => 'animation-duration: {{SIZE}}{{UNIT}}',
+					],
+					'condition'          => array(
+						'mme_kenburns' => 'yes',
+					),
+				]
+			);
 		}
 	}
 
+	/**
+	 * Register custom sorting control.
+	 *
+	 * @return void
+	 */
 	public function register_controls() {
 
+		// Custom control for soriting.
 		require MICEMADE_ELEMENTS_INCLUDES . 'class-micemade-control-sorting.php';
 
 		$controls_manager = \Elementor\Plugin::$instance->controls_manager;
@@ -269,7 +341,7 @@ class Micemade_Elements {
 	}
 
 	/**
-	 * Plugin file inclusions (requirements)
+	 * Plugin file includes (requirements).
 	 *
 	 * @return void
 	 */
@@ -281,6 +353,7 @@ class Micemade_Elements {
 		require MICEMADE_ELEMENTS_INCLUDES . 'wc-functions.php';
 		require MICEMADE_ELEMENTS_INCLUDES . 'instagram.php';
 		require MICEMADE_ELEMENTS_INCLUDES . 'class-micemade-nav-html.php';
+		require MICEMADE_ELEMENTS_INCLUDES . 'class-micemade-shared-controls.php';
 
 	}
 

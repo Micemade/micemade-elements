@@ -6,7 +6,61 @@
 @import "elementor-editor";
 
 // Global whitespace:
-$space: 40px !default; 
+$space: 40px !default;
+
+$kenburns-back-size: 120vw;
+
+@include breakpoint(tablet) {
+	.elementor-element[class*=micemade-kenburns] {
+		animation-fill-mode: forwards;
+		transform-style: preserve-3d;
+	}
+	.micemade-kenburns-zoom-in {
+		animation: animatedZoomIn 15s linear;
+		background-position: 0 50%;
+	}
+	.micemade-kenburns-zoom-out {
+		animation: animatedZoomOut 15s linear;
+		background-position: 0 50%;
+	}
+	.micemade-kenburns-slide-left {
+		animation: animatedSlideLeft 15s linear;
+		background-size: $kenburns-back-size;
+	}
+	.micemade-kenburns-slide-right {
+		animation: animatedSlideRight 15s linear;
+		background-size: $kenburns-back-size;
+	}
+
+}
+@keyframes animatedZoomIn {
+	from { background-size: $kenburns-back-size; }
+	to { background-size: 100%; }
+}
+@keyframes animatedZoomOut {
+	from { background-size: 100%; }
+	to { background-size: $kenburns-back-size; }
+}
+@keyframes animatedSlideLeft {
+	from { 
+		background-position: right center;
+		background-size: $kenburns-back-size;
+	}
+	to {
+		background-position: left center;
+		background-size: $kenburns-back-size;
+	}
+}
+@keyframes animatedSlideRight {
+	from { 
+		background-position: left center;
+		background-size: $kenburns-back-size;
+	}
+	to {
+		background-position: right center;
+		background-size: $kenburns-back-size;
+	}
+}
 
 .micemade-elements {
 	
@@ -397,6 +451,7 @@ $space: 40px !default;
 				position: relative;
 				background-color: transparent !important;
 				height: 400px;
+				width: 100%;
 				
 				.post-thumb-back, .post-overlay {
 					top: 0;
@@ -479,20 +534,19 @@ $space: 40px !default;
 	&_slider, &_products_slider, &_product-categories {
 
 		.swiper-button-next {
-			.elementor & { 
+			.elementor-widget-container > { 
 				right: 20px;
 			}
 		}
 		
 		.swiper-button-prev {
-			.elementor & {
+			.elementor-widget-container > {
 				left: 20px;
 			}
 		}
 		
-		.swiper-button-next, .swiper-button-prev {
-			.elementor & {
-
+		> .swiper-button-next, > .swiper-button-prev {
+			.elementor-widget-container > & {
 				opacity: 0;
 				transition: opacity 0.3s linear;
 				background-image: none;
@@ -504,7 +558,7 @@ $space: 40px !default;
 		
 		&:hover {
 			.swiper-button-next, .swiper-button-prev {
-				.elementor & {
+				.elementor-widget-container > & {
 					opacity: 1;
 				}
 			}
@@ -512,13 +566,49 @@ $space: 40px !default;
 
 		@include breakpoint(laptop-down) {
 			.swiper-button-next, .swiper-button-prev {
-				.elementor & {
+				.elementor-widget-container > & {
 					opacity: 1;
 				}
 			}
 		}
 
-	} // slider elements
+		.buttons-style-2 > .elementor-widget-container > & {
+
+			> .swiper-button-prev {
+				right: 81px;
+				left: auto;
+				&:after {
+					border-top-right-radius: 0px !important;
+					border-bottom-right-radius: 0px !important;
+					border-right-width: 0!important;
+				}
+				&:hover:after {
+					transform: scaleX( calc(100% + 10%) ) translateX( -5% );
+					opacity: 0.5;
+				}
+				&:hover:before {
+					transform: translateX( -80% );
+				}
+			}
+			
+			> .swiper-button-next {
+				left: calc(100% - 80px);
+				&:after {
+					border-top-left-radius: 0px !important;
+					border-bottom-left-radius: 0px !important;
+					border-left-width: 0!important;
+				}
+				&:hover:after {
+					transform: scaleX( calc(100% + 10%) ) translateX( 5% );
+					opacity: 0.5;
+				}
+				&:hover:before {
+					transform: translateX( 80% ) rotate(180deg);
+				}
+			}
+		}
+
+	} // slider nav elements
 
 	&_products_slider, &_wc-catalog {
 		&.woocommerce {
@@ -608,6 +698,7 @@ $space: 40px !default;
 				flex-grow: 1;
 				//flex-basis: 100%;
 				height: 100%;
+				width: 100%;
 				max-width: 100%;
 				transition: all 0.3s ease-in-out;
 			}
@@ -1165,6 +1256,27 @@ $space: 40px !default;
 					margin-right: 0 !important;
 				}
 			}
+
+			&.stacked {
+				.micemade-button {
+					&:first-child {
+						margin-right: 0!important;
+						border-top-right-radius: 0;
+						border-bottom-right-radius: 0;
+					}
+					&:last-child {
+						margin-left: 0!important;
+						border-top-left-radius: 0;
+						border-bottom-left-radius: 0;
+
+					}
+					&:not(:first-child):not(:last-child) {
+						border-radius: 0 !important;
+						margin-left: 0 !important;
+						margin-right: 0 !important;
+					}
+				}
+			}
 		}
 
 		&.vertical {
@@ -1229,7 +1341,8 @@ $space: 40px !default;
 	// MICEMADE SLIDER
 	// .micemade-elements_slider
 	&_slider {
-		
+		// overflow: visible!important;
+		// transform: scale(50%);
 		&.big-slider {
 			display: block;
 			width: 100%;

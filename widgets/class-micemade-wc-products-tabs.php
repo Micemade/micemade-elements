@@ -888,7 +888,7 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 	 *
 	 * @access protected
 	 */
-	protected function _content_template() {}
+	// protected function content_template() {}
 }
 
 Plugin::instance()->widgets_manager->register_widget_type( new Micemade_WC_Products_Tabs() );

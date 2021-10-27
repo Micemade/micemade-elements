@@ -13,8 +13,11 @@ class Micemade_Slider extends Widget_Base {
 
 	public function __construct( $data = array(), $args = null ) {
 		parent::__construct( $data, $args );
+
+		$today = gmdate( 'YmdGi', time() );
+
 		if ( ! wp_script_is( 'micemade-slider-js', 'registered' ) ) {
-			wp_register_script( 'micemade-slider-js', MICEMADE_ELEMENTS_URL . 'assets/js/custom/handlers/slider.js', array( 'elementor-frontend' ), '1.0.0', true );
+			wp_register_script( 'micemade-slider-js', MICEMADE_ELEMENTS_URL . 'assets/js/custom/handlers/slider.js', array( 'elementor-frontend' ), $today, true );
 		}
 		if ( ! wp_script_is( 'micemade-slider-js', 'enqueued' ) ) {
 			wp_enqueue_script( 'micemade-slider-js' );
@@ -321,7 +324,7 @@ class Micemade_Slider extends Widget_Base {
 			array(
 				'label'     => __( 'Overlay color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
-				'default'   => '',
+				'default'   => '#00000040',
 				'condition' => array(
 					'content_type' => 'custom',
 				),
@@ -424,7 +427,7 @@ class Micemade_Slider extends Widget_Base {
 			'autoplay',
 			array(
 				'label'              => __( 'Autoplay', 'micemade-elements' ),
-				'type'               => Controls_Manager::SELECT,
+				'type'               => Controls_Manager::SWITCHER,
 				'default'            => 'yes',
 				'options'            => array(
 					'yes' => __( 'Yes', 'micemade-elements' ),
@@ -465,7 +468,7 @@ class Micemade_Slider extends Widget_Base {
 			'pause_on_hover',
 			array(
 				'label'              => __( 'Pause on Hover', 'micemade-elements' ),
-				'type'               => Controls_Manager::SELECT,
+				'type'               => Controls_Manager::SWITCHER,
 				'default'            => 'yes',
 				'options'            => array(
 					'yes' => __( 'Yes', 'micemade-elements' ),
@@ -482,7 +485,7 @@ class Micemade_Slider extends Widget_Base {
 			'pause_on_interaction',
 			array(
 				'label'              => __( 'Pause on Interaction', 'micemade-elements' ),
-				'type'               => Controls_Manager::SELECT,
+				'type'               => Controls_Manager::SWITCHER,
 				'default'            => 'yes',
 				'options'            => array(
 					'yes' => __( 'Yes', 'micemade-elements' ),
@@ -499,7 +502,7 @@ class Micemade_Slider extends Widget_Base {
 			'infinite',
 			array(
 				'label'              => __( 'Infinite Loop', 'micemade-elements' ),
-				'type'               => Controls_Manager::SELECT,
+				'type'               => Controls_Manager::SWITCHER,
 				'default'            => 'yes',
 				'options'            => array(
 					'yes' => __( 'Yes', 'micemade-elements' ),
@@ -577,6 +580,20 @@ class Micemade_Slider extends Widget_Base {
 		);
 
 		$this->add_control(
+			'buttons_style',
+			array(
+				'label'              => __( 'Arrows style', 'micemade-elements' ),
+				'type'               => Controls_Manager::SELECT,
+				'default'            => 'style-1',
+				'options'            => array(
+					'style-1' => __( 'Style 1', 'micemade-elements' ),
+					'style-2' => __( 'Style 2', 'micemade-elements' ),
+				),
+				'prefix_class'       => 'buttons-',
+			)
+		);
+
+		$this->add_control(
 			'buttons_color',
 			array(
 				'label'     => __( 'Arrows icon color', 'micemade-elements' ),
@@ -600,6 +617,21 @@ class Micemade_Slider extends Widget_Base {
 					'{{WRAPPER}} .swiper-button-prev:after,{{WRAPPER}} .swiper-button-next:after' => 'background-color: {{VALUE}};',
 				),
 				'default'   => '#FFFFFF7A',
+				'condition' => array(
+					'buttons!' => '',
+				),
+			)
+		);
+/* 
+		$this->add_control(
+			'buttons_bordercolor',
+			array(
+				'label'     => __( 'Arrows border color', 'micemade-elements' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} #prev-' . $this->get_ID() . ':after, {{WRAPPER}} #next-' . $this->get_ID() . ':after' => 'border-color: {{VALUE}};',
+				),
+				'default'   => '#FFFFFF7A',
 				'separator' => 'after',
 				'condition' => array(
 					'buttons!' => '',
@@ -607,6 +639,31 @@ class Micemade_Slider extends Widget_Base {
 			)
 		);
 
+		$this->add_control(
+			'nav_arrows_border',
+			array(
+				'label'       => __( 'Arrows border width', 'micemade-elements' ),
+				'type'        => Controls_Manager::SLIDER,
+				'label_block' => true,
+				'size_units'  => array( 'px' ),
+				'default'     => array(
+					'size' => 0,
+					'unit' => 'px',
+				),
+				'range'       => array(
+					'px' => array(
+						'min' => 0,
+						'max' => 10,
+					),
+				),
+				'selectors'   => array(
+					'{{WRAPPER}} #prev-'. $this->get_ID() . ':after, {{WRAPPER}} #next-' . $this->get_ID() . ':after' => 'border-width: {{SIZE}}{{UNIT}};',
+				),
+				'condition'   => array(
+					'buttons!' => '',
+				),
+			)
+		); */
 		$this->add_responsive_control(
 			'nav_arrows_vert_position',
 			array(
@@ -745,7 +802,8 @@ class Micemade_Slider extends Widget_Base {
 			array(
 				'label'     => __( 'Arrow button border' ),
 				'name'      => 'arrow_button_border',
-				'selector'  => '{{WRAPPER}} .swiper-button-prev:after,{{WRAPPER}} .swiper-button-next:after',
+				// 'selector'  => '{{WRAPPER}} .swiper-button-prev:after,{{WRAPPER}} .swiper-button-next:after',
+				'selector'  => '{{WRAPPER}} #prev-'. $this->get_ID() . ':after, {{WRAPPER}} #next-' . $this->get_ID() . ':after',
 				'separator' => 'after',
 				'condition' => array(
 					'buttons!' => '',
@@ -1067,7 +1125,7 @@ class Micemade_Slider extends Widget_Base {
 	 * @param string $button_class - css class.
 	 * @return void
 	 */
-	private function _render_buttons( $index = '', $button_link = array(), $button_text = '', $button_class = '', $hover_animation ) {
+	private function _render_buttons( $index = '', $button_link = array(), $button_text = '', $button_class = '', $hover_animation = '' ) {
 
 		$repeater_setting_key = $this->get_repeater_setting_key( 'text', 'button_list', $index );
 
@@ -1114,6 +1172,7 @@ class Micemade_Slider extends Widget_Base {
 		$buttons         = $settings['buttons'];
 		$arrow_icon      = $settings['arrow_icon'];
 		$hover_animation = $settings['hover_animation'];
+		$infinite        = $settings['infinite'];
 
 		if ( $settings['slides'] ) {
 
@@ -1121,16 +1180,17 @@ class Micemade_Slider extends Widget_Base {
 			$this->add_render_attribute(
 				array(
 					'container' => array(
+						'data-mme-widget' => 'micemade_slider',
 						'class' => array(
 							'swiper-container',
 							'micemade-elements_slider big-slider',
 						),
-						'id'    => 'slider-' . $this->get_id(),
+						'id'    => 'slider_' . $this->get_id(),
 					),
 				)
 			);
 
-			// Slider container.
+			// Start slider container.
 			echo '<div ' . $this->get_render_attribute_string( 'container' ) . '>';
 
 			echo '<div class="swiper-wrapper elementor-image-carousel">';
@@ -1142,15 +1202,26 @@ class Micemade_Slider extends Widget_Base {
 				$this->add_render_attribute(
 					array(
 						'repeater' . $item_id => array(
-							'class' => array(
+							'class'         => array(
 								'swiper-slide',
 								'elementor-repeater-item-' . esc_attr( $item_id ),
 								esc_attr( $type ),
 							),
-							'id'    => esc_attr( $item_id ),
+							'id'            => esc_attr( $item_id ),
 						),
 					)
 				);
+
+				// If not in loop mode, Swiper JS doesn't add index data attribute, so we add it here.
+				if ( 'yes' !== $infinite ) {
+					$this->add_render_attribute(
+						array(
+							'repeater' . $item_id => array(
+								'data-swiper-slide-index' => $index,
+							),
+						)
+					);
+				}
 
 				echo '<div ' . $this->get_render_attribute_string( 'repeater' . $item_id ) . '>';
 
@@ -1194,8 +1265,8 @@ class Micemade_Slider extends Widget_Base {
 				echo '<div class="swiper-pagination"></div>';
 			}
 			if ( $buttons ) {
-				echo '<div class="swiper-button-next ' . esc_attr( $arrow_icon ) . '" screen-reader><span>' . esc_html__( 'Next', 'micemade-elements' ) . '</span></div>';
-				echo '<div class="swiper-button-prev ' . esc_attr( $arrow_icon ) . '" screen-reader><span>' . esc_html__( 'Previous', 'micemade-elements' ) . '</span></div>';
+				echo '<div id="next-' . $this->get_ID() . '" class="swiper-button-next ' . esc_attr( $arrow_icon ) . '" screen-reader><span>' . esc_html__( 'Next', 'micemade-elements' ) . '</span></div>';
+				echo '<div id="prev-' . $this->get_ID() . '" class="swiper-button-prev ' . esc_attr( $arrow_icon ) . '" screen-reader><span>' . esc_html__( 'Previous', 'micemade-elements' ) . '</span></div>';
 			}
 
 			echo '</div>'; // .swiper-container
@@ -1213,7 +1284,7 @@ class Micemade_Slider extends Widget_Base {
 	 *
 	 * @access protected
 	 */
-	// protected function _content_template() {}
+	// protected function content_template() {}
 }
 
 Plugin::instance()->widgets_manager->register_widget_type( new Micemade_Slider() );

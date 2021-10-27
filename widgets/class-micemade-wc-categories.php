@@ -19,8 +19,11 @@ class Micemade_WC_Categories extends Widget_Base {
 
 	public function __construct( $data = array(), $args = null ) {
 		parent::__construct( $data, $args );
+
+		$today = gmdate( 'YmdGi', time() );
+
 		if ( ! wp_script_is( 'micemade-slider-js', 'registered' ) ) {
-			wp_register_script( 'micemade-slider-js', MICEMADE_ELEMENTS_URL . 'assets/js/custom/handlers/slider.js', array( 'elementor-frontend' ), '1.0.0', true );
+			wp_register_script( 'micemade-slider-js', MICEMADE_ELEMENTS_URL . 'assets/js/custom/handlers/slider.js', array( 'elementor-frontend' ), $today, true );
 		}
 		if ( ! wp_script_is( 'micemade-slider-js', 'enqueued' ) ) {
 			wp_enqueue_script( 'micemade-slider-js' );
@@ -377,7 +380,7 @@ class Micemade_WC_Categories extends Widget_Base {
 			'autoplay',
 			array(
 				'label'              => __( 'Autoplay', 'micemade-elements' ),
-				'type'               => Controls_Manager::SELECT,
+				'type'               => Controls_Manager::SWITCHER,
 				'default'            => 'yes',
 				'options'            => array(
 					'yes' => __( 'Yes', 'micemade-elements' ),
@@ -1331,20 +1334,25 @@ class Micemade_WC_Categories extends Widget_Base {
 		// Add slider style selectors if slider instead of grid.
 		$container_slider_css = ( 'slider' === $gr_or_sl ) ? 'swiper-container micemade-elements_slider' : 'mme-row';
 
-		// All the styles for categories container.
-		$this->add_render_attribute(
-			array(
-				'container' => array(
-					'class' => array(
-						$container_slider_css,
-						'micemade-elements_product-categories',
-						$style,
-						$hover_style,
-						$hover_style_box,
-					),
+		// Attributes for the categories container.
+		$container_atts = array(
+			'container' => array(
+				'class'           => array(
+					$container_slider_css,
+					'micemade-elements_product-categories',
+					$style,
+					$hover_style,
+					$hover_style_box,
 				),
-			)
+			),
 		);
+		// Attributes if slider.
+		if ( 'slider' === $gr_or_sl ) {
+			$container_atts['container']['id']              = 'slider_' . $this->get_id();
+			$container_atts['container']['data-mme-widget'] = 'micemade_slider_wc_categories';
+		}
+
+		$this->add_render_attribute( $container_atts );
 
 		// Additional query args.
 		$args = '';
@@ -1449,10 +1457,6 @@ class Micemade_WC_Categories extends Widget_Base {
 		echo '</div>';// End container div.
 
 	}
-
-	protected function content_template() {}
-
-	public function render_plain_content( $instance = array() ) {}
 
 	/**
 	 * Flatten array

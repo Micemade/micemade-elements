@@ -55,6 +55,11 @@ Our tests indicate that the elements work well with most themes that are well co
 Time will tell. When we estimate plugin has enough added functionalities to Elementor, or some other reason, it will be available on wp.org. So far, install it from GitHub (Download zip or clone the repository) .
 
 **Changelog**
+*** v.0.9.0 ***
+* Added - controls for number of slides to change in sliders.
+* Removed - custom section control for fixed positioned (sticky) elements
+* Tweak - /assets/js/custom/handlers/slider.js - number of improvements and compatiblity issues resolved.
+
 *** v.0.8.0 ***
 * Added - Posts grid element - new custom meta, ordering, cherry pick from post types
 

@@ -158,19 +158,16 @@ jQuery.noConflict();
 	}
 
 	var mmWcGalleryJS = function() {
-		//console.log( wc_single_product_params );
 		
 		// wc_single_product_params and wc_product_gallery are required to continue.
 		if ( typeof wc_single_product_params === 'undefined' || ! jQuery().wc_product_gallery ) {
 			return false;
 		}
-		
 
 		$( '.woocommerce-product-gallery' ).each( function() {
 			$( this ).trigger( 'wc-product-gallery-before-init', [ this, wc_single_product_params ] );
 			$( this ).wc_product_gallery( wc_single_product_params );
 			$( this ).trigger( 'wc-product-gallery-after-init', [ this, wc_single_product_params ] );
-			console.log(this);
 		} );
 	}
 

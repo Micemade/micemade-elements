@@ -150,7 +150,7 @@ add_filter( 'micemade_elements_wc_query_args', 'micemade_elements_wc_query_args_
  * @return void
  * an DRY effort ...
  */
-function micemade_elements_loop_product_func( $style = 'style_1', $item_classes, $img_format = 'thumbnail', $posted_in = true, $short_desc = false, $price = true, $add_to_cart = true, $css_class = '', $quickview = true, $icon = 'fas fa-eye' ) {
+function micemade_elements_loop_product_func( $style = 'style_1', $item_classes = '', $img_format = 'thumbnail', $posted_in = true, $short_desc = false, $price = true, $add_to_cart = true, $css_class = '', $quickview = true, $icon = 'fas fa-eye' ) {
 
 	echo '<li class="item ' . esc_attr( $item_classes ) . '">';
 	?>

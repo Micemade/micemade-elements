@@ -28,222 +28,21 @@ class Micemade_Posts_Grid extends Widget_Base {
 
 	protected function _register_controls() {
 
-		// We'll need this var only in this method.
-		$post_types = apply_filters( 'micemade_elements_post_types', '' );
+		/***************************************************
+		 * SHARED CONTROLS FOR POSTS QUERY
+		 *
+		 * "elementor/element/{$section_name}/{$section_id}/after_section_end"
+		 * hooked in "class-micemade-elements" and file "includes/class-micemade-shared-controls.php
+		 * https://code.elementor.com/php-hooks/#elementorelementsection_namesection_idbefore_section_start
+		 * *************************************************
+		*/
 
+		// TAB 2 - STYLES FOR POSTS.
 		$this->start_controls_section(
-			'section_main',
+			'section_grid',
 			[
-				'label' => __( 'Micemade posts grid', 'micemade-elements' ),
-			]
-		);
-
-		$this->add_control(
-			'post_type',
-			[
-				'label'    => __( 'Post type', 'micemade-elements' ),
-				'type'     => Controls_Manager::SELECT2,
-				'default'  => 'post',
-				'options'  => $post_types,
-				'multiple' => false,
-			]
-		);
-
-		$this->add_control(
-			'posts_per_page',
-			[
-				'label'   => __( 'Total posts', 'micemade-elements' ),
-				'type'    => Controls_Manager::NUMBER,
-				'default' => '6',
-				'title'   => __( 'Enter total number of posts to show', 'micemade-elements' ),
-			]
-		);
-
-		$this->add_control(
-			'offset',
-			[
-				'label'   => __( 'Offset', 'micemade-elements' ),
-				'type'    => Controls_Manager::NUMBER,
-				'default' => '',
-				'title'   => __( 'Offset is number of skipped posts', 'micemade-elements' ),
-			]
-		);
-
-		$this->add_control(
-			'order',
-			[
-				'label'    => __( 'Post ordering', 'micemade-elements' ),
-				'type'     => Controls_Manager::SELECT2,
-				'default'  => 'DESC',
-				'label_block' => true,
-				'options'  => [
-					'ASC'  => 'Ascending (older first)',
-					'DESC' => 'Descending (newer first)',
-				],
-				'multiple' => false,
-			]
-		);
-
-		$this->add_control(
-			'orderby',
-			[
-				'label'       => __( 'Order posts by', 'micemade-elements' ),
-				'type'        => Controls_Manager::SELECT2,
-				'default'     => 'date',
-				'label_block' => true,
-				'options'     => [
-					'none'           => __( 'No ordering specified', 'micemade-elements' ),
-					'ID'             => __( 'Order by post id.', 'micemade-elements' ),
-					'author'         => __( 'Order by author.', 'micemade-elements' ),
-					'title'          => __( 'Order by title.', 'micemade-elements' ),
-					'name'           => __( 'Order by name (post slug).', 'micemade-elements' ),
-					'date'           => __( 'Order by date.', 'micemade-elements' ),
-					'modified'       => __( 'Order by last modified date.', 'micemade-elements' ),
-					'parent'         => __( 'Order by post/page parent id.', 'micemade-elements' ),
-					'rand'           => __( 'Random order.', 'micemade-elements' ),
-					'comment_count'  => __( 'Order by number of comments', 'micemade-elements' ),
-					'menu_order'     => __( 'Order by sorting in admin (pages, attachments)', 'micemade-elements' ),
-					'meta_value'     => __( 'Order by meta value (meta key must be added)', 'micemade-elements' ),
-					'meta_value_num' => __( 'Order by meta numeric value (meta key must be added)', 'micemade-elements' ),
-				],
-				'multiple'    => false,
-			]
-		);
-
-		$this->add_control(
-			'orderby_meta',
-			[
-				'label'       => __( 'Meta key for ordering', 'micemade-elements' ),
-				'label_block' => true,
-				'type'        => \Elementor\Controls_Manager::TEXT,
-				'placeholder' => __( 'Enter meta field key here', 'micemade-elements' ),
-				'condition' => [
-					'orderby' => [
-						'meta_value',
-						'meta_value_num',
-					],
-				],
-			]
-		);
-
-		$this->add_control(
-			'heading_filtering',
-			[
-				'label'     => __( 'Posts filtering options', 'micemade-elements' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
-				'condition' => [
-					'post_type!' => 'page',
-				],
-			]
-		);
-
-		$this->add_control(
-			'sticky',
-			[
-				'label'     => esc_html__( 'Show only sticky posts', 'micemade-elements' ),
-				'type'      => Controls_Manager::SWITCHER,
-				'label_off' => __( 'No', 'micemade-elements' ),
-				'label_on'  => __( 'Yes', 'micemade-elements' ),
-				'condition' => [
-					'post_type' => 'post',
-				],
-			]
-		);
-
-		/**
-		 * Get all the post types with its taxonomies in array.
-		 */
-		foreach ( $post_types as $post_type => $label ) {
-			$posttypes_and_its_taxonomies[ $post_type ] = get_cpt_taxonomies( $post_type );
-		}
-
-		foreach ( $posttypes_and_its_taxonomies as $post_type => $taxes ) {
-
-			if ( 'page' === $post_type || empty( $taxes ) ) {
-				continue;
-			}
-
-			// Create options from all publicly queryable taxonomies.
-			foreach ( $taxes as $tax ) {
-				$tax_object = get_taxonomy( $tax );
-				if ( ! $tax_object->publicly_queryable ) {
-					continue;
-				}
-				$tax_options[ $tax ] = $tax_object->label;
-			}
-
-			if ( empty( $tax_options ) ) {
-				continue;
-			}
-
-			// Controls for selection of taxonomies per post type.
-			// -- correct "-" to "_" in taxonomies, JS issue in Elementor-conditional hiding.
-			$taxonomy_control = str_replace( '-', '_', $post_type ) . '_taxonomies';
-			$this->add_control(
-				$taxonomy_control,
-				[
-					'label'       => esc_html__( 'Select taxonomy', 'micemade-elements' ),
-					'type'        => Controls_Manager::SELECT2,
-					'default'     => '',
-					'options'     => $tax_options,
-					'multiple'    => false,
-					'label_block' => true,
-					'condition'   => [
-						'post_type' => $post_type,
-					],
-				]
-			);
-
-			foreach ( $tax_options as $taxonomy => $label ) {
-				$this->add_control(
-					$taxonomy . '_terms_for_' . $post_type,
-					[
-						'label'       => esc_html__( 'Select ', 'micemade-elements' ) . strtolower( $label ),
-						'type'        => Controls_Manager::SELECT2,
-						'default'     => array(),
-						'options'     => apply_filters( 'micemade_elements_terms', $taxonomy ),
-						'multiple'    => true,
-						'label_block' => true,
-						'condition'   => [
-							$taxonomy_control => $taxonomy,
-							'post_type'       => $post_type,
-						],
-					]
-				);
-
-			}
-
-			unset( $tax_options );
-		}
-
-		/**
-		 * For every post type create post__in selection.
-		 */
-		foreach ( $post_types as $post_type => $label ) {
-			$this->add_control(
-				$post_type . '_post_in',
-				[
-					'label'    => esc_html__( 'Select items from ' . strtolower( $label ) , 'micemade-elements' ),
-					'type'     => Controls_Manager::SELECT2,
-					'default'  => 3,
-					'options'  => apply_filters( 'micemade_posts_array', $post_type, 'id' ),
-					'multiple' => true,
-					'label_block' => true,
-					'condition'   => [
-						'post_type' => $post_type,
-						'sticky!'   => 'yes',
-					],
-				]
-			);
-		}
-
-		$this->add_control(
-			'heading_grid_options',
-			[
-				'label'     => __( 'Grid options', 'micemade-elements' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
+				'label' => esc_html__( 'Grid options', 'micemade-elements' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
@@ -346,7 +145,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->start_controls_section(
 			'section_style',
 			[
-				'label' => esc_html__( 'General', 'micemade-elements' ),
+				'label' => esc_html__( 'Layout general', 'micemade-elements' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -454,6 +253,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 				'default'   => 'yes',
 			]
 		);
+
 		$this->add_control(
 			'loadmore_note',
 			[
@@ -465,7 +265,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 				],
 			]
 		);
-		
+
 		$this->add_control(
 			'hr_loadmore',
 			[
