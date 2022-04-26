@@ -2,11 +2,13 @@
 namespace Elementor;
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
+use Elementor\Controls_Stack;
 use Elementor\Core\Schemes\Typography;
 use Elementor\Core\Schemes\Color;
+use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 
 class Micemade_Buttons extends Widget_Base {
 
@@ -27,7 +29,7 @@ class Micemade_Buttons extends Widget_Base {
 	}
 
 
-	protected function _register_controls() {
+	protected function register_controls() {
 		$this->start_controls_section(
 			'section_button',
 			array(
@@ -75,14 +77,15 @@ class Micemade_Buttons extends Widget_Base {
 		$this->add_control(
 			'stacked',
 			array(
-				'label'     => __( 'Stacked', 'micemade-elements' ),
-				'type'      => Controls_Manager::SELECT,
-				'options'   => array(
+				'label'        => __( 'Stacked', 'micemade-elements' ),
+				'type'         => Controls_Manager::SELECT,
+				'options'      => array(
 					'not-stacked' => __( 'Not', 'micemade-elements' ),
 					'stacked'     => __( 'Stacked', 'micemade-elements' ),
 				),
-				'default'   => 'not-stacked',
-				'condition' => array(
+				'default'      => 'not-stacked',
+				'prefix_class' => 'stacking-',
+				'condition'    => array(
 					'orientation' => 'horizontal',
 				),
 			)
@@ -104,17 +107,16 @@ class Micemade_Buttons extends Widget_Base {
 		);
 
 		$repeater->add_control(
-			'icon_new',
+			'selected_icon',
 			array(
 				'label'            => __( 'Button icon', 'micemade-elements' ),
 				'type'             => Controls_Manager::ICONS,
 				'label_block'      => true,
 				'fa4compatibility' => 'icon',
 				'default'          => array(
-					'value'   => 'fa-check',
+					'value'   => 'fa fa-check',
 					'library' => 'fa-solid',
 				),
-
 			)
 		);
 
@@ -148,10 +150,6 @@ class Micemade_Buttons extends Widget_Base {
 				'label'     => __( 'Background color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '',
-				'scheme'    => array(
-					'type'  => Color::get_type(),
-					'value' => Color::COLOR_4,
-				),
 				'selectors' => array(
 					'{{WRAPPER}} a.micemade-button{{CURRENT_ITEM}}' => 'background-color: {{VALUE}};',
 				),
@@ -176,10 +174,6 @@ class Micemade_Buttons extends Widget_Base {
 				'label'     => __( 'Background hover color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '',
-				'scheme'    => array(
-					'type'  => Color::get_type(),
-					'value' => Color::COLOR_4,
-				),
 				'selectors' => array(
 					'{{WRAPPER}} a.micemade-button{{CURRENT_ITEM}}:hover' => 'background-color: {{VALUE}};',
 				),
@@ -193,12 +187,15 @@ class Micemade_Buttons extends Widget_Base {
 				'type'        => Controls_Manager::REPEATER,
 				'default'     => array(
 					array(
-						'text' => __( 'Button #1', 'micemade-elements' ),
-						'icon' => 'fas fa-check',
+						'text'          => __( 'Button #1', 'micemade-elements' ),
+						'selected_icon' => array(
+							'value'   => 'fa fa-check',
+							'library' => 'fa-solid',
+						),
 					),
 				),
 				'fields'      => $repeater->get_controls(),
-				'title_field' => '{{{ elementor.helpers.renderIcon( this, icon_new, {}, "i", "panel" ) || \'<i class="{{ icon }}" aria-hidden="true"></i>\' }}} {{{ text }}}',
+				'title_field' => '{{{ elementor.helpers.renderIcon( this, selected_icon, {}, "i", "panel" ) || \'<i class="{{ icon }}" aria-hidden="true"></i>\' }}} {{{ text }}}',
 			)
 		);
 
@@ -361,6 +358,7 @@ class Micemade_Buttons extends Widget_Base {
 				'type'      => \Elementor\Controls_Manager::SLIDER,
 				'default'   => array(
 					'unit' => 'px',
+					'size' => 5,
 				),
 				'range'     => array(
 					'px' => array(
@@ -454,6 +452,13 @@ class Micemade_Buttons extends Widget_Base {
 				'label'      => __( 'Button Padding', 'micemade-elements' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => array( 'px', 'em', '%' ),
+				'default'    => array(
+					'top'      => '5',
+					'right'    => '15',
+					'bottom'   => '5',
+					'left'     => '15',
+					'isLinked' => false,
+				),
 				'selectors'  => array(
 					'{{WRAPPER}} a.micemade-button' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				),
@@ -477,26 +482,26 @@ class Micemade_Buttons extends Widget_Base {
 
 	protected function render() {
 
-		$settings = $this->get_settings();
+		$settings          = $this->get_settings();
+		$fallback_defaults = array(
+			'fa fa-check',
+		);
 		// Buttons wrapper classes.
-		// $this->add_render_attribute( 'wrapper', 'class', 'micemade-elements_buttons' );
-		// $this->add_render_attribute( 'wrapper', 'class', $settings['orientation'] );
 		$this->add_render_attribute(
-			[
-				'wrapper' => [
-					'class' => [
+			array(
+				'wrapper' => array(
+					'class' => array(
 						'micemade-elements_buttons',
 						$settings['orientation'],
-						$settings['stacked'],
-					],
-				],
-			]
+					),
+				),
+			)
 		);
 
 		// Add animation class to all buttons.
 		?>
 
-		<div <?php echo $this->get_render_attribute_string( 'wrapper' ); ?>>
+		<div <?php $this->print_render_attribute_string( 'wrapper' ); ?>>
 
 			<?php
 			$buttons = $settings['button_list'];
@@ -505,6 +510,7 @@ class Micemade_Buttons extends Widget_Base {
 			foreach ( $buttons as $index => $item ) {
 
 				$repeater_setting_key = $this->get_repeater_setting_key( 'text', 'button_list', $index );
+				$migration_allowed    = Icons_Manager::is_migration_allowed();
 
 				$link     = ! empty( $item['link']['url'] ) ? $item['link']['url'] : '#';
 				$link_key = 'link_' . $index;
@@ -533,36 +539,39 @@ class Micemade_Buttons extends Widget_Base {
 				}
 
 				// Migration to newer version of ICON(s) control.
-				// Check if it's already migrated.
-				$migrated = isset( $item['__fa4_migrated']['icon_new'] );
-				// Check if it's a new widget without previously selected icon using the old Icon control.
-				$is_new = empty( $item['icon'] );
+				// Add old default.
+				if ( ! isset( $item['icon'] ) && ! $migration_allowed ) {
+					$item['icon'] = isset( $fallback_defaults[ $index ] ) ? $fallback_defaults[ $index ] : 'fa fa-check';
+				}
+				$migrated = isset( $item['__fa4_migrated']['selected_icon'] );
+				$is_new   = ! isset( $item['icon'] ) && $migration_allowed;
+				?>
+				<a <?php $this->print_render_attribute_string( $link_key ); ?> >
 
-				echo '<a ' . $this->get_render_attribute_string( $link_key ) . '>';
+				<?php if ( ! empty( $item['icon'] ) || ( ! empty( $item['selected_icon']['value'] ) && $is_new ) ) { ?>
 
-				if ( isset( $item['icon'] ) || isset( $item['icon_new'] ) ) {
-					echo '<span ' . $this->get_render_attribute_string( 'icon' ) . '>';
+					<span <?php $this->print_render_attribute_string( 'icon' ); ?> >
+					<?php
 					if ( $is_new || $migrated ) {
-						\Elementor\Icons_Manager::render_icon( $item['icon_new'], array( 'aria-hidden' => 'true' ) );
+						Icons_Manager::render_icon( $item['selected_icon'], array( 'aria-hidden' => 'true' ) );
 					} else {
-						echo '<i class="' . esc_attr( $item['icon'] ) . '"></i>';
+						echo '<i class="' . esc_attr( $item['icon'] ) . '" aria-hidden="true"></i>';
 					}
-
 					echo '</span>';
 				}
 				?>
 
 				<?php if ( $item['text'] ) { ?>
-					<span <?php echo $this->get_render_attribute_string( $repeater_setting_key ) . $this->get_render_attribute_string( 'text' ); ?>><?php echo $item['text']; ?></span>
+					<span <?php $this->print_render_attribute_string( 'text' ); ?>>
+						<?php echo esc_html( $item['text'] ); ?>
+					</span>
 				<?php } ?>
-
 
 				<?php
 				echo '</a>';
 
-				?>
-
-			<?php } // end foreach ?>
+			} // end foreach.
+			?>
 
 		</div>
 
@@ -575,7 +584,7 @@ class Micemade_Buttons extends Widget_Base {
 			var iconsHTML = {},
 				migrated = {};
 		#>
-		<div class="micemade-elements_buttons {{ settings.orientation }} {{ settings.stacked }}">
+		<div class="micemade-elements_buttons {{ settings.orientation }}">
 			<#
 			var theme_style_inherit = hover_anim = '';
 			if( settings.inherit && settings.style_selectors ) {
@@ -595,8 +604,8 @@ class Micemade_Buttons extends Widget_Base {
 					>
 						<span class="button-icon">
 							<#
-								iconsHTML[ index ] = elementor.helpers.renderIcon( view, item.icon_new, { 'aria-hidden': true }, 'i', 'object' );
-								migrated[ index ] = elementor.helpers.isIconMigrated( item, 'icon_new' );
+								iconsHTML[ index ] = elementor.helpers.renderIcon( view, item.selected_icon, { 'aria-hidden': true }, 'i', 'object' );
+								migrated[ index ] = elementor.helpers.isIconMigrated( item, 'selected_icon' );
 								if ( iconsHTML[ index ] && iconsHTML[ index ].rendered && ( ! item.icon || migrated[ index ] ) ) { #>
 									{{{ iconsHTML[ index ].value }}}
 								<# } else { #>
@@ -616,7 +625,7 @@ class Micemade_Buttons extends Widget_Base {
 	}
 
 	public function on_import( $element ) {
-		return Icons_Manager::on_import_migration( $element, 'icon', 'icon_new', true );
+		return Icons_Manager::on_import_migration( $element, 'icon', 'selected_icon', true );
 	}
 
 }

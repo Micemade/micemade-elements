@@ -1,7 +1,9 @@
-@import "breakpoint";
+// Uncomment bellow 3 lines for Node-Sass creating CSS file:
+// @import "breakpoint";
+// @import "flex-grid-breakpoints";
+@import "flex-grid";
 @import "mixins";
 @import "partials";
-@import "flex-grid";
 @import "swiper/swiper";
 @import "elementor-editor";
 
@@ -131,7 +133,7 @@ $kenburns-back-size: 120vw;
 					background-attachment: scroll;
 					background-position: center;
 
-					@include breakpoint( tablet-down ) {
+					@include breakpoint( mobile ) {
 						width: 100% !important;
 					}
 				}
@@ -161,7 +163,7 @@ $kenburns-back-size: 120vw;
 							display: table;
 							table-layout: auto;
 							
-							@include breakpoint(tablet-down) {
+							@include breakpoint(mobile) {
 								td.label {
 									padding: 10px;
 								}
@@ -225,7 +227,7 @@ $kenburns-back-size: 120vw;
 						width: 50%;
 					}
 					
-					@include breakpoint(phablet-down) {
+					@include breakpoint(mobile) {
 						flex-direction: column;
 						.mm-wc-gallery, .entry-summary {
 							width: 100%;
@@ -431,7 +433,7 @@ $kenburns-back-size: 120vw;
 					margin-bottom: -10px;
 				}
 				
-				@include breakpoint(tablet-down) {
+				@include breakpoint(mobile) {
 				
 					flex-direction: column;
 
@@ -564,7 +566,7 @@ $kenburns-back-size: 120vw;
 			}
 		}
 
-		@include breakpoint(laptop-down) {
+		@include breakpoint(tablet) {
 			.swiper-button-next, .swiper-button-prev {
 				.elementor-widget-container > & {
 					opacity: 1;
@@ -966,25 +968,17 @@ $kenburns-back-size: 120vw;
 					padding: 10px 20px;
 					display: inline-flex;
 					align-items: center;
-					/* 
-					&:before {
-						@include triangle(bottom);
-						position: absolute;
-						left: 50%;
-						top: 100%;
-						transform: translateX(-50%);
-					} */
 				}
 				
 				&:hover {
 					cursor: pointer
 				}
 				
-				@include breakpoint(mobileonly) {
-					display: none;
-				}
-				
 			} //.tab-title
+
+			@include breakpoint(mobile) {
+				flex-direction: column;
+			}
 		
 		}
 		
@@ -995,7 +989,7 @@ $kenburns-back-size: 120vw;
 			overflow: hidden;
 			border-style: solid;
 			
-			@include breakpoint(mobileonly) {
+			@include breakpoint(mobile) {
 				
 				&:before {
 					display: block;
@@ -1011,7 +1005,13 @@ $kenburns-back-size: 120vw;
 			}
 			
 			.tab-mobile-title {
-				display: none;
+				
+				@include breakpoint(mobile) {
+					display: none !important;
+				}
+				position: relative;
+				padding: 15px;
+				text-align: left;
 				border-width: 0 !important;
 
 				&:before,
@@ -1047,7 +1047,7 @@ $kenburns-back-size: 120vw;
 					}
 				} 
 				
-				@include breakpoint(mobileonly) {
+				@include breakpoint(mobile) {
 					display: flex;
 				}
 				
@@ -1119,6 +1119,10 @@ $kenburns-back-size: 120vw;
 				flex-direction: column;
 				justify-content: flex-start;
 			}
+
+			@include breakpoint(mobile) {
+				flex-direction: column;
+			}
 			
 			.tabs-wrapper {
 				flex-basis: 20%;
@@ -1149,20 +1153,22 @@ $kenburns-back-size: 120vw;
 
 					}
 				}
-				
-				@include breakpoint(mobileonly) {
-					display: none;
+
+				@include breakpoint(mobile) {
+					flex-basis: 100% !important;
 				}
-			} 
+				
+			}// .tabs-wrapper
+
 			.tabs-content-wrapper {
 				flex-basis: 80%;
 				border-left-width: 0 !important;
 				
-				@include breakpoint(mobileonly) {
+				@include breakpoint(mobile) {
 					flex-basis: 100% !important;
 				}
-				
 			}
+
 		}
 
 		// Tab icons position.
@@ -1186,24 +1192,6 @@ $kenburns-back-size: 120vw;
 	/**
 	 * end micemade-elements_tabs
 	 */
-
-	/**
-	 * Micemade Instagram
-	 */
-	&_instagram {
-
-		.image-link {
-			img.stretch {
-				width: 100%;
-				height: auto;
-			}
-		}
-
-		.instagram-username {
-			display: block;
-			text-align: left;
-		}
-	}
 
 	/**
 	 * Micemade MailChimp 4 WP
@@ -1245,6 +1233,31 @@ $kenburns-back-size: 120vw;
 			justify-content: center;
 			align-items: center;
 			transition: all 0.3s linear;
+			background-color: #004080;
+			color: #fffdf0;
+
+			.button-icon {
+				display: flex;
+				align-content: center;
+				justify-content: center;
+			}
+
+			.stacking-stacked & {
+				
+				&:first-child {
+					border-top-right-radius: 0!important;
+					border-bottom-right-radius: 0!important;
+				}
+				&:last-child {
+					border-top-left-radius: 0!important;
+					border-bottom-left-radius: 0!important;
+
+				}
+				&:not(:first-child):not(:last-child) {
+					border-radius: 0 !important;
+				}
+				
+			}
 		}
 		
 		&.horizontal {
@@ -1257,26 +1270,6 @@ $kenburns-back-size: 120vw;
 				}
 			}
 
-			&.stacked {
-				.micemade-button {
-					&:first-child {
-						margin-right: 0!important;
-						border-top-right-radius: 0;
-						border-bottom-right-radius: 0;
-					}
-					&:last-child {
-						margin-left: 0!important;
-						border-top-left-radius: 0;
-						border-bottom-left-radius: 0;
-
-					}
-					&:not(:first-child):not(:last-child) {
-						border-radius: 0 !important;
-						margin-left: 0 !important;
-						margin-right: 0 !important;
-					}
-				}
-			}
 		}
 
 		&.vertical {
@@ -1453,6 +1446,9 @@ $kenburns-back-size: 120vw;
 			
 			position: relative;
 			list-style: none;
+			border-style: inherit;
+			border-color: inherit;
+			transition: all .3s linear;
 
 			a {
 				position: relative;
@@ -1472,6 +1468,10 @@ $kenburns-back-size: 120vw;
 				justify-content: center;
 				z-index: 10;
 			}
+
+			.wc_cat-menu-align-space-between & {
+				flex:1;
+			}
 		}
 
 		@include breakpoint(laptop) {
@@ -1485,7 +1485,7 @@ $kenburns-back-size: 120vw;
 			}
 		}
 
-		@include breakpoint(laptop-down) {
+		@include breakpoint(tablet) {
 			
 			i.fa {
 				cursor: pointer;
@@ -1515,13 +1515,20 @@ $kenburns-back-size: 120vw;
 			flex-direction: row;
 			flex-wrap: wrap;
 
+			> .cat-item:last-child {
+				border-right: none;
+			}
+
 			.children {
 				top: 100%;
 				left: 0;
 			}
 
-			@include breakpoint(laptop-down) {
+			@include breakpoint(tablet) {
 				flex-direction: column;
+				.children {
+					top: 0; 
+				}
 			}
 
 		}
@@ -1530,6 +1537,9 @@ $kenburns-back-size: 120vw;
 
 } // END .micemade-elements
 
+[data-widget_type="micemade-wc-cat-menu.default"] > .elementor-widget-container {
+	display: flex;
+}
 
 .mm-enter-animate {
 	opacity: 0;
@@ -1598,6 +1608,8 @@ body {
 			overflow:hidden;
 			box-shadow: 0 0 50px rgba( #000, 0.2 );
 			margin-bottom: $space;
+			left: 20%;
+			right: 20%;
 			
 			
 			// MEDIA QUERIES
@@ -1606,7 +1618,7 @@ body {
 				right: 15%;
 			}
 			
-			@include breakpoint( tablet-down ) {
+			@include breakpoint( mobile ) {
 				left: $space !important;
 				right: $space !important;
 			}
@@ -1619,7 +1631,7 @@ body {
 				opacity: 0;
 				margin-top: 0;
 
-				@include breakpoint( phablet-down ) {
+				@include breakpoint( mobile ) {
 					flex-direction: column;
 				}
 			
@@ -1630,7 +1642,7 @@ body {
 					margin-bottom: 0;
 					
 					// MEDIA QUERIES
-					@include breakpoint( phablet-down ) {
+					@include breakpoint( mobile ) {
 						width:100% !important;
 						.inner-wrap {
 							padding-top: $space;

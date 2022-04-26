@@ -12,7 +12,7 @@
 // Local project URL of your already running WordPress site.
 // > Could be something like "wpgulp.local" or "localhost"
 // > depending upon your local WordPress setup.
-const projectURL = "http://swansong";
+const projectURL = "http://mmdev.local";
 
 // Theme/Plugin URL. Leave it like it is; since our gulpfile.js lives in the root folder.
 const productURL = "./";
@@ -27,7 +27,7 @@ const styleSRC = "./assets/css/scss/micemade-elements.scss";
 const styleDestination = "./assets/css/";
 
 // Available options → 'compact' or 'compressed' or 'nested' or 'expanded'
-const outputStyle = "compact";
+const outputStyle = "expanded";
 const errLogToConsole = true;
 const precision = 10;
 
@@ -104,8 +104,6 @@ const zipIgnoreGlob = [
 	"!./package-lock.json",
 	"!./assets/css/scss/**/*",
 	"!./assets/css/scss",
-	"!./assets/css/less/**/*",
-	"!./assets/css/less",
 	"!./assets/img/raw/**/*",
 	"!./assets/img/raw",
 	`!${imgSRC}`,

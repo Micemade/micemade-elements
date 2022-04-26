@@ -1,0 +1,8 @@
+$fg-breakpoints: (
+	(mobile, 767px, max),
+	(mobile_extra, 920px, max),
+	(tablet, 1024px, max),
+	(tablet_extra, 1200px, max),
+	(laptop, 1366px, max),
+	(widescreen, 2400, min)
+) !default;

@@ -1,0 +1,6 @@
+{
+    "require": {
+        "deliciousbrains/wp-filesystem": "^1.0",
+        "scssphp/scssphp": "^1.10"
+    }
+}

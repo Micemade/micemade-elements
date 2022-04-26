@@ -1,0 +1,41 @@
+<?php return array(
+    'root' => array(
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
+        'type' => 'library',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'reference' => '0cb1959dcb8f526cde3f9d1a518c593a670b1779',
+        'name' => '__root__',
+        'dev' => true,
+    ),
+    'versions' => array(
+        '__root__' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'reference' => '0cb1959dcb8f526cde3f9d1a518c593a670b1779',
+            'dev_requirement' => false,
+        ),
+        'deliciousbrains/wp-filesystem' => array(
+            'pretty_version' => '1.0.0',
+            'version' => '1.0.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../deliciousbrains/wp-filesystem',
+            'aliases' => array(),
+            'reference' => '9bfc759c23e3a1d3a4a2cfd8db5f4e2d84ebb397',
+            'dev_requirement' => false,
+        ),
+        'scssphp/scssphp' => array(
+            'pretty_version' => 'v1.10.2',
+            'version' => '1.10.2.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../scssphp/scssphp',
+            'aliases' => array(),
+            'reference' => '387f4f4abf5d99f16be16314c5ab856f81c82f46',
+            'dev_requirement' => false,
+        ),
+    ),
+);

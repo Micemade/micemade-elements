@@ -1,3 +1,4 @@
+// let elementChanged = false;
 class MicemadeSliderHandler extends elementorModules.frontend.handlers
 	.SwiperBase {
 	getDefaultSettings() {
@@ -11,114 +12,106 @@ class MicemadeSliderHandler extends elementorModules.frontend.handlers
 
 	getDefaultElements() {
 		const selectors = this.getSettings("selectors");
+
 		const elements = {
-			$carousel: this.$element.find(selectors.carousel),
+			$swiperContainer: this.$element.find(selectors.carousel),
 		};
 
-		elements.$swiperSlides = elements.$carousel.find(selectors.slideContent);
+		elements.$slides = elements.$swiperContainer.find(selectors.slideContent);
+
 		return elements;
 	}
 
-	getSlidesCount() {
-		return this.elements.$swiperSlides.length;
-	}
-
-	getMicemadeElementType() {
-		let NamedNodeMapItem =
-			this.elements.$carousel[0].attributes.item("data-mme-widget");
-		return NamedNodeMapItem.nodeValue;
-	}
-
-	getSliderId() {
-		let carousels = this.elements.$carousel;
-		if (0 !== carousels.length) {
-			return carousels[0].id;
-		}
+	getBreakpoints() {
+		return elementorFrontend.config.responsive.activeBreakpoints;
 	}
 
 	getSwiperSettings() {
+		const defaultSlidesNum =
+			"micemade_slider" === this.getMicemadeElementType() ? 1 : 3;
+
 		const elementSettings = this.getElementSettings(),
-			elementorVersion = elementorFrontend.config.version, // get Elementor version.
-			// No. of slides to show.
-			slidesToShow = +elementSettings.posts_per_slide || 1,
-			slidesToShowTab = +elementSettings.posts_per_slide_tab || 1,
-			slidesToShowMob = +elementSettings.posts_per_slide_mob || 1,
-			// No. of slides to scroll.
-			slidesToScroll = +elementSettings.posts_to_scroll || 1,
-			slidesToScrollTab = +elementSettings.posts_to_scroll_tab || 1,
-			slidesToScrollMob = +elementSettings.posts_to_scroll_mob || 1,
+			slidesToShow = +elementSettings.slides_to_show || defaultSlidesNum,
 			isSingleSlide = 1 === slidesToShow,
-			defaultLGDevicesSlidesCount = isSingleSlide ? 1 : 2,
-			// Check for changed breakpoints config with version 3.2.0 (v.3.2.0 >=).
-			elementorBreakpoints = this.versionCheck(elementorVersion, "3.1.4")
-				? elementorFrontend.config.responsive.activeBreakpoints
-				: elementorFrontend.config.breakpoints;
+			elementorBreakpoints = this.getBreakpoints(),
+			defaultSlidesToShowMap = {
+				mobile: 1,
+				tablet: isSingleSlide ? 1 : 2,
+			};
 
 		const swiperOptions = {
-			slidesPerView: slidesToShow,
-			// No. of slides to scroll - don't allow more to scroll than to show.
-			slidesPerGroup:
-				slidesToScroll > slidesToShow ? slidesToShow : slidesToScroll,
-			handleElementorBreakpoints: true,
 			autoHeight: true,
+			slidesPerView: slidesToShow,
 			loop: "yes" === elementSettings.infinite,
 			speed: elementSettings.speed,
 			spaceBetween: elementSettings.space || 0,
-			// ,resizeObserver: true
-			// ,observer: true
-			// observeParents: true
+			handleElementorBreakpoints: true,
 		};
 
-		// Allow fade effect only for single slide.
-		if (isSingleSlide) {
-			swiperOptions.effect = elementSettings.effect;
-			if ("fade" === elementSettings.effect) {
-				swiperOptions.fadeEffect = { crossFade: true };
-			}
-		}
-
-		// Start with breakpoints.
 		swiperOptions.breakpoints = {};
 
-		// Check for changed breakpoints config with version 3.2.0 (v.3.2.0 >=).
-		if (this.versionCheck(elementorVersion, "3.1.4")) {
-			// v.3.2.0 >=
-			swiperOptions.breakpoints[elementorBreakpoints.mobile.value] = {
-				slidesPerView: slidesToShowMob || 1,
-				// No. of slides to scroll - don't allow more to scroll than to show.
-				slidesPerGroup:
-					slidesToScrollMob > slidesToShowMob
-						? slidesToShowMob
-						: slidesToScrollMob,
-			};
-			swiperOptions.breakpoints[elementorBreakpoints.tablet.value] = {
-				slidesPerView: slidesToShowTab || defaultLGDevicesSlidesCount,
-				// No. of slides to scroll - don't allow more to scroll than to show.
-				slidesPerGroup:
-					slidesToScrollTab > slidesToShowTab
-						? slidesToShowTab
-						: slidesToScrollTab,
-			};
-		} else {
-			// v. 3.1.4 <=
-			swiperOptions.breakpoints[elementorBreakpoints.md] = {
-				slidesPerView: slidesToShowMob,
-				slidesPerGroup: 1,
-			};
-			swiperOptions.breakpoints[elementorBreakpoints.lg] = {
-				slidesPerView: slidesToShowTab,
-				slidesPerGroup: 1,
-			};
-		}
+		// -- MME Elementor breakpoints handling (only in editor)
+		// -- If options are edited (onElementChange() method).
+		// if (elementChanged) {
+		// 	swiperOptions.breakpoints["0"] = {
+		// 		slidesPerView: slidesToShow,
+		// 		slidesPerGroup: +elementSettings.slides_to_scroll || 1,
+		// 	};
+		// 	Object.entries(elementorBreakpoints).forEach(([key, value]) => {
+		// 		let val = value.value;
+		// 		swiperOptions.breakpoints[val] = {
+		// 			slidesPerView: +elementSettings["slides_to_show_" + key],
+		// 			slidesPerGroup: +elementSettings["slides_to_scroll_" + key],
+		// 		};
+		// 	});
+		// 	swiperOptions.breakpoints = this.shiftByOne(swiperOptions.breakpoints);
+		// } else {
+		// ---- else, use "Default Elementor breakpoints handling" from bellow.
+		// }
+
+		// Default Elementor breakpoints handling.
+		let lastBreakpointSlidesToShowValue = slidesToShow;
+		Object.keys(elementorBreakpoints)
+			.reverse()
+			.forEach((breakpointName) => {
+				// Tablet has a specific default `slides_to_show`.
+				const defaultSlidesToShow = defaultSlidesToShowMap[breakpointName]
+					? defaultSlidesToShowMap[breakpointName]
+					: lastBreakpointSlidesToShowValue;
+
+				swiperOptions.breakpoints[elementorBreakpoints[breakpointName].value] =
+					{
+						slidesPerView:
+							+elementSettings["slides_to_show_" + breakpointName] ||
+							defaultSlidesToShow,
+						slidesPerGroup:
+							+elementSettings["slides_to_scroll_" + breakpointName] || 1,
+					};
+
+				lastBreakpointSlidesToShowValue =
+					+elementSettings["slides_to_show_" + breakpointName] ||
+					defaultSlidesToShow;
+			});
+		// END Default Elementor breakpoints handling.
 
 		// Autoplay.
-		if (!this.isEdit && "yes" === elementSettings.autoplay) {
+		if (!parent.thisIsEditor && "yes" === elementSettings.autoplay) {
 			swiperOptions.autoplay = {
 				delay: elementSettings.autoplay_speed,
 				disableOnInteraction: "yes" === elementSettings.pause_on_interaction,
 			};
 		}
 
+		// Allow fade effect only for single slide.
+		if (isSingleSlide) {
+			swiperOptions.effect = elementSettings.effect;
+
+			if ("fade" === elementSettings.effect) {
+				swiperOptions.fadeEffect = { crossFade: true };
+			}
+		} else {
+			swiperOptions.slidesPerGroup = +elementSettings.slides_to_scroll || 1;
+		}
 		// Navigation.
 		const showArrows = "yes" === elementSettings.buttons,
 			pagination = "none" !== elementSettings.pagination;
@@ -140,97 +133,225 @@ class MicemadeSliderHandler extends elementorModules.frontend.handlers
 			};
 		}
 
-		// Events.
-		swiperOptions.on = {
-			transitionStart: () => {
-				if (this.sliderId === undefined) return;
-
-				let slides = this.getDefaultElements().$swiperSlides,
-					realIndex = this.sliderId.realIndex,
-					sliderType = this.getMicemadeElementType();
-
-				slides.each((item, slide) => {
-					let cssSelectors = slide.classList;
-					let slideIndex = parseInt(
-						slide.getAttribute("data-swiper-slide-index")
-					);
-
-					if (realIndex === slideIndex) {
-						// Based on slider type, choose which animation methods to run.
-						if ("micemade_slider" === sliderType) {
-							this.startAnimations(slide, cssSelectors);
-						} else if ("micemade_slider_wc_categories" === sliderType) {
-							this.wcCategories(slide, cssSelectors);
-						}
-					}
-				});
-			}, // end transitionStart
-			transitionEnd: () => {
-				if (this.sliderId === undefined) return;
-				let slides = this.getDefaultElements().$swiperSlides,
-					realIndex = this.sliderId.realIndex;
-
-				slides.each((item, slide) => {
-					// let cssSelectors = slide.classList;
-					let slideIndex = parseInt(
-						slide.getAttribute("data-swiper-slide-index")
-					);
-					// Reset all slides, except the active one.
-					if (realIndex !== slideIndex) {
-						this.resetSlides(slide);
-					}
-				});
-			}, // end transitionEnd
-			imagesReady: () => {}, // end imagesReady
-
-			// Slide duplicates issue.
-			// from: https://github.com/nolimits4web/swiper/issues/2629#issuecomment-477655183
-			slideChangeTransitionStart: (swiper) => {
-				if (this.sliderId === undefined) return;
-
-				// if ("yes" === elementSettings.infinite) return;
-
-				let $wrapperEl = this.sliderId.$wrapperEl;
-				let params = this.sliderId.params;
-				$wrapperEl
-					.children("." + params.slideClass + "." + params.slideDuplicateClass)
-					.each(function () {
-						let idx = this.getAttribute("data-swiper-slide-index");
-						this.innerHTML = $wrapperEl
-							.children(
-								"." +
-									params.slideClass +
-									'[data-swiper-slide-index="' +
-									idx +
-									'"]:not(.' +
-									params.slideDuplicateClass +
-									")"
-							)
-							.html();
-					});
-				// if (this.isEdit) {
-				// 	this.addEditorListeners();
-				// }
-			},
-			slideChangeTransitionEnd: (swiper) => {
-				if (this.sliderId === undefined) return;
-
-				// if ("yes" === elementSettings.infinite) return;
-
-				this.sliderId.slideToLoop(this.sliderId.realIndex, 0, false);
-			},
-			init: () => {
-				// if ( this.isEdit ) {
-				// 	console.log(this.getEditorListeners());
-				// 	this.addEditorListeners();
-				// }
-			},
-		};
+		// Events - custom Micemade slider events.
+		swiperOptions.on = this.swiperEvents();
 
 		return swiperOptions;
 	}
 
-	startAnimations(slide) {
+	async onInit(...args) {
+		super.onInit(...args);
+
+		const elementSettings = this.getElementSettings();
+
+		if (
+			!this.elements.$swiperContainer.length ||
+			2 > this.elements.$slides.length
+		) {
+			return;
+		}
+
+		this.initSwiper();
+
+		// Expose the swiper instance in the frontend
+		this.elements.$swiperContainer.data("swiper", this.swiper);
+
+		if ("yes" === elementSettings.pause_on_hover) {
+			this.togglePauseOnHover(true);
+		}
+
+		// FIXING NUM OF ITEMS TO SCROLL, IF NOT MICEMADE SLIDER:
+		if ("micemade-slider" !== this.getWidgetType() && parent.thisIsEditor) {
+			// On init.
+			this.fixScrollItemsOnInit();
+			// On accessing settings with Hook action.
+			this.fixScrollItemsAccessSettings();
+		}
+
+		// Elementor version.
+		// const elementorVersion = elementorFrontend.config.version,
+	}
+
+	// Two methods for inital fixing no. of items to scroll.
+	fixScrollItemsAccessSettings() {
+		const parent = this;
+		elementor.hooks.addAction(
+			"panel/open_editor/widget/" + this.getWidgetType(),
+			parent.fixScrollItemsOnInit()
+		);
+	}
+	fixScrollItemsOnInit() {
+		const breakpoints = this.getBreakpoints();
+		let propertyNames = ["slides_to_show"];
+		Object.keys(breakpoints).forEach((breakpointName) => {
+			propertyNames.push("slides_to_show_" + breakpointName);
+		});
+		propertyNames.forEach((propertyName) => {
+			this.fixScrollItems(propertyName);
+		});
+	}
+
+	async initSwiper() {
+		const sliderElemId = this.getSliderId(),
+			Swiper = elementorFrontend.utils.swiper;
+
+		this.swiper = await new Swiper(
+			jQuery("#" + sliderElemId),
+			this.getSwiperSettings()
+		);
+	}
+
+	updateSwiperOption(propertyName) {
+		const elementSettings = this.getElementSettings(),
+			newSettingValue = elementSettings[propertyName],
+			params = this.swiper.params;
+
+		params.breakpoints[0] = {
+			slidesPerView: params.slidesPerView,
+			slidesPerGroup: params.slidesPerGroup,
+		};
+
+		switch (propertyName) {
+			case "space":
+				params.spaceBetween = +newSettingValue || 0;
+				break;
+			case "autoplay_speed":
+				params.autoplay.delay = +newSettingValue;
+				break;
+			case "speed":
+				params.speed = +newSettingValue;
+				break;
+			case "slides_to_show":
+				params.slidesPerView = +newSettingValue;
+				params.breakpoints[0].slidesPerView = +newSettingValue;
+				break;
+			case "slides_to_scroll":
+				params.slidesPerGroup = +newSettingValue;
+				params.breakpoints[0].slidesPerGroup = +newSettingValue;
+				break;
+		}
+
+		const breakpoints = this.getBreakpoints();
+
+		// Add settings for breakpoints params.
+		Object.entries(breakpoints).forEach(([key, value]) => {
+			let val = value.value;
+			if (propertyName === "slides_to_show_" + key) {
+				params.breakpoints[val].slidesPerView = +newSettingValue;
+			}
+			if (propertyName === "slides_to_scroll_" + key) {
+				params.breakpoints[val].slidesPerGroup = +newSettingValue;
+			}
+		});
+
+		params.breakpoints = this.shiftByOne(params.breakpoints);
+
+		this.swiper.update();
+	}
+
+	// Helper method for fixing breakpoint items position.
+	shiftByOne(bPoints) {
+		if (typeof bPoints !== "object") {
+			return;
+		}
+		// Shift breakpoints (rotate position by one item).
+		var keys = Object.keys(bPoints),
+			result = Object.assign(
+				...keys.map((k, i) => ({ [k]: bPoints[keys[(i + 1) % keys.length]] }))
+			);
+		// Corrected breakpoints.
+		return result;
+	}
+
+	getChangeableProperties() {
+		return {
+			pause_on_hover: "pauseOnHover",
+			autoplay_speed: "delay",
+			speed: "speed",
+			space: "spaceBetween",
+			slides_to_show: "slidesPerView",
+			slides_to_show_mobile: "breakpoints",
+			slides_to_show_tablet: "breakpoints",
+			slides_to_scroll: "slidesPerGroup",
+			slides_to_scroll_mobile: "breakpoints",
+			slides_to_scroll_tablet: "breakpoints",
+		};
+	}
+
+	onElementChange(propertyName) {
+		const changeableProperties = this.getChangeableProperties();
+
+		if (changeableProperties[propertyName]) {
+			// 'pause_on_hover' is implemented by the handler with event listeners, not the Swiper library.
+			if ("pause_on_hover" === propertyName) {
+				const newSettingValue = this.getElementSettings("pause_on_hover");
+				this.togglePauseOnHover("yes" === newSettingValue);
+			} else {
+				this.updateSwiperOption(propertyName);
+			}
+		}
+
+		if ("micemade-slider" !== this.getWidgetType()) {
+			this.fixScrollItems(propertyName);
+		}
+
+		// elementChanged = true;
+	}
+
+	fixScrollItems(propertyName) {
+		const elementSettings = this.getElementSettings(),
+			newSettingValue = elementSettings[propertyName];
+
+		const numItems = [1, 2, 3, 4, 6];
+
+		const toShow = "slides_to_show";
+		if (propertyName.startsWith(toShow)) {
+			// Str. replace for slides_to_scroll ...
+			const toScroll = propertyName.replace("show", "scroll");
+			// Select controls for slide_to_show/to_scroll.
+			let toShowSel = parent.document.querySelector(
+				"[data-setting=" + propertyName + "]"
+			);
+			if (!toShowSel) return;
+			let toShowValue = toShowSel.value,
+				toScrolSel = parent.document.querySelector(
+					"[data-setting=" + toScroll + "]"
+				),
+				toScrollOptions = toScrolSel.querySelectorAll("option");
+
+			// Valid number of scroll items.
+			const validItemNums = numItems.filter((num) => toShowValue % num === 0),
+				itemsNumDisable = numItems.filter(
+					(x) => validItemNums.indexOf(x) === -1
+				);
+
+			if (
+				itemsNumDisable.includes(parseInt(toScrolSel.value)) ||
+				!toScrolSel.value
+			) {
+				// Reset scroll value if num items to scroll is in itemsNumDisable.
+				toScrolSel.value = newSettingValue;
+			}
+
+			// Make non-divisible items number disabled for to scroll options.
+			toScrollOptions.forEach(function (option) {
+				option.removeAttribute("disabled");
+				if (itemsNumDisable.includes(parseInt(option.value))) {
+					option.setAttribute("disabled", true);
+				}
+				toScrolSel.add(option);
+			});
+		}
+	}
+
+	onEditSettingsChange(propertyName) {
+		if ("activeItemIndex" === propertyName) {
+			this.swiper.slideToLoop(this.getEditSettings("activeItemIndex") - 1);
+		}
+	}
+
+	// Micemade slider template animations.
+	templateAnimations(slide) {
 		// All slide inner elements (widgets, columns, sections).
 		const elemElem = slide.querySelectorAll(".elementor-element");
 
@@ -251,9 +372,7 @@ class MicemadeSliderHandler extends elementorModules.frontend.handlers
 					: settings.animation;
 
 				// No animation set - abort.
-				if (!animType) {
-					continue;
-				}
+				if (!animType) continue;
 
 				// If animation delay is set.
 				if (
@@ -327,110 +446,37 @@ class MicemadeSliderHandler extends elementorModules.frontend.handlers
 		} // end for.
 	}
 
-	wcCategories(slide, cssSelectors) {
-		// const settings = JSON.parse(index.dataset.settings);
-		const settings = JSON.parse(slide.getAttribute("data-settings")); // supposably faster then dataset.settings.
-		// No data settings - quit.
+	wcCategories(slide) {
+		// getAttribuite = faster than dataset.settings.
+		const settings = JSON.parse(slide.getAttribute("data-settings"));
 		if (settings === null) {
-			return true;
+			return true; // quit if no data-settings.
 		}
 
-		// WC CATEGORIES WIDGET - If element is a category AND slide has '_animation' setting.
-		// In case entering animation is set, discard animations, except for the first visible slides.
-		if (
-			settings.hasOwnProperty("_enter_animation") &&
-			cssSelectors.contains("category")
-		) {
+		// If entering animation is set, discard animations.
+		if (settings.hasOwnProperty("_enter_animation")) {
 			const animType = settings._enter_animation;
 			if (!animType) {
 				return true;
 			}
-			// Remove entering animation from slides not visible at slider init.
-			if (cssSelectors.contains("mm-enter-animate")) {
-				cssSelectors.remove("mm-enter-animate");
+
+			// Remove entering animation from slides.
+			if (slide.classList.contains("mm-enter-animate")) {
+				slide.classList.remove("mm-enter-animate");
+				slide.classList.remove(animType);
 			}
 		}
 	}
 
-	updateSpaceBetween() {
-		this.id.params.spaceBetween = this.getElementSettings("space").size || 0;
-		this.sliderId.update();
+	// "data-mme-widget" attribute (dataset usage "mmeWidget") in .swiper-container element.
+	getMicemadeElementType() {
+		return this.elements.$swiperContainer[0].dataset.mmeWidget;
 	}
 
-	onInit(...args) {
-		super.onInit(...args);
-
-		const elementSettings = this.getElementSettings();
-
-		if (
-			!this.elements.$carousel.length ||
-			2 > this.elements.$swiperSlides.length
-		) {
-			return;
-		}
-
-		this.initSwiper();
-
-		// Expose the swiper instance in the frontend
-		this.elements.$carousel.data("swiper", this.sliderId);
-
-		if ("yes" === elementSettings.pause_on_hover) {
-			this.elements.$carousel.on({
-				mouseenter: () => {
-					this.sliderId.autoplay.stop();
-				},
-				mouseleave: () => {
-					this.sliderId.autoplay.start();
-				},
-			});
-		}
-	}
-
-	async initSwiper() {
-		const sliderId = this.getSliderId();
-		// Since Elementor v.3.1.0 - optimized asset loading.
-		// https://developers.elementor.com/experiment-optimized-asset-loading/
-		if ("undefined" === typeof Swiper) {
-			const Swiper = elementorFrontend.utils.swiper;
-
-			// --- Use without "async" before initSwiper()
-			// const asyncSwiper = elementorFrontend.utils.swiper;
-			// new asyncSwiper( this.elements.$carousel, this.getSwiperSettings() ).then( ( newSwiperInstance ) => {
-			// 	this.sliderId = newSwiperInstance;
-			// } );
-
-			// --- Use without "async" before initSwiper()
-			const asyncSwiper = elementorFrontend.utils.swiper;
-			new Swiper(
-				document.getElementById(sliderId),
-				this.getSwiperSettings()
-			).then((newSwiperInstance) => {
-				this.sliderId = newSwiperInstance;
-			});
-
-			// this.sliderId = await new Swiper( document.getElementById( sliderId ), this.getSwiperSettings() );
-		} else {
-			// Legacy (< v.3.1.0) Swiper instantiation.
-			this.sliderId = new Swiper(
-				document.getElementById(sliderId),
-				this.getSwiperSettings()
-			);
-		}
-	}
-
-	onElementChange(propertyName) {
-		if (0 === propertyName.indexOf("space")) {
-			this.updateSpaceBetween();
-		} else if ("arrows_position" === propertyName) {
-			this.sliderId.update();
-		} else if ("autoplay" === propertyName) {
-			this.sliderId.update();
-		}
-	}
-
-	onEditSettingsChange(propertyName) {
-		if ("activeItemIndex" === propertyName) {
-			this.sliderId.slideToLoop(this.getEditSettings("activeItemIndex") - 1);
+	getSliderId() {
+		let carousels = this.elements.$swiperContainer;
+		if (0 !== carousels.length) {
+			return carousels[0].id;
 		}
 	}
 
@@ -448,6 +494,104 @@ class MicemadeSliderHandler extends elementorModules.frontend.handlers
 			}
 		}
 		return v2.length > v1.length;
+	}
+
+	// Custom Micemade slider events.
+	swiperEvents() {
+		return {
+			update: () => {
+				window.viewportAction();
+			},
+			transitionStart: () => {
+				const sliderType = this.getMicemadeElementType(),
+					thisSliderType = ["micemade_slider", "micemade_slider_wc_categories"];
+
+				// Bail early if Swiper not started,
+				// or Micemade Slider or MM Slider WC Categories.
+				if (this.swiper === undefined || !thisSliderType.includes(sliderType))
+					return;
+
+				let slides = this.getDefaultElements().$slides,
+					realIndex = this.swiper.realIndex;
+
+				slides.each((item, slide) => {
+					let slideIndex = parseInt(
+						slide.getAttribute("data-swiper-slide-index")
+					);
+
+					if (realIndex === slideIndex) {
+						// If Micemade Slider widget, handle templates used in slides.
+						if ("micemade_slider" === sliderType) {
+							this.templateAnimations(slide);
+						}
+					}
+					// Handle WC categories entering animations.
+					if ("micemade_slider_wc_categories" === sliderType) {
+						this.wcCategories(slide);
+					}
+				});
+			}, // end transitionStart
+			transitionEnd: () => {
+				if (this.swiper === undefined) return;
+				let slides = this.getDefaultElements().$slides,
+					realIndex = this.swiper.realIndex;
+
+				slides.each((item, slide) => {
+					// let cssSelectors = slide.classList;
+					let slideIndex = parseInt(
+						slide.getAttribute("data-swiper-slide-index")
+					);
+					// Reset all slides, except the active one.
+					if (realIndex !== slideIndex) {
+						this.resetSlides(slide);
+					}
+				});
+			}, // end transitionEnd
+			imagesReady: () => {}, // end imagesReady
+
+			// Slide duplicates issue.
+			// from: https://github.com/nolimits4web/swiper/issues/2629#issuecomment-477655183
+			slideChangeTransitionStart: (swiper) => {
+				if (this.swiper === undefined) return;
+
+				// if ("yes" === elementSettings.infinite) return;
+
+				let $wrapperEl = this.swiper.$wrapperEl;
+				let params = this.swiper.params;
+				$wrapperEl
+					.children("." + params.slideClass + "." + params.slideDuplicateClass)
+					.each(function () {
+						let idx = this.getAttribute("data-swiper-slide-index");
+						this.innerHTML = $wrapperEl
+							.children(
+								"." +
+									params.slideClass +
+									'[data-swiper-slide-index="' +
+									idx +
+									'"]:not(.' +
+									params.slideDuplicateClass +
+									")"
+							)
+							.html();
+					});
+				// if (parent.thisIsEditor) {
+				// 	this.addEditorListeners();
+				// }
+			},
+			slideChangeTransitionEnd: (swiper) => {
+				if (this.swiper === undefined) return;
+
+				// if ("yes" === elementSettings.infinite) return;
+
+				this.swiper.slideToLoop(this.swiper.realIndex, 0, false);
+			},
+			init: () => {
+				// if ( this.parent.thisIsEditor ) {
+				// 	console.log(this.getEditorListeners());
+				// 	this.addEditorListeners();
+				// }
+			},
+		};
 	}
 }
 

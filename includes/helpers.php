@@ -11,6 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Elementor\Core\Breakpoints\Manager as Breakpoints_Manager;
+
 /**
  * COLUMN CSS SELECTORS FOR FLEX GRID
  *
@@ -71,6 +73,77 @@ function micemade_elements_grid_class( $items_desktop = 3, $items_tablet = 1, $i
 
 	// Added fixed full width to small screen - to do controls for small devices (?).
 	return $style_class;
+}
+
+/**
+ * Calculate grid CSS selectors based on Elementor breakpoints.
+ *
+ * Elementor breakpoints methods here: elementor/core/breakpoints/manager.php
+ *
+ * @param array $columns - array with column settings.
+ * @return string $selectors - a string with css selectors for grid.
+ */
+function micemade_elements_grid( $columns = array() ) {
+
+	// use Elementor\Core\Breakpoints\Manager as Breakpoints_Manager.
+	$bp_manager = new Breakpoints_Manager();
+
+	// Get only active breakpoints ( get_breakpoints_config() for ALL ).
+	$bpoints   = array_keys( $bp_manager->get_active_breakpoints() );
+	$bpoints[] = 'desktop'; // default breakpoint.
+	foreach ( $bpoints as $bp_name ) {
+		$selectors_arr[ $bp_name ] = array(
+			1  => 'mme-col-' . $bp_name . '-12',
+			2  => 'mme-col-' . $bp_name . '-6',
+			3  => 'mme-col-' . $bp_name . '-4',
+			4  => 'mme-col-' . $bp_name . '-3',
+			6  => 'mme-col-' . $bp_name . '-2',
+			12 => 'mme-col-' . $bp_name . '-1',
+		);
+	}
+
+	// Set CSS selectors string for output.
+	$selectors = '';
+	// Default values.
+	$selectors .= ! in_array( 'columns_desktop', $columns, true ) ? 'mme-col-desktop-3 ' : ''; // 4 columns.
+	$selectors .= ! in_array( 'columns_tablet', $columns, true ) ? 'mme-col-tablet-6 ' : '';   // 2 columns.
+	$selectors .= ! in_array( 'columns_mobile', $columns, true ) ? 'mme-col-mobile-12 ' : '';  // 1 column.
+
+	foreach ( $selectors_arr as $key => $value ) { // or: 'mobile'=> array( 1 => 'mme-col-tablet-12' ...)
+		// Element settings for columns number.
+		foreach ( $columns as $itemnum => $setting ) { // or: '3' => 'columns_tablet'.
+			if ( $itemnum && strpos( $setting, $key ) ) {
+				$selectors .= $value[ $itemnum ] . ' ';
+			}
+		}
+	}
+
+	// Additional breakpoints.
+	if ( $bp_manager->has_custom_breakpoints() ) {
+		$additional = array(
+			$bp_manager::BREAKPOINT_KEY_MOBILE_EXTRA,
+			$bp_manager::BREAKPOINT_KEY_TABLET_EXTRA,
+			$bp_manager::BREAKPOINT_KEY_LAPTOP,
+			$bp_manager::BREAKPOINT_KEY_WIDESCREEN,
+		);
+		foreach ( $additional as $add_bp ) {
+			if ( in_array( $add_bp, $bpoints, true ) && ! in_array( 'columns_' . $add_bp, $columns, true ) ) {
+				$suffix = '';
+				if ( 'mobile_extra' === $add_bp ) {
+					$suffix = '-6 ';
+				} elseif ( 'tablet_extra' === $add_bp ) {
+					$suffix = '-4 ';
+				} elseif ( 'laptop' === $add_bp ) {
+					$suffix = '-3 ';
+				} elseif ( 'widescreen' === $add_bp ) {
+					$suffix = '-2 ';
+				}
+				$selectors .= 'mme-col-' . $add_bp . $suffix;
+			}
+		}
+	}
+
+	return $selectors;
 }
 
 /**
@@ -147,6 +220,8 @@ function micemade_elements_author( $void ) {
 /**
  * Post custom meta
  *
+ * @param int   $post_id - post ID.
+ * @param array $cm_fields - array of custom fields.
  * @return void
  */
 function micemade_elements_custom_meta( $post_id, $cm_fields ) {
@@ -183,7 +258,8 @@ function micemade_elements_custom_meta( $post_id, $cm_fields ) {
 /**
  * Post meta ordering (using WP hook priorities)
  *
- * @param array $meta_ordering - array created with Elementor Repeater Control
+ * @param array  $meta_ordering - array created with Elementor Repeater Control.
+ * @param string $taxonomy - taxonomy string.
  * @return void
  */
 function micemade_elements_postmeta( $meta_ordering, $taxonomy ) {
@@ -229,8 +305,8 @@ function micemade_elements_thumb_f( $img_format = 'thumbnail' ) {
 		'alt' => the_title_attribute( 'echo=0' ),
 	);
 
-	echo '<div class="post-thumb">'; // thumb wrapper
-	echo '<a href="' . get_the_permalink() . '" title="' . the_title_attribute( 'echo=0' ) . '" >'; // post link
+	echo '<div class="post-thumb">'; // thumb wrapper.
+	echo '<a href="' . esc_url( get_the_permalink() ) . '" title="' . the_title_attribute( 'echo=0' ) . '" >'; // post link.
 	if ( has_post_thumbnail() ) {
 
 		the_post_thumbnail( $img_format, $atts );
@@ -247,7 +323,7 @@ function micemade_elements_thumb_f( $img_format = 'thumbnail' ) {
 
 		echo '<img src="' . esc_url( apply_filters( 'micemade_elements_no_image', '' ) ) . '" class="no-image" alt="' . the_title_attribute( 'echo=0' ) . '" >';
 	}
-	echo "</a>";
+	echo '</a>';
 	echo '</div>';
 }
 add_action( 'micemade_elements_thumb', 'micemade_elements_thumb_f', 10, 1 );
@@ -283,6 +359,7 @@ function micemade_elements_thumb_back_f( $img_format = 'thumbnail' ) {
 
 }
 add_action( 'micemade_elements_thumb_back', 'micemade_elements_thumb_back_f', 10, 1 );
+
 /**
  * GET GALLERY IMAGES ID's
  * get id's from WP gallery shortcode
@@ -300,7 +377,7 @@ function micemade_elements_gallery_ids_f() {
 
 	// Finds the "gallery" shortcode and puts the image ids in an associative array at $matches[3].
 	if ( preg_match_all( '/' . $pattern . '/s', $post->post_content, $matches ) ) {
-		$count = count( $matches[3] ); //in case there is more than one gallery in the post.
+		$count = count( $matches[3] ); // In case there is more than one gallery in the post.
 		for ( $i = 0; $i < $count; $i++ ) {
 			$atts = shortcode_parse_atts( $matches[3][ $i ] );
 			if ( isset( $atts['ids'] ) ) {
@@ -316,15 +393,22 @@ add_filter( 'micemade_elements_gallery_ids', 'micemade_elements_gallery_ids_f' )
 /**
  * POSTS QUERY ARGS
  *
- * @param integer $posts_per_page - posts per query.
+ * @param string  $post_type -type of the post.
+ * @param integer $ppp - posts per page.
+ * @param string  $order - ascending or descending sorting.
+ * @param string  $orderby - sorting criteria.
+ * @param string  $orderby_meta - sorting criteria by meta.
+ * @param string  $taxonomy - taxonomy to filter posts.
  * @param array   $categories - categories to filter posts.
+ * @param array   $post__in - handpicked posts (override other filters).
  * @param boolean $sticky - to show sticky or not.
  * @param integer $offset - posts offset.
  * @return $args
+ *
  * arguments for get_posts() - DRY effort, mostly because of ajax posts
  * list of all args:https://www.billerickson.net/code/wp_query-arguments/
  */
-function micemade_elements_query_args_func( $post_type = 'post', $ppp = 3, $order = 'DESC', $orderby = 'menu_order date', $orderby_meta = '', $taxonomy = 'category', $categories = array(), $post__in = [], $sticky = false, $offset = 0 ) {
+function micemade_elements_query_args_func( $post_type = 'post', $ppp = 3, $order = 'DESC', $orderby = 'menu_order date', $orderby_meta = '', $taxonomy = 'category', $categories = array(), $post__in = array(), $sticky = false, $offset = 0 ) {
 
 	// Defaults.
 	$args = array(
@@ -395,7 +479,7 @@ add_filter( 'micemade_elements_query_args', 'micemade_elements_query_args_func',
  * @return void
  * DRY effort, mostly because of ajax posts.
  */
-function micemade_elements_loop_post_func( $style = 'style_1', $grid = '', $show_thumb = true, $img_format = 'thumbnail', $meta = true, $meta_ordering = [], $excerpt = true, $excerpt_limit = 20, $css_class = '', $taxonomy = '', $cm_fields = [], $elm_ordering = [], $if_readmore = true, $readmore_text = '' ) {
+function micemade_elements_loop_post_func( $style = 'style_1', $grid = '', $show_thumb = true, $img_format = 'thumbnail', $meta = true, $meta_ordering = array(), $excerpt = true, $excerpt_limit = 20, $css_class = '', $taxonomy = '', $cm_fields = array(), $elm_ordering = array(), $if_readmore = true, $readmore_text = '' ) {
 	$post_id = get_the_ID();
 	?>
 	<div class="post item <?php echo esc_attr( $grid ); ?>">
@@ -417,12 +501,12 @@ function micemade_elements_loop_post_func( $style = 'style_1', $grid = '', $show
 
 				<?php
 				if ( empty( $elm_ordering ) ) {
-					$elm_ordering = [
+					$elm_ordering = array(
 						0 => 'title',
 						1 => 'meta',
 						2 => 'excerpt',
 						3 => 'custom_meta',
-					];
+					);
 				}
 
 				// Use for each to re-order post elements.
@@ -545,9 +629,14 @@ function micemade_elements_term_data_f( $taxonomy, $term, $img_format = 'thumbna
 }
 add_filter( 'micemade_elements_term_data', 'micemade_elements_term_data_f', 100, 3 );
 
+/**
+ * Get all meta keys.
+ *
+ * @return array $meta_keys
+ */
 function micemade_get_meta_keys() {
 	global $wpdb;
-	$keys = $wpdb->get_col(
+	$keys      = $wpdb->get_col(
 		"
 			SELECT meta_key
 			FROM $wpdb->postmeta
@@ -560,29 +649,3 @@ function micemade_get_meta_keys() {
 	}
 	return $meta_keys;
 }
-
-/*
-// Meta keys for different post types. 
-// The meta keys from this query will be those that do not start with an underscore or number.
-// https://wordpress.stackexchange.com/questions/58834/echo-all-meta-keys-of-a-custom-post-type
-function micemade_generate_meta_keys( $post_type = 'post' ){
-	global $wpdb;
-	$query = "
-		SELECT DISTINCT($wpdb->postmeta.meta_key) 
-		FROM $wpdb->posts 
-		LEFT JOIN $wpdb->postmeta 
-		ON $wpdb->posts.ID = $wpdb->postmeta.post_id 
-		WHERE $wpdb->posts.post_type = '%s' 
-		AND $wpdb->postmeta.meta_key != '' 
-		AND $wpdb->postmeta.meta_key NOT RegExp '(^[_0-9].+$)' 
-		AND $wpdb->postmeta.meta_key NOT RegExp '(^[0-9]+$)'
-	";
-	$meta_keys = $wpdb->get_col( $wpdb->prepare( $query, $post_type ) );
-	set_transient( 'foods_meta_keys', $meta_keys, 60*60*24 ); # create 1 Day Expiration
-	return $meta_keys;
-}
-function micemade_get_meta_keys( $post_type = 'post' ){
-	$cache     = get_transient( $post_type . '_meta_keys' );
-	$meta_keys = $cache ? $cache : micemade_generate_meta_keys( $post_type );
-	return $meta_keys;
-} */

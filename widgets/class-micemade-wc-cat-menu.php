@@ -5,6 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
+use Elementor\Controls_Stack;
 use Elementor\Core\Schemes\Typography;
 
 class Micemade_WC_Cat_Menu extends Widget_Base {
@@ -26,7 +27,7 @@ class Micemade_WC_Cat_Menu extends Widget_Base {
 		return [ 'micemade_elements' ];
 	}
 
-	protected function _register_controls() {
+	protected function register_controls() {
 
 		$this->start_controls_section(
 			'section_main',
@@ -99,7 +100,7 @@ class Micemade_WC_Cat_Menu extends Widget_Base {
 			[
 				'label'   => __( 'Maximum depth', 'elementor' ),
 				'type'    => Controls_Manager::NUMBER,
-				'default' => '',
+				'default' => '0',
 				'min'     => 0,
 				'step'    => 1,
 				'title'   => esc_html__( 'depth of submenus', 'micemade-elements' ),
@@ -120,7 +121,7 @@ class Micemade_WC_Cat_Menu extends Widget_Base {
 			'orient',
 			[
 				'label'       => esc_html__( 'Orientation', 'micemade-elements' ),
-				'type'        => Controls_Manager::SELECT2,
+				'type'        => Controls_Manager::SELECT,
 				'default'     => 'vertical',
 				'options'     => [
 					'vertical'   => esc_html__( 'Vertical', 'micemade-elements' ),
@@ -148,15 +149,21 @@ class Micemade_WC_Cat_Menu extends Widget_Base {
 						'title' => __( 'Right', 'micemade-elements' ),
 						'icon'  => 'fa fa-align-right',
 					],
+					'space-between' => array(
+						'title' => __( 'Justified', 'micemade-elements' ),
+						'icon'  => 'fa fa-align-justify',
+					),
 
 				],
 				'default'   => '',
 				'selectors' => [
-					'{{WRAPPER}} .micemade-elements_wc_cat_menu.horizontal' => 'justify-content: {{VALUE}};',
+					'{{WRAPPER}} > .elementor-widget-container' => 'justify-content: {{VALUE}};',
+					'{{WRAPPER}} .product-categories' => 'justify-content: {{VALUE}};',
 				],
 				'condition' => [
 					'orient' => 'horizontal',
 				],
+				'prefix_class'       => 'wc_cat-menu-align-',
 			]
 		);
 
@@ -176,40 +183,6 @@ class Micemade_WC_Cat_Menu extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
-			'image',
-			[
-				'label'     => esc_html__( 'Show category image', 'micemade-elements' ),
-				'type'      => Controls_Manager::SWITCHER,
-				'label_off' => __( 'No', 'elementor' ),
-				'label_on'  => __( 'Yes', 'elementor' ),
-				'default'   => 'yes',
-			]
-		);
-
-		$this->add_control(
-			'img_format',
-			[
-				'label'     => esc_html__( 'Categories image format', 'micemade-elements' ),
-				'type'      => Controls_Manager::SELECT,
-				'default'   => 'thumbnail',
-				'options'   => apply_filters( 'micemade_elements_image_sizes', '' ),
-				'condition' => [
-					'image!' => '',
-				],
-			]
-		);
-
-		$this->add_control(
-			'prod_count',
-			[
-				'label'     => esc_html__( 'Show products count', 'micemade-elements' ),
-				'type'      => Controls_Manager::SWITCHER,
-				'label_off' => __( 'No', 'elementor' ),
-				'label_on'  => __( 'Yes', 'elementor' ),
-				'default'   => 'yes',
-			]
-		);
 		*/
 
 		$this->add_responsive_control(
@@ -229,6 +202,51 @@ class Micemade_WC_Cat_Menu extends Widget_Base {
 				'selectors'  => [
 					'{{WRAPPER}} .cat-item a' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'menu_width',
+			[
+				'label'          => __( 'Menu width', 'micemade-elements' ),
+				'type'           => Controls_Manager::SLIDER,
+				'size_units'     => [ 'px', 'em', '%', 'vw' ],
+				'default'        => [
+					'unit' => '%',
+					'size' => 100,
+				],
+				'tablet_default' => [
+					'unit' => '%',
+					'size' => 100,
+				],
+				'mobile_default' => [
+					'unit' => '%',
+					'size' => 100,
+				],
+				'range'          => [
+					'px' => [
+						'min' => 0,
+						'max' => 1000,
+					],
+					'em' => [
+						'min' => 0,
+						'max' => 100,
+					],
+					'%'  => [
+						'min' => 0,
+						'max' => 100,
+					],
+					'vw' => [
+						'min' => 0,
+						'max' => 100,
+					],
+				],
+				'selectors'      => [
+					'{{WRAPPER}} .product-categories' => 'width: {{SIZE}}{{UNIT}};',
+				],
+				// 'condition' => [
+				// 	'align' => 'space-between',
+				// ],
 			]
 		);
 
@@ -257,7 +275,7 @@ class Micemade_WC_Cat_Menu extends Widget_Base {
 					],
 					'em' => [
 						'min' => 0,
-						'max' => 10,
+						'max' => 50,
 					],
 					'%'  => [
 						'min' => 0,
@@ -281,83 +299,13 @@ class Micemade_WC_Cat_Menu extends Widget_Base {
 				'type'      => Controls_Manager::SWITCHER,
 				'label_off' => __( 'No', 'elementor' ),
 				'label_on'  => __( 'Yes', 'elementor' ),
-				'default'   => 'yes',
+				'default'   => 'no',
 			]
 		);
 
-		/*
-		$this->add_responsive_control(
-			'cat_image_width',
-			[
-				'label'     => __( 'Image width', 'micemade-elements' ),
-				'type'      => Controls_Manager::SLIDER,
-				'default'   => [
-					'size' => '',
-				],
-				'range'     => [
-					'px' => [
-						'max'  => 100,
-						'min'  => 0,
-						'step' => 1,
-					],
-				],
-				'selectors' => [
-					'{{WRAPPER}} .category .category__image' => 'width: {{SIZE}}%;',
-				],
-				'condition' => [
-					'style' => 'style_2',
-				],
-			]
-		);
-
-		$this->add_responsive_control(
-			'post_text_align',
-			[
-				'label'     => __( 'Categories alignment', 'micemade-elements' ),
-				'type'      => Controls_Manager::CHOOSE,
-				'options'   => [
-					'left'   => [
-						'title' => __( 'Left', 'micemade-elements' ),
-						'icon'  => 'fa fa-align-left',
-					],
-					'center' => [
-						'title' => __( 'Center', 'micemade-elements' ),
-						'icon'  => 'fa fa-align-center',
-					],
-					'right'  => [
-						'title' => __( 'Right', 'micemade-elements' ),
-						'icon'  => 'fa fa-align-right',
-					],
-				],
-				'default'   => '',
-				'selectors' => [
-					'{{WRAPPER}} .category__text-wrap' => 'text-align: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->add_responsive_control(
-			'cat_vertical_alignment',
-			[
-				'label'     => __( 'Vertical Align Product Info', 'micemade-elements' ),
-				'type'      => Controls_Manager::SELECT,
-				'options'   => [
-					'flex-start' => __( 'Top', 'micemade-elements' ),
-					'center'     => __( 'Middle', 'micemade-elements' ),
-					'flex-end'   => __( 'Bottom', 'micemade-elements' ),
-				],
-				'default'   => 'center',
-				'selectors' => [
-					'{{WRAPPER}} .category__text-wrap' => 'align-self: {{VALUE}};',
-				],
-				'condition' => [
-					'style' => [ 'style_1', 'style_2', 'style_4' ],
-				],
-			]
-		);
-		*/
 		$this->end_controls_section();
 
+		// Styles for both main and sub level menus.
 		$this->start_controls_section(
 			'section_style',
 			[
@@ -435,9 +383,9 @@ class Micemade_WC_Cat_Menu extends Widget_Base {
 		$this->end_controls_tabs();
 
 		$this->add_control(
-			'cat_item_border',
+			'menu_border',
 			[
-				'label'     => __( 'Category item border', 'micemade-elements' ),
+				'label'     => __( 'Menu (and submenu) border', 'micemade-elements' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -446,20 +394,53 @@ class Micemade_WC_Cat_Menu extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name'        => 'cat_border',
+				'name'        => 'menu_border',
 				'label'       => __( 'Border', 'micemade-elements' ),
 				'placeholder' => '1px',
 				'default'     => '1px',
-				'selector'    => '{{WRAPPER}} .cat-item',
+				'selector'    => '{{WRAPPER}} .product-categories, {{WRAPPER}} .children',
+				'separator'   => 'after',
+			]
+		);
+
+		$this->add_responsive_control(
+			'main_menu_items_sep',
+			[
+				'label'          => __( 'Items separator', 'micemade-elements' ),
+				'type'           => Controls_Manager::SLIDER,
+				'size_units'     => [ 'px' ],
+				'default'        => [
+					'unit' => 'px',
+					'size' => 0,
+				],
+				'tablet_default' => [
+					'unit' => 'px',
+					'size' => 1,
+				],
+				'mobile_default' => [
+					'unit' => 'px',
+					'size' => 1,
+				],
+				'range'          => [
+					'px' => [
+						'min' => 0,
+						'max' => 10,
+					],
+				],
+				'selectors'      => [
+					'{{WRAPPER}} .product-categories.horizontal > .cat-item' => 'border-right-width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .product-categories.horizontal .children > .cat-item' => 'border-bottom-width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .product-categories.vertical .cat-item' => 'border-bottom-width: {{SIZE}}{{UNIT}};',
+				],
 			]
 		);
 
 		$this->add_group_control(
 			Group_Control_Box_Shadow::get_type(),
 			[
-				'name'     => 'toplevel_box_shadow',
-				'label'    => __( 'Box Shadow', 'micemade-elements' ),
-				'selector' => '{{WRAPPER}} .product-categories',
+				'name'      => 'toplevel_box_shadow',
+				'label'     => __( 'Box Shadow', 'micemade-elements' ),
+				'selector'  => '{{WRAPPER}} .product-categories',
 			]
 		);
 
@@ -561,9 +542,9 @@ class Micemade_WC_Cat_Menu extends Widget_Base {
 		$this->end_controls_tabs();
 
 		$this->add_control(
-			'submenu_cat_item_border',
+			'submenu_border',
 			[
-				'label'     => __( 'Category item border', 'micemade-elements' ),
+				'label'     => __( 'Submenu border', 'micemade-elements' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -572,11 +553,11 @@ class Micemade_WC_Cat_Menu extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name'        => 'submenu_cat_border',
+				'name'        => 'submenu_border',
 				'label'       => __( 'Border', 'micemade-elements' ),
 				'placeholder' => '1px',
 				'default'     => '1px',
-				'selector'    => '{{WRAPPER}} .children .cat-item',
+				'selector'    => '{{WRAPPER}} .product-categories .children',
 			]
 		);
 
@@ -979,80 +960,32 @@ class Micemade_WC_Cat_Menu extends Widget_Base {
 		$list_args['show_option_none'] = __( 'No product categories exist.', 'micemade-elements' );
 
 		// Add classes to menu wrapper ( <ul> element ).
-		$this->add_render_attribute( 'wrapper', 'class', 'product-categories micemade-elements_wc_cat_menu' );
-		$this->add_render_attribute( 'wrapper', 'class', $last_border );
-		$this->add_render_attribute( 'wrapper', 'class', $orient );
+		$this->add_render_attribute(
+			array(
+				'wrapper' => array(
+					'class' => array(
+						'micemade-elements_wc_cat_menu',
+						'product-categories',
+						$last_border,
+						$orient,
+					),
+				),
+			)
+		);
 
 		// Render the menu.
-		echo '<ul ' . $this->get_render_attribute_string( 'wrapper' ) . ' >';
+		?>
+		<ul <?php $this->print_render_attribute_string( 'wrapper' ); ?>>
 
-		wp_list_categories( apply_filters( 'woocommerce_product_categories_widget_args', $list_args ) );
+		<?php wp_list_categories( apply_filters( 'woocommerce_product_categories_widget_args', $list_args ) ); ?>
 
-		echo '</ul>';
-
-		/*
-		// *
-		if ( empty( $categories ) ) {
-			return;
-		}
-
-		// Categories holder.
-		echo '<div ' . $this->get_render_attribute_string( 'categories-holder-css' ) . '>';
-
-		foreach ( $categories as $index => $cat ) {
-
-			$count = $index + 1;
-
-			$term_data = apply_filters( 'micemade_elements_term_data', 'product_cat', $cat, $img_format ); // hook in inc/helpers.php
-
-			if ( empty( $term_data ) ) {
-				continue;
-			}
-
-			$term_id    = isset( $term_data['term_id'] ) ? $term_data['term_id'] : '';
-			$term_title = isset( $term_data['term_title'] ) ? $term_data['term_title'] : '';
-			$term_link  = isset( $term_data['term_link'] ) ? $term_data['term_link'] . $args : '#';
-			$image_url  = isset( $term_data['image_url'] ) ? $term_data['image_url'] : '';
-
-			// Category item data-id / data-delay.
-			$this->add_render_attribute( 'data-id' . $count, 'data-id', $id . '-' . $count );
-			$this->add_render_attribute( 'data-delay' . $count, 'data-delay', $item_anim_delay * $count );
-
-			echo '<a ' . $this->get_render_attribute_string( 'data-id' . $count ) . ' ' . $this->get_render_attribute_string( 'category-css' ) . ' href="' . esc_url( $term_link ) . '" title="' . esc_attr( $term_title ) . '" ' . $this->get_render_attribute_string( 'item-anim-data' ) . ' ' . $this->get_render_attribute_string( 'data-delay' . $count ) . '>';
-
-				echo '<div class="category__inner-wrap">';
-
-					echo '<div class="category__overlay"></div>';
-
-			if ( $image ) {
-				echo '<div class="category__image"><div class="image-inner" style="background-image: url(' . esc_url( $image_url ) . ')"></div></div>';
-			}
-
-					echo '<div class="category__text-wrap">';
-
-			if ( $term_title ) {
-				echo '<h3 class="category__title">' . esc_html( $term_title ) . '</h3>';
-			}
-
-			if ( $prod_count && $term_id ) {
-				do_action( 'micemade_elements_product_count', $term_id );
-			}
-
-					echo '</div>';
-
-				echo '</div>'; //.inner-wrap.
-
-			echo '</a>';
-
-		}
-
-		echo '</div>';
-		*/
+		</ul>
+		<?php
 	}
 
-	protected function content_template() {}
+	// protected function content_template() {}
 
-	public function render_plain_content( $instance = [] ) {}
+	// public function render_plain_content( $instance = [] ) {}
 
 }
 

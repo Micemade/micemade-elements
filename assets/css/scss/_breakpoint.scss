@@ -1,36 +1,50 @@
 @mixin breakpoint($point) {
-  
-	@if $point == desktop {
-		@media (min-width: 1440px) { @content ; }
+	@if $point == mobile {
+		@media (max-width: 767px) { @content ; }
 	}
-	
-	@else if $point == laptop {
-		@media (min-width: 1025px) { @content ; }
+	@if $point == mobile_extra {
+		@media (max-width: 920px) { @content ; }
 	}
-
-	@else if $point == laptop-down {
+	@if $point == tablet { 
 		@media (max-width: 1024px) { @content ; }
 	}
-
-	@else if $point == tablet {
-		@media (min-width: 769px) { @content ; }
+	@if $point == tablet_extra {
+		@media (max-width: 1200px) { @content ; }
 	}
-	
-	@else if $point == tablet-down {
-		@media (max-width: 768px) { @content ; }
+	@if $point == laptop {
+		@media (max-width: 1366px) { @content ; }
 	}
-
-	@else if $point == phablet {
-		@media (min-width: 560px)  { @content ; }
+	@if $point == widescreen {
+		@media (min-width: 2400px) { @content ; }
 	}
-
-	@else if $point == phablet-down {
-		@media (max-width: 560px)  { @content ; }
-	}
-	
-	@else if $point == mobileonly {
-		@media (max-width: 480px)  { @content ; }
-
-	}
-
 }
+// Old breakpoints.
+// @mixin breakpoint($point) {
+// 	@if $point == desktop {
+// 		@media (min-width: 1440px) { @content ; }
+// 	}
+// 	@else if $point == laptop {
+// 		@media (min-width: 1025px) { @content ; }
+// 	}
+// 	@else if $point == laptop-down {
+// 		@media (max-width: 1024px) { @content ; }
+// 	}
+// 	@else if $point == tablet {
+// 		@media (min-width: 769px) { @content ; }
+// 	}
+// 	@else if $point == tablet-down {
+// 		@media (max-width: 768px) { @content ; }
+// 	}
+// 	@else if $point == phablet {
+// 		@media (min-width: 560px)  { @content ; }
+// 	}
+// 	@else if $point == phablet-down {
+// 		@media (max-width: 560px)  { @content ; }
+// 	}
+// 	@else if $point == mobileup {
+// 		@media (min-width: 481px)  { @content ; }
+// 	}
+// 	@else if $point == mobileonly {
+// 		@media (max-width: 480px)  { @content ; }
+// 	}
+// }

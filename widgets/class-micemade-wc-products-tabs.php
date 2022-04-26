@@ -1,27 +1,31 @@
 <?php
 namespace Elementor;
 
+use Elementor\Controls_Stack;
 // use Elementor\Controls_Manager;
 // use Elementor\Controls_Stack;
 // use Elementor\Core\Files\CSS\Post;
 // use Elementor\Element_Base;
-// use Elementor\Widget_Base;
 // use Elementor\Plugin;
+
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
 use Elementor\Core\Schemes\Typography;
+use Elementor\Core\Breakpoints\Manager as Breakpoints_Manager;
 
-class Micemade_WC_Products_Tabs extends Widget_Base {
+class Micemade_WC_Products_Tabs extends \Elementor\Widget_Base {
+
+
 	/*
 	public function __construct( $data = [], $args = null ) {
-		parent::__construct( $data, $args );
-
-		$this->add_actions();
+	parent::__construct( $data, $args );
+	$this->add_actions();
 	}
-	 */
+	*/
+
 	public function get_name() {
 		return 'micemade-wc-products-tabs';
 	}
@@ -35,11 +39,11 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 	}
 
 	public function get_script_depends() {
-		return [ 'ace' ];
+		return array( 'ace' );
 	}
 
 	public function get_categories() {
-		return [ 'micemade_elements' ];
+		return array( 'micemade_elements' );
 	}
 
 	/**
@@ -49,37 +53,197 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 	 *
 	 * @access protected
 	 */
-	protected function _register_controls() {
+	protected function register_controls() {
 
 		$this->start_controls_section(
 			'section_tabs',
-			[
+			array(
 				'label' => __( 'Tabs', 'micemade-elements' ),
-			]
+			)
 		);
 
 		$this->add_control(
 			'type',
-			[
-				'label'   => __( 'Type', 'micemade-elements' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => 'horizontal',
-				'options' => [
+			array(
+				'label'        => __( 'Type', 'micemade-elements' ),
+				'type'         => Controls_Manager::SELECT,
+				'default'      => 'horizontal',
+				'options'      => array(
 					'horizontal' => __( 'Horizontal', 'micemade-elements' ),
 					'vertical'   => __( 'Vertical', 'micemade-elements' ),
-				],
+				),
 				'prefix_class' => 'mm-wc-tabs-type-',
-			]
+			)
+		);
+
+		$repeater = new Repeater();
+
+		$repeater->add_control(
+			'tab_title',
+			array(
+				'label'       => esc_html__( 'Tab title', 'micemade-elements' ),
+				'type'        => Controls_Manager::TEXT,
+				'default'     => esc_html__( 'Tab Title', 'micemade-elements' ),
+				'placeholder' => esc_html__( 'Tab Title', 'micemade-elements' ),
+				'label_block' => true,
+			),
+		);
+		$repeater->add_control(
+			'posts_per_page',
+			array(
+				'label'   => esc_html__( 'Total products', 'micemade-elements' ),
+				'type'    => Controls_Manager::NUMBER,
+				'default' => '4',
+				'title'   => esc_html__( 'Enter total number of products to show', 'micemade-elements' ),
+			)
+		);
+		$repeater->add_control(
+			'offset',
+			array(
+				'label'   => esc_html__( 'Offset', 'micemade-elements' ),
+				'type'    => Controls_Manager::NUMBER,
+				'default' => '',
+				'title'   => esc_html__( 'Offset is a number of skipped products', 'micemade-elements' ),
+			),
+		);
+		$repeater->add_control(
+			'categories',
+			array(
+				'label'       => esc_html__( 'Select product categories', 'micemade-elements' ),
+				'type'        => Controls_Manager::SELECT2,
+				'default'     => array(),
+				'options'     => apply_filters( 'micemade_elements_terms', 'product_cat' ),
+				'multiple'    => true,
+				'label_block' => true,
+			),
+		);
+		$repeater->add_control(
+			'exclude_cats',
+			array(
+				'label'       => esc_html__( 'Exclude product categories', 'micemade-elements' ),
+				'type'        => Controls_Manager::SELECT2,
+				'default'     => array(),
+				'options'     => apply_filters( 'micemade_elements_terms', 'product_cat' ),
+				'multiple'    => true,
+				'label_block' => true,
+			),
+		);
+		$repeater->add_control(
+			'filters',
+			array(
+				'label'   => __( 'Products filters', 'micemade-elements' ),
+				'type'    => Controls_Manager::SELECT,
+				'default' => 'latest',
+				'options' => array(
+					'latest'       => esc_html__( 'Latest products', 'micemade-elements' ),
+					'featured'     => esc_html__( 'Featured products', 'micemade-elements' ),
+					'best_sellers' => esc_html__( 'Best selling products', 'micemade-elements' ),
+					'best_rated'   => esc_html__( 'Best rated products', 'micemade-elements' ),
+					'on_sale'      => esc_html__( 'Products on sale', 'micemade-elements' ),
+					'random'       => esc_html__( 'Random products', 'micemade-elements' ),
+				),
+			),
+		);
+		$repeater->add_control(
+			'products_in',
+			array(
+				'label'    => esc_html__( 'Select products', 'micemade-elements' ),
+				'type'     => Controls_Manager::SELECT2,
+				'default'  => array(),
+				'options'  => apply_filters( 'micemade_posts_array', 'product' ),
+				'multiple' => true,
+			),
+		);
+		$repeater->add_control(
+			'no_outofstock',
+			array(
+				'label'     => esc_html__( 'Hide out of stock products', 'micemade-elements' ),
+				'type'      => Controls_Manager::SWITCHER,
+				'label_off' => esc_html__( 'No', 'elementor' ),
+				'label_on'  => esc_html__( 'Yes', 'elementor' ),
+				'default'   => 'yes',
+			),
+		);
+		$repeater->add_control(
+			'orderby',
+			array(
+				'label'   => esc_html__( 'Order by', 'micemade-elements' ),
+				'type'    => Controls_Manager::SELECT,
+				'default' => 'date',
+				'options' => array(
+					'date'       => esc_html__( 'Date', 'micemade-elements' ),
+					'name'       => esc_html__( 'Name', 'micemade-elements' ),
+					'modified'   => esc_html__( 'Last date modified', 'micemade-elements' ),
+					'menu_order' => esc_html__( 'Ordered in admin', 'micemade-elements' ),
+				),
+			),
+		);
+		$repeater->add_control(
+			'order',
+			array(
+				'label'     => esc_html__( 'Order', 'micemade-elements' ),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'DESC',
+				'options'   => array(
+					'DESC' => esc_html__( 'Descending', 'micemade-elements' ),
+					'ASC'  => esc_html__( 'Ascending', 'micemade-elements' ),
+				),
+				'separator' => 'after',
+			),
+		);
+		$items_num = array(
+			1 => esc_html__( 'One', 'micemade-elements' ),
+			2 => esc_html__( 'Two', 'micemade-elements' ),
+			3 => esc_html__( 'Three', 'micemade-elements' ),
+			4 => esc_html__( 'Four', 'micemade-elements' ),
+			6 => esc_html__( 'Six', 'micemade-elements' ),
+		);
+		$repeater->add_control(
+			'products_per_row',
+			array(
+				'label'   => esc_html__( 'Products per row', 'micemade-elements' ),
+				'type'    => Controls_Manager::SELECT,
+				'default' => 4,
+				'options' => $items_num,
+			),
+		);
+
+		$repeater->add_control(
+			'products_per_row_tab',
+			array(
+				'label'   => esc_html__( 'Products per row (tablets)', 'micemade-elements' ),
+				'type'    => Controls_Manager::SELECT,
+				'default' => 2,
+				'options' => $items_num,
+			),
+		);
+		$repeater->add_control(
+			'products_per_row_mob',
+			array(
+				'label'   => esc_html__( 'Products per row (mobiles)', 'micemade-elements' ),
+				'type'    => Controls_Manager::SELECT,
+				'default' => 2,
+				'options' => $items_num,
+			),
+		);
+		$repeater->add_control(
+			'icon',
+			array(
+				'label'       => esc_html__( 'Tab icon', 'micemade-elements' ),
+				'type'        => Controls_Manager::ICON,
+				'label_block' => true,
+				'default'     => '',
+			),
 		);
 
 		$this->add_control(
 			'tabs',
-			[
-				'label'       => __( 'Tabs Items', 'micemade-elements' ),
+			array(
+				'label'       => esc_html__( 'Tabs Items', 'micemade-elements' ),
 				'type'        => Controls_Manager::REPEATER,
-				'default'     => [
-					[
-						'tab_title'            => __( 'Tab #1', 'micemade-elements' ),
+				'default'     => array(
+					array(
+						'tab_title'            => esc_html__( 'Tab #1', 'micemade-elements' ),
 						'posts_per_page'       => 4,
 						'offset'               => 0,
 						'products_per_row'     => 4,
@@ -88,358 +252,204 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 						'categories'           => '',
 						'exclude_cats'         => '',
 						'filters'              => 'latest',
-						'products_in'          => [],
+						'products_in'          => array(),
 						'no_outofstock'        => 'yes',
 						'orderby'              => 'date',
 						'order'                => 'DESC',
-					],
-				],
+					),
+				),
 				'title_field' => '<i class="{{ icon }}"></i> {{{ tab_title }}}',
-				'fields'      => [
-					[
-						'name'        => 'tab_title',
-						'label'       => __( 'Tab title', 'micemade-elements' ),
-						'type'        => Controls_Manager::TEXT,
-						'default'     => __( 'Tab Title', 'micemade-elements' ),
-						'placeholder' => __( 'Tab Title', 'micemade-elements' ),
-						'label_block' => true,
-					],
+				'fields'      => $repeater->get_controls(),
 
-					[
-						'name'    => 'posts_per_page',
-						'label'   => __( 'Total products', 'micemade-elements' ),
-						'type'    => Controls_Manager::NUMBER,
-						'default' => '4',
-						'title'   => __( 'Enter total number of products to show', 'micemade-elements' ),
-					],
-
-					[
-						'name'    => 'offset',
-						'label'   => __( 'Offset', 'micemade-elements' ),
-						'type'    => Controls_Manager::NUMBER,
-						'default' => '',
-						'title'   => __( 'Offset is a number of skipped products', 'micemade-elements' ),
-					],
-
-					[
-						'name'        => 'categories',
-						'label'       => esc_html__( 'Select product categories', 'micemade-elements' ),
-						'type'        => Controls_Manager::SELECT2,
-						'default'     => array(),
-						'options'     => apply_filters( 'micemade_elements_terms', 'product_cat' ),
-						'multiple'    => true,
-						'label_block' => true,
-					],
-
-					[
-						'name'        => 'exclude_cats',
-						'label'       => esc_html__( 'Exclude product categories', 'micemade-elements' ),
-						'type'        => Controls_Manager::SELECT2,
-						'default'     => array(),
-						'options'     => apply_filters( 'micemade_elements_terms', 'product_cat' ),
-						'multiple'    => true,
-						'label_block' => true,
-					],
-
-					[
-						'name'    => 'filters',
-						'label'   => __( 'Products filters', 'micemade-elements' ),
-						'type'    => Controls_Manager::SELECT,
-						'default' => 'latest',
-						'options' => [
-							'latest'       => __( 'Latest products', 'micemade-elements' ),
-							'featured'     => __( 'Featured products', 'micemade-elements' ),
-							'best_sellers' => __( 'Best selling products', 'micemade-elements' ),
-							'best_rated'   => __( 'Best rated products', 'micemade-elements' ),
-							'on_sale'      => __( 'Products on sale', 'micemade-elements' ),
-							'random'       => __( 'Random products', 'micemade-elements' ),
-						],
-					],
-
-					[
-						'name'     => 'products_in',
-						'label'    => esc_html__( 'Select products', 'micemade-elements' ),
-						'type'     => Controls_Manager::SELECT2,
-						'default'  => [],
-						'options'  => apply_filters( 'micemade_posts_array', 'product' ),
-						'multiple' => true,
-					],
-
-					[
-						'name'      => 'no_outofstock',
-						'label'     => esc_html__( 'Hide out of stock products', 'micemade-elements' ),
-						'type'      => Controls_Manager::SWITCHER,
-						'label_off' => __( 'No', 'elementor' ),
-						'label_on'  => __( 'Yes', 'elementor' ),
-						'default'   => 'yes',
-					],
-
-					[
-						'name'    => 'orderby',
-						'label'   => __( 'Order by', 'micemade-elements' ),
-						'type'    => Controls_Manager::SELECT,
-						'default' => 'date',
-						'options' => [
-							'date'       => __( 'Date', 'micemade-elements' ),
-							'name'       => __( 'Name', 'micemade-elements' ),
-							'modified'   => __( 'Last date modified', 'micemade-elements' ),
-							'menu_order' => __( 'Ordered in admin', 'micemade-elements' ),
-						],
-					],
-
-					[
-						'name'    => 'order',
-						'label'   => __( 'Order', 'micemade-elements' ),
-						'type'    => Controls_Manager::SELECT,
-						'default' => 'DESC',
-						'options' => [
-							'DESC' => __( 'Descending', 'micemade-elements' ),
-							'ASC'  => __( 'Ascending', 'micemade-elements' ),
-						],
-						'separator'=> 'after',
-					],
-
-					[
-						'name'    => 'products_per_row',
-						'label'   => __( 'Products per row', 'micemade-elements' ),
-						'type'    => Controls_Manager::SELECT,
-						'default' => 4,
-						'options' => [
-							1 => __( 'One', 'micemade-elements' ),
-							2 => __( 'Two', 'micemade-elements' ),
-							3 => __( 'Three', 'micemade-elements' ),
-							4 => __( 'Four', 'micemade-elements' ),
-							6 => __( 'Six', 'micemade-elements' ),
-						],
-					],
-
-					[
-						'name'    => 'products_per_row_tab',
-						'label'   => __( 'Products per row (tablets)', 'micemade-elements' ),
-						'type'    => Controls_Manager::SELECT,
-						'default' => 2,
-						'options' => [
-							1 => __( 'One', 'micemade-elements' ),
-							2 => __( 'Two', 'micemade-elements' ),
-							3 => __( 'Three', 'micemade-elements' ),
-							4 => __( 'Four', 'micemade-elements' ),
-							6 => __( 'Six', 'micemade-elements' ),
-						],
-					],
-
-					[
-						'name'    => 'products_per_row_mob',
-						'label'   => __( 'Products per row (mobiles)', 'micemade-elements' ),
-						'type'    => Controls_Manager::SELECT,
-						'default' => 2,
-						'options' => [
-							1 => __( 'One', 'micemade-elements' ),
-							2 => __( 'Two', 'micemade-elements' ),
-							3 => __( 'Three', 'micemade-elements' ),
-							4 => __( 'Four', 'micemade-elements' ),
-							6 => __( 'Six', 'micemade-elements' ),
-						],
-					],
-
-					[
-						'name'        => 'icon',
-						'label'       => __( 'Tab icon', 'micemade-elements' ),
-						'type'        => Controls_Manager::ICON,
-						'label_block' => true,
-						'default'     => '',
-					],
-
-				],
-
-			]
+			)
 		);
 
 		$this->add_control(
 			'heading_items_spacing_settings',
-			[
-				'label'     => __( 'Items spacing', 'micemade-elements' ),
+			array(
+				'label'     => esc_html__( 'Items spacing', 'micemade-elements' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
-			]
+			)
 		);
 
 		$this->add_responsive_control(
 			'horiz_spacing',
-			[
-				'label'     => __( 'Products horizontal spacing', 'micemade-elements' ),
-				'type'      => Controls_Manager::SLIDER,
-				'devices'         => [ 'desktop', 'tablet', 'mobile' ],
-				'desktop_default' => [
+			array(
+				'label'           => esc_html__( 'Products horizontal spacing', 'micemade-elements' ),
+				'type'            => Controls_Manager::SLIDER,
+				'devices'         => array( 'desktop', 'tablet', 'mobile' ),
+				'desktop_default' => array(
 					'size' => 10,
 					'unit' => 'px',
-				],
-				'tablet_default' => [
+				),
+				'tablet_default'  => array(
 					'size' => 10,
 					'unit' => 'px',
-				],
-				'mobile_default' => [
+				),
+				'mobile_default'  => array(
 					'size' => 10,
 					'unit' => 'px',
-				],
-				'range'     => [
-					'px' => [
+				),
+				'range'           => array(
+					'px' => array(
 						'max'  => 50,
 						'min'  => 0,
 						'step' => 1,
-					],
-				],
-				'selectors' => [
+					),
+				),
+				'selectors'       => array(
 					'{{WRAPPER}} ul.products > li' => 'padding-left:{{SIZE}}px;padding-right:{{SIZE}}px;',
 					'{{WRAPPER}} .mme-row'         => 'margin-left:-{{SIZE}}px; margin-right:-{{SIZE}}px;',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_responsive_control(
 			'vert_spacing',
-			[
-				'label'           => __( 'Products bottom spacing', 'micemade-elements' ),
+			array(
+				'label'           => esc_html__( 'Products bottom spacing', 'micemade-elements' ),
 				'type'            => Controls_Manager::SLIDER,
-				'devices'         => [ 'desktop', 'tablet', 'mobile' ],
-				'desktop_default' => [
+				'devices'         => array( 'desktop', 'tablet', 'mobile' ),
+				'desktop_default' => array(
 					'size' => 10,
 					'unit' => 'px',
-				],
-				'tablet_default' => [
+				),
+				'tablet_default'  => array(
 					'size' => 10,
 					'unit' => 'px',
-				],
-				'mobile_default' => [
+				),
+				'mobile_default'  => array(
 					'size' => 10,
 					'unit' => 'px',
-				],
-				'range'     => [
-					'px' => [
+				),
+				'range'           => array(
+					'px' => array(
 						'max'  => 100,
 						'min'  => 0,
 						'step' => 1,
-					],
-				],
-				'selectors'       => [
+					),
+				),
+				'selectors'       => array(
 					'{{WRAPPER}} ul.products > li' => 'margin-bottom:{{SIZE}}px;',
 					'{{WRAPPER}} .mme-row'         => 'margin-bottom:-{{SIZE}}px;',
-				],
+				),
 
-			]
+			)
 		);
 
 		$this->end_controls_section();
 
 		$this->start_controls_section(
 			'section_tabs_style',
-			[
-				'label' => __( 'Tabs style', 'micemade-elements' ),
+			array(
+				'label' => esc_html__( 'Tabs style', 'micemade-elements' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
-			]
+			)
 		);
 
 		$this->add_control(
 			'navigation_width',
-			[
-				'label'     => __( 'Navigation Width', 'micemade-elements' ),
+			array(
+				'label'     => esc_html__( 'Navigation Width', 'micemade-elements' ),
 				'type'      => Controls_Manager::SLIDER,
-				'default'   => [
+				'default'   => array(
 					'unit' => '%',
-				],
-				'range'     => [
-					'%' => [
+				),
+				'range'     => array(
+					'%' => array(
 						'min' => 10,
 						'max' => 50,
-					],
-				],
-				'selectors' => [
+					),
+				),
+				'selectors' => array(
 					'{{WRAPPER}} .tabs-wrapper'         => 'flex-basis: {{SIZE}}{{UNIT}}',
 					'{{WRAPPER}} .tabs-content-wrapper' => 'flex-basis: calc( 100% - {{SIZE}}{{UNIT}} )',
-				],
-				'condition' => [
+				),
+				'condition' => array(
 					'type' => 'vertical',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_responsive_control(
 			'align',
-			[
-				'label'     => __( 'Tabs Alignment', 'micemade-elements' ),
-				'type'      => Controls_Manager::CHOOSE,
-				'options'   => [
-					'left'   => [
+			array(
+				'label'        => esc_html__( 'Tabs Alignment', 'micemade-elements' ),
+				'type'         => Controls_Manager::CHOOSE,
+				'options'      => array(
+					'left'   => array(
 						'title' => __( 'Left', 'micemade-elements' ),
 						'icon'  => 'fa fa-align-left',
-					],
-					'center' => [
+					),
+					'center' => array(
 						'title' => __( 'Center', 'micemade-elements' ),
 						'icon'  => 'fa fa-align-center',
-					],
-					'right'  => [
+					),
+					'right'  => array(
 						'title' => __( 'Right', 'micemade-elements' ),
 						'icon'  => 'fa fa-align-right',
-					],
+					),
 
-				],
-				'default'   => '',
-				'selectors' => [
+				),
+				'default'      => '',
+				'selectors'    => array(
 					'{{WRAPPER}} .tabs-wrapper' => 'text-align: {{VALUE}};',
-				],
+				),
 				'prefix_class' => 'mm-wc-tabs-align-',
-			]
+			)
 		);
 
 		$this->add_responsive_control(
 			'tab_padding',
-			[
+			array(
 				'label'      => esc_html__( 'Tab padding', 'micemade-elements' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', 'em', '%' ],
-				'selectors'  => [
+				'size_units' => array( 'px', 'em', '%' ),
+				'selectors'  => array(
 					'{{WRAPPER}} .tab-title > span' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_control(
 			'vertical-align',
-			[
-				'label'     => __( 'Vertical Alignment', 'micemade-elements' ),
+			array(
+				'label'     => esc_html__( 'Vertical Alignment', 'micemade-elements' ),
 				'type'      => Controls_Manager::CHOOSE,
-				'options'   => [
-					'flex-start' => [
+				'options'   => array(
+					'flex-start' => array(
 						'title' => __( 'Top', 'micemade-elements' ),
 						'icon'  => 'fa fa-caret-down',
-					],
-					'center'     => [
+					),
+					'center'     => array(
 						'title' => __( 'Center', 'micemade-elements' ),
 						'icon'  => 'fa fa-unsorted',
-					],
-					'flex-end'   => [
+					),
+					'flex-end'   => array(
 						'title' => __( 'Bottom', 'micemade-elements' ),
 						'icon'  => 'fa fa-caret-up',
-					],
+					),
 
-				],
+				),
 				'default'   => '',
-				'selectors' => [
+				'selectors' => array(
 					'{{WRAPPER}} .tabs-wrapper, {{WRAPPER}} .tabs-content-wrapper' => 'justify-content: {{VALUE}};',
-				],
-				'condition' => [
+				),
+				'condition' => array(
 					'type' => 'vertical',
-				],
-			]
+				),
+			)
 		);
 
 		// Tab styles title
 		$this->add_control(
 			'heading_tab_styles',
-			[
-				'label'     => __( 'Tab styles', 'micemade-elements' ),
+			array(
+				'label'     => esc_html__( 'Tab styles', 'micemade-elements' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
-			]
+			)
 		);
 
 		// ACTIVE, HOVER, INACTIVE.
@@ -448,39 +458,39 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 		// Styles for active tab
 		$this->start_controls_tab(
 			'style_active',
-			[
-				'label' => __( 'Active', 'micemade-elements' ),
-			]
+			array(
+				'label' => esc_html__( 'Active', 'micemade-elements' ),
+			)
 		);
 
 		$this->add_control(
 			'tab_active_color',
-			[
-				'label'     => __( 'Active tab title color', 'micemade-elements' ),
+			array(
+				'label'     => esc_html__( 'Active tab title color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
+				'selectors' => array(
 					'{{WRAPPER}} .tab-title.active' => 'color: {{VALUE}};',
-				],
-			]
+				),
+			)
 		);
 		$this->add_control(
 			'background_color',
-			[
-				'label'     => __( 'Background Color', 'micemade-elements' ),
+			array(
+				'label'     => esc_html__( 'Background Color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
+				'selectors' => array(
 					'{{WRAPPER}} .tab-title.active'   => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} .tab-content.active' => 'background-color: {{VALUE}};',
-				],
-			]
+				),
+			)
 		);
 		$this->add_control(
 			'active_tab_desc',
-			[
-				'raw'             => __( 'Active tab background also applies to active content. Content styles can be overriden bellow, under "Tab content style" settings.', 'micemade-elements' ),
+			array(
+				'raw'             => esc_html__( 'Active tab background also applies to active content. Content styles can be overriden bellow, under "Tab content style" settings.', 'micemade-elements' ),
 				'type'            => Controls_Manager::RAW_HTML,
 				'content_classes' => 'elementor-descriptor',
-			]
+			)
 		);
 
 		$this->end_controls_tab();// End active tab styles.
@@ -488,58 +498,58 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 		// Styles for tab hover.
 		$this->start_controls_tab(
 			'style_hover',
-			[
-				'label' => __( 'Hover', 'micemade-elements' ),
-			]
+			array(
+				'label' => esc_html__( 'Hover', 'micemade-elements' ),
+			)
 		);
 		$this->add_control(
 			'tab_color_hover',
-			[
-				'label'     => __( 'Hover tab title color', 'micemade-elements' ),
+			array(
+				'label'     => esc_html__( 'Hover tab title color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
+				'selectors' => array(
 					'{{WRAPPER}} .tab-title:not(.active):hover' => 'color: {{VALUE}};',
-				],
-			]
+				),
+			)
 		);
 		$this->add_control(
 			'background_color_hover',
-			[
-				'label'     => __( 'Hover background Color', 'micemade-elements' ),
+			array(
+				'label'     => esc_html__( 'Hover background Color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
+				'selectors' => array(
 					'{{WRAPPER}} .tab-title:not(.active):hover' => 'background-color: {{VALUE}};',
-				],
-			]
+				),
+			)
 		);
 		$this->end_controls_tab();
 
 		// Styles for tab Inactive.
 		$this->start_controls_tab(
 			'style_inactive',
-			[
-				'label' => __( 'Inactive', 'micemade-elements' ),
-			]
+			array(
+				'label' => esc_html__( 'Inactive', 'micemade-elements' ),
+			)
 		);
 		$this->add_control(
 			'inacitve_tab_color',
-			[
-				'label'     => __( 'Inactive tab title color', 'micemade-elements' ),
+			array(
+				'label'     => esc_html__( 'Inactive tab title color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
+				'selectors' => array(
 					'{{WRAPPER}} .tab-title' => 'color: {{VALUE}};',
-				],
-			]
+				),
+			)
 		);
 		$this->add_control(
 			'inactive_background_color',
-			[
-				'label'     => __( 'Background Color', 'micemade-elements' ),
+			array(
+				'label'     => esc_html__( 'Background Color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
+				'selectors' => array(
 					'{{WRAPPER}} .tab-title' => 'background-color: {{VALUE}};',
-				],
-			]
+				),
+			)
 		);
 
 		$this->end_controls_tab();// End inactive tab styles.
@@ -549,179 +559,168 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
-			[
+			array(
 				'name'     => 'tab_typography',
-				'label'    => __( 'Title typography', 'micemade-elements' ),
+				'label'    => esc_html__( 'Title typography', 'micemade-elements' ),
 				'selector' => '{{WRAPPER}} .tab-title',
 				'scheme'   => Typography::TYPOGRAPHY_1,
-			]
+			)
 		);
 
 		$this->add_control(
 			'border_width',
-			[
-				'label'     => __( 'Border Width', 'micemade-elements' ),
+			array(
+				'label'     => esc_html__( 'Border Width', 'micemade-elements' ),
 				'type'      => Controls_Manager::SLIDER,
-				'default'   => [
+				'default'   => array(
 					'size' => 1,
-				],
-				'range'     => [
-					'px' => [
+				),
+				'range'     => array(
+					'px' => array(
 						'min' => 0,
 						'max' => 10,
-					],
-				],
-				'selectors' => [
+					),
+				),
+				'selectors' => array(
 					'{{WRAPPER}} .tab-title, {{WRAPPER}} .tab-title:before, {{WRAPPER}} .tab-title:after, {{WRAPPER}} .tabs-content-wrapper, {{WRAPPER}} .tabs-content-wrapper:before' => 'border-width: {{SIZE}}{{UNIT}};',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_control(
 			'border_color',
-			[
-				'label'     => __( 'Border Color', 'micemade-elements' ),
+			array(
+				'label'     => esc_html__( 'Border Color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#999999',
-				'selectors' => [
+				'selectors' => array(
 					'{{WRAPPER}} .tab-title.active, {{WRAPPER}} .tab-title:before, {{WRAPPER}} .tab-title:after, {{WRAPPER}} .tabs-content-wrapper, {{WRAPPER}} .tabs-content-wrapper:before' => 'border-color: {{VALUE}};',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_control(
 			'heading_icon',
-			[
-				'label'     => __( 'Tab icon', 'micemade-elements' ),
+			array(
+				'label'     => esc_html__( 'Tab icon', 'micemade-elements' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
-			]
+			)
 		);
 
 		$this->add_responsive_control(
 			'icon_size',
-			[
-				'label'     => __( 'Icon size', 'micemade-elements' ),
+			array(
+				'label'     => esc_html__( 'Icon size', 'micemade-elements' ),
 				'type'      => Controls_Manager::SLIDER,
-				'default'   => [
+				'default'   => array(
 					'unit' => 'px',
-				],
-				'range'     => [
-					'px' => [
+				),
+				'range'     => array(
+					'px' => array(
 						'min'  => 0,
 						'max'  => 100,
 						'step' => 1,
-					],
-				],
-				'selectors' => [
+					),
+				),
+				'selectors' => array(
 					'{{WRAPPER}} .tab-icon.fa' => 'font-size: {{SIZE}}{{UNIT}};',
-				],
+				),
 
-			]
+			)
 		);
 
 		$this->add_responsive_control(
 			'icon_spacing',
-			[
-				'label'     => __( 'Tab icon spacing', 'micemade-elements' ),
+			array(
+				'label'     => esc_html__( 'Tab icon spacing', 'micemade-elements' ),
 				'type'      => Controls_Manager::SLIDER,
-				'default'   => [
+				'default'   => array(
 					'unit' => 'px',
-				],
-				'range'     => [
-					'px' => [
+				),
+				'range'     => array(
+					'px' => array(
 						'min'  => 0,
 						'max'  => 100,
 						'step' => 1,
-					],
-				],
-				'selectors' => [
+					),
+				),
+				'selectors' => array(
 					'{{WRAPPER}} .tab-icon' => 'margin: 0 {{SIZE}}{{UNIT}};',
-				],
+				),
 
-			]
+			)
 		);
 
 		$this->add_control(
 			'icon_position',
-			[
-				'label'        => __( 'Icon position', 'micemade-elements' ),
+			array(
+				'label'        => esc_html__( 'Icon position', 'micemade-elements' ),
 				'type'         => Controls_Manager::SELECT,
-				'options'      => [
+				'options'      => array(
 					'left'  => __( 'Left', 'micemade-elements' ),
 					'right' => __( 'Right', 'micemade-elements' ),
-				],
+				),
 				'default'      => 'left',
 				'prefix_class' => 'mm-wc-tabs-icon-',
-			]
+			)
 		);
 
 		$this->end_controls_section();
 
 		$this->start_controls_section(
 			'section_tabs_content',
-			[
-				'label' => __( 'Tab content style', 'micemade-elements' ),
+			array(
+				'label' => esc_html__( 'Tab content style', 'micemade-elements' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
-			]
+			)
 		);
 
 		$this->add_control(
 			'content_background_color',
-			[
-				'label'     => __( 'Content background Color', 'micemade-elements' ),
+			array(
+				'label'     => esc_html__( 'Content background Color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
+				'selectors' => array(
 					'{{WRAPPER}} .tab-content.active' => 'background-color: {{VALUE}};',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_responsive_control(
 			'content_padding',
-			[
+			array(
 				'label'      => esc_html__( 'Content padding', 'micemade-elements' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', 'em', '%' ],
-				'selectors'  => [
+				'size_units' => array( 'px', 'em', '%' ),
+				'selectors'  => array(
 					'{{WRAPPER}} .tab-content' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_control(
 			'content_border_width',
-			[
-				'label'     => __( 'Content border Width', 'micemade-elements' ),
+			array(
+				'label'     => esc_html__( 'Content border Width', 'micemade-elements' ),
 				'type'      => Controls_Manager::SLIDER,
-				/* 'default'   => [
-					'size' => 1,
+				/*
+				'default'   => [
+				'size' => 1,
 				], */
-				'range'     => [
-					'px' => [
+				'range'     => array(
+					'px' => array(
 						'min' => 0,
 						'max' => 10,
-					],
-				],
-				'selectors' => [
+					),
+				),
+				'selectors' => array(
 					'{{WRAPPER}} .tabs-content-wrapper, {{WRAPPER}} .tabs-content-wrapper:before' => 'border-width: {{SIZE}}{{UNIT}};',
 					'{{WRAPPER}} .tab-title.active:not(.tab-mobile-title):before, {{WRAPPER}} .tab-title.active:not(.tab-mobile-title):after' => 'border-width: {{SIZE}}{{UNIT}};',
-				],
-			]
+				),
+			)
 		);
-		/*
-		$this->add_control(
-			'product_tabs_custom_css',
-			[
-				'type'        => Controls_Manager::CODE,
-				'label'       => __( 'Custom CSS', 'micemade-elements' ),
-				'language'    => 'css',
-				'render_type' => 'ui',
-				'show_label'  => false,
-				'separator'   => 'none',
-			]
-		);
-		*/
+
 		$this->end_controls_section();
 
 	}
@@ -742,15 +741,22 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 		$idint = substr( $this->get_id_int(), 0, 3 );
 		?>
 
-		<div class="micemade-elements_tabs <?php echo esc_attr( $type ); ?> elementor-tabs" role="tablist">
+		<div class="micemade-elements_tabs <?php echo esc_attr( $type ); ?>" role="tablist">
 
-			<?php
-			$counter        = 1;
-			$tab_status     = '';
-			$content_status = '';
-			?>
+		<?php
+		// Get breakpoints configuration.
+		// $bm = new Breakpoints_Manager();
+		// echo '<pre class="mm-debug">';
+		// print_r($bm->get_breakpoints_config());
+		// echo '</pre>';
+		?>
+		<?php
+		$counter        = 1;
+		$tab_status     = '';
+		$content_status = '';
+		?>
 
-			<div class="tabs-wrapper elementor-tabs-wrapper" role="tab">
+			<div class="tabs-wrapper" role="tab">
 				<?php
 				foreach ( $tabs as $item ) {
 
@@ -770,19 +776,11 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 			</div>
 
 			<?php $counter = 1; ?>
-			<div class="tabs-content-wrapper elementor-tabs-content-wrapper" role="tabpanel">
+			<div class="tabs-content-wrapper" role="tabpanel">
 
 				<?php
 				foreach ( $tabs as $item ) {
 					$content_status = ( 1 === $counter ) ? ' active' : '';
-
-					if ( $item['icon'] ) {
-						$icon_html = '<i class="tab-icon ' . esc_attr( $item['icon'] ) . '"></i>';
-					} else {
-						$icon_html = '';
-					}
-
-					echo '<div class="tab-title tab-mobile-title' . esc_attr( $content_status ) . '" data-tab="' . esc_attr( $counter ) . '"><span>' . wp_kses_post( $icon_html . $item['tab_title'] ) . '</span></div>';
 
 					$ppp           = $item['posts_per_page'];
 					$offset        = $item['offset'];
@@ -810,10 +808,10 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 					// "item" class is to support Micemade Themes
 					add_filter(
 						'woocommerce_post_class',
-						function( $classes ) {
+						function ( $classes ) {
 							// Remove the "first" and "last" added by wc_get_loop_class().
 							$classes = array_diff( $classes, array( 'first', 'last' ) );
-							return apply_filters( 'micemade_elements_product_item_classes', $classes, 'add', [ $this->mm_products_grid, 'item'] );
+							return apply_filters( 'micemade_elements_product_item_classes', $classes, 'add', array( $this->mm_products_grid, 'item' ) );
 						},
 						10
 					);
@@ -821,8 +819,11 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 					$products = get_posts( $args );
 					if ( ! empty( $products ) ) {
 
-						echo '<div class="woocommerce woocommerce-page micemade-elements_wc-catalog tab-content elementor-tab-content elementor-clearfix tab-' . esc_attr( $counter . $content_status ) . '">';
-						echo '<ul class="products mme-row">';
+							echo '<div class="woocommerce woocommerce-page micemade-elements_wc-catalog tab-content elementor-tab-content elementor-clearfix tab-' . esc_attr( $counter . $content_status ) . '">';
+
+							echo '<div class="tab-mobile-title tab-' . esc_attr( $counter . $content_status ) . '" data-tab="' . esc_attr( $counter ) . '"><span><i>' . esc_html__( 'Showing: ', 'micemade-elements' ) . '</i>' . esc_html( $item['tab_title'] ) . '</span></div>';
+
+							echo '<ul class="products mme-row">';
 
 						foreach ( $products as $post ) {
 
@@ -830,16 +831,16 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 							wc_get_template_part( 'content', 'product' );
 						}
 
-						echo '</ul>';
-						echo '</div>';
+							echo '</ul>';
+							echo '</div>';
 					}
 
 					// "Clean" or "reset" post_class
 					// avoid conflict with other "post_class" functions
 					add_filter(
 						'woocommerce_post_class',
-						function( $classes ) {
-							return apply_filters( 'micemade_elements_product_item_classes', $classes, '', [ $this->mm_products_grid, 'item'] );
+						function ( $classes ) {
+							return apply_filters( 'micemade_elements_product_item_classes', $classes, '', array( $this->mm_products_grid, 'item' ) );
 						},
 						10
 					);
@@ -856,31 +857,6 @@ class Micemade_WC_Products_Tabs extends Widget_Base {
 		<?php
 	}
 
-	public function add_post_css( $post_css, Element_Base $element ) {
-
-		$settings = $element->get_settings();
-
-		if ( empty( $settings['product_tabs_custom_css'] ) ) {
-			return;
-		}
-
-		$css = trim( $settings['product_tabs_custom_css'] );
-
-		if ( empty( $css ) ) {
-			return;
-		}
-		$css = str_replace( 'selector', $post_css->get_element_unique_selector( $element ), $css );
-
-		// Add a css comment.
-		$css = sprintf( '/* Start custom CSS for %s, class: %s */', $element->get_name(), $element->get_unique_selector() ) . $css;
-
-		$post_css->get_stylesheet()->add_raw_css( $css );
-	}
-	/*
-	protected function add_actions() {
-		add_action( 'elementor/element/parse_css', [ $this, 'add_post_css' ], 10, 2 );
-	}
-	 */
 	/**
 	 * Render tabs widget output in the editor.
 	 *

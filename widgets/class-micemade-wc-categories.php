@@ -1,12 +1,14 @@
 <?php
 namespace Elementor;
 
-use Elementor\Controls_Manager;
-use Elementor\Core\Schemes\Typography;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
+
+use Elementor\Controls_Stack;
+use Elementor\Controls_Manager;
+use Elementor\Core\Schemes\Typography;
+use Elementor\Plugin;
 
 class Micemade_WC_Categories extends Widget_Base {
 
@@ -27,6 +29,13 @@ class Micemade_WC_Categories extends Widget_Base {
 		}
 		if ( ! wp_script_is( 'micemade-slider-js', 'enqueued' ) ) {
 			wp_enqueue_script( 'micemade-slider-js' );
+		}
+
+		if ( ! wp_script_is( 'micemade-wc-cats', 'registered' ) ) {
+			wp_register_script( 'micemade-wc-cats', MICEMADE_ELEMENTS_URL . 'assets/js/custom/handlers/wc-categories.js', array( 'elementor-frontend' ), $today, true );
+		}
+		if ( ! wp_script_is( 'micemade-wc-cats', 'enqueued' ) ) {
+			wp_enqueue_script( 'micemade-wc-cats' );
 		}
 	}
 
@@ -53,7 +62,7 @@ class Micemade_WC_Categories extends Widget_Base {
 	}
 
 	public function get_title() {
-		return __( 'Micemade WC Categories', 'micemade-elements' );
+		return esc_html__( 'Micemade WC Categories', 'micemade-elements' );
 	}
 
 	public function get_icon() {
@@ -65,10 +74,10 @@ class Micemade_WC_Categories extends Widget_Base {
 		return array( 'micemade_elements' );
 	}
 
-	protected function _register_controls() {
+	protected function register_controls() {
 
 		// $slider_style = new Micemade_Slider_Style_Controls();
-		// $slider_style->_register_controls();
+		// $slider_style->register_controls();
 
 		$this->start_controls_section(
 			'section_main',
@@ -79,14 +88,14 @@ class Micemade_WC_Categories extends Widget_Base {
 
 		// Get product categories and first default category item.
 		$get_cats    = apply_filters( 'micemade_elements_terms', 'product_cat' );
-		$default_cat = ! empty( $get_cats ) ? array_key_first( $get_cats ) : [];
+		$default_cat = ! empty( $get_cats ) ? array_key_first( $get_cats ) : array();
 
 		$this->add_control(
 			'categories',
 			array(
 				'label'       => esc_html__( 'Select product categories', 'micemade-elements' ),
 				'type'        => Controls_Manager::SELECT2,
-				'default'     => [ $default_cat ],
+				'default'     => array( $default_cat ),
 				'options'     => $get_cats,
 				'multiple'    => true,
 				'label_block' => true,
@@ -103,9 +112,9 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'add_query_args',
 			array(
-				'label'       => __( 'Product filters (per category)', 'micemade-elements' ),
+				'label'       => esc_html__( 'Product filters (per category)', 'micemade-elements' ),
 				'type'        => Controls_Manager::SELECT2,
-				'default'     => [],
+				'default'     => array(),
 				'options'     => $this->add_query_args_array,
 				'multiple'    => true,
 				'label_block' => true,
@@ -115,14 +124,14 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'add_query_text',
 			array(
-				'label'       => __( 'Text for filters', 'micemade-elements' ),
+				'label'       => esc_html__( 'Text for filters', 'micemade-elements' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => '',
-				'placeholder' => __( 'Featured products in ...', 'micemade-elements' ),
+				'placeholder' => esc_html__( 'Featured products in ...', 'micemade-elements' ),
 				'label_block' => true,
-				'condition'   => [
-					'add_query_args!' => [],
-				],
+				'condition'   => array(
+					'add_query_args!' => array(),
+				),
 			)
 		);
 
@@ -130,7 +139,7 @@ class Micemade_WC_Categories extends Widget_Base {
 			'add_query_note',
 			array(
 				'type'            => \Elementor\Controls_Manager::RAW_HTML,
-				'raw'             => __( '<small>Prepend your custom text for additional filters to category title.</small>' ),
+				'raw'             => '<small>' . esc_html__( 'Prepend your custom text for additional filters to category title.' ) . '</small>',
 				'content_classes' => 'your-class',
 				'separator'       => 'after',
 				'condition'       => array(
@@ -142,12 +151,12 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'grid_or_slider',
 			array(
-				'label'   => __( 'Grid or slider', 'micemade-elements' ),
+				'label'   => esc_html__( 'Grid or slider', 'micemade-elements' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'grid',
 				'options' => array(
-					'grid'   => __( 'Grid', 'micemade-elements' ),
-					'slider' => __( 'Slider', 'micemade-elements' ),
+					'grid'   => esc_html__( 'Grid', 'micemade-elements' ),
+					'slider' => esc_html__( 'Slider', 'micemade-elements' ),
 				),
 			)
 		);
@@ -156,7 +165,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'heading_grid',
 			array(
-				'label'     => __( 'Categories grid options', 'micemade-elements' ),
+				'label'     => esc_html__( 'Categories grid options', 'micemade-elements' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 				'condition' => array(
@@ -164,11 +173,11 @@ class Micemade_WC_Categories extends Widget_Base {
 				),
 			)
 		);
-		// Heading for slider options
+		// Heading for slider options.
 		$this->add_control(
 			'heading_slider',
 			array(
-				'label'     => __( 'Categories slider options', 'micemade-elements' ),
+				'label'     => esc_html__( 'Categories slider options', 'micemade-elements' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 				'condition' => array(
@@ -179,17 +188,17 @@ class Micemade_WC_Categories extends Widget_Base {
 
 		// Items in grid row.
 		$items_num = array(
-			1 => __( 'One', 'micemade-elements' ),
-			2 => __( 'Two', 'micemade-elements' ),
-			3 => __( 'Three', 'micemade-elements' ),
-			4 => __( 'Four', 'micemade-elements' ),
-			6 => __( 'Six', 'micemade-elements' ),
+			1 => esc_html__( 'One', 'micemade-elements' ),
+			2 => esc_html__( 'Two', 'micemade-elements' ),
+			3 => esc_html__( 'Three', 'micemade-elements' ),
+			4 => esc_html__( 'Four', 'micemade-elements' ),
+			6 => esc_html__( 'Six', 'micemade-elements' ),
 		);
 
 		$this->add_control(
 			'cats_per_row',
 			array(
-				'label'     => __( 'Items per row', 'micemade-elements' ),
+				'label'     => esc_html__( 'Items per row', 'micemade-elements' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 3,
 				'options'   => $items_num,
@@ -202,7 +211,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'cats_per_row_tab',
 			array(
-				'label'     => __( 'Items per row (tablets)', 'micemade-elements' ),
+				'label'     => esc_html__( 'Items per row (tablets)', 'micemade-elements' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 1,
 				'options'   => $items_num,
@@ -215,7 +224,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'cats_per_row_mob',
 			array(
-				'label'     => __( 'Items per row (mobiles)', 'micemade-elements' ),
+				'label'     => esc_html__( 'Items per row (mobiles)', 'micemade-elements' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 1,
 				'options'   => $items_num,
@@ -226,9 +235,24 @@ class Micemade_WC_Categories extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
+			'columns',
+			array(
+				'label'           => esc_html__( 'Category columns (devices)', 'micemade-elements' ),
+				'type'            => Controls_Manager::SELECT,
+				'desktop_default' => 4,
+				'tablet_default'  => 2,
+				'mobile_default'  => 1,
+				'options'         => $items_num,
+				'condition' => array(
+					'grid_or_slider' => 'grid',
+				),
+			)
+		);
+
+		$this->add_responsive_control(
 			'horiz_spacing',
 			array(
-				'label'     => __( 'Grid horizontal spacing', 'micemade-elements' ),
+				'label'     => esc_html__( 'Grid horizontal spacing', 'micemade-elements' ),
 				'type'      => Controls_Manager::SLIDER,
 				'default'   => array(
 					'size' => '',
@@ -253,7 +277,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_responsive_control(
 			'vert_spacing',
 			array(
-				'label'     => __( 'Grid bottom spacing', 'micemade-elements' ),
+				'label'     => esc_html__( 'Grid bottom spacing', 'micemade-elements' ),
 				'type'      => Controls_Manager::SLIDER,
 				'default'   => array(
 					'size' => '20',
@@ -275,62 +299,39 @@ class Micemade_WC_Categories extends Widget_Base {
 			)
 		);
 
-		$this->add_control(
-			'posts_per_slide',
+		$this->add_responsive_control(
+			'slides_to_show',
 			array(
-				'label'              => __( 'Items per slide', 'micemade-elements' ),
+				'label'              => esc_html__( 'Items per slide', 'micemade-elements' ),
 				'type'               => Controls_Manager::SELECT,
 				'default'            => 3,
-				'options'            => array(
-					1 => __( 'One', 'micemade-elements' ),
-					2 => __( 'Two', 'micemade-elements' ),
-					3 => __( 'Three', 'micemade-elements' ),
-					4 => __( 'Four', 'micemade-elements' ),
-					6 => __( 'Six', 'micemade-elements' ),
-				),
+				'options'            => $items_num,
 				'frontend_available' => true,
+				'render_type'        => 'template', // ?
 				'condition'          => array(
 					'grid_or_slider' => 'slider',
 				),
 			)
 		);
 
-		$this->add_control(
-			'posts_per_slide_tab',
-			array(
-				'label'              => __( 'Items per slide (tablets)', 'micemade-elements' ),
+		$this->add_responsive_control(
+			'slides_to_scroll',
+			[
+				'label'              => esc_html__( 'Items to scroll', 'micemade-elements' ),
 				'type'               => Controls_Manager::SELECT,
-				'default'            => 2,
+				'default'            => 3,
 				'options'            => $items_num,
 				'frontend_available' => true,
-				'condition'          => array(
-					'grid_or_slider' => 'slider',
-				),
-			)
+			]
 		);
-
-		$this->add_control(
-			'posts_per_slide_mob',
-			array(
-				'label'              => __( 'Items per slide (mobiles)', 'micemade-elements' ),
-				'type'               => Controls_Manager::SELECT,
-				'default'            => 1,
-				'options'            => $items_num,
-				'frontend_available' => true,
-				'condition'          => array(
-					'grid_or_slider' => 'slider',
-				),
-			)
-		);
-		// end slides to show.
 
 		// Space between the slides.
-		$this->add_responsive_control(
+		$this->add_control(
 			'space',
 			array(
-				'label'              => __( 'Space between', 'micemade-elements' ),
+				'label'              => esc_html__( 'Space between', 'micemade-elements' ),
 				'type'               => Controls_Manager::NUMBER,
-				'default'            => 30,
+				'default'            => 20,
 				'min'                => 0,
 				'step'               => 10,
 				'frontend_available' => true,
@@ -344,14 +345,14 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'pagination',
 			array(
-				'label'              => __( 'Slider pagination', 'micemade-elements' ),
+				'label'              => esc_html__( 'Slider pagination', 'micemade-elements' ),
 				'type'               => Controls_Manager::SELECT,
 				'default'            => 'bullets',
 				'options'            => array(
-					'none'        => __( 'None', 'micemade-elements' ),
-					'bullets'     => __( 'Bullets', 'micemade-elements' ),
-					'progressbar' => __( 'Progress bar', 'micemade-elements' ),
-					'fraction'    => __( 'Fraction', 'micemade-elements' ),
+					'none'        => esc_html__( 'None', 'micemade-elements' ),
+					'bullets'     => esc_html__( 'Bullets', 'micemade-elements' ),
+					'progressbar' => esc_html__( 'Progress bar', 'micemade-elements' ),
+					'fraction'    => esc_html__( 'Fraction', 'micemade-elements' ),
 				),
 				'frontend_available' => true,
 				'condition'          => array(
@@ -366,8 +367,8 @@ class Micemade_WC_Categories extends Widget_Base {
 			array(
 				'label'              => esc_html__( 'Show navigation arrows', 'micemade-elements' ),
 				'type'               => Controls_Manager::SWITCHER,
-				'label_off'          => __( 'No', 'elementor' ),
-				'label_on'           => __( 'Yes', 'elementor' ),
+				'label_off'          => esc_html__( 'No', 'elementor' ),
+				'label_on'           => esc_html__( 'Yes', 'elementor' ),
 				'default'            => 'yes',
 				'frontend_available' => true,
 				'condition'          => array(
@@ -379,12 +380,12 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'autoplay',
 			array(
-				'label'              => __( 'Autoplay', 'micemade-elements' ),
+				'label'              => esc_html__( 'Autoplay', 'micemade-elements' ),
 				'type'               => Controls_Manager::SWITCHER,
 				'default'            => 'yes',
 				'options'            => array(
-					'yes' => __( 'Yes', 'micemade-elements' ),
-					'no'  => __( 'No', 'micemade-elements' ),
+					'yes' => esc_html__( 'Yes', 'micemade-elements' ),
+					'no'  => esc_html__( 'No', 'micemade-elements' ),
 				),
 				'frontend_available' => true,
 				'condition'          => array(
@@ -396,7 +397,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'autoplay_speed',
 			array(
-				'label'              => __( 'Autoplay Speed', 'micemade-elements' ),
+				'label'              => esc_html__( 'Autoplay Speed', 'micemade-elements' ),
 				'type'               => Controls_Manager::NUMBER,
 				'default'            => 5000,
 				'condition'          => array(
@@ -411,7 +412,7 @@ class Micemade_WC_Categories extends Widget_Base {
 			'autplay_note',
 			array(
 				'type'            => \Elementor\Controls_Manager::RAW_HTML,
-				'raw'             => __( '<small>No value under 1000 (ms) will be accepted.</small>' ),
+				'raw'             => '<small>' . esc_html__( 'No value under 1000 (ms) will be accepted.' ) . '</small>',
 				'content_classes' => 'your-class',
 				'condition'       => array(
 					'autoplay' => 'yes',
@@ -423,12 +424,12 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'pause_on_hover',
 			array(
-				'label'              => __( 'Pause on Hover', 'micemade-elements' ),
+				'label'              => esc_html__( 'Pause on Hover', 'micemade-elements' ),
 				'type'               => Controls_Manager::SELECT,
 				'default'            => 'yes',
 				'options'            => array(
-					'yes' => __( 'Yes', 'micemade-elements' ),
-					'no'  => __( 'No', 'micemade-elements' ),
+					'yes' => esc_html__( 'Yes', 'micemade-elements' ),
+					'no'  => esc_html__( 'No', 'micemade-elements' ),
 				),
 				'condition'          => array(
 					'autoplay' => 'yes',
@@ -440,12 +441,12 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'pause_on_interaction',
 			array(
-				'label'              => __( 'Pause on Interaction', 'micemade-elements' ),
+				'label'              => esc_html__( 'Pause on Interaction', 'micemade-elements' ),
 				'type'               => Controls_Manager::SELECT,
 				'default'            => 'yes',
 				'options'            => array(
-					'yes' => __( 'Yes', 'micemade-elements' ),
-					'no'  => __( 'No', 'micemade-elements' ),
+					'yes' => esc_html__( 'Yes', 'micemade-elements' ),
+					'no'  => esc_html__( 'No', 'micemade-elements' ),
 				),
 				'condition'          => array(
 					'autoplay' => 'yes',
@@ -458,29 +459,12 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'infinite',
 			array(
-				'label'              => __( 'Infinite Loop', 'micemade-elements' ),
+				'label'              => esc_html__( 'Infinite Loop', 'micemade-elements' ),
 				'type'               => Controls_Manager::SELECT,
 				'default'            => 'yes',
 				'options'            => array(
-					'yes' => __( 'Yes', 'micemade-elements' ),
-					'no'  => __( 'No', 'micemade-elements' ),
-				),
-				'frontend_available' => true,
-				'condition'          => array(
-					'grid_or_slider' => 'slider',
-				),
-			)
-		);
-
-		$this->add_control(
-			'effect',
-			array(
-				'label'              => __( 'Effect', 'micemade-elements' ),
-				'type'               => Controls_Manager::SELECT,
-				'default'            => 'slide',
-				'options'            => array(
-					'slide' => __( 'Slide', 'micemade-elements' ),
-					'fade'  => __( 'Fade', 'micemade-elements' ),
+					'yes' => esc_html__( 'Yes', 'micemade-elements' ),
+					'no'  => esc_html__( 'No', 'micemade-elements' ),
 				),
 				'frontend_available' => true,
 				'condition'          => array(
@@ -492,7 +476,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'speed',
 			array(
-				'label'              => __( 'Animation Speed', 'micemade-elements' ),
+				'label'              => esc_html__( 'Animation Speed', 'micemade-elements' ),
 				'type'               => Controls_Manager::NUMBER,
 				'default'            => 500,
 				'frontend_available' => true,
@@ -519,7 +503,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'pagination_color',
 			array(
-				'label'     => __( 'Pagination color', 'micemade-elements' ),
+				'label'     => esc_html__( 'Pagination color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					'{{WRAPPER}} .swiper-pagination-progressbar-fill' => 'background-color: {{VALUE}};',
@@ -537,7 +521,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'buttons_color',
 			array(
-				'label'     => __( 'Arrows icon color', 'micemade-elements' ),
+				'label'     => esc_html__( 'Arrows icon color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					'{{WRAPPER}} .swiper-button-prev:before' => 'color: {{VALUE}};',
@@ -552,7 +536,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'buttons_bckcolor',
 			array(
-				'label'     => __( 'Arrows button color', 'micemade-elements' ),
+				'label'     => esc_html__( 'Arrows button color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					'{{WRAPPER}} .swiper-button-prev:after,{{WRAPPER}} .swiper-button-next:after' => 'background-color: {{VALUE}};',
@@ -568,7 +552,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_responsive_control(
 			'nav_arrows_vert_position',
 			array(
-				'label'       => __( 'Arrows vertical position', 'micemade-elements' ),
+				'label'       => esc_html__( 'Arrows vertical position', 'micemade-elements' ),
 				'type'        => Controls_Manager::SLIDER,
 				'label_block' => true,
 				'size_units'  => array( '%', 'px' ),
@@ -599,7 +583,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'arrow_icon',
 			array(
-				'label'       => __( 'Arrow icons', 'micemade-elements' ),
+				'label'       => esc_html__( 'Arrow icons', 'micemade-elements' ),
 				'type'        => \Elementor\Controls_Manager::ICON,
 				'label_block' => true,
 				'include'     => array(
@@ -619,7 +603,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_responsive_control(
 			'nav_arrows_size',
 			array(
-				'label'       => __( 'Arrows icon size', 'micemade-elements' ),
+				'label'       => esc_html__( 'Arrows icon size', 'micemade-elements' ),
 				'type'        => Controls_Manager::SLIDER,
 				'label_block' => true,
 				'size_units'  => array( 'px' ),
@@ -645,7 +629,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_responsive_control(
 			'nav_arrows_back_size',
 			array(
-				'label'       => __( 'Arrows button size', 'micemade-elements' ),
+				'label'       => esc_html__( 'Arrows button size', 'micemade-elements' ),
 				'type'        => Controls_Manager::SLIDER,
 				'label_block' => true,
 				'size_units'  => array( 'px' ),
@@ -671,7 +655,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'nav_arrows_back_roundness',
 			array(
-				'label'       => __( 'Arrows button roundness', 'micemade-elements' ),
+				'label'       => esc_html__( 'Arrows button roundness', 'micemade-elements' ),
 				'type'        => Controls_Manager::SLIDER,
 				'label_block' => true,
 				'size_units'  => array( 'px' ),
@@ -701,7 +685,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			array(
-				'label'     => __( 'Arrow button border' ),
+				'label'     => esc_html__( 'Arrow button border' ),
 				'name'      => 'arrow_button_border',
 				'selector'  => '{{WRAPPER}} .swiper-button-prev:after,{{WRAPPER}} .swiper-button-next:after',
 				'separator' => 'after',
@@ -717,8 +701,8 @@ class Micemade_WC_Categories extends Widget_Base {
 			array(
 				'label'     => esc_html__( 'Fix icon position', 'micemade-elements' ),
 				'type'      => Controls_Manager::SWITCHER,
-				'label_off' => __( 'No', 'elementor' ),
-				'label_on'  => __( 'Yes', 'elementor' ),
+				'label_off' => esc_html__( 'No', 'elementor' ),
+				'label_on'  => esc_html__( 'Yes', 'elementor' ),
 				'default'   => 'no',
 			)
 		);
@@ -726,7 +710,7 @@ class Micemade_WC_Categories extends Widget_Base {
 			'fix_icon_note',
 			array(
 				'type'            => \Elementor\Controls_Manager::RAW_HTML,
-				'raw'             => __( '<small>Some icons may misalign with it\'s button. Enable the control above to fix the arrow icon position.</small>' ),
+				'raw'             => esc_html__( '<small>Some icons may misalign with it\'s button. Enable the control above to fix the arrow icon position.</small>' ),
 				'content_classes' => 'your-class',
 			)
 		);
@@ -734,7 +718,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_responsive_control(
 			'nav_arrows_fix_position',
 			array(
-				'label'       => __( 'Fix arrow position', 'micemade-elements' ),
+				'label'       => esc_html__( 'Fix arrow position', 'micemade-elements' ),
 				'type'        => Controls_Manager::SLIDER,
 				'label_block' => true,
 				'size_units'  => array( '%', 'px' ),
@@ -774,14 +758,14 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'style',
 			array(
-				'label'   => __( 'Base style', 'micemade-elements' ),
+				'label'   => esc_html__( 'Base style', 'micemade-elements' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'style_1',
 				'options' => array(
-					'style_1' => __( 'Style one', 'micemade-elements' ),
-					'style_2' => __( 'Style two', 'micemade-elements' ),
-					'style_3' => __( 'Style three', 'micemade-elements' ),
-					'style_4' => __( 'Style four', 'micemade-elements' ),
+					'style_1' => esc_html__( 'Style one', 'micemade-elements' ),
+					'style_2' => esc_html__( 'Style two', 'micemade-elements' ),
+					'style_3' => esc_html__( 'Style three', 'micemade-elements' ),
+					'style_4' => esc_html__( 'Style four', 'micemade-elements' ),
 				),
 			)
 		);
@@ -791,8 +775,8 @@ class Micemade_WC_Categories extends Widget_Base {
 			array(
 				'label'     => esc_html__( 'Show category image', 'micemade-elements' ),
 				'type'      => Controls_Manager::SWITCHER,
-				'label_off' => __( 'No', 'elementor' ),
-				'label_on'  => __( 'Yes', 'elementor' ),
+				'label_off' => esc_html__( 'No', 'elementor' ),
+				'label_on'  => esc_html__( 'Yes', 'elementor' ),
 				'default'   => 'yes',
 			)
 		);
@@ -815,8 +799,8 @@ class Micemade_WC_Categories extends Widget_Base {
 			array(
 				'label'     => esc_html__( 'Show products count', 'micemade-elements' ),
 				'type'      => Controls_Manager::SWITCHER,
-				'label_off' => __( 'No', 'elementor' ),
-				'label_on'  => __( 'Yes', 'elementor' ),
+				'label_off' => esc_html__( 'No', 'elementor' ),
+				'label_on'  => esc_html__( 'Yes', 'elementor' ),
 				'default'   => 'yes',
 				'separator' => 'before',
 			)
@@ -825,10 +809,10 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'prod_count_pre',
 			array(
-				'label'       => __( 'Prepend text to products count', 'micemade-elements' ),
+				'label'       => esc_html__( 'Prepend text to products count', 'micemade-elements' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => __( 'Number of products: ', 'micemade-elements' ),
-				'placeholder' => __( 'Prepend text to products count', 'micemade-elements' ),
+				'default'     => esc_html__( 'Number of products: ', 'micemade-elements' ),
+				'placeholder' => esc_html__( 'Prepend text to products count', 'micemade-elements' ),
 				'label_block' => true,
 				'condition'   => array(
 					'prod_count!' => '',
@@ -839,10 +823,10 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'prod_count_ape',
 			array(
-				'label'       => __( 'Append text to products count', 'micemade-elements' ),
+				'label'       => esc_html__( 'Append text to products count', 'micemade-elements' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => '',
-				'placeholder' => __( 'Add or change appended text', 'micemade-elements' ),
+				'placeholder' => esc_html__( 'Add or change appended text', 'micemade-elements' ),
 				'label_block' => true,
 				'condition'   => array(
 					'prod_count!' => '',
@@ -853,7 +837,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_responsive_control(
 			'categories_height',
 			array(
-				'label'     => __( 'Items height', 'micemade-elements' ),
+				'label'     => esc_html__( 'Items height', 'micemade-elements' ),
 				'type'      => Controls_Manager::SLIDER,
 				'default'   => array(
 					'size' => 250,
@@ -875,7 +859,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_responsive_control(
 			'cat_image_width',
 			array(
-				'label'     => __( 'Category image width', 'micemade-elements' ),
+				'label'     => esc_html__( 'Category image width', 'micemade-elements' ),
 				'type'      => Controls_Manager::SLIDER,
 				'default'   => array(
 					'size' => '',
@@ -899,20 +883,20 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_responsive_control(
 			'post_text_align',
 			array(
-				'label'     => __( 'Alignment', 'micemade-elements' ),
+				'label'     => esc_html__( 'Alignment', 'micemade-elements' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'options'   => array(
 					'left'   => array(
-						'title' => __( 'Left', 'micemade-elements' ),
-						'icon'  => 'fa fa-align-left',
+						'title' => esc_html__( 'Left', 'micemade-elements' ),
+						'icon'  => 'eicon-text-align-left',
 					),
 					'center' => array(
-						'title' => __( 'Center', 'micemade-elements' ),
-						'icon'  => 'fa fa-align-center',
+						'title' => esc_html__( 'Center', 'micemade-elements' ),
+						'icon'  => 'eicon-text-align-center',
 					),
 					'right'  => array(
-						'title' => __( 'Right', 'micemade-elements' ),
-						'icon'  => 'fa fa-align-right',
+						'title' => esc_html__( 'Right', 'micemade-elements' ),
+						'icon'  => 'eicon-text-align-right',
 					),
 				),
 				'default'   => '',
@@ -925,12 +909,12 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_responsive_control(
 			'cat_vertical_alignment',
 			array(
-				'label'     => __( 'Vertical Alignment', 'micemade-elements' ),
+				'label'     => esc_html__( 'Vertical Alignment', 'micemade-elements' ),
 				'type'      => Controls_Manager::SELECT,
 				'options'   => array(
-					'flex-start' => __( 'Top', 'micemade-elements' ),
-					'center'     => __( 'Middle', 'micemade-elements' ),
-					'flex-end'   => __( 'Bottom', 'micemade-elements' ),
+					'flex-start' => esc_html__( 'Top', 'micemade-elements' ),
+					'center'     => esc_html__( 'Middle', 'micemade-elements' ),
+					'flex-end'   => esc_html__( 'Bottom', 'micemade-elements' ),
 				),
 				'default'   => 'center',
 				'selectors' => array(
@@ -957,7 +941,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_responsive_control(
 			'inner_spacing',
 			array(
-				'label'     => __( 'Item margin', 'micemade-elements' ),
+				'label'     => esc_html__( 'Item margin', 'micemade-elements' ),
 				'type'      => Controls_Manager::SLIDER,
 				'default'   => array(
 					'size' => '0',
@@ -990,14 +974,14 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->start_controls_tab(
 			'tab_button_normal',
 			array(
-				'label' => __( 'Normal', 'micemade-elements' ),
+				'label' => esc_html__( 'Normal', 'micemade-elements' ),
 			)
 		);
 
 		$this->add_control(
 			'title_text_color',
 			array(
-				'label'     => __( 'Text Color', 'micemade-elements' ),
+				'label'     => esc_html__( 'Text Color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '',
 				'selectors' => array(
@@ -1009,7 +993,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'filters_text_color',
 			array(
-				'label'     => __( 'Additional filters text color', 'micemade-elements' ),
+				'label'     => esc_html__( 'Additional filters text color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '',
 				'selectors' => array(
@@ -1025,7 +1009,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'prod_count_text_color',
 			array(
-				'label'     => __( 'Products count text color', 'micemade-elements' ),
+				'label'     => esc_html__( 'Products count text color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '',
 				'selectors' => array(
@@ -1041,7 +1025,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'background_color',
 			array(
-				'label'     => __( 'Category overlay color', 'micemade-elements' ),
+				'label'     => esc_html__( 'Category overlay color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					'{{WRAPPER}} .category__overlay' => 'background-color: {{VALUE}};',
@@ -1056,14 +1040,14 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->start_controls_tab(
 			'tab_title_hover',
 			array(
-				'label' => __( 'Hover', 'micemade-elements' ),
+				'label' => esc_html__( 'Hover', 'micemade-elements' ),
 			)
 		);
 
 		$this->add_control(
 			'title_hover_color',
 			array(
-				'label'     => __( 'Title Color on Hover', 'micemade-elements' ),
+				'label'     => esc_html__( 'Title Color on Hover', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					'{{WRAPPER}} .category:hover' => 'color: {{VALUE}};',
@@ -1074,7 +1058,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'filters_text_color_hover',
 			array(
-				'label'     => __( 'Additional filters text hover color', 'micemade-elements' ),
+				'label'     => esc_html__( 'Additional filters text hover color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '',
 				'selectors' => array(
@@ -1089,7 +1073,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'prod_count_text_color_hover',
 			array(
-				'label'     => __( 'Products count text hover color', 'micemade-elements' ),
+				'label'     => esc_html__( 'Products count text hover color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '',
 				'selectors' => array(
@@ -1105,7 +1089,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'background_color_hover',
 			array(
-				'label'     => __( 'Category overlay color on hover', 'micemade-elements' ),
+				'label'     => esc_html__( 'Category overlay color on hover', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					'{{WRAPPER}} .category:hover .category__overlay' => 'background-color: {{VALUE}};',
@@ -1121,7 +1105,7 @@ class Micemade_WC_Categories extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			array(
 				'name'     => 'title_typography',
-				'label'    => __( 'Title typography', 'micemade-elements' ),
+				'label'    => esc_html__( 'Title typography', 'micemade-elements' ),
 				'scheme'   => Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} .category__title',
 			)
@@ -1131,7 +1115,7 @@ class Micemade_WC_Categories extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			array(
 				'name'      => 'filters_text_typography',
-				'label'     => __( 'Filters text typography', 'micemade-elements' ),
+				'label'     => esc_html__( 'Filters text typography', 'micemade-elements' ),
 				'scheme'    => Typography::TYPOGRAPHY_4,
 				'selector'  => '{{WRAPPER}} .category__add-query-text',
 				'separator' => 'before',
@@ -1145,7 +1129,7 @@ class Micemade_WC_Categories extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			array(
 				'name'      => 'product_count_typography',
-				'label'     => __( 'Products count typography', 'micemade-elements' ),
+				'label'     => esc_html__( 'Products count typography', 'micemade-elements' ),
 				'scheme'    => Typography::TYPOGRAPHY_4,
 				'selector'  => '{{WRAPPER}} .category__product-count',
 				'separator' => 'before',
@@ -1159,7 +1143,7 @@ class Micemade_WC_Categories extends Widget_Base {
 			Group_Control_Border::get_type(),
 			array(
 				'name'        => 'border',
-				'label'       => __( 'Border', 'micemade-elements' ),
+				'label'       => esc_html__( 'Border', 'micemade-elements' ),
 				'placeholder' => '1px',
 				'default'     => '1px',
 				'selector'    => '{{WRAPPER}} .category__inner-wrap',
@@ -1171,7 +1155,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->start_controls_section(
 			'section_anim_effects',
 			array(
-				'label' => __( 'Animation and hover effects', 'micemade-elements' ),
+				'label' => esc_html__( 'Animation and hover effects', 'micemade-elements' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			)
 		);
@@ -1179,15 +1163,15 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'hover_style',
 			array(
-				'label'     => __( 'Image hover effect', 'micemade-elements' ),
+				'label'     => esc_html__( 'Image hover effect', 'micemade-elements' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'blur_image',
 				'options'   => array(
-					'no_image_effect' => __( 'No image hover effect', 'micemade-elements' ),
-					'blur_image'      => __( 'Blur image', 'micemade-elements' ),
-					'enlarge_image'   => __( 'Enlarge image', 'micemade-elements' ),
-					'shrink_image'    => __( 'Shrink image', 'micemade-elements' ),
-					'greyscale_image' => __( 'Greyscale image', 'micemade-elements' ),
+					'no_image_effect' => esc_html__( 'No image hover effect', 'micemade-elements' ),
+					'blur_image'      => esc_html__( 'Blur image', 'micemade-elements' ),
+					'enlarge_image'   => esc_html__( 'Enlarge image', 'micemade-elements' ),
+					'shrink_image'    => esc_html__( 'Shrink image', 'micemade-elements' ),
+					'greyscale_image' => esc_html__( 'Greyscale image', 'micemade-elements' ),
 				),
 				'condition' => array(
 					'image!' => '',
@@ -1198,28 +1182,28 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'hover_style_box',
 			array(
-				'label'   => __( 'Category hover effect', 'micemade-elements' ),
+				'label'   => esc_html__( 'Category hover effect', 'micemade-elements' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'none',
 				'options' => array(
-					'none'               => __( 'None', 'micemade-elements' ),
-					'box_enlarge_shadow' => __( 'Enlarge with shadow', 'micemade-elements' ),
-					'box_shrink_shadow'  => __( 'Shrink with shadow', 'micemade-elements' ),
-					'box_move_up'        => __( 'Float', 'micemade-elements' ),
-					'box_move_down'      => __( 'Sink', 'micemade-elements' ),
-					'box_move_right'     => __( 'Forward', 'micemade-elements' ),
-					'box_move_left'      => __( 'Backward', 'micemade-elements' ),
+					'none'               => esc_html__( 'None', 'micemade-elements' ),
+					'box_enlarge_shadow' => esc_html__( 'Enlarge with shadow', 'micemade-elements' ),
+					'box_shrink_shadow'  => esc_html__( 'Shrink with shadow', 'micemade-elements' ),
+					'box_move_up'        => esc_html__( 'Float', 'micemade-elements' ),
+					'box_move_down'      => esc_html__( 'Sink', 'micemade-elements' ),
+					'box_move_right'     => esc_html__( 'Forward', 'micemade-elements' ),
+					'box_move_left'      => esc_html__( 'Backward', 'micemade-elements' ),
 				),
 			)
 		);
 
 		// Prepare array of animations.
-		$no_anim    = array( 'none' => __( 'None', 'micemade-elements' ) );
+		$no_anim    = array( 'none' => esc_html__( 'None', 'micemade-elements' ) );
 		$anim_array = $this->array_flatten( Control_Animation::get_animations() );
 		$this->add_control(
 			'item_anim',
 			array(
-				'label'       => __( 'Entrance Animation', 'micemade-elements' ),
+				'label'       => esc_html__( 'Entrance Animation', 'micemade-elements' ),
 				'type'        => Controls_Manager::SELECT,
 				'default'     => 'none',
 				'options'     => array_merge( $no_anim, $anim_array ),
@@ -1230,13 +1214,13 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'item_anim_duration',
 			array(
-				'label'     => __( 'Animation Speed', 'elementor' ),
+				'label'     => esc_html__( 'Animation Speed', 'elementor' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => '',
 				'options'   => array(
-					'slow' => __( 'Slow', 'elementor' ),
-					''     => __( 'Normal', 'elementor' ),
-					'fast' => __( 'Fast', 'elementor' ),
+					'slow' => esc_html__( 'Slow', 'elementor' ),
+					''     => esc_html__( 'Normal', 'elementor' ),
+					'fast' => esc_html__( 'Fast', 'elementor' ),
 				),
 				'condition' => array(
 					'item_anim!' => 'none',
@@ -1247,7 +1231,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		$this->add_control(
 			'item_anim_delay',
 			array(
-				'label'     => __( 'Animation Delay', 'elementor' ) . ' (ms)',
+				'label'     => esc_html__( 'Animation Delay', 'elementor' ) . ' (ms)',
 				'type'      => Controls_Manager::NUMBER,
 				'default'   => 0,
 				'min'       => 0,
@@ -1269,40 +1253,27 @@ class Micemade_WC_Categories extends Widget_Base {
 		$settings = $this->get_settings_for_display();
 		// Settings vars.
 		// $categories__         = wp_list_pluck( $settings['categories__'], 'category' ); // if repeater.
-		$categories           = $settings['categories'];
-		$add_query_args       = $settings['add_query_args'];
-		$add_query_text       = $settings['add_query_text'];
-		$gr_or_sl             = $settings['grid_or_slider'];
-		$cats_per_row         = (int) $settings['cats_per_row'];
-		$cats_per_row_tab     = (int) $settings['cats_per_row_tab'];
-		$cats_per_row_mob     = (int) $settings['cats_per_row_mob'];
-		$posts_per_slide      = (int) $settings['posts_per_slide'];
-		$posts_per_slide_tab  = (int) $settings['posts_per_slide_tab'];
-		$posts_per_slide_mob  = (int) $settings['posts_per_slide_mob'];
-		$space                = (int) $settings['space'];
-		$space_tablet         = (int) $settings['space_tablet'];
-		$space_mobile         = (int) $settings['space_mobile'];
-		$pagination           = $settings['pagination'];
-		$buttons              = $settings['buttons'];
-		$arrow_icon           = $settings['arrow_icon'];
-		$autoplay             = $settings['autoplay'];
-		$autoplay_speed       = $settings['autoplay_speed'];
-		$speed                = $settings['speed'];
-		$pause_on_hover       = $settings['pause_on_hover'];
-		$pause_on_interaction = $settings['pause_on_interaction'];
-		$effect               = $settings['effect'];
-		$infinite             = $settings['infinite'];
-		$style                = $settings['style'];
-		$hover_style          = $settings['hover_style'];
-		$hover_style_box      = $settings['hover_style_box'];
-		$image                = $settings['image'];
-		$img_format           = $settings['img_format'];
-		$prod_count           = $settings['prod_count'];
-		$prod_count_pre       = $settings['prod_count_pre'];
-		$prod_count_ape       = $settings['prod_count_ape'];
-		$item_anim            = $settings['item_anim'];
-		$item_anim_dur        = $settings['item_anim_duration'];
-		$item_anim_delay      = $settings['item_anim_delay'];
+		$categories       = $settings['categories'];
+		$add_query_args   = $settings['add_query_args'];
+		$add_query_text   = $settings['add_query_text'];
+		$gr_or_sl         = $settings['grid_or_slider'];
+		$cats_per_row     = (int) $settings['cats_per_row'];
+		$cats_per_row_tab = (int) $settings['cats_per_row_tab'];
+		$cats_per_row_mob = (int) $settings['cats_per_row_mob'];
+		$pagination       = $settings['pagination'];
+		$buttons          = $settings['buttons'];
+		$arrow_icon       = $settings['arrow_icon'];
+		$style            = $settings['style'];
+		$hover_style      = $settings['hover_style'];
+		$hover_style_box  = $settings['hover_style_box'];
+		$image            = $settings['image'];
+		$img_format       = $settings['img_format'];
+		$prod_count       = $settings['prod_count'];
+		$prod_count_pre   = $settings['prod_count_pre'];
+		$prod_count_ape   = $settings['prod_count_ape'];
+		$item_anim        = $settings['item_anim'];
+		$item_anim_dur    = $settings['item_anim_duration'];
+		$item_anim_delay  = $settings['item_anim_delay'];
 
 		// This widget ID.
 		$id = $this->get_id();
@@ -1311,25 +1282,23 @@ class Micemade_WC_Categories extends Widget_Base {
 			return;
 		}
 
-		// Grid item styles.
-		$grid = micemade_elements_grid_class( intval( $cats_per_row ), intval( $cats_per_row_tab ), intval( $cats_per_row_mob ) );
+		// Columns - responsive settings.
+		$columns = array();
+		foreach ( $settings as $key => $value ) {
+			if ( 'columns' === $key && $value ) {
+				$columns[ (string) $value ] = $key . '_desktop';
+			} elseif ( strpos( $key, 'columns_' ) === 0 ) {
+				$columns[ (string) $value ] = $key;
+			}
+		}
 
-		$swiper_settings = array(
-			'posts_per_slide'      => $posts_per_slide,
-			'posts_per_slide_tab'  => $posts_per_slide_tab,
-			'posts_per_slide_mob'  => $posts_per_slide_mob,
-			'space'                => $space,
-			'space_tablet'         => $space_tablet,
-			'space_mobile'         => $space_mobile,
-			'pagination'           => $pagination,
-			'autoplay'             => $autoplay,
-			'delay'                => $autoplay_speed,
-			'speed'                => $speed,
-			'pause_on_hover'       => $pause_on_hover,
-			'pause_on_interaction' => $pause_on_interaction,
-			'infinite'             => $infinite,
-			'effect'               => $effect,
-		);
+		// Create grid CSS selectors based on column settings.
+		if ( NEW_CSS ) {
+			$grid = micemade_elements_grid( $columns );
+		} else {
+			// Grid item styles.
+			$grid = micemade_elements_grid_class( intval( $cats_per_row ), intval( $cats_per_row_tab ), intval( $cats_per_row_mob ) ); // To deprecate.
+		}
 
 		// Add slider style selectors if slider instead of grid.
 		$container_slider_css = ( 'slider' === $gr_or_sl ) ? 'swiper-container micemade-elements_slider' : 'mme-row';
@@ -1337,7 +1306,7 @@ class Micemade_WC_Categories extends Widget_Base {
 		// Attributes for the categories container.
 		$container_atts = array(
 			'container' => array(
-				'class'           => array(
+				'class' => array(
 					$container_slider_css,
 					'micemade-elements_product-categories',
 					$style,
@@ -1362,10 +1331,11 @@ class Micemade_WC_Categories extends Widget_Base {
 				$args .= $arg . ( end( $add_query_args ) === $arg ? '' : '&amp;' );
 			}
 		}
-
 		// Categories holder.
-		echo '<div ' . $this->get_render_attribute_string( 'container' ) . '>';
+		?>
+		<div <?php $this->print_render_attribute_string( 'container' ); ?>>
 
+		<?php
 		echo ( 'slider' === $gr_or_sl ) ? '<div class="swiper-wrapper">' : '';
 
 		foreach ( $categories as $index => $cat ) {
@@ -1384,10 +1354,17 @@ class Micemade_WC_Categories extends Widget_Base {
 			$image_url  = isset( $term_data['image_url'] ) ? $term_data['image_url'] : '';
 
 			// Category item animation data.
-			$anim_settings = array(
-				'_enter_animation' => $item_anim,
-				'_animation_delay' => $item_anim_delay * $count,
-			);
+			$anim_settings = array();
+			if ( 'none' !== $item_anim ) {
+				$anim_settings = array(
+					'_enter_animation' => $item_anim,
+					'_animation_delay' => $item_anim_delay * $count,
+				);
+				// Include assets/lib/animation.css/animation.css from Elementor.
+				$enable_animation = array( 'styles' => array( 'e-animations' ) );
+				Plugin::$instance->assets_loader->enable_assets( $enable_animation );
+			}
+
 			// Category item attributes.
 			$this->add_render_attribute(
 				array(
@@ -1403,12 +1380,14 @@ class Micemade_WC_Categories extends Widget_Base {
 						'data-settings' => wp_json_encode( $anim_settings ),
 						'title'         => esc_attr( $term_title ),
 						'href'          => esc_url( $term_link ),
+						'data-cat'      => $term_title,
 					),
 				)
 			);
+			?>
+			<a <?php $this->print_render_attribute_string( 'cat_item' . $count ); ?>>
 
-			echo '<a ' . $this->get_render_attribute_string( 'cat_item' . $count ) . '>';
-
+			<?php
 				echo '<div class="category__inner-wrap">';
 
 					echo '<div class="category__overlay"></div>';

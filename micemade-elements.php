@@ -3,11 +3,11 @@
  * Plugin Name: Micemade Elements
  * Description: Extension plugin with custom elements for Elementor, created by Micemade. Elementor plugin required.
  * Plugin URI: https://github.com/Micemade/micemade-elements/
- * Version: 0.9.0
+ * Version: 0.9.2
  * Author: micemade
  * Author URI: http://micemade.com
  * Text Domain: micemade-elements
- * Elementor tested up to: 3.1.0
+ * Elementor tested up to: 3.6.4
  * Elementor Pro tested up to: 3.1.0
  *
  * @package WordPress
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Plugin version constant.
 if ( ! defined( 'MICEMADE_ELEMENTS_VERSION' ) ) {
-	define( 'MICEMADE_ELEMENTS_VERSION', '0.9.0' );
+	define( 'MICEMADE_ELEMENTS_VERSION', '0.9.2' );
 }
 
 // Define MICEMADE_ELEMENTS_PLUGIN_FILE.
@@ -48,4 +48,8 @@ if ( ! defined( 'MICEMADE_ELEMENTS_SLUG' ) ) {
 	define( 'MICEMADE_ELEMENTS_SLUG', plugin_basename( __FILE__ ) );
 }
 
-require_once MICEMADE_ELEMENTS_DIR . 'includes/class-micemade-elements.php';
+if ( ! defined( 'NEW_CSS' ) ) {
+	define( 'NEW_CSS', true );
+}
+
+require_once MICEMADE_ELEMENTS_INCLUDES . 'class-micemade-elements.php';

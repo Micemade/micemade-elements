@@ -1,0 +1,22 @@
+{
+  "name": "deliciousbrains/wp-filesystem",
+  "description": "A wrapper for the WP Filesystem",
+  "homepage": "https://github.com/deliciousbrains/wp-filesystem",
+  "keywords": [
+    "filesystem",
+    "wordpress",
+    "files"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Delicious Brains",
+      "email": "nom@deliciousbrains.com"
+    }
+  ],
+  "autoload": {
+    "classmap": [
+      "src/"
+    ]
+  }
+}

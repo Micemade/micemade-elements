@@ -5,6 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+use Elementor\Controls_Stack;
 use Elementor\Core\Schemes\Typography;
 
 class Micemade_Header_Logo extends Widget_Base {
@@ -25,7 +26,7 @@ class Micemade_Header_Logo extends Widget_Base {
 		return [ 'micemade_elements_header' ];
 	}
 
-	protected function _register_controls() {
+	protected function register_controls() {
 
 		$this->start_controls_section(
 			'section_content',
@@ -181,17 +182,19 @@ class Micemade_Header_Logo extends Widget_Base {
 		$this->add_render_attribute( 'logo-class', 'class', $no_logo ? 'no-logo' : 'logo' );
 		$this->add_render_attribute( 'site-title', 'class', $no_logo ? 'site-title text' : 'site-title text-hidden' );
 
-		echo '<a href="' . esc_url( home_url( '/' ) ) . '" title="' . esc_attr( get_bloginfo( 'name', 'display' ) ) . ' / ' . get_bloginfo( 'description' ) . '" rel="home" class="micemade-elements_header-logo">';
+		echo '<a href="' . esc_url( home_url( '/' ) ) . '" title="' . esc_attr( get_bloginfo( 'name', 'display' ) ) . ' / ' . esc_attr( get_bloginfo( 'description' ) ) . '" rel="home" class="micemade-elements_header-logo">';
 		?>
 
-			<?php
-			// Render <h1> if on home/front page, else render <div>.
-			echo '<' . ( ( is_home() || is_front_page() ) ? 'h1 ' : 'div ' ) . $this->get_render_attribute_string( 'logo-class' ) . $this->get_render_attribute_string( 'logo-image' ) . '>';
-			?>
+			<?php // Render <h1> if on home/front page, else render <div>. ?>
+			<
+				<?php echo ( ( is_home() || is_front_page() ) ? 'h1 ' : 'div ' ); ?> 
+				<?php $this->print_render_attribute_string( 'logo-class' ); ?> 
+				<?php $this->print_render_attribute_string( 'logo-image' ); ?> 
+			>
 
-				<span <?php echo $this->get_render_attribute_string( 'site-title' ); ?>>
-					<?php bloginfo( 'name' ); ?>
-				</span>
+			<span <?php $this->print_render_attribute_string( 'site-title' ); ?>>
+				<?php bloginfo( 'name' ); ?>
+			</span>
 
 			<?php
 			// Render </h1> if on home/front page, else render </div>.

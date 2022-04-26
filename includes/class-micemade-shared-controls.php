@@ -32,65 +32,65 @@ class Micemade_Shared_Controls {
 
 		$element->start_controls_section(
 			'section_content',
-			[
+			array(
 				'label' => __( 'Posts query settings', 'micemade-elements' ),
-			]
+			)
 		);
 
 		$element->add_control(
 			'post_type',
-			[
+			array(
 				'label'    => __( 'Post type', 'micemade-elements' ),
 				'type'     => Controls_Manager::SELECT2,
 				'default'  => 'post',
 				'options'  => $post_types,
 				'multiple' => false,
-			]
+			)
 		);
 
 		$element->add_control(
 			'posts_per_page',
-			[
+			array(
 				'label'   => __( 'Total posts', 'micemade-elements' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => '6',
 				'title'   => __( 'Enter total number of posts to show', 'micemade-elements' ),
-			]
+			)
 		);
 
 		$element->add_control(
 			'offset',
-			[
+			array(
 				'label'   => __( 'Offset', 'micemade-elements' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => '',
 				'title'   => __( 'Offset is number of skipped posts', 'micemade-elements' ),
-			]
+			)
 		);
 
 		$element->add_control(
 			'order',
-			[
-				'label'    => __( 'Post ordering', 'micemade-elements' ),
-				'type'     => Controls_Manager::SELECT2,
-				'default'  => 'DESC',
+			array(
+				'label'       => __( 'Post ordering', 'micemade-elements' ),
+				'type'        => Controls_Manager::SELECT2,
+				'default'     => 'DESC',
 				'label_block' => true,
-				'options'  => [
+				'options'     => array(
 					'ASC'  => 'Ascending (older first)',
 					'DESC' => 'Descending (newer first)',
-				],
-				'multiple' => false,
-			]
+				),
+				'multiple'    => false,
+			)
 		);
 
 		$element->add_control(
 			'orderby',
-			[
+			array(
 				'label'       => __( 'Order posts by', 'micemade-elements' ),
 				'type'        => Controls_Manager::SELECT2,
 				'default'     => 'date',
 				'label_block' => true,
-				'options'     => [
+				'options'     => array(
 					'none'           => __( 'No ordering specified', 'micemade-elements' ),
 					'ID'             => __( 'Order by post id.', 'micemade-elements' ),
 					'author'         => __( 'Order by author.', 'micemade-elements' ),
@@ -104,50 +104,50 @@ class Micemade_Shared_Controls {
 					'menu_order'     => __( 'Order by sorting in admin (pages, attachments)', 'micemade-elements' ),
 					'meta_value'     => __( 'Order by meta value (meta key must be added)', 'micemade-elements' ),
 					'meta_value_num' => __( 'Order by meta numeric value (meta key must be added)', 'micemade-elements' ),
-				],
+				),
 				'multiple'    => false,
-			]
+			)
 		);
 
 		$element->add_control(
 			'orderby_meta',
-			[
+			array(
 				'label'       => __( 'Meta key for ordering', 'micemade-elements' ),
 				'label_block' => true,
 				'type'        => \Elementor\Controls_Manager::TEXT,
 				'placeholder' => __( 'Enter meta field key here', 'micemade-elements' ),
-				'condition' => [
-					'orderby' => [
+				'condition'   => array(
+					'orderby' => array(
 						'meta_value',
 						'meta_value_num',
-					],
-				],
-			]
+					),
+				),
+			)
 		);
 
 		$element->add_control(
 			'heading_filtering',
-			[
+			array(
 				'label'     => __( 'Posts filtering options', 'micemade-elements' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
-				'condition' => [
+				'condition' => array(
 					'post_type!' => 'page',
-				],
-			]
+				),
+			)
 		);
 
 		$element->add_control(
 			'sticky',
-			[
+			array(
 				'label'     => esc_html__( 'Show only sticky posts', 'micemade-elements' ),
 				'type'      => Controls_Manager::SWITCHER,
 				'label_off' => __( 'No', 'micemade-elements' ),
 				'label_on'  => __( 'Yes', 'micemade-elements' ),
-				'condition' => [
+				'condition' => array(
 					'post_type' => 'post',
-				],
-			]
+				),
+			)
 		);
 
 		/**
@@ -181,34 +181,34 @@ class Micemade_Shared_Controls {
 			$taxonomy_control = str_replace( '-', '_', $post_type ) . '_taxonomies';
 			$element->add_control(
 				$taxonomy_control,
-				[
+				array(
 					'label'       => esc_html__( 'Select taxonomy', 'micemade-elements' ),
 					'type'        => Controls_Manager::SELECT2,
 					'default'     => '',
 					'options'     => $tax_options,
 					'multiple'    => false,
 					'label_block' => true,
-					'condition'   => [
+					'condition'   => array(
 						'post_type' => $post_type,
-					],
-				]
+					),
+				)
 			);
 
 			foreach ( $tax_options as $taxonomy => $label ) {
 				$element->add_control(
 					$taxonomy . '_terms_for_' . $post_type,
-					[
+					array(
 						'label'       => esc_html__( 'Select ', 'micemade-elements' ) . strtolower( $label ),
 						'type'        => Controls_Manager::SELECT2,
 						'default'     => array(),
 						'options'     => apply_filters( 'micemade_elements_terms', $taxonomy ),
 						'multiple'    => true,
 						'label_block' => true,
-						'condition'   => [
+						'condition'   => array(
 							$taxonomy_control => $taxonomy,
 							'post_type'       => $post_type,
-						],
-					]
+						),
+					)
 				);
 
 			}
@@ -222,18 +222,19 @@ class Micemade_Shared_Controls {
 		foreach ( $post_types as $post_type => $label ) {
 			$element->add_control(
 				$post_type . '_post_in',
-				[
-					'label'    => esc_html__( 'Select items from ' . strtolower( $label ) , 'micemade-elements' ),
-					'type'     => Controls_Manager::SELECT2,
-					'default'  => 3,
-					'options'  => apply_filters( 'micemade_posts_array', $post_type, 'id' ),
-					'multiple' => true,
+				array(
+					// translators: $label for post type label.
+					'label'       => sprintf( esc_html__( 'Select items from %s', 'micemade-elements' ), strtolower( $label ) ),
+					'type'        => Controls_Manager::SELECT2,
+					'default'     => 3,
+					'options'     => apply_filters( 'micemade_posts_array', $post_type, 'id' ),
+					'multiple'    => true,
 					'label_block' => true,
-					'condition'   => [
+					'condition'   => array(
 						'post_type' => $post_type,
 						'sticky!'   => 'yes',
-					],
-				]
+					),
+				)
 			);
 		}
 
@@ -251,112 +252,73 @@ class Micemade_Shared_Controls {
 	public function slider_controls( $element, $args ) {
 
 		// Section elements style.
-		$element->start_controls_section(
-			'section_slider_settings',
-			[
-				'label'     => esc_html__( 'Slider settings', 'micemade-elements' ),
-				'tab'       => Controls_Manager::TAB_STYLE,
-			]
-		);
+		// $element->start_controls_section(
+		// 'section_slider_settings',
+		// [
+		// 'label'     => esc_html__( 'Slider settings', 'micemade-elements' ),
+		// 'tab'       => Controls_Manager::TAB_STYLE,
+		// ]
+		// );
 
 		$element->add_control(
 			'heading_slider',
-			[
+			array(
 				'label'     => __( 'Slider settings', 'micemade-elements' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
-			]
+			)
 		);
 
-		// Slides to show.
-		$slides_no = [
+		// Choices for number of slides.
+		$slides_no = array(
 			1 => __( 'One', 'micemade-elements' ),
 			2 => __( 'Two', 'micemade-elements' ),
 			3 => __( 'Three', 'micemade-elements' ),
 			4 => __( 'Four', 'micemade-elements' ),
 			6 => __( 'Six', 'micemade-elements' ),
-		];
-
-		$element->add_control(
-			'posts_per_slide',
-			[
+		);
+		// Slides to show.
+		$element->add_responsive_control(
+			'slides_to_show',
+			array(
 				'label'              => __( 'Items per slide', 'micemade-elements' ),
 				'type'               => Controls_Manager::SELECT,
 				'default'            => 3,
 				'options'            => $slides_no,
 				'frontend_available' => true,
-			]
+				'render_type'        => 'template',
+				'selectors'          => array(
+					'{{WRAPPER}}' => '--e-image-carousel-slides-to-show: {{VALUE}}',
+				),
+			)
 		);
-
-		$element->add_control(
-			'posts_per_slide_tab',
-			[
-				'label'              => __( 'Items per slide (tablets)', 'micemade-elements' ),
-				'type'               => Controls_Manager::SELECT,
-				'default'            => 2,
-				'options'            => $slides_no,
-				'frontend_available' => true,
-			]
-		);
-
-		$element->add_control(
-			'posts_per_slide_mob',
-			[
-				'label'              => __( 'Items per slide (mobiles)', 'micemade-elements' ),
-				'type'               => Controls_Manager::SELECT,
-				'default'            => 1,
-				'options'            => $slides_no,
-				'frontend_available' => true,
-			]
-		);
-		// end slides to show.
 
 		// Slides to scroll.
-		$element->add_control(
-			'scroll_slides_note',
-			[
-				'type'            => \Elementor\Controls_Manager::RAW_HTML,
-				'raw'             => __( '<small><strong>"Items to scroll"</strong> will fallback to <strong>"Items per slide"</strong>, if the scroll number is higher than per slide number.</small>', 'micemade-elements' ),
-				'content_classes' => 'your-class',
-				'separator'       => 'before',
-			]
-		);
-		$element->add_control(
-			'posts_to_scroll',
-			[
+		$element->add_responsive_control(
+			'slides_to_scroll',
+			array(
 				'label'              => __( 'Items to scroll', 'micemade-elements' ),
 				'type'               => Controls_Manager::SELECT,
 				'default'            => 3,
 				'options'            => $slides_no,
 				'frontend_available' => true,
-			]
+			)
 		);
 		$element->add_control(
-			'posts_to_scroll_tab',
-			[
-				'label'              => __( 'Items to scroll (tablets)', 'micemade-elements' ),
-				'type'               => Controls_Manager::SELECT,
-				'default'            => 2,
-				'options'            => $slides_no,
-				'frontend_available' => true,
-			]
-		);
-		$element->add_control(
-			'posts_to_scroll_mob',
-			[
-				'label'              => __( 'Items to scroll (mobile)', 'micemade-elements' ),
-				'type'               => Controls_Manager::SELECT,
-				'default'            => 1,
-				'options'            => $slides_no,
-				'frontend_available' => true,
-			]
+			'scroll_slides_note',
+			array(
+				'type'            => \Elementor\Controls_Manager::RAW_HTML,
+				'raw'             => __( '<small>Only divisible values to "Items per slide" can be selected.</small>', 'micemade-elements' ),
+				'content_classes' => 'your-class',
+				'separator'       => 'after',
+			)
 		);
 		// End slides to scroll.
 
 		// Space between the slides.
-		$element->add_responsive_control(
+		$element->add_control(
 			'space',
-			[
+			array(
 				'label'              => __( 'Space between', 'micemade-elements' ),
 				'type'               => Controls_Manager::NUMBER,
 				'default'            => 30,
@@ -364,30 +326,30 @@ class Micemade_Shared_Controls {
 				'step'               => 10,
 				'frontend_available' => true,
 				'separator'          => 'before',
-			]
+			)
 		);
 
 		// Pagination.
 		$element->add_control(
 			'pagination',
-			[
+			array(
 				'label'              => __( 'Slider pagination', 'micemade-elements' ),
 				'type'               => Controls_Manager::SELECT,
 				'default'            => 'bullets',
-				'options'            => [
+				'options'            => array(
 					'none'        => __( 'None', 'micemade-elements' ),
 					'bullets'     => __( 'Bullets', 'micemade-elements' ),
 					'progressbar' => __( 'Progress bar', 'micemade-elements' ),
 					'fraction'    => __( 'Fraction', 'micemade-elements' ),
-				],
+				),
 				'frontend_available' => true,
-			]
+			)
 		);
 
 		// Slider navigation.
 		$element->add_control(
 			'buttons',
-			[
+			array(
 				'label'              => esc_html__( 'Show navigation arrows', 'micemade-elements' ),
 				'type'               => Controls_Manager::SWITCHER,
 				'label_off'          => __( 'No', 'elementor' ),
@@ -395,7 +357,7 @@ class Micemade_Shared_Controls {
 				'default'            => 'yes',
 				'frontend_available' => true,
 
-			]
+			)
 		);
 
 		$element->add_control(
@@ -498,11 +460,11 @@ class Micemade_Shared_Controls {
 					'fade'  => __( 'Fade', 'micemade-elements' ),
 				),
 				'frontend_available' => true,
-				'condition'          => [
-					'posts_per_slide'     => '1',
-					'posts_per_slide_tab' => '1',
-					'posts_per_slide_mob' => '1',
-				]
+				'condition'          => array(
+					'slides_to_show' => '1',
+					// 'slides_to_show_tab' => '1',
+					// 'slides_to_show_mob' => '1',
+				),
 			)
 		);
 
@@ -516,104 +478,107 @@ class Micemade_Shared_Controls {
 			)
 		);
 
-		$element->end_controls_section();
+		// $element->end_controls_section();
+	}
+
+	public function slider_styles( $element, $arg ) {
 
 		// Section elements style.
 		$element->start_controls_section(
 			'section_slider_elements_style',
-			[
-				'label'     => esc_html__( 'Slider elements style', 'micemade-elements' ),
-				'tab'       => Controls_Manager::TAB_STYLE,
-			]
+			array(
+				'label' => esc_html__( 'Slider elements style', 'micemade-elements' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			)
 		);
 
 		$element->add_control(
 			'pagination_color',
-			[
+			array(
 				'label'     => __( 'Pagination color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
+				'selectors' => array(
 					'{{WRAPPER}} .swiper-pagination-progressbar-fill'   => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} .swiper-pagination-bullet-active' => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} .swiper-pagination-fraction'      => 'color: {{VALUE}};',
-				],
+				),
 				'default'   => '#333333',
 				'separator' => 'after',
-				'condition' => [
+				'condition' => array(
 					'pagination!' => 'none',
-				],
-			]
+				),
+			)
 		);
 
 		$element->add_control(
 			'buttons_color',
-			[
+			array(
 				'label'     => __( 'Arrows icon color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
+				'selectors' => array(
 					'{{WRAPPER}} .swiper-button-prev:before' => 'color: {{VALUE}};',
 					'{{WRAPPER}} .swiper-button-next:before' => 'color: {{VALUE}};',
-				],
+				),
 				'default'   => '#2F2E2EC7',
-				'condition' => [
+				'condition' => array(
 					'buttons!' => '',
-				],
-			]
+				),
+			)
 		);
 		$element->add_control(
 			'buttons_bckcolor',
-			[
+			array(
 				'label'     => __( 'Arrows button color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
+				'selectors' => array(
 					'{{WRAPPER}} .swiper-button-prev:after,{{WRAPPER}} .swiper-button-next:after' => 'background-color: {{VALUE}};',
-				],
+				),
 				'default'   => '#FFFFFF7A',
 				'separator' => 'after',
-				'condition' => [
+				'condition' => array(
 					'buttons!' => '',
-				],
-			]
+				),
+			)
 		);
 
 		$element->add_responsive_control(
 			'nav_arrows_vert_position',
-			[
+			array(
 				'label'       => __( 'Arrows vertical position', 'micemade-elements' ),
 				'type'        => Controls_Manager::SLIDER,
 				'label_block' => true,
-				'size_units'  => [ '%', 'px' ],
-				'default'     => [
+				'size_units'  => array( '%', 'px' ),
+				'default'     => array(
 					'size' => 50,
 					'unit' => '%',
-				],
-				'range'       => [
-					'%'  => [
+				),
+				'range'       => array(
+					'%'  => array(
 						'max'  => 100,
 						'min'  => 0,
 						'step' => 1,
-					],
-					'px' => [
+					),
+					'px' => array(
 						'min' => 0,
 						'max' => 1000,
-					],
-				],
-				'selectors'   => [
+					),
+				),
+				'selectors'   => array(
 					'{{WRAPPER}} .swiper-button-prev,{{WRAPPER}} .swiper-button-next' => 'top: {{SIZE}}{{UNIT}};',
-				],
-				'condition'   => [
+				),
+				'condition'   => array(
 					'buttons!' => '',
-				],
-			]
+				),
+			)
 		);
 
 		$element->add_control(
 			'arrow_icon',
-			[
+			array(
 				'label'       => __( 'Arrow icons', 'micemade-elements' ),
 				'type'        => \Elementor\Controls_Manager::ICON,
 				'label_block' => true,
-				'include' => [
+				'include'     => array(
 					'fa fa-arrow-left',
 					'fa fa-angle-left',
 					'fa fa-angle-double-left',
@@ -622,157 +587,156 @@ class Micemade_Shared_Controls {
 					'fa fa-chevron-left',
 					'fa fa-chevron-circle-left',
 					'fa fa-long-arrow-left',
-				],
+				),
 				'default'     => 'fa fa-chevron-left',
-			]
+			)
 		);
 
 		$element->add_responsive_control(
 			'nav_arrows_size',
-			[
+			array(
 				'label'       => __( 'Arrows icon size', 'micemade-elements' ),
 				'type'        => Controls_Manager::SLIDER,
 				'label_block' => true,
-				'size_units'  => [ 'px' ],
-				'default'     => [
+				'size_units'  => array( 'px' ),
+				'default'     => array(
 					'size' => 12,
 					'unit' => 'px',
-				],
-				'range'       => [
-					'px' => [
+				),
+				'range'       => array(
+					'px' => array(
 						'min' => 0,
 						'max' => 100,
-					],
-				],
-				'selectors'   => [
+					),
+				),
+				'selectors'   => array(
 					'{{WRAPPER}} .swiper-button-next:before, {{WRAPPER}} .swiper-button-prev:before' => 'font-size: {{SIZE}}{{UNIT}};',
-				],
-				'condition'   => [
+				),
+				'condition'   => array(
 					'buttons!' => '',
-				],
-			]
+				),
+			)
 		);
 
 		$element->add_responsive_control(
 			'nav_arrows_back_size',
-			[
+			array(
 				'label'       => __( 'Arrows button size', 'micemade-elements' ),
 				'type'        => Controls_Manager::SLIDER,
 				'label_block' => true,
-				'size_units'  => [ 'px' ],
-				'default'     => [
+				'size_units'  => array( 'px' ),
+				'default'     => array(
 					'size' => 32,
 					'unit' => 'px',
-				],
-				'range'       => [
-					'px' => [
+				),
+				'range'       => array(
+					'px' => array(
 						'min' => 0,
 						'max' => 100,
-					],
-				],
-				'selectors'   => [
+					),
+				),
+				'selectors'   => array(
 					'{{WRAPPER}} .swiper-button-prev, {{WRAPPER}} .swiper-button-prev:after,{{WRAPPER}} .swiper-button-next, {{WRAPPER}} .swiper-button-next:after' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
-				],
-				'condition'   => [
+				),
+				'condition'   => array(
 					'buttons!' => '',
-				],
-			]
+				),
+			)
 		);
 
 		$element->add_control(
 			'nav_arrows_back_roundness',
-			[
+			array(
 				'label'       => __( 'Arrows button roundness', 'micemade-elements' ),
 				'type'        => Controls_Manager::SLIDER,
 				'label_block' => true,
-				'size_units'  => [ 'px' ],
-				'default'     => [
+				'size_units'  => array( 'px' ),
+				'default'     => array(
 					'size' => 12,
 					'unit' => 'px',
-				],
-				'range'       => [
-					'px' => [
+				),
+				'range'       => array(
+					'px' => array(
 						'min' => 0,
 						'max' => 100,
-					],
-					'%' => [
+					),
+					'%'  => array(
 						'min' => 0,
 						'max' => 100,
-					],
-				],
-				'selectors'   => [
+					),
+				),
+				'selectors'   => array(
 					'{{WRAPPER}} .swiper-button-prev:after,{{WRAPPER}} .swiper-button-next:after' => 'border-radius: {{SIZE}}{{UNIT}};',
-				],
-				'condition'   => [
+				),
+				'condition'   => array(
 					'buttons!' => '',
-				],
-			]
+				),
+			)
 		);
 
 		$element->add_group_control(
 			Group_Control_Border::get_type(),
-			[
+			array(
 				'label'     => __( 'Arrow button border' ),
 				'name'      => 'arrow_button_border',
 				'selector'  => '{{WRAPPER}} .swiper-button-prev:after,{{WRAPPER}} .swiper-button-next:after',
 				'separator' => 'after',
-				'condition' => [
+				'condition' => array(
 					'buttons!' => '',
-				],
-			]
+				),
+			)
 		);
 
 		// Slider navigation.
 		$element->add_control(
 			'show_icon_fix',
-			[
+			array(
 				'label'     => esc_html__( 'Fix icon position', 'micemade-elements' ),
 				'type'      => Controls_Manager::SWITCHER,
 				'label_off' => __( 'No', 'elementor' ),
 				'label_on'  => __( 'Yes', 'elementor' ),
 				'default'   => 'no',
-			]
+			)
 		);
 		$element->add_control(
 			'fix_icon_note',
-			[
+			array(
 				'type'            => \Elementor\Controls_Manager::RAW_HTML,
 				'raw'             => __( '<small>Some icons may misalign with it\'s button. Enable the control above to fix the arrow icon position.' ),
 				'content_classes' => 'your-class',
-			]
+			)
 		);
 
 		$element->add_responsive_control(
 			'nav_arrows_fix_position',
-			[
+			array(
 				'label'       => __( 'Fix arrow position', 'micemade-elements' ),
 				'type'        => Controls_Manager::SLIDER,
 				'label_block' => true,
-				'size_units'  => [ '%', 'px' ],
-				'default'     => [
+				'size_units'  => array( '%', 'px' ),
+				'default'     => array(
 					'size' => 0,
 					'unit' => '%',
-				],
-				'range'       => [
-					'%'  => [
+				),
+				'range'       => array(
+					'%' => array(
 						'max'  => 50,
 						'min'  => -50,
 						'step' => 1,
-					],
-				],
-				'selectors'   => [
+					),
+				),
+				'selectors'   => array(
 					'{{WRAPPER}} .swiper-button-prev:before' => 'margin-top: {{SIZE}}{{UNIT}};',
 					' {{WRAPPER}} .swiper-button-next:before' => 'margin-bottom: {{SIZE}}{{UNIT}};',
-				],
-				'condition'   => [
+				),
+				'condition'   => array(
 					'buttons!'      => '',
 					'show_icon_fix' => 'yes',
-				],
-			]
+				),
+			)
 		);
 
 		$element->end_controls_section();
-
 	}
 
 }

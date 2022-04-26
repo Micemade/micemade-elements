@@ -141,12 +141,15 @@ add_filter( 'micemade_elements_wc_query_args', 'micemade_elements_wc_query_args_
  * PRODUCT FOR LOOP
  *
  * @param string  $style - slides style.
+ * @param string  $item_classes - css selectors.
  * @param string  $img_format - registered image format.
  * @param boolean $posted_in - to show "Posted in" (categories), or not.
  * @param boolean $short_desc - to show Short product description or not.
  * @param boolean $price - to show product price or not.
  * @param boolean $add_to_cart - to show "Add to Cart" button or not.
  * @param string  $css_class - string with custom CSS classes.
+ * @param boolean $quickview - if quickview modal will display.
+ * @param string  $icon - icon css selector.
  * @return void
  * an DRY effort ...
  */
@@ -245,9 +248,11 @@ add_filter( 'micemade_elements_simple_prod_data', 'micemade_elements_simple_prod
 /**
  * PRODUCT COUNT PER CATEGORY
  *
- * @param integer $term_id Parameter_Description.
- * @return $output
- * @details html with count of products in category
+ * @param int    $term_id - id number for term.
+ * @param array  $filters - categories filters.
+ * @param string $prod_count_pre - text before products count.
+ * @param string $prod_count_ape - text after products count.
+ * @return html  $output
  */
 function micemade_elements_product_count_f( $term_id, $filters = array(), $prod_count_pre = '', $prod_count_ape = '' ) {
 
@@ -403,6 +408,7 @@ add_action( 'pre_get_posts', 'micemade_elements_cat_args', 999 );
  *
  * @param array  $classes - array of post classes.
  * @param string $add_remove - if "add", then add classes to array.
+ * @param string $additional_classes - additional css selectors.
  * @return $classes
  */
 function micemade_elements_product_item_classes_f( $classes, $add_remove, $additional_classes ) {
@@ -420,6 +426,7 @@ add_filter( 'micemade_elements_product_item_classes', 'micemade_elements_product
 /**
  * QUICK VIEW BUTTON
  *
+ * @param string $icon - icon css selector.
  * @return void
  */
 function micemade_elements_quick_view_f( $icon = '' ) {

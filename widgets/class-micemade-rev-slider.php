@@ -5,6 +5,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+use Elementor\Controls_Stack;
+
 class Micemade_Rev_Slider extends Widget_Base {
 
 	public function get_name() {
@@ -24,7 +26,7 @@ class Micemade_Rev_Slider extends Widget_Base {
 		return [ 'micemade_elements' ];
 	}
 
-	protected function _register_controls() {
+	protected function register_controls() {
 
 		$this->start_controls_section(
 			'section_main',

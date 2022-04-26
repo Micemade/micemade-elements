@@ -2,9 +2,10 @@
 namespace Elementor;
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
+use Elementor\Controls_Stack;
 use Elementor\Core\Schemes\Typography;
 
 class Micemade_WC_Single_Product extends Widget_Base {
@@ -22,396 +23,396 @@ class Micemade_WC_Single_Product extends Widget_Base {
 	}
 
 	public function get_categories() {
-		return [ 'micemade_elements' ];
+		return array( 'micemade_elements' );
 	}
 
-	protected function _register_controls() {
+	protected function register_controls() {
 
 		$this->start_controls_section(
 			'section_my_custom',
-			[
+			array(
 				'label' => esc_html__( 'Micemade WC Single Product', 'micemade-elements' ),
-			]
+			)
 		);
 
 		$this->add_control(
 			'post_name',
-			[
+			array(
 				'label'       => esc_html__( 'Select a product', 'micemade-elements' ),
 				'type'        => Controls_Manager::SELECT2,
 				'default'     => 3,
 				'options'     => apply_filters( 'micemade_posts_array', 'product' ),
 				'label_block' => true,
-			]
+			)
 		);
 
 		$this->add_control(
 			'layout',
-			[
+			array(
 				'label'   => esc_html__( 'Layout base', 'micemade-elements' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'images_left',
-				'options' => [
+				'options' => array(
 					'images_left'       => esc_html__( 'Image left', 'micemade-elements' ),
 					'images_right'      => esc_html__( 'Image right', 'micemade-elements' ),
 					'vertical'          => esc_html__( 'Vertical', 'micemade-elements' ),
 					'vertical_reversed' => esc_html__( 'Vertical reversed', 'micemade-elements' ),
 					'image_background'  => esc_html__( 'Featured image background', 'micemade-elements' ),
 					'no_image'          => esc_html__( 'No product image', 'micemade-elements' ),
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_control(
 			'wc_image_gallery',
-			[
+			array(
 				'label'       => esc_html__( 'Use WC image gallery', 'micemade-elements' ),
 				'label_block' => true,
 				'type'        => Controls_Manager::SWITCHER,
 				'label_off'   => __( 'No', 'elementor' ),
 				'label_on'    => __( 'Yes', 'elementor' ),
-				'condition' => [
-					'layout!' => [ 'image_background', 'no_image' ],
-				],
-			]
+				'condition'   => array(
+					'layout!' => array( 'image_background', 'no_image' ),
+				),
+			)
 		);
 
 		$this->add_control(
 			'img_format',
-			[
-				'label'   => esc_html__( 'Featured image format', 'micemade-elements' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => 'shop_single',
-				'options' => apply_filters( 'micemade_elements_image_sizes', '' ),
-				'condition' => [
+			array(
+				'label'     => esc_html__( 'Featured image format', 'micemade-elements' ),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'shop_single',
+				'options'   => apply_filters( 'micemade_elements_image_sizes', '' ),
+				'condition' => array(
 					'layout!' => 'no_image',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_control(
 			'product_data',
-			[
+			array(
 				'label'   => esc_html__( 'Product data', 'micemade-elements' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'full',
-				'options' => [
+				'options' => array(
 					'full'    => esc_html__( 'Full - single product page', 'micemade-elements' ),
 					'reduced' => esc_html__( 'Reduced - catalog product', 'micemade-elements' ),
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_control(
 			'short_desc',
-			[
+			array(
 				'label'     => esc_html__( 'Show "Product Short Description"', 'micemade-elements' ),
 				'type'      => Controls_Manager::SWITCHER,
 				'label_off' => __( 'No', 'micemade-elements' ),
 				'label_on'  => __( 'Yes', 'micemade-elements' ),
 				'default'   => 'yes',
-				'condition' => [
+				'condition' => array(
 					'product_data' => 'reduced',
-				],
-			]
+				),
+			)
 		);
 
 		$this->end_controls_section();
 
 		$this->start_controls_section(
 			'section_height',
-			[
+			array(
 				'label'     => esc_html__( 'Product height', 'micemade-elements' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
-				'condition' => [
+				'condition' => array(
 					'layout' => 'image_background',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_responsive_control(
 			'thumb_back_product_height',
-			[
+			array(
 				'label'     => __( 'Product height', 'micemade-elements' ),
 				'type'      => Controls_Manager::SLIDER,
-				'default'   => [
+				'default'   => array(
 					'size' => '450',
-				],
-				'range'     => [
-					'px' => [
+				),
+				'range'     => array(
+					'px' => array(
 						'max'  => 1600,
 						'min'  => 0,
 						'step' => 10,
-					],
-				],
-				'selectors' => [
+					),
+				),
+				'selectors' => array(
 					'{{WRAPPER}} .woocommerce div.single-product-container ' => 'height: {{SIZE}}px;',
-				],
-				'condition' => [
+				),
+				'condition' => array(
 					'layout' => 'image_background',
-				],
-			]
+				),
+			)
 		);
 
 		$this->end_controls_section();
 
 		$this->start_controls_section(
 			'section_style',
-			[
+			array(
 				'label' => esc_html__( 'Product info settings', 'micemade-elements' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
-			]
+			)
 		);
 
 		$this->add_control(
 			'background_color',
-			[
+			array(
 				'label'     => __( 'Product info background', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
-				'selectors' => [
+				'selectors' => array(
 					'{{WRAPPER}} .entry-summary' => 'background-color: {{VALUE}};',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_responsive_control(
 			'product_elements_spacing',
-			[
+			array(
 				'label'     => __( 'Product elements spacing', 'micemade-elements' ),
 				'type'      => Controls_Manager::SLIDER,
-				'default'   => [
+				'default'   => array(
 					'size' => '',
-				],
-				'range'     => [
-					'px' => [
+				),
+				'range'     => array(
+					'px' => array(
 						'max'  => 200,
 						'min'  => 0,
 						'step' => 1,
-					],
-				],
-				'selectors' => [
+					),
+				),
+				'selectors' => array(
 					'{{WRAPPER}} .woocommerce div.single-product-container div.summary>*' => 'margin-top: {{SIZE}}px;margin-bottom: {{SIZE}}px;',
 					'{{WRAPPER}} .woocommerce div.single-product-container div.summary form.cart >*' => 'margin-bottom: {{SIZE}}px;',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_responsive_control(
 			'align',
-			[
-				'label'     => __( 'Horizontal align', 'micemade-elements' ),
-				'type'      => Controls_Manager::CHOOSE,
-				'options'   => [
-					'left'   => [
+			array(
+				'label'                => __( 'Horizontal align', 'micemade-elements' ),
+				'type'                 => Controls_Manager::CHOOSE,
+				'options'              => array(
+					'left'   => array(
 						'title' => __( 'Left', 'micemade-elements' ),
 						'icon'  => 'fa fa-align-left',
-					],
-					'center' => [
+					),
+					'center' => array(
 						'title' => __( 'Center', 'micemade-elements' ),
 						'icon'  => 'fa fa-align-center',
-					],
-					'right'  => [
+					),
+					'right'  => array(
 						'title' => __( 'Right', 'micemade-elements' ),
 						'icon'  => 'fa fa-align-right',
-					],
-				],
-				'default'   => 'left',
-				'selectors' => [
+					),
+				),
+				'default'              => 'left',
+				'selectors'            => array(
 					'{{WRAPPER}} .entry-summary' => 'text-align: {{VALUE}};',
 					'{{WRAPPER}} .star-rating, {{WRAPPER}} .woocommerce-review-link' => 'float: {{VALUE}};',
-				],
+				),
 				'selectors_dictionary' => array(
 					'left'   => 'text-align: left; align-items: flex-start',
 					'center' => 'text-align: center; align-items: center',
 					'right'  => 'text-align: right; align-items: flex-end',
 				),
-			]
+			)
 		);
 
 		$this->add_responsive_control(
 			'vertical_align',
-			[
+			array(
 				'label'       => __( 'Vertical Align', 'micemade-elements' ),
 				'type'        => Controls_Manager::CHOOSE,
 				'label_block' => false,
-				'options'     => [
-					'flex-start' => [
+				'options'     => array(
+					'flex-start' => array(
 						'title' => __( 'Start', 'micemade-elements' ),
 						'icon'  => 'eicon-v-align-top',
-					],
-					'center'     => [
+					),
+					'center'     => array(
 						'title' => __( 'Center', 'micemade-elements' ),
 						'icon'  => 'eicon-v-align-middle',
-					],
-					'flex-end'   => [
+					),
+					'flex-end'   => array(
 						'title' => __( 'End', 'micemade-elements' ),
 						'icon'  => 'eicon-v-align-bottom',
-					],
-				],
-				'selectors'   => [
+					),
+				),
+				'selectors'   => array(
 					'{{WRAPPER}} .entry-summary' => 'justify-content: {{VALUE}}',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_responsive_control(
 			'product_info_position',
-			[
-				'label'     => esc_html__( 'Product info position', 'micemade-elements' ),
-				'type'      => Controls_Manager::CHOOSE,
-				'options'   => array(
-					'left' => array(
+			array(
+				'label'                => esc_html__( 'Product info position', 'micemade-elements' ),
+				'type'                 => Controls_Manager::CHOOSE,
+				'options'              => array(
+					'left'   => array(
 						'title' => __( 'Left', 'micemade-elements' ),
 						'icon'  => 'fa fa-align-left',
 					),
-					'center'     => array(
+					'center' => array(
 						'title' => __( 'Center', 'micemade-elements' ),
 						'icon'  => 'fa fa-align-center',
 					),
-					'right'   => array(
+					'right'  => array(
 						'title' => __( 'Right', 'micemade-elements' ),
 						'icon'  => 'fa fa-align-right',
 					),
 				),
-				'selectors'  => [
+				'selectors'            => array(
 					'{{WRAPPER}} .woocommerce div.single-product-container div.entry-summary' => '{{VALUE}};',
-				],
+				),
 				'selectors_dictionary' => array(
 					'left'   => 'left: 0; transform: none; right: auto',
 					'center' => 'left: 50%; transform: translateX(-50%)',
 					'right'  => 'right: 0; transform: none; left: auto',
 				),
-				'condition'  => [
+				'condition'            => array(
 					'layout' => 'image_background',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_responsive_control(
 			'product_info__width',
-			[
+			array(
 				'label'     => __( 'Product info width (%)', 'micemade-elements' ),
 				'type'      => Controls_Manager::SLIDER,
-				'default'   => [
+				'default'   => array(
 					'size' => '100',
-				],
-				'range'     => [
-					'%' => [
+				),
+				'range'     => array(
+					'%' => array(
 						'max'  => 100,
 						'min'  => 0,
 						'step' => 1,
-					],
-				],
-				'selectors' => [
+					),
+				),
+				'selectors' => array(
 					'{{WRAPPER}} .woocommerce div.single-product-container div.entry-summary' => 'width: {{SIZE}}%;',
-				],
-				'condition' => [
+				),
+				'condition' => array(
 					'layout' => 'image_background',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_responsive_control(
 			'padding',
-			[
+			array(
 				'label'      => esc_html__( 'Product info padding', 'micemade-elements' ),
 				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', 'em', '%' ],
-				'selectors'  => [
+				'size_units' => array( 'px', 'em', '%' ),
+				'selectors'  => array(
 					'{{WRAPPER}} div.entry-summary' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
-			]
+				),
+			)
 		);
 
 		$this->end_controls_section();
 
 		$this->start_controls_section(
 			'section_product_thumb_settings',
-			[
+			array(
 				'label'     => __( 'Product image settings', 'micemade-elements' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
-				'condition' => [
+				'condition' => array(
 					'layout!' => 'no_image',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_responsive_control(
 			'thumb_width',
-			[
+			array(
 				'label'     => __( 'Image container width', 'micemade-elements' ),
 				'type'      => Controls_Manager::SLIDER,
-				'default'   => [
+				'default'   => array(
 					'unit' => '%',
 					'size' => 100,
-				],
-				'range'     => [
-					'%' => [
+				),
+				'range'     => array(
+					'%' => array(
 						'min'  => 0,
 						'max'  => 100,
 						'step' => 1,
-					],
-				],
-				'selectors' => [
+					),
+				),
+				'selectors' => array(
 					'{{WRAPPER}} div.single-product-container .entry-summary' => 'width: calc(100% - {{SIZE}}{{UNIT}} )',
 					'{{WRAPPER}} div.single-product-container .product-thumb' => 'width: {{SIZE}}{{UNIT}}',
 					'{{WRAPPER}} div.single-product-container .mm-wc-gallery' => 'width: {{SIZE}}{{UNIT}}',
-				],
-				'condition' => [
-					'layout' => ['image_left', 'image_right'],
-				],
-			]
+				),
+				'condition' => array(
+					'layout' => array( 'image_left', 'image_right' ),
+				),
+			)
 		);
 
 		$this->add_responsive_control(
 			'thumb_height',
-			[
+			array(
 				'label'     => esc_html__( 'Image container height', 'micemade-elements' ),
 				'type'      => Controls_Manager::SLIDER,
-				'default'   => [
+				'default'   => array(
 					'size' => 400,
-				],
-				'range'     => [
-					'px' => [
+				),
+				'range'     => array(
+					'px' => array(
 						'min'  => 0,
 						'max'  => 1000,
 						'step' => 10,
-					],
-				],
-				'selectors' => [
+					),
+				),
+				'selectors' => array(
 					'{{WRAPPER}} .product-thumb' => 'height: {{SIZE}}{{UNIT}} !important;',
-				],
-				'condition' => [
+				),
+				'condition' => array(
 					'layout!' => 'image_background',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_responsive_control(
 			'thumb_as_back_height',
-			[
+			array(
 				'label'     => esc_html__( 'Image container height', 'micemade-elements' ),
 				'type'      => Controls_Manager::NUMBER,
 				'default'   => 100,
 				'min'       => 0,
 				'max'       => 100,
 				'step'      => 5,
-				'selectors' => [
+				'selectors' => array(
 					'{{WRAPPER}} .product-thumb' => 'height: {{VALUE}}%;',
-				],
-				'condition' => [
+				),
+				'condition' => array(
 					'layout' => 'image_background',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_responsive_control(
 			'back_image_position',
-			[
+			array(
 				'label'     => esc_html__( 'Image background position', 'micemade-elements' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'center',
-				'options'   => [
+				'options'   => array(
 					'left top'      => esc_html__( 'Top left', 'micemade-elements' ),
 					'center top'    => esc_html__( 'Top center', 'micemade-elements' ),
 					'right top'     => esc_html__( 'Top right', 'micemade-elements' ),
@@ -421,54 +422,54 @@ class Micemade_WC_Single_Product extends Widget_Base {
 					'left bottom'   => esc_html__( 'Bottom left ', 'micemade-elements' ),
 					'center bottom' => esc_html__( 'Bottom center ', 'micemade-elements' ),
 					'right bottom'  => esc_html__( 'Bottom right ', 'micemade-elements' ),
-				],
-				'selectors' => [
+				),
+				'selectors' => array(
 					'{{WRAPPER}} .product-thumb' => 'background-position: {{VALUE}};',
-				],
-				'condition' => [
+				),
+				'condition' => array(
 					'layout' => 'image_background',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_responsive_control(
 			'thumb_background_size',
-			[
+			array(
 				'label'     => esc_html__( 'Image background size', 'micemade-elements' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'cover',
-				'options'   => [
+				'options'   => array(
 					'auto'    => esc_html__( 'Auto', 'micemade-elements' ),
 					'cover'   => esc_html__( 'Cover', 'micemade-elements' ),
 					'contain' => esc_html__( 'Contain', 'micemade-elements' ),
 					'custom'  => esc_html__( 'Custom', 'micemade-elements' ),
-				],
-				'selectors' => [
+				),
+				'selectors' => array(
 					'{{WRAPPER}} .product-thumb' => 'background-size: {{VALUE}};',
-				],
-				'condition' => [
+				),
+				'condition' => array(
 					'layout' => 'image_background',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_responsive_control(
 			'thumb_background_size_custom',
-			[
+			array(
 				'label'     => esc_html__( 'Custom image size', 'micemade-elements' ),
 				'type'      => Controls_Manager::NUMBER,
 				'default'   => '',
 				'min'       => 0,
 				'max'       => 200,
 				'step'      => 5,
-				'selectors' => [
+				'selectors' => array(
 					'{{WRAPPER}} .product-thumb' => 'background-size: {{VALUE}}% !important;',
-				],
-				'condition' => [
+				),
+				'condition' => array(
 					'layout'                => 'image_background',
 					'thumb_background_size' => 'custom',
-				],
-			]
+				),
+			)
 		);
 
 		$this->end_controls_section();
@@ -478,109 +479,108 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		 */
 		$this->start_controls_section(
 			'section_title_price_desc',
-			[
+			array(
 				'label' => __( 'Title, price, description options', 'micemade-elements' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
-			]
+			)
 		);
 		// Title Options.
 		$this->add_control(
 			'heading_title',
-			[
+			array(
 				'label'     => __( 'Title', 'micemade-elements' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
-			]
+			)
 		);
 		$this->add_control(
 			'title_text_color',
-			[
+			array(
 				'label'     => __( 'Title Color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '',
-				'selectors' => [
+				'selectors' => array(
 					'{{WRAPPER}} .entry-summary h3 a, {{WRAPPER}} .entry-summary h4 a' => 'color: {{VALUE}};',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
-			[
+			array(
 				'name'     => 'title_typography',
 				'label'    => __( 'Typography', 'micemade-elements' ),
 				'scheme'   => Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} .entry-summary h3, {{WRAPPER}} .entry-summary h4',
-			]
+			)
 		);
 
 		// Price options.
 		$this->add_control(
 			'heading_price',
-			[
+			array(
 				'label'     => __( 'Price', 'micemade-elements' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
-			]
+			)
 		);
 
 		$this->add_control(
 			'price_color',
-			[
+			array(
 				'label'     => __( 'Price Color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '',
-				'selectors' => [
+				'selectors' => array(
 					'{{WRAPPER}} .entry-summary .woocommerce-Price-amount' => 'color: {{VALUE}};',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
-			[
+			array(
 				'name'     => 'price_typography',
 				'label'    => __( 'Typography', 'micemade-elements' ),
 				'scheme'   => Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} .entry-summary .woocommerce-Price-amount',
-			]
+			)
 		);
 		// Description options.
 		$this->add_control(
 			'heading_desc',
-			[
+			array(
 				'label'     => __( 'Short description', 'micemade-elements' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
-			]
+			)
 		);
 
 		$this->add_control(
 			'desc_color',
-			[
+			array(
 				'label'     => __( 'Short description Color', 'micemade-elements' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '',
-				'selectors' => [
+				'selectors' => array(
 					'{{WRAPPER}} .entry-summary .woocommerce-product-details__short-description' => 'color: {{VALUE}};',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
-			[
+			array(
 				'name'     => 'desc_typography',
 				'label'    => __( 'Typography', 'micemade-elements' ),
 				'scheme'   => Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} .entry-summary .woocommerce-product-details__short-description',
-			]
+			)
 		);
 
 		$this->end_controls_section();
 
-		//Plugin::$instance->controls_manager->add_custom_css_controls( $this );
-
+		// Plugin::$instance->controls_manager->add_custom_css_controls( $this );.
 	}
 
 	protected function render() {
@@ -648,7 +648,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 				}
 				?>
 
-				<div <?php echo $this->get_render_attribute_string( 'summary' ); ?>>
+				<div <?php $this->print_render_attribute_string( 'summary' ); ?>>
 					<?php
 					if ( 'full' == $product_data ) {
 						// display full single prod. summary.

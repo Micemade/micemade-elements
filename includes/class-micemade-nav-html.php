@@ -17,6 +17,12 @@ class Micemade_Nav_Html {
 
 	public $menu_id;
 
+	/**
+	 * The constructor
+	 *
+	 * @param int    $menu_id - menu ID.
+	 * @param string $layout - vertical or horizontal.
+	 */
 	public function __construct( $menu_id, $layout ) {
 
 		$this->$menu_id = $menu_id;
@@ -25,6 +31,12 @@ class Micemade_Nav_Html {
 		$this->get_menu( $this->$menu_id, $this->$layout );
 	}
 
+	/**
+	 * Create the menu
+	 *
+	 * @param int    $menu_id - menu ID.
+	 * @param string $layout - vertical or horizontal.
+	 */
 	public function get_menu( $menu_id, $layout ) {
 
 		$flat_menu_array = wp_get_nav_menu_items( $menu_id );
@@ -114,10 +126,10 @@ class Micemade_Nav_Html {
 	}
 
 	/**
-	 * Build tree menu ( multidimensional array )
+	 *  Build tree menu ( multidimensional array )
 	 *
-	 * @param array $elements
-	 * @param integer $parent_id
+	 * @param array   $elements - array of elements.
+	 * @param integer $parent_id - parent menu item id.
 	 * @return $branch
 	 */
 	private function build_tree( array &$elements, $parent_id = 0 ) {
@@ -130,7 +142,7 @@ class Micemade_Nav_Html {
 					$element['children'] = $children;
 				}
 				$branch[ $element['ID'] ] = $element;
-				//unset($elements[$element['ID']]);
+				// unset($elements[$element['ID']]);
 			}
 		}
 		return $branch;
@@ -139,8 +151,7 @@ class Micemade_Nav_Html {
 	/**
 	 * Menu item elements
 	 *
-	 * @param array $item
-	 * @return $output
+	 * @param array $item - item containing array of elements.
 	 */
 	private function menu_item_elements( $item ) {
 
@@ -161,7 +172,7 @@ class Micemade_Nav_Html {
 		$mega    = ! empty( $item['mega'] ) ? $item['mega'] : '';
 		$icon    = ! empty( $item['icon'] ) ? $item['icon'] : '';
 
-		// CSS classes for menu list item
+		// CSS classes for menu list item.
 		$item_class = '';
 		if ( $current_page_id === $current ) {
 			$item_class .= ' current';
@@ -182,10 +193,11 @@ class Micemade_Nav_Html {
 	/**
 	 * CSS Class if there are children
 	 *
-	 * @param array $children
+	 * @param array  $children - children items.
+	 * @param string $mega - if submenu is mega menu.
 	 * @return $css
 	 */
-	function subs_css( $children, $mega ) {
+	public function subs_css( $children, $mega ) {
 		$css = '';
 		if ( $mega ) {
 			$css = ' has-mega-menu';

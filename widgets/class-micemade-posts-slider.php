@@ -5,6 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+use Elementor\Controls_Stack;
 use Elementor\Core\Schemes\Typography;
 
 class Micemade_Posts_Slider extends Widget_Base {
@@ -39,7 +40,7 @@ class Micemade_Posts_Slider extends Widget_Base {
 		return [ 'micemade_elements' ];
 	}
 
-	protected function _register_controls() {
+	protected function register_controls() {
 
 		/***************************************************
 		 * SHARED CONTROLS FOR POSTS QUERY AND SLIDER SETTINGS
@@ -1118,22 +1119,9 @@ class Micemade_Posts_Slider extends Widget_Base {
 		// ---- end QUERY SETTINGS.
 
 		// Slider settings.
-		$posts_per_slide      = (int) $settings['posts_per_slide'];
-		$posts_per_slide_tab  = (int) $settings['posts_per_slide_tab'];
-		$posts_per_slide_mob  = (int) $settings['posts_per_slide_mob'];
-		$space                = (int) $settings['space'];
-		$space_tablet         = (int) $settings['space_tablet'];
-		$space_mobile         = (int) $settings['space_mobile'];
 		$pagination           = $settings['pagination'];
 		$buttons              = $settings['buttons'];
 		$arrow_icon           = $settings['arrow_icon'];
-		$autoplay             = $settings['autoplay'];
-		$autoplay_speed       = $settings['autoplay_speed'];
-		$speed                = $settings['speed'];
-		$pause_on_hover       = $settings['pause_on_hover'];
-		$pause_on_interaction = $settings['pause_on_interaction'];
-		$effect               = $settings['effect'];
-		$infinite             = $settings['infinite'];
 		// Layout and style settings.
 		$show_thumb    = $settings['show_thumb'];
 		$img_format    = $settings['img_format'];
@@ -1164,20 +1152,23 @@ class Micemade_Posts_Slider extends Widget_Base {
 			$this->add_render_attribute(
 				[
 					'posts-slider-container' => [
-						'class' => [
+						'class'           => [
 							'swiper-container',
 							'micemade-elements_slider',
 							'micemade-elements_posts-slider',
 							esc_attr( $style ),
 						],
-						'id'    => 'slider_' . $this->get_id(),
+						'id'              => 'slider_' . $this->get_id(),
+						'data-mme-widget' => 'micemade_slider_posts',
 					],
 				]
 			);
 
-			// Posts grid container.
-			echo '<div ' . $this->get_render_attribute_string( 'posts-slider-container' ) . '>';
+			// Posts slider container.
+			?>
+			<div <?php $this->print_render_attribute_string( 'posts-slider-container' ); ?>>
 
+			<?php
 			echo '<div class="swiper-wrapper">';
 
 			foreach ( $posts as $post ) {
@@ -1200,7 +1191,7 @@ class Micemade_Posts_Slider extends Widget_Base {
 				echo '<div class="swiper-button-prev ' . esc_attr( $arrow_icon ) . '" screen-reader><span>' . esc_html__( 'Previous', 'micemade-elements' ) . '</span></div>';
 			}
 
-			echo '</div>';// end .swiper-container.
+			echo '</div>';// end posts slider container.
 		}
 
 		wp_reset_postdata();
