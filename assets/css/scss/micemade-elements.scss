@@ -1,6 +1,6 @@
-// Uncomment bellow 3 lines for Node-Sass creating CSS file:
-// @import "breakpoint";
-// @import "flex-grid-breakpoints";
+// Uncomment bellow 2 lines for Node-Sass creating CSS file:
+@import "breakpoint";
+@import "flex-grid-breakpoints";
 @import "flex-grid";
 @import "mixins";
 @import "partials";

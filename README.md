@@ -55,6 +55,11 @@ Our tests indicate that the elements work well with most themes that are well co
 Time will tell. When we estimate plugin has enough added functionalities to Elementor, or some other reason, it will be available on wp.org. So far, install it from GitHub (Download zip or clone the repository) .
 
 **Changelog**
+*** v.0.9.2 ***
+* Plugin CSS file location changed to "uploads" folder. File is dynamically created upon activation, or changing Elementor breakpoints settings. SCSS generated CSS in "assets" folder remain for fallback.
+* Changed grid (Posts, Products grid widgets) generation, also using Elementor breakpoints settings. Replaced "add_control" to "add_reponsive_control" for those elements.
+* Great nubmer of tweaks in "WC product tabs", "WC Products Slider", "WC Products", "Posts slider" and helper functions.
+
 *** v.0.9.1 ***
 * Replaced 'get_render_attribute_string' method with 'print_render_attribute_string' for escaping issues.
 * Micemade Buttons tweaks and fixes.
