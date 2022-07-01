@@ -10,7 +10,7 @@
  * Uses elementor/document/before_save hook : https://developers.elementor.com/docs/hooks/php/
  * Breakpoints manager: elementor/core/breakpoints/manager.php
  * Dependencies (composer): deliciousbrains/wp-filesystem  scssphp/scssphp.
- * Droped padaliyajay/php-autoprefixer (performance issues - https://github.com/padaliyajay/php-autoprefixer)
+ * Dropped padaliyajay/php-autoprefixer (performance issues - https://github.com/padaliyajay/php-autoprefixer)
  */
 
 use ScssPhp\ScssPhp\Compiler;
@@ -196,7 +196,7 @@ class Micemade_Elements_CSS {
 			$bp_scss = '$fg-breakpoints: (';
 			foreach ( $active_bps as $bp_name => $bp_config ) {
 				$comma    = $bp_name === $last ? '' : ',';
-				$bp_scss .= '(' . $bp_name . ', ' . $bp_config['value'] . 'px,' . $bp_config['direction'] . ')' . $comma;
+				$bp_scss .= '(' . $bp_name . ', ' . $bp_config['value'] . 'px, ' . $bp_config['direction'] . ')' . $comma;
 			}
 			$bp_scss .= ') !default;';
 

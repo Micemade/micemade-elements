@@ -1,4 +1,4 @@
-// Uncomment bellow 2 lines for Node-Sass creating CSS file:
+// === Uncomment bellow 2 lines for Node-Sass creating CSS file: ===
 @import "breakpoint";
 @import "flex-grid-breakpoints";
 @import "flex-grid";
@@ -119,8 +119,13 @@ $kenburns-back-size: 120vw;
 				position: relative;
 				border: none;
 
-				// Main elements general styles
-				.woocommerce-product-gallery {
+				.woocommerce-product-gallery__wrapper,
+				.product-thumb {
+					flex-grow: 1;
+					flex-shrink: 0;
+				}
+				
+				.woocommerce-product-gallery__wrapper {
 					z-index: 0;
 					margin: 0;
 					padding: 0;
@@ -1004,15 +1009,13 @@ $kenburns-back-size: 120vw;
 				}
 			}
 			
-			.tab-mobile-title {
+			.title-showing {
 				
-				@include breakpoint(mobile) {
-					display: none !important;
-				}
 				position: relative;
-				padding: 15px;
+				padding-bottom: 15px;
 				text-align: left;
 				border-width: 0 !important;
+				display: none;
 
 				&:before,
 				&:after {
@@ -1045,12 +1048,12 @@ $kenburns-back-size: 120vw;
 					&:after {
 						display: none;
 					}
-				} 
-				
+				}
+
 				@include breakpoint(mobile) {
 					display: flex;
 				}
-				
+
 			}
 
 			.tab-content {
@@ -1063,6 +1066,15 @@ $kenburns-back-size: 120vw;
 					display: flex;
 					flex-direction: row;
 					flex-wrap: wrap;
+					// "Normalize" product image.
+					img {
+						height: auto;
+						max-width: 100%;
+						border: none;
+						border-radius: 0;
+						box-shadow: none;
+						width: 100%;
+					}
 				}
 			}
 		
@@ -1075,13 +1087,13 @@ $kenburns-back-size: 120vw;
 				
 				.tab-title {
 					
-					border-bottom-width: 0 !important;
+					border-bottom-style: none !important;
 					&.active {
 						z-index:1;
 						border-style: solid;
 						
-						&:not(.tab-mobile-title):before,
-						&:not(.tab-mobile-title):after {
+						&:before,
+						&:after {
 							display: block;
 							content: "";
 							position: absolute;
@@ -1094,7 +1106,13 @@ $kenburns-back-size: 120vw;
 						&:after {
 							left: 100%;
 						}
+					}
 
+					@include breakpoint(mobile) {
+						border-style: solid !important;
+						&:last-child {
+							border-top-style: none !important;
+						}
 					}
 				}
 			
@@ -1107,7 +1125,7 @@ $kenburns-back-size: 120vw;
 		}
 		
 		// Vertical tabs type
-		.mm-wc-tabs-type-vertical & {
+		.elementor-element .mm-wc-tabs-type-vertical & {
 			
 			display: flex;
 			flex-direction: row;
@@ -1129,13 +1147,18 @@ $kenburns-back-size: 120vw;
 
 				.tab-title {
 					display: block;
-					border-right-width: 0 !important;
+					border-style: solid;
+					border-right-style: none;
+					border-top-style: none;
+
+					&:first-child {
+						border-top-style: solid;
+					}
 					&.active {
 						z-index:1;
-						border-style: solid;
 						
-						&:not(.tab-mobile-title):before,
-						&:not(.tab-mobile-title):after {
+						&:before,
+						&:after {
 							display: block;
 							content: "";
 							position: absolute;
@@ -1150,7 +1173,19 @@ $kenburns-back-size: 120vw;
 							bottom: auto;
 							top: 100%;
 						}
-
+					}
+					@include breakpoint(mobile) {
+						border-right-style: solid;
+						&.active {
+							&:before,
+							&:after {
+								border-left-style: none;
+							}
+						}
+						
+						&:last-child {
+							border-bottom-style: none !important;
+						}
 					}
 				}
 
@@ -1162,9 +1197,10 @@ $kenburns-back-size: 120vw;
 
 			.tabs-content-wrapper {
 				flex-basis: 80%;
-				border-left-width: 0 !important;
+				border-left-style: none;
 				
 				@include breakpoint(mobile) {
+					border-left-style: solid;
 					flex-basis: 100% !important;
 				}
 			}
@@ -1424,7 +1460,7 @@ $kenburns-back-size: 120vw;
 		list-style: none !important;
 		margin: 0;
 		padding: 0;
-		z-index: 1;
+		z-index: 10;
 
 		.children {
 			position: absolute;
@@ -1472,10 +1508,8 @@ $kenburns-back-size: 120vw;
 			.wc_cat-menu-align-space-between & {
 				flex:1;
 			}
-		}
 
-		@include breakpoint(laptop) {
-			.cat-item:hover {
+			&:hover {
 				.children {
 					opacity: 1;
 					visibility: visible;
@@ -1484,6 +1518,8 @@ $kenburns-back-size: 120vw;
 				}
 			}
 		}
+
+		// @include breakpoint(laptop) {}
 
 		@include breakpoint(tablet) {
 			

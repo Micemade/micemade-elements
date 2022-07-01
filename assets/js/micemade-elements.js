@@ -120,20 +120,18 @@ jQuery.noConflict();
     }
 
     tabs.each(function () {
-      var $_Tabs = $(this); // Single tabs holder
+      var $_Tabs = $(this); // Single tabs element.
 
       var tabsWrapper = $_Tabs.find(".tabs-wrapper"),
           tabTitles = tabsWrapper.find(".tab-title"),
           tabsContent = $_Tabs.find(".tabs-content-wrapper"),
-          content = tabsContent.find(".tab-content"),
-          contentTitles = tabsContent.find(".tab-mobile-title");
+          content = tabsContent.find(".tab-content");
       tabTitles.on("click touchstart", function (event) {
         $(this).addClass("active");
         $(this).siblings().removeClass("active"); // Hide inactive tab titles and show active one and content
 
         var tab = $(this).data("tab");
         content.not(".tab-" + tab).css("display", "none").removeClass("active");
-        contentTitles.not(".tab-" + tab).css("display", "none").removeClass("active");
         tabsContent.find(".tab-" + tab).fadeIn().addClass("active");
       });
     });

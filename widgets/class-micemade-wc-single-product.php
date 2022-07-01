@@ -36,12 +36,12 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		);
 
 		$this->add_control(
-			'post_name',
+			'product_id',
 			array(
 				'label'       => esc_html__( 'Select a product', 'micemade-elements' ),
 				'type'        => Controls_Manager::SELECT2,
 				'default'     => 3,
-				'options'     => apply_filters( 'micemade_posts_array', 'product' ),
+				'options'     => apply_filters( 'micemade_posts_array', 'product', 'id' ),
 				'label_block' => true,
 			)
 		);
@@ -590,32 +590,35 @@ class Micemade_WC_Single_Product extends Widget_Base {
 
 		$this->add_render_attribute( 'summary', 'class', $settings['align'] . ' summary entry-summary' );
 
-		$post_name        = ! empty( $settings['post_name'] ) ? $settings['post_name'] : '';
+		$post_name        = ! empty( $settings['post_name'] ) ? $settings['post_name'] : ''; // fallback.
+		$product_id       = ! empty( $settings['product_id'] ) ? $settings['product_id'] : '';
+		$product_id       = $product_id ? $product_id : $post_name;
 		$layout           = ! empty( $settings['layout'] ) ? $settings['layout'] : 'images_left';
 		$wc_image_gallery = ! empty( $settings['wc_image_gallery'] ) ? $settings['wc_image_gallery'] : '';
 		$img_format       = ! empty( $settings['img_format'] ) ? $settings['img_format'] : 'thumbnail';
 		$product_data     = ! empty( $settings['product_data'] ) ? $settings['product_data'] : 'full';
 		$short_desc       = ! empty( $settings['short_desc'] ) ? ( 'yes' === $settings['short_desc'] ) : '';
 
-		if ( is_array( $post_name ) ) {
-			$post_name = $post_name;
-		} else {
-			$post_name = array( $post_name );
-		}
+		// if ( is_array( $product_id ) ) {
+		// 	$product_id = $product_id;
+		// } else {
+		// 	$product_id = array( $product_id );
+		// }
 
 		global $post;
 
-		$args = array(
-			'posts_per_page'   => 1,
-			'post_type'        => 'product',
-			'no_found_rows'    => 1,
-			'post_status'      => 'publish',
-			'post_parent'      => 0,
-			'suppress_filters' => false,
-			'post_name__in'    => $post_name,
-		);
+		// $args = array(
+		// 	'posts_per_page'   => 1,
+		// 	'post_type'        => 'product',
+		// 	'no_found_rows'    => 1,
+		// 	'post_status'      => 'publish',
+		// 	'post_parent'      => 0,
+		// 	'suppress_filters' => false,
+		// 	'post_name__in'    => $post_name,
+		// );
+		// $product = get_posts( $args );
 
-		$product = get_posts( $args );
+		$product = wc_get_product( $product_id );
 
 		if ( ! empty( $product ) ) {
 			?>
@@ -623,18 +626,19 @@ class Micemade_WC_Single_Product extends Widget_Base {
 			<div class="woocommerce woocommerce-page micemade-elements_single-product">	
 
 			<?php
-			$post = $product[0];
-			setup_postdata( $post );
+			// $post = $product[0];
+			// setup_postdata( $post );
+			$post_object = get_post( $product->get_id() );
+			setup_postdata( $GLOBALS['post'] =& $post_object );// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited, Squiz.PHP.DisallowMultipleAssignments.Found );
 			?>
 
 			<div <?php post_class( esc_attr( $layout . ' single-product-container' ) ); ?>>
 
 				<?php
-				$post_id = get_the_ID();
+				// $product_id = get_the_ID();
+				if ( ( 'no_image' !== $layout ) && has_post_thumbnail( $product_id ) ) {
 
-				if ( ( 'no_image' !== $layout ) && has_post_thumbnail( $post_id ) ) {
-
-					$post_thumb_id = get_post_thumbnail_id( $post_id );
+					$post_thumb_id = get_post_thumbnail_id( $product_id );
 					$img_src       = wp_get_attachment_image_src( $post_thumb_id, $img_format );
 					$img_url       = $img_src[0];
 

@@ -594,7 +594,7 @@ class Micemade_WC_Cat_Menu extends Widget_Base {
 		$this->start_controls_section(
 			'section_subicon',
 			[
-				'label' => esc_html__( 'Submenu icon', 'micemade-elements' ),
+				'label' => esc_html__( 'Submenu indicator icon', 'micemade-elements' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -602,11 +602,12 @@ class Micemade_WC_Cat_Menu extends Widget_Base {
 		$this->add_control(
 			'sub_icon',
 			[
-				'label'     => __( 'Choose icon', 'micemade-elements' ),
-				'type'      => Controls_Manager::ICON,
-				'default'   => 'fa fa-plus',
-				'separator' => 'before',
-				'include'   => [
+				'label'       => __( 'Choose icon', 'micemade-elements' ),
+				'type'        => Controls_Manager::ICON,
+				'label_block' => true,
+				'default'     => 'fa fa-plus',
+				'separator'   => 'before',
+				'include'     => [
 					'fa fa-plus',
 					'fa fa-plus-circle',
 					'fa fa-plus-square',
@@ -831,78 +832,6 @@ class Micemade_WC_Cat_Menu extends Widget_Base {
 
 		$this->end_controls_section();
 
-		/*
-		// Animation effects
-		$this->start_controls_section(
-			'section_anim_effects',
-			[
-				'label' => __( 'Animation and hover effects', 'micemade-elements' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
-			]
-		);
-
-		$this->add_control(
-			'hover_style_box',
-			[
-				'label'   => __( 'Category hover effect', 'micemade-elements' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => 'none',
-				'options' => [
-					'none'               => __( 'None', 'micemade-elements' ),
-					'box_enlarge_shadow' => __( 'Enlarge with shadow', 'micemade-elements' ),
-					'box_shrink_shadow'  => __( 'Shrink with shadow', 'micemade-elements' ),
-					'box_move_up'        => __( 'Float', 'micemade-elements' ),
-					'box_move_down'      => __( 'Sink', 'micemade-elements' ),
-					'box_move_right'     => __( 'Forward', 'micemade-elements' ),
-					'box_move_left'      => __( 'Backward', 'micemade-elements' ),
-				],
-			]
-		);
-
-		$this->add_control(
-			'item_anim',
-			[
-				'label'       => __( 'Category Entering Animation', 'elementor' ),
-				'type'        => Controls_Manager::ANIMATION,
-				'default'     => '',
-				'label_block' => true,
-			]
-		);
-
-		$this->add_control(
-			'item_anim_duration',
-			[
-				'label'     => __( 'Animation Speed', 'elementor' ),
-				'type'      => Controls_Manager::SELECT,
-				'default'   => '',
-				'options'   => [
-					'slow' => __( 'Slow', 'elementor' ),
-					''     => __( 'Normal', 'elementor' ),
-					'fast' => __( 'Fast', 'elementor' ),
-				],
-				'condition' => [
-					'item_anim!' => '',
-				],
-			]
-		);
-
-		$this->add_control(
-			'item_anim_delay',
-			[
-				'label'     => __( 'Animation Delay', 'elementor' ) . ' (ms)',
-				'type'      => Controls_Manager::NUMBER,
-				'default'   => '',
-				'min'       => 0,
-				'step'      => 100,
-				'title'     => esc_html__( 'animation delay between category items', 'micemade-elements' ),
-				'condition' => [
-					'item_anim!' => '',
-				],
-			]
-		);
-
-		$this->end_controls_section();
-		*/
 	}
 
 	protected function render() {

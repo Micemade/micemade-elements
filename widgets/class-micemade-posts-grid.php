@@ -55,36 +55,6 @@ class Micemade_Posts_Grid extends Widget_Base {
 			6 => esc_html__( 'Six', 'micemade-elements' ),
 		);
 
-		$this->add_control(
-			'posts_per_row',
-			array(
-				'label'   => esc_html__( 'Posts per row', 'micemade-elements' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => 3,
-				'options' => $items_num,
-			)
-		);
-
-		$this->add_control(
-			'posts_per_row_tab',
-			array(
-				'label'   => esc_html__( 'Posts per row (on tablets)', 'micemade-elements' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => 1,
-				'options' => $items_num,
-			)
-		);
-
-		$this->add_control(
-			'posts_per_row_mob',
-			array(
-				'label'   => esc_html__( 'Posts per row (on mobiles)', 'micemade-elements' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => 1,
-				'options' => $items_num,
-			)
-		);
-
 		$this->add_responsive_control(
 			'columns',
 			array(
@@ -1309,11 +1279,6 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$offset     = (int) $settings['offset'];
 		// ---- end QUERY SETTINGS.
 
-		// Grid settings.
-		$ppr     = (int) $settings['posts_per_row'];
-		$ppr_tab = (int) $settings['posts_per_row_tab'];
-		$ppr_mob = (int) $settings['posts_per_row_mob'];
-
 		// Layout and style settings.
 		$show_thumb    = $settings['show_thumb'];
 		$img_format    = $settings['img_format'];
@@ -1337,19 +1302,14 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$columns = array();
 		foreach ( $settings as $key => $value ) {
 			if ( 'columns' === $key && $value ) {
-				$columns[ (string) $value ] = $key . '_desktop';
+				$columns[ $key . '_desktop' ] = (string) $value;
 			} elseif ( strpos( $key, 'columns_' ) === 0 ) {
-				$columns[ (string) $value ] = $key;
+				$columns[ $key ] = (string) $value;
 			}
 		}
 
 		// Create grid CSS selectors based on column settings.
-		if ( NEW_CSS ) {
-			$grid = micemade_elements_grid( $columns );
-		} else {
-			$grid = micemade_elements_grid_class( intval( $ppr ), intval( $ppr_tab ), intval( $ppr_mob ) ); // To deprecate.
-
-		}
+		$grid = micemade_elements_grid( $columns );
 		$grid .= $cm_inline ? ' custom-meta-inline' : '';
 
 		// Query posts - "micemade_elements_query_args" hook in includes/helpers.php.

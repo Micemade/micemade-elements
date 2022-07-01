@@ -14,68 +14,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Elementor\Core\Breakpoints\Manager as Breakpoints_Manager;
 
 /**
- * COLUMN CSS SELECTORS FOR FLEX GRID
- *
- * @param integer $items_desktop - number of items in row on desktop.
- * @param integer $items_tablet - number of items in row on tablet.
- * @param integer $items_mobile - number of items in row on mobile.
- * @param boolean $no_margin - to show margin or not.
- * @return $style_class
- */
-function micemade_elements_grid_class( $items_desktop = 3, $items_tablet = 1, $items_mobile = 1, $no_margin = false ) {
-
-	$style_class   = '';
-	$desktop_class = '';
-	$tablets_class = '';
-	$mobiles_class = '';
-
-	$no_margin = micemade_elements_to_boolean( $no_margin ); // make sure it is not string.
-
-	$column_desktop = array(
-		1  => 'mme-col-md-12',
-		2  => 'mme-col-md-6',
-		3  => 'mme-col-md-4',
-		4  => 'mme-col-md-3',
-		6  => 'mme-col-md-2',
-		12 => 'mme-col-md-1',
-	);
-	$column_tablet  = array(
-		1  => 'mme-col-sm-12',
-		2  => 'mme-col-sm-6',
-		3  => 'mme-col-sm-4',
-		4  => 'mme-col-sm-3',
-		6  => 'mme-col-sm-2',
-		12 => 'mme-col-sm-1',
-	);
-	$column_mobile  = array(
-		1  => 'mme-col-xs-12',
-		2  => 'mme-col-xs-6',
-		3  => 'mme-col-xs-4',
-		4  => 'mme-col-xs-3',
-		6  => 'mme-col-xs-2',
-		12 => 'mme-col-xs-1',
-	);
-
-	// Generate class selector for desktop.
-	if ( array_key_exists( $items_desktop, $column_desktop ) && ! empty( $column_desktop[ $items_desktop ] ) ) {
-		$desktop_class = $column_desktop[ $items_desktop ];
-	}
-	// Generate class selector for tablets.
-	if ( array_key_exists( $items_tablet, $column_tablet ) && ! empty( $column_tablet[ $items_tablet ] ) ) {
-		$tablets_class = $column_tablet[ $items_tablet ];
-	}
-	// Generate class selector for mobiles.
-	if ( array_key_exists( $items_mobile, $column_mobile ) && ! empty( $column_mobile[ $items_mobile ] ) ) {
-		$mobiles_class = $column_mobile[ $items_mobile ];
-	}
-
-	$style_class = $no_margin ? ( $desktop_class . ' ' . $tablets_class . ' ' . $mobiles_class . ' mme-zero-margin' ) : ( $desktop_class . ' ' . $tablets_class . ' ' . $mobiles_class );
-
-	// Added fixed full width to small screen - to do controls for small devices (?).
-	return $style_class;
-}
-
-/**
  * Calculate grid CSS selectors based on Elementor breakpoints.
  *
  * Elementor breakpoints methods here: elementor/core/breakpoints/manager.php
@@ -85,14 +23,14 @@ function micemade_elements_grid_class( $items_desktop = 3, $items_tablet = 1, $i
  */
 function micemade_elements_grid( $columns = array() ) {
 
-	// use Elementor\Core\Breakpoints\Manager as Breakpoints_Manager.
+	// Use Elementor\Core\Breakpoints\Manager as Breakpoints_Manager.
 	$bp_manager = new Breakpoints_Manager();
 
 	// Get only active breakpoints ( get_breakpoints_config() for ALL ).
 	$bpoints   = array_keys( $bp_manager->get_active_breakpoints() );
 	$bpoints[] = 'desktop'; // default breakpoint.
 	foreach ( $bpoints as $bp_name ) {
-		$selectors_arr[ $bp_name ] = array(
+		$bpoint_arr[ $bp_name ] = array(
 			1  => 'mme-col-' . $bp_name . '-12',
 			2  => 'mme-col-' . $bp_name . '-6',
 			3  => 'mme-col-' . $bp_name . '-4',
@@ -105,15 +43,15 @@ function micemade_elements_grid( $columns = array() ) {
 	// Set CSS selectors string for output.
 	$selectors = '';
 	// Default values.
-	$selectors .= ! in_array( 'columns_desktop', $columns, true ) ? 'mme-col-desktop-3 ' : ''; // 4 columns.
-	$selectors .= ! in_array( 'columns_tablet', $columns, true ) ? 'mme-col-tablet-6 ' : '';   // 2 columns.
-	$selectors .= ! in_array( 'columns_mobile', $columns, true ) ? 'mme-col-mobile-12 ' : '';  // 1 column.
+	$selectors .= ! array_key_exists( 'columns_desktop', $columns ) ? 'mme-col-desktop-3 ' : ''; // 4 columns.
+	$selectors .= ! array_key_exists( 'columns_tablet', $columns ) ? 'mme-col-tablet-6 ' : '';   // 2 columns.
+	$selectors .= ! array_key_exists( 'columns_mobile', $columns, ) ? 'mme-col-mobile-12 ' : '';  // 1 column.
 
-	foreach ( $selectors_arr as $key => $value ) { // or: 'mobile'=> array( 1 => 'mme-col-tablet-12' ...)
+	foreach ( $bpoint_arr as $bp_name => $sel_array_for_bp ) { // or: 'mobile'=> array( 1 => 'mme-col-tablet-12' ...)
 		// Element settings for columns number.
-		foreach ( $columns as $itemnum => $setting ) { // or: '3' => 'columns_tablet'.
-			if ( $itemnum && strpos( $setting, $key ) ) {
-				$selectors .= $value[ $itemnum ] . ' ';
+		foreach ( $columns as $device => $num_columns ) { // or: 'columns_tablet' => '3'.
+			if ( $device && strpos( $device, $bp_name ) ) {
+				$selectors .= $sel_array_for_bp[ $num_columns ] . ' ';
 			}
 		}
 	}
@@ -183,7 +121,7 @@ function micemade_elements_posted_in( $taxonomy ) {
 		$posted_in_terms = array();
 		$last_term       = end( $terms );
 		foreach ( $terms as $term ) {
-			$separator  = ( $term == $last_term ) ? '' : ', ';
+			$separator  = ( $term === $last_term ) ? '' : ', ';
 			$posted_in .= '<a href="' . esc_url( get_term_link( $term->slug, $taxonomy ) ) . '" rel="tag" tabindex="0">' . esc_html( $term->name . ' ' . $term->ID ) . '</a>' . esc_html( $separator );
 		}
 
@@ -201,7 +139,7 @@ function micemade_elements_posted_in( $taxonomy ) {
  */
 function micemade_elements_date( $void ) {
 
-	$date = '<span class="published"><time datetime="' . sprintf( get_the_time( esc_html__( 'Y-m-d', 'micemade_elements' ) ) ) . '">' . sprintf( get_the_time( get_option( 'date_format', 'M d, Y' ) ) ) . '</time></span>';
+	$date = '<span class="published"><time datetime="' . sprintf( get_the_time( esc_html__( 'Y-m-d', 'micemade-elements' ) ) ) . '">' . sprintf( get_the_time( get_option( 'date_format', 'M d, Y' ) ) ) . '</time></span>';
 
 	echo wp_kses_post( $date );
 }
@@ -212,7 +150,7 @@ function micemade_elements_date( $void ) {
  * @return void
  */
 function micemade_elements_author( $void ) {
-	$author = '<span class="author vcard"><span class="by">' . esc_html__( 'By: ', 'micemade_elements' ) . '</span><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '" title="' . esc_attr( get_the_author_meta( 'display_name' ) ) . '">' . esc_html( get_the_author_meta( 'display_name' ) ) . '</a></span>';
+	$author = '<span class="author vcard"><span class="by">' . esc_html__( 'By: ', 'micemade-elements' ) . '</span><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '" title="' . esc_attr( get_the_author_meta( 'display_name' ) ) . '">' . esc_html( get_the_author_meta( 'display_name' ) ) . '</a></span>';
 
 	echo wp_kses_post( $author );
 }
@@ -297,19 +235,17 @@ add_filter( 'micemade_elements_no_image', 'micemade_elements_no_image_f' );
  * @param string $img_format - selected predefined image format.
  * @return void
  */
-function micemade_elements_thumb_f( $img_format = 'thumbnail' ) {
+function micemade_elements_thumb_f( $img_format = 'thumbnail', $attach_id = '', $permalink = '' ) {
 
 	$gallery_shortcode = apply_filters( 'micemade_elements_gallery_ids', '' );
 
-	$atts = array(
-		'alt' => the_title_attribute( 'echo=0' ),
-	);
+	$atts = array( 'alt' => the_title_attribute( 'echo=0' ) );
 
 	echo '<div class="post-thumb">'; // thumb wrapper.
-	echo '<a href="' . esc_url( get_the_permalink() ) . '" title="' . the_title_attribute( 'echo=0' ) . '" >'; // post link.
-	if ( has_post_thumbnail() ) {
+	echo '<a href="' . esc_url( $permalink ) . '" title="' . the_title_attribute( 'echo=0' ) . '" >'; // post link.
+	if ( has_post_thumbnail() || $attach_id ) {
 
-		the_post_thumbnail( $img_format, $atts );
+		echo wp_get_attachment_image( $attach_id, $img_format, false, $atts );
 
 	} elseif ( ! empty( $gallery_shortcode ) ) {
 
@@ -326,23 +262,25 @@ function micemade_elements_thumb_f( $img_format = 'thumbnail' ) {
 	echo '</a>';
 	echo '</div>';
 }
-add_action( 'micemade_elements_thumb', 'micemade_elements_thumb_f', 10, 1 );
+add_action( 'micemade_elements_thumb', 'micemade_elements_thumb_f', 10, 3 );
 
 /**
  * POST THUMB BACKGROUND
  *
  * @param string $img_format - image format string.
+ * @param int    $attach_id - id of attached image.
  * @return void
  */
-function micemade_elements_thumb_back_f( $img_format = 'thumbnail' ) {
+function micemade_elements_thumb_back_f( $img_format = 'thumbnail', $attach_id = '' ) {
 
 	$gallery_shortcode = apply_filters( 'micemade_elements_gallery_ids', '' );
 
 	$img_url = '';
 
-	if ( has_post_thumbnail() ) {
+	if ( has_post_thumbnail() || $attach_id  ) {
 
-		$img_url = get_the_post_thumbnail_url( get_the_ID(), $img_format );
+		$att_src = wp_get_attachment_image_src( $attach_id, $img_format );
+		$img_url = $att_src[0];
 
 	} elseif ( ! empty( $gallery_shortcode ) ) {
 
@@ -358,7 +296,7 @@ function micemade_elements_thumb_back_f( $img_format = 'thumbnail' ) {
 	echo '<div class="post-thumb-back" style="background-image: url(' . esc_url( $img_url ) . ');"></div><div class="post-overlay"></div>';
 
 }
-add_action( 'micemade_elements_thumb_back', 'micemade_elements_thumb_back_f', 10, 1 );
+add_action( 'micemade_elements_thumb_back', 'micemade_elements_thumb_back_f', 10, 2 );
 
 /**
  * GET GALLERY IMAGES ID's

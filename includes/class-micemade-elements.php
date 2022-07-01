@@ -429,10 +429,6 @@ class Micemade_Elements {
 		// CSS styles.
 		wp_register_style( 'micemade-elements', $url , array(), MICEMADE_ELEMENTS_VERSION );
 		wp_enqueue_style( 'micemade-elements' );
-
-		// Smartmenus styles - postponed until v.1.0.0
-		// wp_register_style( 'micemade-elements-smartmenus', MICEMADE_ELEMENTS_URL . 'assets/css/smartmenus.css', array(), MICEMADE_ELEMENTS_VERSION  );
-		// wp_enqueue_style( 'micemade-elements-smartmenus' );
 	}
 
 	/**

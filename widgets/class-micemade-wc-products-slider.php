@@ -613,20 +613,20 @@ class Micemade_WC_Products_Slider extends \Elementor\Widget_Base {
 				'options'              => array(
 					'left'   => array(
 						'title' => __( 'Left', 'micemade-elements' ),
-						'icon'  => 'fa fa-align-left',
+						'icon'  => 'eicon-h-align-left',
 					),
 					'center' => array(
 						'title' => __( 'Center', 'micemade-elements' ),
-						'icon'  => 'fa fa-align-center',
+						'icon'  => 'eicon-h-align-center',
 					),
 					'right'  => array(
 						'title' => __( 'Right', 'micemade-elements' ),
-						'icon'  => 'fa fa-align-right',
+						'icon'  => 'eicon-h-align-right',
 					),
 				),
-				'default'              => 'center',
+				'default'              => 'left',
 				'selectors'            => array(
-					'{{WRAPPER}} .post-text, {{WRAPPER}} .post-text > *:not(.button)' => '{{VALUE}};',
+					'{{WRAPPER}} .post-text, {{WRAPPER}} .post-text > *:not(.button), {{WRAPPER}} .post-text .meta' => '{{VALUE}};',
 				),
 				'selectors_dictionary' => array(
 					'left'   => 'text-align: left; align-items: flex-start',
@@ -1226,12 +1226,12 @@ class Micemade_WC_Products_Slider extends \Elementor\Widget_Base {
 
 		global $post;
 
-		// Query args: ( hook in includes/wc-functions.php ).
-		$args = apply_filters( 'micemade_elements_wc_query_args', $posts_per_page, $categories, $exclude_cats, $filters, $offset, $products_in, $no_outofstock, $orderby, $order );
+		// Query args: ( includes/wc-functions.php ).
+		$qa = micemade_elements_wc_query( $posts_per_page, $categories, $exclude_cats, $filters, $offset, $products_in, $no_outofstock, $orderby, $order );
 
-		$products_query = new \WP_Query( $args );
+		$products = wc_get_products( $qa );
 
-		if ( $products_query->have_posts() ) {
+		if ( ! empty( $products ) ) {
 
 			// Main slider container - add CSS classes and data settings.
 			$this->add_render_attribute(
@@ -1280,18 +1280,18 @@ class Micemade_WC_Products_Slider extends \Elementor\Widget_Base {
 				);
 			}
 
-			while ( $products_query->have_posts() ) {
+			foreach ( $products as $product ) {
 
-				$products_query->the_post();
-
-				// If style as in WC content-product template.
 				if ( 'catalog' === $style ) {
+					$post_object = get_post( $product->get_id() );
+					setup_postdata( $GLOBALS['post'] =& $post_object );// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited, Squiz.PHP.DisallowMultipleAssignments.Found );
 					wc_get_template_part( 'content', 'product' );
-					// else, use plugin loop items.
 				} else {
 					$item_classes = apply_filters( 'micemade_elements_product_item_class', 'swiper-slide post product' );
-					apply_filters( 'micemade_elements_loop_product', $style, $item_classes, $img_format, $posted_in, $short_desc, $price, $add_to_cart, $css_class, $quickview, $selected_icon );// hook in includes/wc-functions.php.
+					wc_setup_product_data( $product->get_id() );
+					micemade_elements_product( $product, $style, $item_classes, $img_format, $posted_in, $short_desc, $price, $add_to_cart, $css_class, $quickview, $selected_icon );
 				}
+
 			}
 
 			if ( 'catalog' === $style ) {

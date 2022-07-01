@@ -123,13 +123,12 @@ jQuery.noConflict();
 			return;
 		}
 		tabs.each(function () {
-			var $_Tabs = $(this); // Single tabs holder
+			var $_Tabs = $(this); // Single tabs element.
 
 			var tabsWrapper = $_Tabs.find(".tabs-wrapper"),
 				tabTitles = tabsWrapper.find(".tab-title"),
 				tabsContent = $_Tabs.find(".tabs-content-wrapper"),
-				content = tabsContent.find(".tab-content"),
-				contentTitles = tabsContent.find(".tab-mobile-title");
+				content = tabsContent.find(".tab-content");
 
 			tabTitles.on("click touchstart", function (event) {
 				$(this).addClass("active");
@@ -138,10 +137,6 @@ jQuery.noConflict();
 				// Hide inactive tab titles and show active one and content
 				var tab = $(this).data("tab");
 				content
-					.not(".tab-" + tab)
-					.css("display", "none")
-					.removeClass("active");
-				contentTitles
 					.not(".tab-" + tab)
 					.css("display", "none")
 					.removeClass("active");
@@ -323,8 +318,8 @@ jQuery.noConflict();
 			var $_posts_holder = $(this);
 
 			var $loader = $_posts_holder
-					.next(".micemade-elements_more-posts-wrap")
-					.find(".more_posts"),
+				.next(".micemade-elements_more-posts-wrap")
+				.find(".more_posts"),
 				postoptions = $_posts_holder
 					.find(".posts-grid-settings")
 					.data("postoptions"),
@@ -419,10 +414,10 @@ jQuery.noConflict();
 						error: function (jqXHR, textStatus, errorThrown) {
 							$loader.html(
 								$.parseJSON(jqXHR.responseText) +
-									" :: " +
-									textStatus +
-									" :: " +
-									errorThrown
+								" :: " +
+								textStatus +
+								" :: " +
+								errorThrown
 							);
 						},
 					});
@@ -446,10 +441,10 @@ jQuery.noConflict();
 			// Append Quickview element to body.
 			$("body").append(
 				'<div class="micemade-elements-quickview" id="mmqv-' +
-					modalID +
-					'"><div class="mmqv-holder woocommerce"><div class="mmqv-loading"><i class="fa fa-spinner fa-spin"></i><span>' +
-					micemadeJsLocalize.loadingposts +
-					" </span></div></div></div>"
+				modalID +
+				'"><div class="mmqv-holder woocommerce"><div class="mmqv-loading"><i class="fa fa-spinner fa-spin"></i><span>' +
+				micemadeJsLocalize.loadingposts +
+				" </span></div></div></div>"
 			);
 
 			// Vars to popuate QV HOLDER with product data.

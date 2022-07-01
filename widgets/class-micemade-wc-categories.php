@@ -195,45 +195,6 @@ class Micemade_WC_Categories extends Widget_Base {
 			6 => esc_html__( 'Six', 'micemade-elements' ),
 		);
 
-		$this->add_control(
-			'cats_per_row',
-			array(
-				'label'     => esc_html__( 'Items per row', 'micemade-elements' ),
-				'type'      => Controls_Manager::SELECT,
-				'default'   => 3,
-				'options'   => $items_num,
-				'condition' => array(
-					'grid_or_slider' => 'grid',
-				),
-			)
-		);
-
-		$this->add_control(
-			'cats_per_row_tab',
-			array(
-				'label'     => esc_html__( 'Items per row (tablets)', 'micemade-elements' ),
-				'type'      => Controls_Manager::SELECT,
-				'default'   => 1,
-				'options'   => $items_num,
-				'condition' => array(
-					'grid_or_slider' => 'grid',
-				),
-			)
-		);
-
-		$this->add_control(
-			'cats_per_row_mob',
-			array(
-				'label'     => esc_html__( 'Items per row (mobiles)', 'micemade-elements' ),
-				'type'      => Controls_Manager::SELECT,
-				'default'   => 1,
-				'options'   => $items_num,
-				'condition' => array(
-					'grid_or_slider' => 'grid',
-				),
-			)
-		);
-
 		$this->add_responsive_control(
 			'columns',
 			array(
@@ -322,6 +283,9 @@ class Micemade_WC_Categories extends Widget_Base {
 				'default'            => 3,
 				'options'            => $items_num,
 				'frontend_available' => true,
+				'condition'          => array(
+					'grid_or_slider' => 'slider',
+				),
 			]
 		);
 
@@ -710,7 +674,7 @@ class Micemade_WC_Categories extends Widget_Base {
 			'fix_icon_note',
 			array(
 				'type'            => \Elementor\Controls_Manager::RAW_HTML,
-				'raw'             => esc_html__( '<small>Some icons may misalign with it\'s button. Enable the control above to fix the arrow icon position.</small>' ),
+				'raw'             => '<small>' . esc_html__( 'Some icons may misalign with it\'s button. Enable the control above to fix the arrow icon position.' ) . '</small>',
 				'content_classes' => 'your-class',
 			)
 		);
@@ -1257,9 +1221,6 @@ class Micemade_WC_Categories extends Widget_Base {
 		$add_query_args   = $settings['add_query_args'];
 		$add_query_text   = $settings['add_query_text'];
 		$gr_or_sl         = $settings['grid_or_slider'];
-		$cats_per_row     = (int) $settings['cats_per_row'];
-		$cats_per_row_tab = (int) $settings['cats_per_row_tab'];
-		$cats_per_row_mob = (int) $settings['cats_per_row_mob'];
 		$pagination       = $settings['pagination'];
 		$buttons          = $settings['buttons'];
 		$arrow_icon       = $settings['arrow_icon'];
@@ -1286,19 +1247,14 @@ class Micemade_WC_Categories extends Widget_Base {
 		$columns = array();
 		foreach ( $settings as $key => $value ) {
 			if ( 'columns' === $key && $value ) {
-				$columns[ (string) $value ] = $key . '_desktop';
+				$columns[ $key . '_desktop' ] = (string) $value;
 			} elseif ( strpos( $key, 'columns_' ) === 0 ) {
-				$columns[ (string) $value ] = $key;
+				$columns[ $key ] = (string) $value;
 			}
 		}
 
 		// Create grid CSS selectors based on column settings.
-		if ( NEW_CSS ) {
-			$grid = micemade_elements_grid( $columns );
-		} else {
-			// Grid item styles.
-			$grid = micemade_elements_grid_class( intval( $cats_per_row ), intval( $cats_per_row_tab ), intval( $cats_per_row_mob ) ); // To deprecate.
-		}
+		$grid = micemade_elements_grid( $columns );
 
 		// Add slider style selectors if slider instead of grid.
 		$container_slider_css = ( 'slider' === $gr_or_sl ) ? 'swiper-container micemade-elements_slider' : 'mme-row';

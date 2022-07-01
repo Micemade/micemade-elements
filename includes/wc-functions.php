@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param array   $products_in - an array of products to use with "post_name__in".
  * @param string  $no_outofstock - string with "yes" or "no" value.
  * @param string  $orderby - string with ordering criteria value.
- * @param string  $order - string with "ASC" or "DESC" value.
+ * @param string  $order - string with "ASC" or "DESC" value
  *
  * function for filtering WooCommerce posts.
  * with a little help from: https://github.com/woocommerce/woocommerce/blob/master/includes/widgets/class-wc-widget-products.php
@@ -137,6 +137,45 @@ function micemade_elements_wc_query_args_func( $posts_per_page, $categories = ar
 }
 add_filter( 'micemade_elements_wc_query_args', 'micemade_elements_wc_query_args_func', 10, 9 );
 
+function micemade_elements_wc_query( $posts_per_page, $categories = array(), $exclude_cats = array(), $filters = 'latest', $offset = 0, $products_in = array(), $no_outofstock = 'yes', $orderby = 'date', $order = 'DESC' ) {
+	$qa = array(
+		'limit'    => $posts_per_page,
+		'offset'   => $offset,
+		'orderby'  => $orderby,
+		'order'    => $order,
+		'featured' => 'featured' === $filters ? true : false,
+		'category' => $categories,
+		'return'   => 'objects', // 'ids'
+	);
+	if ( ! empty( $exclude_cats ) ) {
+		$qa['tax_query']   = array( 'relation' => 'AND' );
+		$qa['tax_query'][] = array(
+			'taxonomy'         => 'product_cat',
+			'field'            => 'slug',
+			'operator'         => 'NOT IN',
+			'terms'            => $exclude_cats,
+			'include_children' => true,
+		);
+	}
+	if ( 'yes' === $no_outofstock ) {
+		$qa['stock_status'] = 'instock';
+	}
+	// Array of selected products.
+	if ( ! empty( $products_in ) ) {
+		$qa['include'] = $products_in;
+	}
+
+	// Polylang (and WPML) support.
+	if ( function_exists( 'pll_current_language' ) ) {
+		$current_lang = pll_current_language();
+		$qa['lang']   = $current_lang;
+	} elseif ( defined( 'ICL_LANGUAGE_CODE' ) ) {
+		$current_lang = ICL_LANGUAGE_CODE;
+		$qa['lang']   = $current_lang;
+	}
+
+	return $qa;
+}
 /**
  * PRODUCT FOR LOOP
  *
@@ -222,6 +261,96 @@ function micemade_elements_loop_product_func( $style = 'style_1', $item_classes 
 	<?php
 }
 add_filter( 'micemade_elements_loop_product', 'micemade_elements_loop_product_func', 10, 10 );
+
+/**
+ * Loop product content.
+ *
+ * @param  object  $product
+ * @param  string  $style
+ * @param  string  $item_classes
+ * @param  string  $img_format
+ * @param  boolean $posted_in
+ * @param  boolean $short_desc
+ * @param  boolean $price
+ * @param  boolean $add_to_cart
+ * @param  string  $css_class
+ * @param  boolean $quickview
+ * @param  string  $icon
+ *
+ * All available getters: woocommerce/includes/abstracts/abstract-wc-product.php.
+ *
+ * @return void
+ */
+function micemade_elements_product( $product, $style = 'style_1', $item_classes = '', $img_format = 'thumbnail', $posted_in = true, $short_desc = false, $price = true, $add_to_cart = true, $css_class = '', $quickview = true, $icon = 'fas fa-eye' ) {
+
+	$product_id = $product->get_id();
+
+	echo '<li class="item ' . esc_attr( $item_classes ) . '">';
+	?>
+
+		<div class="inner-wrap">
+
+			<?php
+			if ( 'style_3' === $style || 'style_4' === $style ) {
+				do_action( 'micemade_elements_thumb_back', $img_format, $product->get_image_id() );
+				echo '<div class="post-overlay"></div>';
+			} else {
+				do_action( 'micemade_elements_thumb', $img_format, $product->get_image_id(), $product->get_permalink() );
+			}
+			?>
+
+			<div class="post-text">
+
+				<h4>
+					<a href="<?php echo esc_url( $product->get_permalink() ); ?>" title="<?php echo esc_attr( $product->get_title() ); ?>">
+						<?php echo esc_html( $product->get_title() ); ?>
+					</a>
+				</h4>
+
+				<?php if ( $posted_in ) { ?>
+				<div class="meta">
+
+					<?php echo wp_kses_post( wc_get_product_category_list( $product_id ) ); ?>
+
+				</div>
+				<?php } ?>
+
+				<div class="product-details">
+
+				<?php
+				if ( $price ) {
+					echo '<span class="price-wrap">';
+					echo wp_kses_post( $product->get_price_html() );
+					echo '</span>';
+				}
+				// Add to Cart/Select options.
+				echo '<span class="add-to-cart-wrap quickview-wrap">';
+				if ( $add_to_cart ) {
+					woocommerce_template_loop_add_to_cart();
+				}
+				// Quick View.
+				if ( $quickview ) {
+					do_action( 'micemade_elements_quick_view', $product_id, $icon );
+				}
+				echo '</span>';
+
+				if ( $short_desc ) {
+
+					echo '<p class="short-desc">' . esc_html( $product->get_short_description() ) . '</p>';
+
+					echo '<a href="' . esc_url( $product->get_permalink() ) . '" title="' . esc_attr( $product->get_title() ) . '" class="micemade-elements-readmore ' . esc_attr( $css_class ) . ' ">' . esc_html( apply_filters( 'micemade_elements_prod_details', esc_html__( 'Product details', 'micemade-elements' ) ) ) . '</a>';
+				}
+				?>
+				</div>
+
+			</div>
+
+		</div>
+
+	</li>
+
+	<?php
+}
 
 /**
  * SIMPLE PRODUCT DATA (as in WC catalog)
@@ -429,25 +558,27 @@ add_filter( 'micemade_elements_product_item_classes', 'micemade_elements_product
  * @param string $icon - icon css selector.
  * @return void
  */
-function micemade_elements_quick_view_f( $icon = '' ) {
+function micemade_elements_quick_view_f( $product_id = '', $icon = '' ) {
 
+	if ( ! $product_id || ! is_integer( $product_id ) ) {
+		return;
+	}
 	// WPML (and Polylang) support.
 	if ( function_exists( 'pll_current_language' ) ) {
-		$id        = icl_object_id( get_the_ID(), 'product', false, ICL_LANGUAGE_CODE );
-		$lang_code = ICL_LANGUAGE_CODE;
+		$product_id = icl_object_id( $product_id, 'product', false, ICL_LANGUAGE_CODE );
+		$lang_code  = ICL_LANGUAGE_CODE;
 	} else {
-		$id        = get_the_ID();
-		$lang_code = '';
+		$lang_code  = '';
 	}
 
-	$class = apply_filters( 'mme_quick_view_css_classes', 'icon-button button' );
+	$class = apply_filters( 'micemade_elements_qv_css', 'icon-button button' );
 
-	echo '<a href="#qv-holder-' . esc_attr( $id ) . '" class="mme-quick-view ' . esc_attr( $class ) . '" data-id="' . esc_attr( $id ) . '"' . ( $lang_code ? ' data-lang="' . esc_attr( $lang_code ) . '"' : '' ) . ' title="' . esc_attr__( 'Quick view', 'micemade_elements' ) . '">';
+	echo '<a href="#qv-holder-' . esc_attr( $product_id ) . '" class="mme-quick-view ' . esc_attr( $class ) . '" data-id="' . esc_attr( $product_id ) . '"' . ( $lang_code ? ' data-lang="' . esc_attr( $lang_code ) . '"' : '' ) . ' title="' . esc_attr__( 'Quick view', 'micemade-elements' ) . '">';
 
 	\Elementor\Icons_Manager::render_icon( $icon, array( 'aria-hidden' => 'true' ) );
 	echo '</a>';
 }
-add_action( 'micemade_elements_quick_view', 'micemade_elements_quick_view_f', 10, 1 );
+add_action( 'micemade_elements_quick_view', 'micemade_elements_quick_view_f', 10, 2 );
 
 /**
  * Enqueue single product JS scripts
@@ -482,7 +613,9 @@ function micemade_elements_single_product_scripts_e() {
 	}
 	if ( ! $photoswipe ) {
 		wp_register_script( 'photoswipe-ui-default', WP_PLUGIN_URL . $wc_assets . 'photoswipe/photoswipe-ui-default.min.js', array( 'photoswipe' ), '4.1.1', true );
+		wp_enqueue_script( 'photoswipe' );
 		wp_enqueue_script( 'photoswipe-ui-default' );
+		wp_enqueue_style( 'photoswipe' );
 		wp_enqueue_style( 'photoswipe-default-skin' );
 		add_action( 'wp_footer', 'woocommerce_photoswipe' );
 	}
