@@ -420,14 +420,14 @@ class Micemade_Elements {
 
 		$upload_dir     = wp_upload_dir();
 		$style_filepath = $upload_dir['basedir'] . '/micemade-elements.css';
-		if ( NEW_CSS && file_exists( $style_filepath ) ) {
+		if ( file_exists( $style_filepath ) ) {
 			$url = $upload_dir['baseurl'] . '/micemade-elements.css';
 		} else {
 			$url = MICEMADE_ELEMENTS_URL . 'assets/css/micemade-elements' . $prefix . '.css';
 		}
 
 		// CSS styles.
-		wp_register_style( 'micemade-elements', $url , array(), MICEMADE_ELEMENTS_VERSION );
+		wp_register_style( 'micemade-elements', $url, array(), MICEMADE_ELEMENTS_VERSION );
 		wp_enqueue_style( 'micemade-elements' );
 	}
 

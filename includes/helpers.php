@@ -135,9 +135,11 @@ function micemade_elements_posted_in( $taxonomy ) {
 /**
  * Date for post meta function
  *
+ * @param  string $date - a string with a date.
+ *
  * @return void
  */
-function micemade_elements_date( $void ) {
+function micemade_elements_date( $date ) {
 
 	$date = '<span class="published"><time datetime="' . sprintf( get_the_time( esc_html__( 'Y-m-d', 'micemade-elements' ) ) ) . '">' . sprintf( get_the_time( get_option( 'date_format', 'M d, Y' ) ) ) . '</time></span>';
 
@@ -147,9 +149,11 @@ function micemade_elements_date( $void ) {
 /**
  * Author for post meta
  *
+ * @param string $author - a string with author.
+ *
  * @return void
  */
-function micemade_elements_author( $void ) {
+function micemade_elements_author( $author ) {
 	$author = '<span class="author vcard"><span class="by">' . esc_html__( 'By: ', 'micemade-elements' ) . '</span><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '" title="' . esc_attr( get_the_author_meta( 'display_name' ) ) . '">' . esc_html( get_the_author_meta( 'display_name' ) ) . '</a></span>';
 
 	echo wp_kses_post( $author );
@@ -277,7 +281,7 @@ function micemade_elements_thumb_back_f( $img_format = 'thumbnail', $attach_id =
 
 	$img_url = '';
 
-	if ( has_post_thumbnail() || $attach_id  ) {
+	if ( has_post_thumbnail() || $attach_id ) {
 
 		$att_src = wp_get_attachment_image_src( $attach_id, $img_format );
 		$img_url = $att_src[0];
@@ -428,9 +432,9 @@ function micemade_elements_loop_post_func( $style = 'style_1', $grid = '', $show
 			if ( $show_thumb ) {
 
 				if ( 'style_3' === $style || 'style_4' === $style ) {
-					do_action( 'micemade_elements_thumb_back', $img_format );
+					do_action( 'micemade_elements_thumb_back', $img_format, get_post_thumbnail_id(), get_permalink() );
 				} else {
-					do_action( 'micemade_elements_thumb', $img_format );
+					do_action( 'micemade_elements_thumb', $img_format, get_post_thumbnail_id(), get_permalink() );
 				}
 			}
 			?>

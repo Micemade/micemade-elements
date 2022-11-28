@@ -60,6 +60,7 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 * Dynamic creation of plugin CSS to wp-content/uploads dir, upon activation or breakpoints change.
 * Lot of small fixes and tweaks.
 * Removed commented and reduntant code.
+* Fixed issues with custom post types for mega menus and footer.
 
 *** v.0.9.1 ***
 * Replaced 'get_render_attribute_string' method with 'print_render_attribute_string' for escaping issues.

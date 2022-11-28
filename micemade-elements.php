@@ -7,7 +7,7 @@
  * Author: micemade
  * Author URI: http://micemade.com
  * Text Domain: micemade-elements
- * Elementor tested up to: 3.6.4
+ * Elementor tested up to: 3.8.1
  * Elementor Pro tested up to: 3.1.0
  *
  * @package WordPress
@@ -46,10 +46,6 @@ if ( ! defined( 'MICEMADE_ELEMENTS_INCLUDES' ) ) {
 // Define plugin slug or a basename.
 if ( ! defined( 'MICEMADE_ELEMENTS_SLUG' ) ) {
 	define( 'MICEMADE_ELEMENTS_SLUG', plugin_basename( __FILE__ ) );
-}
-
-if ( ! defined( 'NEW_CSS' ) ) {
-	define( 'NEW_CSS', false );
 }
 
 require_once MICEMADE_ELEMENTS_INCLUDES . 'class-micemade-elements.php';
