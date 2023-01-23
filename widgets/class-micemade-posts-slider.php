@@ -1203,5 +1203,3 @@ class Micemade_Posts_Slider extends Widget_Base {
 	public function render_plain_content( $instance = [] ) {}
 
 }
-
-Plugin::instance()->widgets_manager->register_widget_type( new Micemade_Posts_Slider() );

@@ -1397,5 +1397,3 @@ class Micemade_Posts_Grid extends Widget_Base {
 	public function render_plain_content( $instance = array() ) {}
 
 }
-
-Plugin::instance()->widgets_manager->register_widget_type( new Micemade_Posts_Grid() );

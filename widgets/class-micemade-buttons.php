@@ -629,5 +629,3 @@ class Micemade_Buttons extends Widget_Base {
 	}
 
 }
-
-Plugin::instance()->widgets_manager->register_widget_type( new Micemade_Buttons() );

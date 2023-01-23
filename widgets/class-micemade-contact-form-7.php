@@ -70,5 +70,3 @@ class Micemade_CF7_Forms extends Widget_Base {
 
 	}
 }
-
-Plugin::instance()->widgets_manager->register_widget_type( new Micemade_CF7_Forms() );

@@ -1282,15 +1282,4 @@ class Micemade_Slider extends Widget_Base {
 
 		<?php
 	}
-
-	/**
-	 * Render slides widget output in the editor.
-	 *
-	 * Written as a Backbone JavaScript template and used to generate the live preview.
-	 *
-	 * @access protected
-	 */
-	// protected function content_template() {}
 }
-
-Plugin::instance()->widgets_manager->register_widget_type( new Micemade_Slider() );

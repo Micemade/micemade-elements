@@ -51,7 +51,9 @@ function micemade_elements_grid( $columns = array() ) {
 		// Element settings for columns number.
 		foreach ( $columns as $device => $num_columns ) { // or: 'columns_tablet' => '3'.
 			if ( $device && strpos( $device, $bp_name ) ) {
-				$selectors .= $sel_array_for_bp[ $num_columns ] . ' ';
+				if ( isset( $sel_array_for_bp[ $num_columns ] ) ) {
+					$selectors .= $sel_array_for_bp[ $num_columns ] . ' ';
+				}
 			}
 		}
 	}

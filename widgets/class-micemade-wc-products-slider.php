@@ -20,8 +20,6 @@ use Elementor\Core\Schemes\Typography;
  */
 class Micemade_WC_Products_Slider extends \Elementor\Widget_Base {
 
-
-
 	public function __construct( $data = array(), $args = null ) {
 		parent::__construct( $data, $args );
 
@@ -1333,10 +1331,4 @@ class Micemade_WC_Products_Slider extends \Elementor\Widget_Base {
 
 	}
 
-	// protected function content_template() {}
-
-	// public function render_plain_content( $instance = [] ) {}
-
 }
-
-Plugin::instance()->widgets_manager->register_widget_type( new Micemade_WC_Products_Slider() );

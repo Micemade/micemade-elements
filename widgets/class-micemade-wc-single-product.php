@@ -684,11 +684,4 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		wp_reset_postdata();
 
 	}
-
-	// protected function content_template() {}
-
-	// public function render_plain_content( $instance = [] ) {}
-
 }
-
-Plugin::instance()->widgets_manager->register_widget_type( new Micemade_WC_Single_Product() );

@@ -911,11 +911,4 @@ class Micemade_WC_Cat_Menu extends Widget_Base {
 		</ul>
 		<?php
 	}
-
-	// protected function content_template() {}
-
-	// public function render_plain_content( $instance = [] ) {}
-
 }
-
-Plugin::instance()->widgets_manager->register_widget_type( new Micemade_WC_Cat_Menu() );

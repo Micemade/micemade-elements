@@ -18,14 +18,6 @@ use Elementor\Core\Breakpoints\Manager as Breakpoints_Manager;
 
 class Micemade_WC_Products_Tabs extends \Elementor\Widget_Base {
 
-
-	/*
-	public function __construct( $data = [], $args = null ) {
-	parent::__construct( $data, $args );
-	$this->add_actions();
-	}
-	*/
-
 	public function get_name() {
 		return 'micemade-wc-products-tabs';
 	}
@@ -821,5 +813,3 @@ class Micemade_WC_Products_Tabs extends \Elementor\Widget_Base {
 	 */
 	// protected function content_template() {}
 }
-
-Plugin::instance()->widgets_manager->register_widget_type( new Micemade_WC_Products_Tabs() );

@@ -1412,5 +1412,3 @@ class Micemade_WC_Categories extends Widget_Base {
 	}
 
 }
-
-Plugin::instance()->widgets_manager->register_widget_type( new Micemade_WC_Categories() );
