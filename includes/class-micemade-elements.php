@@ -50,8 +50,8 @@ class Micemade_Elements {
 
 		if ( self::$instance->elementor_activation_check() ) {
 
-			$this->requires();
 
+			$this->requires();
 			// Add "Micemade Elements" widget categories.
 			add_action( 'elementor/elements/categories_registered', array( $this, 'add_widget_categories' ) );
 
@@ -103,53 +103,60 @@ class Micemade_Elements {
 	 * @return void
 	 */
 	public function register_micemade_widgets( $widgets_manager ) {
+
 		// Widgets directory plus widget prefix "class-micemade".
 		$prefix = MICEMADE_ELEMENTS_DIR . 'widgets/class-micemade-';
 
-		require_once $prefix . 'posts-grid.php';
-		require_once $prefix . 'posts-slider.php';
 		require_once $prefix . 'buttons.php';
+		$widgets_manager->register( new \Micemade_Buttons() );
+
+		require_once $prefix . 'posts-grid.php';
+		$widgets_manager->register( new Micemade_Posts_Grid() );
+
+		require_once $prefix . 'posts-slider.php';
+		$widgets_manager->register( new Micemade_Posts_Slider() );
+
+		require_once $prefix . 'slider.php';
+		$widgets_manager->register( new Elementor\Micemade_Slider() );
 
 		// "Revolution Slider" plugin widget.
-		if ( MICEMADE_ELEMENTS_REVSLIDER_ON ) {
+		if ( defined( 'MICEMADE_ELEMENTS_REVSLIDER_ON' ) && MICEMADE_ELEMENTS_REVSLIDER_ON ) {
 			require_once $prefix . 'rev-slider.php';
 			$widgets_manager->register( new Elementor\Micemade_Rev_Slider() );
 		}
 
 		// "WooCommerce" plugin widgets.
-		if ( MICEMADE_ELEMENTS_WOO_ACTIVE ) {
+		if ( defined( 'MICEMADE_ELEMENTS_WOO_ACTIVE' ) && MICEMADE_ELEMENTS_WOO_ACTIVE ) {
 			require_once $prefix . 'wc-categories.php';
-			require_once $prefix . 'wc-products.php';
-			require_once $prefix . 'wc-products-slider.php';
-			require_once $prefix . 'wc-single-product.php';
-			require_once $prefix . 'wc-products-tabs.php';
-			require_once $prefix . 'wc-cat-menu.php';
 			$widgets_manager->register( new Elementor\Micemade_WC_Categories() );
+
+			require_once $prefix . 'wc-products.php';
 			$widgets_manager->register( new Elementor\Micemade_WC_Products() );
+
+			require_once $prefix . 'wc-products-slider.php';
 			$widgets_manager->register( new Elementor\Micemade_WC_Products_Slider() );
+
+			require_once $prefix . 'wc-single-product.php';
 			$widgets_manager->register( new Elementor\Micemade_WC_Single_Product() );
+
+			require_once $prefix . 'wc-products-tabs.php';
 			$widgets_manager->register( new Elementor\Micemade_WC_Products_Tabs() );
+
+			require_once $prefix . 'wc-cat-menu.php';
 			$widgets_manager->register( new Elementor\Micemade_WC_Cat_Menu() );
 		}
 
 		// "Contact Form 7" plugin widget.
-		if ( MICEMADE_ELEMENTS_CF7_ON ) {
+		if ( defined( 'MICEMADE_ELEMENTS_CF7_ON' ) && MICEMADE_ELEMENTS_CF7_ON ) {
 			require_once $prefix . 'contact-form-7.php';
 			$widgets_manager->register( new Elementor\Micemade_CF7_Forms() );
 		}
 		// "MailChimp 4 WP" plugin widget.
-		if ( MICEMADE_ELEMENTS_MC4WP_ON ) {
+		if ( defined( 'MICEMADE_ELEMENTS_MC4WP_ON' ) && MICEMADE_ELEMENTS_MC4WP_ON ) {
 			require_once $prefix . 'mailchimp.php';
 			$widgets_manager->register( new Elementor\Micemade_Mailchimp() );
 		}
 
-		// Micemade slider.
-		require_once $prefix . 'slider.php';
-
-		$widgets_manager->register( new Elementor\Micemade_Buttons() );
-		$widgets_manager->register( new Elementor\Micemade_Posts_Grid() );
-		$widgets_manager->register( new Elementor\Micemade_Posts_Slider() );
-		$widgets_manager->register( new Elementor\Micemade_Slider() );
 	}
 
 	/**
@@ -370,6 +377,7 @@ class Micemade_Elements {
 			'admin',
 			'ajax_posts',
 			'helpers',
+			'plugins',
 			'wc-functions',
 			'class-micemade-shared-controls',
 			'vendor/autoload',
@@ -460,7 +468,7 @@ class Micemade_Elements {
 		// wp_register_script( 'smartmenus', MICEMADE_ELEMENTS_URL . 'assets/js/jquery.smartmenus.min.js' );
 
 		$ajaxurl = '';
-		if ( MICEMADE_ELEMENTS_WPML_ON ) {
+		if ( defined( 'MICEMADE_ELEMENTS_WPML_ON' ) && MICEMADE_ELEMENTS_WPML_ON ) {
 			$ajaxurl .= admin_url( 'admin-ajax.php?lang=' . ICL_LANGUAGE_CODE );
 		} else {
 			$ajaxurl .= admin_url( 'admin-ajax.php' );
@@ -552,7 +560,7 @@ class Micemade_Elements {
 	 */
 	public function enable_wc_frontend_in_editor() {
 		// WooCommerce frontend functionalities in Elementor editor.
-		if ( MICEMADE_ELEMENTS_WOO_ACTIVE ) {
+		if ( defined( 'MICEMADE_ELEMENTS_WOO_ACTIVE' ) && MICEMADE_ELEMENTS_WOO_ACTIVE ) {
 			add_action( 'admin_action_elementor', array( $this, 'wc_frontend_includes' ), 5 );
 		}
 	}
@@ -612,4 +620,16 @@ class Micemade_Elements {
 
 } // end class Micemade_Elements
 
-Micemade_Elements::get_instance()->init();
+/**
+ * Initialize Micemade Elements plugin.
+ *
+ * Run on the `init` hook to ensure translations and other functionality
+ * are loaded at the appropriate time.
+ *
+ * @return void
+ */
+function micemade_elements_init_plugin() {
+	Micemade_Elements::get_instance()->init();
+}
+
+add_action( 'init', 'micemade_elements_init_plugin' );

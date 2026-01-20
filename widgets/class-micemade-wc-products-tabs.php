@@ -3,7 +3,6 @@ namespace Elementor;
 
 use Elementor\Controls_Stack;
 // use Elementor\Controls_Manager;
-// use Elementor\Controls_Stack;
 // use Elementor\Core\Files\CSS\Post;
 // use Elementor\Element_Base;
 // use Elementor\Plugin;
@@ -13,10 +12,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-use Elementor\Core\Schemes\Typography;
 use Elementor\Core\Breakpoints\Manager as Breakpoints_Manager;
 
 class Micemade_WC_Products_Tabs extends \Elementor\Widget_Base {
+
+	/**
+	 * Products grid CSS classes
+	 *
+	 * @var string
+	 */
+	public $mm_products_grid;
 
 	public function get_name() {
 		return 'micemade-wc-products-tabs';
@@ -510,7 +515,6 @@ class Micemade_WC_Products_Tabs extends \Elementor\Widget_Base {
 				'name'     => 'tab_typography',
 				'label'    => esc_html__( 'Title typography', 'micemade-elements' ),
 				'selector' => '{{WRAPPER}} .tab-title',
-				'scheme'   => Typography::TYPOGRAPHY_1,
 			)
 		);
 
@@ -684,16 +688,16 @@ class Micemade_WC_Products_Tabs extends \Elementor\Widget_Base {
 		$idint = substr( $this->get_id_int(), 0, 3 );
 		?>
 
-		<div class="micemade-elements_tabs <?php echo esc_attr( $type ); ?>" role="tablist">
+<div class="micemade-elements_tabs <?php echo esc_attr( $type ); ?>" role="tablist">
 
-		<?php
+	<?php
 		$counter        = 1;
 		$tab_status     = '';
 		$content_status = '';
 		?>
 
-			<div class="tabs-wrapper" role="tab">
-				<?php
+	<div class="tabs-wrapper" role="tab">
+		<?php
 				foreach ( $tabs as $item ) {
 
 					$tab_status = ( 1 === $counter ) ? ' active' : '';
@@ -709,12 +713,12 @@ class Micemade_WC_Products_Tabs extends \Elementor\Widget_Base {
 					$counter++;
 				}
 				?>
-			</div>
+	</div>
 
-			<?php $counter = 1; ?>
-			<div class="tabs-content-wrapper" role="tabpanel">
+	<?php $counter = 1; ?>
+	<div class="tabs-content-wrapper" role="tabpanel">
 
-				<?php
+		<?php
 				foreach ( $tabs as $item ) {
 					$content_status = ( 1 === $counter ) ? ' active' : '';
 
@@ -795,13 +799,13 @@ class Micemade_WC_Products_Tabs extends \Elementor\Widget_Base {
 					wp_reset_postdata();
 					?>
 
-					<?php
+		<?php
 					$counter++;
 				} // end foreach tab.
 				?>
-			</div>
-		</div>
-		<?php
+	</div>
+</div>
+<?php
 	}
 
 	/**

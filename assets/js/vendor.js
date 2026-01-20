@@ -11,7 +11,7 @@ http://www.gnu.org/licenses/gpl.html
 */
 !function (n) {
   var t = n(window),
-      e = t.height();
+    e = t.height();
   t.resize(function () {
     e = t.height();
   }), n.fn.parallax = function (o, r, i) {
@@ -19,14 +19,13 @@ http://www.gnu.org/licenses/gpl.html
       var i = t.scrollTop();
       l.each(function (t, u) {
         var l = n(u),
-            f = l.offset().top,
-            s = a(l);
+          f = l.offset().top,
+          s = a(l);
         i > f + s || f > i + e || l.css("backgroundPosition", o + " " + Math.round((l.data("firstTop") - i) * r) + "px");
       });
     }
-
     var a,
-        l = n(this);
+      l = n(this);
     l.each(function (t, e) {
       $element = n(e), $element.data("firstTop", $element.offset().top);
     }), a = i ? function (n) {
@@ -38,8 +37,7 @@ http://www.gnu.org/licenses/gpl.html
 }(jQuery);
 "use strict";
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 /*! SmartMenus jQuery Plugin - v1.1.0 - September 17, 2017
  * http://www.smartmenus.org/
  * Copyright Vasil Dinkov, Vadikom Web Ltd. http://vadikom.com; Licensed MIT */
@@ -50,65 +48,54 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     var e = ".smartmenus_mouse";
     if (mouseDetectionEnabled || t) mouseDetectionEnabled && t && ($(document).off(e), mouseDetectionEnabled = !1);else {
       var i = !0,
-          s = null,
-          o = {
-        mousemove: function mousemove(t) {
-          var e = {
-            x: t.pageX,
-            y: t.pageY,
-            timeStamp: new Date().getTime()
-          };
-
-          if (s) {
-            var o = Math.abs(s.x - e.x),
+        s = null,
+        o = {
+          mousemove: function mousemove(t) {
+            var e = {
+              x: t.pageX,
+              y: t.pageY,
+              timeStamp: new Date().getTime()
+            };
+            if (s) {
+              var o = Math.abs(s.x - e.x),
                 a = Math.abs(s.y - e.y);
-
-            if ((o > 0 || a > 0) && 2 >= o && 2 >= a && 300 >= e.timeStamp - s.timeStamp && (mouse = !0, i)) {
-              var n = $(t.target).closest("a");
-              n.is("a") && $.each(menuTrees, function () {
-                return $.contains(this.$root[0], n[0]) ? (this.itemEnter({
-                  currentTarget: n[0]
-                }), !1) : void 0;
-              }), i = !1;
+              if ((o > 0 || a > 0) && 2 >= o && 2 >= a && 300 >= e.timeStamp - s.timeStamp && (mouse = !0, i)) {
+                var n = $(t.target).closest("a");
+                n.is("a") && $.each(menuTrees, function () {
+                  return $.contains(this.$root[0], n[0]) ? (this.itemEnter({
+                    currentTarget: n[0]
+                  }), !1) : void 0;
+                }), i = !1;
+              }
             }
+            s = e;
           }
-
-          s = e;
-        }
-      };
+        };
       o[touchEvents ? "touchstart" : "pointerover pointermove pointerout MSPointerOver MSPointerMove MSPointerOut"] = function (t) {
         isTouchEvent(t.originalEvent) && (mouse = !1);
       }, $(document).on(getEventsNS(o, e)), mouseDetectionEnabled = !0;
     }
   }
-
   function isTouchEvent(t) {
     return !/^(4|mouse)$/.test(t.pointerType);
   }
-
   function getEventsNS(t, e) {
     e || (e = "");
     var i = {};
-
-    for (var s in t) {
-      i[s.split(" ").join(e + " ") + e] = t[s];
-    }
-
+    for (var s in t) i[s.split(" ").join(e + " ") + e] = t[s];
     return i;
   }
-
   var menuTrees = [],
-      mouse = !1,
-      touchEvents = ("ontouchstart" in window),
-      mouseDetectionEnabled = !1,
-      requestAnimationFrame = window.requestAnimationFrame || function (t) {
-    return setTimeout(t, 1e3 / 60);
-  },
-      cancelAnimationFrame = window.cancelAnimationFrame || function (t) {
-    clearTimeout(t);
-  },
-      canAnimate = !!$.fn.animate;
-
+    mouse = !1,
+    touchEvents = "ontouchstart" in window,
+    mouseDetectionEnabled = !1,
+    requestAnimationFrame = window.requestAnimationFrame || function (t) {
+      return setTimeout(t, 1e3 / 60);
+    },
+    cancelAnimationFrame = window.cancelAnimationFrame || function (t) {
+      clearTimeout(t);
+    },
+    canAnimate = !!$.fn.animate;
   return $.SmartMenus = function (t, e) {
     this.$root = $(t), this.opts = e, this.rootId = "", this.accessIdPrefix = "", this.$subArrow = null, this.activatedItems = [], this.visibleSubMenus = [], this.showTimeout = 0, this.hideTimeout = 0, this.scrollTimeout = 0, this.clickActivated = !1, this.focusActivated = !1, this.zIndexInc = 0, this.idInc = 0, this.$firstLink = null, this.$firstSub = null, this.disabled = !1, this.$disableOverlay = null, this.$touchScrollingSub = null, this.cssTransforms3d = "perspective" in t.style || "webkitPerspective" in t.style, this.wasCollapsible = !1, this.init();
   }, $.extend($.SmartMenus, {
@@ -118,16 +105,12 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       });
     },
     destroy: function destroy() {
-      for (; menuTrees.length;) {
-        menuTrees[0].destroy();
-      }
-
+      for (; menuTrees.length;) menuTrees[0].destroy();
       initMouseDetection(!0);
     },
     prototype: {
       init: function init(t) {
         var e = this;
-
         if (!t) {
           menuTrees.push(this), this.rootId = (new Date().getTime() + Math.random() + "").replace(/\D/g, ""), this.accessIdPrefix = "sm-" + this.rootId + "-", this.$root.hasClass("sm-rtl") && (this.opts.rightToLeftSubMenus = !0);
           var i = ".smartmenus";
@@ -151,23 +134,21 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             "resize orientationchange": $.proxy(this.winResize, this)
           }, i)), this.opts.subIndicators && (this.$subArrow = $("<span/>").addClass("sub-arrow"), this.opts.subIndicatorsText && this.$subArrow.html(this.opts.subIndicatorsText)), initMouseDetection();
         }
-
         if (this.$firstSub = this.$root.find("ul").each(function () {
           e.menuInit($(this));
         }).eq(0), this.$firstLink = this.$root.find("a").eq(0), this.opts.markCurrentItem) {
           var s = /(index|default)\.[^#\?\/]*/i,
-              o = /#.*/,
-              a = window.location.href.replace(s, ""),
-              n = a.replace(o, "");
+            o = /#.*/,
+            a = window.location.href.replace(s, ""),
+            n = a.replace(o, "");
           this.$root.find("a").each(function () {
             var t = this.href.replace(s, ""),
-                i = $(this);
+              i = $(this);
             (t == a || t == n) && (i.addClass("current"), e.opts.markCurrentTree && i.parentsUntil("[data-smartmenus-id]", "ul").each(function () {
               $(this).dataSM("parent-a").addClass("current");
             }));
           });
         }
-
         this.wasCollapsible = this.isCollapsible();
       },
       destroy: function destroy(t) {
@@ -175,7 +156,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           var e = ".smartmenus";
           this.$root.removeData("smartmenus").removeAttr("data-smartmenus-id").removeDataSM("level").off(e), e += this.rootId, $(document).off(e), $(window).off(e), this.opts.subIndicators && (this.$subArrow = null);
         }
-
         this.menuHideAll();
         var i = this;
         this.$root.find("ul").each(function () {
@@ -211,7 +191,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               opacity: 0
             }).appendTo(document.body);
           }
-
           this.disabled = !0;
         }
       },
@@ -227,7 +206,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               t.menuHideAll();
             }, 350);
           }
-
           this.lastTouch = null;
         }
       },
@@ -249,10 +227,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         this.disabled && (this.$disableOverlay && (this.$disableOverlay.remove(), this.$disableOverlay = null), this.disabled = !1);
       },
       getClosestMenu: function getClosestMenu(t) {
-        for (var e = $(t).closest("ul"); e.dataSM("in-mega");) {
-          e = e.parent().closest("ul");
-        }
-
+        for (var e = $(t).closest("ul"); e.dataSM("in-mega");) e = e.parent().closest("ul");
         return e[0] || null;
       },
       getHeight: function getHeight(t) {
@@ -268,7 +243,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           visibility: "hidden"
         }).show());
         var s = t[0].getBoundingClientRect && t[0].getBoundingClientRect(),
-            o = s && (e ? s.height || s.bottom - s.top : s.width || s.right - s.left);
+          o = s && (e ? s.height || s.bottom - s.top : s.width || s.right - s.left);
         return o || 0 === o || (o = e ? t[0].offsetHeight : t[0].offsetWidth), i && t.hide().css(i), o;
       },
       getStartZIndex: function getStartZIndex(t) {
@@ -280,8 +255,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       },
       getViewport: function getViewport(t) {
         var e = t ? "Height" : "Width",
-            i = document.documentElement["client" + e],
-            s = window["inner" + e];
+          i = document.documentElement["client" + e],
+          s = window["inner" + e];
         return s && (i = Math.min(i, s)), i;
       },
       getViewportHeight: function getViewportHeight() {
@@ -319,15 +294,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       },
       itemActivate: function itemActivate(t, e) {
         var i = t.closest("ul"),
-            s = i.dataSM("level");
-
+          s = i.dataSM("level");
         if (s > 1 && (!this.activatedItems[s - 2] || this.activatedItems[s - 2][0] != i.dataSM("parent-a")[0])) {
           var o = this;
           $(i.parentsUntil("[data-smartmenus-id]", "ul").get().reverse()).add(i).each(function () {
             o.itemActivate($(this).dataSM("parent-a"));
           });
         }
-
         if ((!this.isCollapsible() || e) && this.menuHideSubMenus(this.activatedItems[s - 1] && this.activatedItems[s - 1][0] == t[0] ? s : s - 1), this.activatedItems[s - 1] = t, this.$root.triggerHandler("activate.smapi", t[0]) !== !1) {
           var a = t.dataSM("sub");
           a && (this.isTouchMode() || !this.opts.showOnClick || this.clickActivated) && this.menuShow(a);
@@ -339,22 +312,19 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       },
       itemClick: function itemClick(t) {
         var e = $(t.currentTarget);
-
         if (this.handleItemEvents(e)) {
           if (this.$touchScrollingSub && this.$touchScrollingSub[0] == e.closest("ul")[0]) return this.$touchScrollingSub = null, t.stopPropagation(), !1;
           if (this.$root.triggerHandler("click.smapi", e[0]) === !1) return !1;
           var i = $(t.target).is(".sub-arrow"),
-              s = e.dataSM("sub"),
-              o = s ? 2 == s.dataSM("level") : !1,
-              a = this.isCollapsible(),
-              n = /toggle$/.test(this.opts.collapsibleBehavior),
-              r = /link$/.test(this.opts.collapsibleBehavior),
-              h = /^accordion/.test(this.opts.collapsibleBehavior);
-
+            s = e.dataSM("sub"),
+            o = s ? 2 == s.dataSM("level") : !1,
+            a = this.isCollapsible(),
+            n = /toggle$/.test(this.opts.collapsibleBehavior),
+            r = /link$/.test(this.opts.collapsibleBehavior),
+            h = /^accordion/.test(this.opts.collapsibleBehavior);
           if (s && !s.is(":visible")) {
             if ((!r || !a || i) && (this.opts.showOnClick && o && (this.clickActivated = !0), this.itemActivate(e, h), s.is(":visible"))) return this.focusActivated = !0, !1;
           } else if (a && (n || i)) return this.itemActivate(e, h), this.menuHide(s), n && (this.focusActivated = !1), !1;
-
           return this.opts.showOnClick && o || e.hasClass("disabled") || this.$root.triggerHandler("select.smapi", e[0]) === !1 ? !1 : void 0;
         }
       },
@@ -364,7 +334,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       },
       itemEnter: function itemEnter(t) {
         var e = $(t.currentTarget);
-
         if (this.handleItemEvents(e)) {
           if (!this.isTouchMode()) {
             this.showTimeout && (clearTimeout(this.showTimeout), this.showTimeout = 0);
@@ -373,7 +342,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               i.itemActivate(e);
             }, this.opts.showOnClick && 1 == e.closest("ul").dataSM("level") ? 1 : this.opts.showTimeout);
           }
-
           this.$root.triggerHandler("mouseenter.smapi", e[0]);
         }
       },
@@ -390,7 +358,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           var e = function e() {
             t.css("z-index", "");
           };
-
           this.isCollapsible() ? canAnimate && this.opts.collapsibleHideFunction ? this.opts.collapsibleHideFunction.call(this, t, e) : t.hide(this.opts.collapsibleHideDuration, e) : canAnimate && this.opts.hideFunction ? this.opts.hideFunction.call(this, t, e) : t.hide(this.opts.hideDuration, e), t.dataSM("scroll") && (this.menuScrollStop(t), t.css({
             "touch-action": "",
             "-ms-touch-action": "",
@@ -406,11 +373,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       },
       menuHideAll: function menuHideAll() {
         this.showTimeout && (clearTimeout(this.showTimeout), this.showTimeout = 0);
-
-        for (var t = this.opts.isPopup ? 1 : 0, e = this.visibleSubMenus.length - 1; e >= t; e--) {
-          this.menuHide(this.visibleSubMenus[e]);
-        }
-
+        for (var t = this.opts.isPopup ? 1 : 0, e = this.visibleSubMenus.length - 1; e >= t; e--) this.menuHide(this.visibleSubMenus[e]);
         this.opts.isPopup && (canAnimate && this.$root.stop(!0, !0), this.$root.is(":visible") && (canAnimate && this.opts.hideFunction ? this.opts.hideFunction.call(this, this.$root) : this.$root.hide(this.opts.hideDuration))), this.activatedItems = [], this.visibleSubMenus = [], this.clickActivated = !1, this.focusActivated = !1, this.zIndexInc = 0, this.$root.triggerHandler("hideAll.smapi");
       },
       menuHideSubMenus: function menuHideSubMenus(t) {
@@ -422,15 +385,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       menuInit: function menuInit(t) {
         if (!t.dataSM("in-mega")) {
           t.hasClass("mega-menu") && t.find("ul").dataSM("in-mega", !0);
-
-          for (var e = 2, i = t[0]; (i = i.parentNode.parentNode) != this.$root[0];) {
-            e++;
-          }
-
+          for (var e = 2, i = t[0]; (i = i.parentNode.parentNode) != this.$root[0];) e++;
           var s = t.prevAll("a").eq(-1);
           s.length || (s = t.prevAll().find("a").eq(-1)), s.addClass("has-submenu").dataSM("sub", t), t.dataSM("parent-a", s).dataSM("level", e).parent().dataSM("sub", t);
           var o = s.attr("id") || this.accessIdPrefix + ++this.idInc,
-              a = t.attr("id") || this.accessIdPrefix + ++this.idInc;
+            a = t.attr("id") || this.accessIdPrefix + ++this.idInc;
           s.attr({
             id: o,
             "aria-haspopup": "true",
@@ -447,32 +406,30 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       },
       menuPosition: function menuPosition(t) {
         var e,
-            i,
-            s = t.dataSM("parent-a"),
-            o = s.closest("li"),
-            a = o.parent(),
-            n = t.dataSM("level"),
-            r = this.getWidth(t),
-            h = this.getHeight(t),
-            u = s.offset(),
-            l = u.left,
-            c = u.top,
-            d = this.getWidth(s),
-            m = this.getHeight(s),
-            p = $(window),
-            f = p.scrollLeft(),
-            v = p.scrollTop(),
-            b = this.getViewportWidth(),
-            S = this.getViewportHeight(),
-            g = a.parent().is("[data-sm-horizontal-sub]") || 2 == n && !a.hasClass("sm-vertical"),
-            M = this.opts.rightToLeftSubMenus && !o.is("[data-sm-reverse]") || !this.opts.rightToLeftSubMenus && o.is("[data-sm-reverse]"),
-            w = 2 == n ? this.opts.mainMenuSubOffsetX : this.opts.subMenusSubOffsetX,
-            T = 2 == n ? this.opts.mainMenuSubOffsetY : this.opts.subMenusSubOffsetY;
-
+          i,
+          s = t.dataSM("parent-a"),
+          o = s.closest("li"),
+          a = o.parent(),
+          n = t.dataSM("level"),
+          r = this.getWidth(t),
+          h = this.getHeight(t),
+          u = s.offset(),
+          l = u.left,
+          c = u.top,
+          d = this.getWidth(s),
+          m = this.getHeight(s),
+          p = $(window),
+          f = p.scrollLeft(),
+          v = p.scrollTop(),
+          b = this.getViewportWidth(),
+          S = this.getViewportHeight(),
+          g = a.parent().is("[data-sm-horizontal-sub]") || 2 == n && !a.hasClass("sm-vertical"),
+          M = this.opts.rightToLeftSubMenus && !o.is("[data-sm-reverse]") || !this.opts.rightToLeftSubMenus && o.is("[data-sm-reverse]"),
+          w = 2 == n ? this.opts.mainMenuSubOffsetX : this.opts.subMenusSubOffsetX,
+          T = 2 == n ? this.opts.mainMenuSubOffsetY : this.opts.subMenusSubOffsetY;
         if (g ? (e = M ? d - r - w : w, i = this.opts.bottomToTopSubMenus ? -h - T : m + T) : (e = M ? w - r : d - w, i = this.opts.bottomToTopSubMenus ? m - T - h : T), this.opts.keepInViewport) {
           var y = l + e,
-              I = c + i;
-
+            I = c + i;
           if (M && f > y ? e = g ? f - y + e : d - w : !M && y + r > f + b && (e = g ? f + b - r - y + e : w - r), g || (S > h && I + h > v + S ? i += v + S - h - I : (h >= S || v > I) && (i += v - I)), g && (I + h > v + S + .49 || v > I) || !g && h > S + .49) {
             var x = this;
             t.dataSM("scroll-arrows") || t.dataSM("scroll-arrows", $([$('<span class="scroll-up"><span class="scroll-up-arrow"></span></span>')[0], $('<span class="scroll-down"><span class="scroll-down-arrow"></span></span>')[0]]).on({
@@ -482,12 +439,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               mouseleave: function mouseleave(e) {
                 x.menuScrollStop(t), x.menuScrollOut(t, e);
               },
-              "mousewheel DOMMouseScroll": function mousewheelDOMMouseScroll(t) {
+              "mousewheel DOMMouseScroll": function mousewheel_DOMMouseScroll(t) {
                 t.preventDefault();
               }
             }).insertAfter(t));
             var A = ".smartmenus_scroll";
-
             if (t.dataSM("scroll", {
               y: this.cssTransforms3d ? 0 : i - m,
               step: 1,
@@ -501,7 +457,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               mouseout: function mouseout(e) {
                 x.menuScrollOut(t, e);
               },
-              "mousewheel DOMMouseScroll": function mousewheelDOMMouseScroll(e) {
+              "mousewheel DOMMouseScroll": function mousewheel_DOMMouseScroll(e) {
                 x.menuScrollMousewheel(t, e);
               }
             }, A)).dataSM("scroll-arrows").css({
@@ -521,7 +477,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             }
           }
         }
-
         t.css({
           top: "auto",
           left: "0",
@@ -531,14 +486,12 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       },
       menuScroll: function menuScroll(t, e, i) {
         var s,
-            o = t.dataSM("scroll"),
-            a = t.dataSM("scroll-arrows"),
-            n = o.up ? o.upEnd : o.downEnd;
-
+          o = t.dataSM("scroll"),
+          a = t.dataSM("scroll-arrows"),
+          n = o.up ? o.upEnd : o.downEnd;
         if (!e && o.momentum) {
           if (o.momentum *= .92, s = o.momentum, .5 > s) return this.menuScrollStop(t), void 0;
         } else s = i || (e || !this.opts.scrollAccelerate ? this.opts.scrollStep : Math.floor(o.step));
-
         var r = t.dataSM("level");
         if (this.activatedItems[r - 1] && this.activatedItems[r - 1].dataSM("sub") && this.activatedItems[r - 1].dataSM("sub").is(":visible") && this.menuHideSubMenus(r - 1), o.y = o.up && o.y >= n || !o.up && n >= o.y ? o.y : Math.abs(n - o.y) > s ? o.y + (o.up ? s : -s) : n, t.css(this.cssTransforms3d ? {
           "-webkit-transform": "translate3d(0, " + o.y + "px, 0)",
@@ -559,7 +512,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           var i = (e.wheelDelta || -e.detail) > 0;
           t.dataSM("scroll-arrows").eq(i ? 0 : 1).is(":visible") && (t.dataSM("scroll").up = i, this.menuScroll(t, !0));
         }
-
         e.preventDefault();
       },
       menuScrollOut: function menuScrollOut(t, e) {
@@ -569,13 +521,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         if (mouse && !/^scroll-(up|down)/.test(e.target.className) && this.getClosestMenu(e.target) == t[0]) {
           this.menuScrollRefreshData(t);
           var i = t.dataSM("scroll"),
-              s = $(window).scrollTop() - t.dataSM("parent-a").offset().top - i.itemH;
+            s = $(window).scrollTop() - t.dataSM("parent-a").offset().top - i.itemH;
           t.dataSM("scroll-arrows").eq(0).css("margin-top", s).end().eq(1).css("margin-top", s + this.getViewportHeight() - i.arrowDownH).end().css("visibility", "visible");
         }
       },
       menuScrollRefreshData: function menuScrollRefreshData(t) {
         var e = t.dataSM("scroll"),
-            i = $(window).scrollTop() - t.dataSM("parent-a").offset().top - e.itemH;
+          i = $(window).scrollTop() - t.dataSM("parent-a").offset().top - e.itemH;
         this.cssTransforms3d && (i = -(parseFloat(t.css("margin-top")) - i)), $.extend(e, {
           upEnd: i,
           downEnd: i + this.getViewportHeight() - e.subH
@@ -587,7 +539,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       menuScrollTouch: function menuScrollTouch(t, e) {
         if (e = e.originalEvent, isTouchEvent(e)) {
           var i = this.getTouchPoint(e);
-
           if (this.getClosestMenu(i.target) == t[0]) {
             var s = t.dataSM("scroll");
             if (/(start|down)$/i.test(e.type)) this.menuScrollStop(t) ? (e.preventDefault(), this.$touchScrollingSub = t) : this.$touchScrollingSub = null, this.menuScrollRefreshData(t), $.extend(s, {
@@ -595,7 +546,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               touchStartTime: e.timeStamp
             });else if (/move$/i.test(e.type)) {
               var o = void 0 !== s.touchY ? s.touchY : s.touchStartY;
-
               if (void 0 !== o && o != i.pageY) {
                 this.$touchScrollingSub = t;
                 var a = i.pageY > o;
@@ -607,7 +557,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
                   touchY: i.pageY
                 }), this.menuScroll(t, !0, Math.abs(i.pageY - o));
               }
-
               e.preventDefault();
             } else void 0 !== s.touchY && ((s.momentum = 15 * Math.pow(Math.abs(i.pageY - s.touchStartY) / (e.timeStamp - s.touchStartTime), 2)) && (this.menuScrollStop(t), this.menuScroll(t), e.preventDefault()), delete s.touchY);
           }
@@ -616,7 +565,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       menuShow: function menuShow(t) {
         if ((t.dataSM("beforefirstshowfired") || (t.dataSM("beforefirstshowfired", !0), this.$root.triggerHandler("beforefirstshow.smapi", t[0]) !== !1)) && this.$root.triggerHandler("beforeshow.smapi", t[0]) !== !1 && (t.dataSM("shown-before", !0), canAnimate && t.stop(!0, !0), !t.is(":visible"))) {
           var e = t.dataSM("parent-a"),
-              i = this.isCollapsible();
+            i = this.isCollapsible();
           if ((this.opts.keepHighlighted || i) && e.addClass("highlighted"), i) t.removeClass("sm-nowrap").css({
             zIndex: "",
             width: "auto",
@@ -635,14 +584,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
               var s = this.getWidth(t);
               t.css("max-width", this.opts.subMenusMaxWidth), s > this.getWidth(t) && t.removeClass("sm-nowrap").css("width", this.opts.subMenusMaxWidth);
             }
-
             this.menuPosition(t);
           }
-
           var o = function o() {
             t.css("overflow", "");
           };
-
           i ? canAnimate && this.opts.collapsibleShowFunction ? this.opts.collapsibleShowFunction.call(this, t, o) : t.show(this.opts.collapsibleShowDuration, o) : canAnimate && this.opts.showFunction ? this.opts.showFunction.call(this, t, o) : t.show(this.opts.showDuration, o), e.attr("aria-expanded", "true"), t.attr({
             "aria-expanded": "true",
             "aria-hidden": "false"
@@ -658,18 +604,15 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       },
       popupShow: function popupShow(t, e) {
         if (!this.opts.isPopup) return alert('SmartMenus jQuery Error:\n\nIf you want to show this menu via the "popupShow" method, set the isPopup:true option.'), void 0;
-
         if (this.hideTimeout && (clearTimeout(this.hideTimeout), this.hideTimeout = 0), this.$root.dataSM("shown-before", !0), canAnimate && this.$root.stop(!0, !0), !this.$root.is(":visible")) {
           this.$root.css({
             left: t,
             top: e
           });
-
           var i = this,
-              s = function s() {
-            i.$root.css("overflow", "");
-          };
-
+            s = function s() {
+              i.$root.css("overflow", "");
+            };
           canAnimate && this.opts.showFunction ? this.opts.showFunction.call(this, this.$root, s) : this.$root.show(this.opts.showDuration, s), this.visibleSubMenus[0] = this.$root;
         }
       },
@@ -680,25 +623,20 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         if (this.handleEvents()) switch (t.keyCode) {
           case 27:
             var e = this.activatedItems[0];
-
             if (e) {
               this.menuHideAll(), e[0].focus();
               var i = e.dataSM("sub");
               i && this.menuHide(i);
             }
-
             break;
-
           case 32:
             var s = $(t.target);
-
             if (s.is("a") && this.handleItemEvents(s)) {
               var i = s.dataSM("sub");
               i && !i.is(":visible") && (this.itemClick({
                 currentTarget: t.target
               }), t.preventDefault());
             }
-
         }
       },
       rootOut: function rootOut(t) {
@@ -736,13 +674,12 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   }, $.fn.smartmenus = function (options) {
     if ("string" == typeof options) {
       var args = arguments,
-          method = options;
+        method = options;
       return Array.prototype.shift.call(args), this.each(function () {
         var t = $(this).data("smartmenus");
         t && t[method] && t[method].apply(t, args);
       });
     }
-
     return this.each(function () {
       var dataOpts = $(this).data("sm-options") || null;
       if (dataOpts) try {
@@ -795,8 +732,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 });
 "use strict";
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 /**
  * WhenInViewport 2.0.4
  * Author: dbrekalo
@@ -807,10 +743,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
  * edit: added root ={} - fix error in line root.WhenInViewport = factory()
  */
+
 (function (root, factory) {
   root = {};
   /* istanbul ignore next */
-
   if (typeof define === 'function' && define.amd) {
     define([], factory);
   } else if ((typeof module === "undefined" ? "undefined" : _typeof(module)) === 'object' && module.exports) {
@@ -821,7 +757,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 })(void 0, function () {
   var windowHeight;
   var scrollOffset;
-
   function WhenInViewport(element, callback, options) {
     events.setup();
     this.registryItem = registry.addItem(element, typeof callback === 'function' ? assign(options || {}, {
@@ -829,12 +764,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     }) : callback);
     registry.processItem(this.registryItem);
   }
-
   WhenInViewport.prototype.stopListening = function () {
     registry.removeItem(this.registryItem);
     events.removeIfStoreEmpty();
   };
-
   WhenInViewport.defaults = {
     threshold: 0,
     context: null
@@ -842,11 +775,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   assign(WhenInViewport, {
     setRateLimiter: function setRateLimiter(rateLimiter, rateLimitDelay) {
       events.rateLimiter = rateLimiter;
-
       if (rateLimitDelay) {
         events.rateLimitDelay = rateLimitDelay;
       }
-
       return this;
     },
     checkAll: function checkAll() {
@@ -866,13 +797,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     registerAsJqueryPlugin: function registerAsJqueryPlugin($) {
       $.fn.whenInViewport = function (options, moreOptions) {
         var pluginOptions;
-
         var callbackProxy = function callbackProxy(callback) {
           return function (el) {
             callback.call(this, $(el));
           };
         };
-
         if (typeof options === 'function') {
           pluginOptions = $.extend({}, moreOptions, {
             callback: callbackProxy(options)
@@ -882,7 +811,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             callback: callbackProxy(options.callback)
           });
         }
-
         return this.each(function () {
           if (pluginOptions.setupOnce) {
             !$.data(this, 'whenInViewport') && $.data(this, 'whenInViewport', new WhenInViewport(this, pluginOptions));
@@ -891,25 +819,20 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           }
         });
       };
-
       return this;
     }
   });
-
   function getWindowHeight() {
     /* istanbul ignore next */
     return 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight;
   }
-
   function getWindowScrollOffset() {
     /* istanbul ignore next */
     return 'pageYOffset' in window ? window.pageYOffset : document.documentElement.scrollTop || document.body.scrollTop;
   }
-
   function getElementOffset(element) {
     return element.getBoundingClientRect().top + getWindowScrollOffset();
   }
-
   function iterate(obj, callback, context) {
     for (var key in obj) {
       if (obj.hasOwnProperty(key)) {
@@ -919,17 +842,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       }
     }
   }
-
   function assign(out) {
     for (var i = 1; i < arguments.length; i++) {
       iterate(arguments[i], function (obj, key) {
         out[key] = obj;
       });
     }
-
     return out;
   }
-
   var registry = {
     store: {},
     counter: 0,
@@ -981,7 +901,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       } else if (window.attachEvent) {
         window.attachEvent(eventName, callback);
       }
-
       return this;
     },
     off: function off(eventName, callback) {
@@ -991,12 +910,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       } else if (window.detachEvent) {
         window.detachEvent('on' + eventName, callback);
       }
-
       return this;
     },
     setup: function setup() {
       var self = this;
-
       if (!this.setuped) {
         scrollOffset = getWindowScrollOffset();
         windowHeight = getWindowHeight();
@@ -1024,11 +941,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       }
     }
   };
-
   if (typeof window !== 'undefined') {
     var $ = window.jQuery || window.$;
     $ && WhenInViewport.registerAsJqueryPlugin($);
   }
-
   return WhenInViewport;
 });

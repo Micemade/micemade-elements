@@ -1,7 +1,9 @@
 // let elementChanged = false;
-class MicemadeSliderHandler extends elementorModules.frontend.handlers
-	.SwiperBase {
-	getDefaultSettings() {
+
+jQuery(window).on("elementor/frontend/init", () => {
+	class MicemadeSliderHandler extends elementorModules.frontend.handlers
+		.SwiperBase {
+		getDefaultSettings() {
 		return {
 			selectors: {
 				carousel: ".micemade-elements_slider",
@@ -593,9 +595,8 @@ class MicemadeSliderHandler extends elementorModules.frontend.handlers
 			},
 		};
 	}
-}
+	}
 
-jQuery(window).on("elementor/frontend/init", () => {
 	elementorFrontend.elementsHandler.attachHandler(
 		"micemade-slider",
 		MicemadeSliderHandler

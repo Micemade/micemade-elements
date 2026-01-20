@@ -2,7 +2,7 @@
 // 1. Theme Quick Settings (Variables)
 // (for further control, you will need to dig into the actual CSS in 2.)
 // ----------------------------------------------------------
-@import 'mixins/sub-items-indentation';
+@use 'mixins/sub-items-indentation' as *;
 
 // ----------------------------------------------------------
 // :: 1.1. Colors

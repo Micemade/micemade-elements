@@ -34,9 +34,10 @@ const config = require("./wpgulp.config.js");
 const gulp = require("gulp"); // Gulp of-course.
 
 // CSS related plugins.
-const sass = require("gulp-sass"); // Gulp plugin for Sass compilation.
+const sass = require("gulp-sass")(require("sass")); // Gulp plugin for Sass compilation.
 const minifycss = require("gulp-uglifycss"); // Minifies CSS files.
-const autoprefixer = require("gulp-autoprefixer"); // Autoprefixing magic.
+const gulpAutoprefixer = require("gulp-autoprefixer"); // Autoprefixing magic.
+const autoprefixer = gulpAutoprefixer.default || gulpAutoprefixer; // Handle both CJS and ESM exports.
 const mmq = require("gulp-merge-media-queries"); // Combine matching media queries into one.
 const rtlcss = require("gulp-rtlcss"); // Generates RTL stylesheet.
 
@@ -50,9 +51,10 @@ const imagemin = require("gulp-imagemin"); // Minify PNG, JPEG, GIF and SVG imag
 
 // Utility related plugins.
 const rename = require("gulp-rename"); // Renames files E.g. style.css -> style.min.css.
-const lineec = require("gulp-line-ending-corrector"); // Consistent Line Endings for non UNIX systems. Gulp Plugin for Line Ending Corrector (A utility that makes sure your files have consistent line endings).
-const filter = require("gulp-filter"); // Enables you to work on a subset of the original files by filtering them using a glob.
-const sourcemaps = require("gulp-sourcemaps"); // Maps code in a compressed file (E.g. style.css) back to it’s original position in a source file (E.g. structure.scss, which was later combined with other css files to generate style.css).
+const lineec = require("gulp-line-ending-corrector"); // Consistent Line Endings for non UNIX systems.
+const gulpFilter = require("gulp-filter"); // Enables you to work on a subset of the original files by filtering them using a glob.
+const filter = gulpFilter.default || gulpFilter; // Support both CJS and ESM exports.
+const sourcemaps = require("gulp-sourcemaps"); // Maps code in a compressed file back to its original position.
 const notify = require("gulp-notify"); // Sends message notification to you.
 const browserSync = require("browser-sync").create(); // Reloads browser and injects CSS. Time-saving synchronized browser testing.
 const wpPot = require("gulp-wp-pot"); // For generating the .pot file.
@@ -418,6 +420,14 @@ gulp.task(
 			gulp.watch(config.imgSRC, gulp.series("images", reload)); // Reload on customJS file changes.
 		}
 	)
+);
+
+/**
+ * All tasks and export to zip.
+ */
+gulp.task(
+	"build",
+	gulp.parallel("styles", "vendorsJS", "customJS", "images")
 );
 
 /**

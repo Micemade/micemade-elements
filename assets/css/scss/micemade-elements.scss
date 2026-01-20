@@ -1,11 +1,11 @@
 // === Uncomment bellow 2 lines for Node-Sass creating CSS file: ===
-@import "breakpoint";
-@import "flex-grid-breakpoints";
-@import "flex-grid";
-@import "mixins";
-@import "partials";
-@import "swiper/swiper";
-@import "elementor-editor";
+@use "breakpoint" as *;
+@use "flex-grid-breakpoints" as *;
+@use "flex-grid" as *;
+@use "mixins" as *;
+@use "partials" as *;
+@use "swiper/swiper" as *;
+@use "elementor-editor" as *;
 
 // Global whitespace:
 $space: 40px !default;
@@ -541,19 +541,19 @@ $kenburns-back-size: 120vw;
 	&_slider, &_products_slider, &_product-categories {
 
 		.swiper-button-next {
-			.elementor-widget-container > { 
+			.elementor-widget-container > * { 
 				right: 20px;
 			}
 		}
 		
 		.swiper-button-prev {
-			.elementor-widget-container > {
+			.elementor-widget-container > * {
 				left: 20px;
 			}
 		}
 		
-		> .swiper-button-next, > .swiper-button-prev {
-			.elementor-widget-container > & {
+		.elementor-widget-container {
+			> .swiper-button-next, > .swiper-button-prev {
 				opacity: 0;
 				transition: opacity 0.3s linear;
 				background-image: none;
@@ -564,16 +564,16 @@ $kenburns-back-size: 120vw;
 		}
 		
 		&:hover {
-			.swiper-button-next, .swiper-button-prev {
-				.elementor-widget-container > & {
+			.elementor-widget-container {
+				> .swiper-button-next, > .swiper-button-prev {
 					opacity: 1;
 				}
 			}
 		}
 
 		@include breakpoint(tablet) {
-			.swiper-button-next, .swiper-button-prev {
-				.elementor-widget-container > & {
+			.elementor-widget-container {
+				> .swiper-button-next, > .swiper-button-prev {
 					opacity: 1;
 				}
 			}

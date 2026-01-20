@@ -8,7 +8,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Elementor\Controls_Stack;
 use Elementor\Core\Schemes;
 use Elementor\Core\Settings\Manager;
-use Elementor\Core\Schemes\Typography;
 
 class Micemade_Slider extends Widget_Base {
 
@@ -19,9 +18,6 @@ class Micemade_Slider extends Widget_Base {
 
 		if ( ! wp_script_is( 'micemade-slider-js', 'registered' ) ) {
 			wp_register_script( 'micemade-slider-js', MICEMADE_ELEMENTS_URL . 'assets/js/custom/handlers/slider.js', array( 'elementor-frontend' ), $today, true );
-		}
-		if ( ! wp_script_is( 'micemade-slider-js', 'enqueued' ) ) {
-			wp_enqueue_script( 'micemade-slider-js' );
 		}
 	}
 
@@ -946,7 +942,6 @@ class Micemade_Slider extends Widget_Base {
 			array(
 				'name'     => 'slide_title_typography',
 				'selector' => '{{WRAPPER}} .slide-title',
-				'scheme'   => Typography::TYPOGRAPHY_1,
 			)
 		);
 
@@ -975,7 +970,6 @@ class Micemade_Slider extends Widget_Base {
 			array(
 				'name'     => 'slide_content_typography',
 				'selector' => '{{WRAPPER}} .slide-content',
-				'scheme'   => Typography::TYPOGRAPHY_1,
 			)
 		);
 

@@ -6,7 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Elementor\Controls_Stack;
-use Elementor\Core\Schemes\Typography;
 
 class Micemade_WC_Products extends Widget_Base {
 
@@ -880,7 +879,6 @@ class Micemade_WC_Products extends Widget_Base {
 			array(
 				'name'     => 'title_typography',
 				'label'    => esc_html__( 'Typography', 'micemade-elements' ),
-				'scheme'   => Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} .post-text h4',
 			)
 		);
@@ -970,7 +968,6 @@ class Micemade_WC_Products extends Widget_Base {
 			array(
 				'name'      => 'text_typography',
 				'label'     => esc_html__( 'Short description typography', 'micemade-elements' ),
-				'scheme'    => Typography::TYPOGRAPHY_4,
 				'selector'  => '{{WRAPPER}} .post-text p.short-desc',
 				'condition' => array(
 					'short_desc!' => '',

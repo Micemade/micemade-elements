@@ -1,15 +1,18 @@
 <?php
-namespace Elementor;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+use Elementor\Widget_Base;
 use Elementor\Controls_Stack;
-use Elementor\Core\Schemes\Typography;
+use Elementor\Controls_Manager;
+use Elementor\Group_Control_Border;
+use Elementor\Group_Control_Typography;
+
 
 class Micemade_Posts_Grid extends Widget_Base {
-	
+
 	public function get_name() {
 		return 'micemade-posts-grid';
 	}
@@ -198,7 +201,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_control(
 			'custom_meta_note',
 			array(
-				'type'            => \Elementor\Controls_Manager::RAW_HTML,
+				'type'            => Controls_Manager::RAW_HTML,
 				'raw'             => '<small>' . sprintf( wp_kses_post( __( 'Add custom fields meta keys and edit settings bellow, under the "Custom meta" section. Only for advanced users. <a href="%s" target="_blank">Learn more</a>', 'micemade-elements' ) ), 'https://wordpress.org/support/article/custom-fields/' ) . '</small>',
 				'content_classes' => 'your-class',
 				'condition'       => array(
@@ -210,7 +213,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_control(
 			'hr_cm',
 			array(
-				'type'      => \Elementor\Controls_Manager::DIVIDER,
+				'type'      => Controls_Manager::DIVIDER,
 				'condition' => array(
 					'custom_meta' => 'yes',
 				),
@@ -231,7 +234,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_control(
 			'loadmore_note',
 			array(
-				'type'            => \Elementor\Controls_Manager::RAW_HTML,
+				'type'            => Controls_Manager::RAW_HTML,
 				'raw'             => '<small>' . esc_html__( 'If there are items in "Select items from [post type]", Load more feature will be disabled.', 'micemade-elements' ) . '</small>',
 				'content_classes' => 'your-class',
 				'condition'       => array(
@@ -243,7 +246,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_control(
 			'hr_loadmore',
 			array(
-				'type'      => \Elementor\Controls_Manager::DIVIDER,
+				'type'      => Controls_Manager::DIVIDER,
 				'condition' => array(
 					'use_load_more' => 'yes',
 				),
@@ -362,7 +365,7 @@ class Micemade_Posts_Grid extends Widget_Base {
 		$this->add_control(
 			'hr',
 			array(
-				'type' => \Elementor\Controls_Manager::DIVIDER,
+				'type' => Controls_Manager::DIVIDER,
 			)
 		);
 
@@ -668,7 +671,6 @@ class Micemade_Posts_Grid extends Widget_Base {
 			array(
 				'name'     => 'title_typography',
 				'label'    => esc_html__( 'Typography', 'micemade-elements' ),
-				'scheme'   => Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} .post-text h4',
 			)
 		);
@@ -782,7 +784,6 @@ class Micemade_Posts_Grid extends Widget_Base {
 			array(
 				'name'      => 'meta_typography',
 				'label'     => esc_html__( 'Meta typography', 'micemade-elements' ),
-				'scheme'    => Typography::TYPOGRAPHY_4,
 				'selector'  => '{{WRAPPER}} .post-text .meta',
 				'condition' => array(
 					'meta!' => '',
@@ -962,7 +963,6 @@ class Micemade_Posts_Grid extends Widget_Base {
 			array(
 				'name'     => 'custom_meta_typography',
 				'label'    => esc_html__( 'Custom meta typography', 'micemade-elements' ),
-				'scheme'   => Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} .post-text .custom-meta',
 			)
 		);
@@ -1054,7 +1054,6 @@ class Micemade_Posts_Grid extends Widget_Base {
 			array(
 				'name'     => 'text_typography',
 				'label'    => esc_html__( 'Excerpt typography', 'micemade-elements' ),
-				'scheme'   => Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} .post-text p',
 
 			)
@@ -1334,9 +1333,9 @@ class Micemade_Posts_Grid extends Widget_Base {
 
 			// Posts grid container.
 			?>
-			<div <?php $this->print_render_attribute_string( 'posts-grid-container' ); ?> >
+<div <?php $this->print_render_attribute_string( 'posts-grid-container' ); ?>>
 
-			<?php
+	<?php
 			// If "Load more" is selected, turn on the arguments for Ajax call.
 			if ( $use_load_more ) {
 
@@ -1391,9 +1390,5 @@ class Micemade_Posts_Grid extends Widget_Base {
 		}
 
 	}
-
-	protected function content_template() {}
-
-	public function render_plain_content( $instance = array() ) {}
 
 }

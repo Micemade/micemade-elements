@@ -1,6 +1,6 @@
 .micemade-elements_products_slider,
 .micemade-elements_slider {
-	.swiper-container {
+	&.swiper-container {
 		margin-left: auto;
 		margin-right: auto;
 		position:relative;
@@ -8,12 +8,12 @@
 		/* Fix of Webkit flickering */
 		z-index:1;
 	}
-	.swiper-container-no-flexbox {
+	&.swiper-container-no-flexbox {
 		.swiper-slide {
 			float: left;
 		}
 	}
-	.swiper-container-vertical > .swiper-wrapper{
+	&.swiper-container-vertical > .swiper-wrapper{
 		-webkit-box-orient: vertical;
 		-moz-box-orient: vertical;
 		-ms-flex-direction: column;
@@ -37,7 +37,7 @@
 		-o-transition-property:-o-transform;
 		-ms-transition-property:-ms-transform;
 		transition-property:transform;
-		
+
 		-webkit-box-sizing: content-box;
 		-moz-box-sizing: content-box;
 		box-sizing: content-box;

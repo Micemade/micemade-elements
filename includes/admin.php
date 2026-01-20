@@ -65,8 +65,8 @@ function micemade_elements_terms_func( $taxonomy ) {
 
 	$terms_arr = array();
 	$terms     = get_terms( $taxonomy, 'hide_empty=1, hierarchical=0' );
-	// If wpml is activated.
-	if ( MICEMADE_ELEMENTS_WPML_ON ) {
+	// If WPML is activated.
+	if ( defined( 'MICEMADE_ELEMENTS_WPML_ON' ) && MICEMADE_ELEMENTS_WPML_ON ) {
 		if ( ! empty( $terms ) ) {
 			foreach ( $terms as $term ) {
 				if ( icl_object_id( $term->term_id, $taxonomy, false, ICL_LANGUAGE_CODE ) === $term->term_id ) {

@@ -9,6 +9,10 @@
  * https://github.com/matthewsimo/scss-flex-grid
  */
 
+@use "sass:math";
+@use "sass:list";
+@use "flex-grid-breakpoints" as *;
+
 /**
  * Grid setup
  *
@@ -62,7 +66,7 @@ $fg-class-off: 'mme-off' !default; // default was 'off'
 
 // Calculate column size percentage
 @function get-col-percent($column-num) {
-	@return $column-num / $fg-columns * 100%;
+	@return math.div($column-num, $fg-columns) * 100%;
 }
 
 // Spacing mixin to create uniform margin/padding
@@ -163,22 +167,22 @@ $fg-class-off: 'mme-off' !default; // default was 'off'
  */
 @each $val in $fg-breakpoints {
 
-	$namespace: nth($val, 1);
+	$namespace: list.nth($val, 1);
 	@include grid-base( $namespace );
 
 }
 
 @each $val in $fg-breakpoints {
-	@if length($val) == 1 {
+	@if list.length($val) == 1 {
 
-		$namespace: nth($val, 1);
+		$namespace: list.nth($val, 1);
 		@include grid-sizes( $namespace );
 
 	} @else {
 
-		$namespace: nth($val, 1);
-		$size: nth($val, 2);
-		$dir:  nth($val, 3);
+		$namespace: list.nth($val, 1);
+		$size: list.nth($val, 2);
+		$dir:  list.nth($val, 3);
 
 		@media only screen and (#{$dir}-width: #{$size}) {
 			@include grid-sizes( $namespace );

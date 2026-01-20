@@ -1,13 +1,13 @@
 # Micemade Elements
 
-Author URI: http://micemade.com  
-Plugin URI: http://micemade.com/micemade-elements  
-Contributors: Micemade  
-Tags: elementor, elementor addon, elementor extension, elements, widgets, posts grid, woocommerce, catalog, products, product, micemade  
-Requires at least: 5.5  
+Author URI: http://micemade.com
+Plugin URI: http://micemade.com/micemade-elements
+Contributors: Micemade
+Tags: elementor, elementor addon, elementor extension, elements, widgets, posts grid, woocommerce, catalog, products, product, micemade
+Requires at least: 5.5
 Tested up to: 6.0
-Stable Tag: 1.0.1
-License: GPLv2 or later  
+Stable Tag: 1.2.0
+License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 A collection of free elements for Elementor page builder WordPress plugin . "Elementor" plugin is required.
@@ -55,6 +55,10 @@ Our tests indicate that the elements work well with most themes that are well co
 Time will tell. When we estimate plugin has enough added functionalities to Elementor, or some other reason, it will be available on wp.org. So far, install it from GitHub (Download zip or clone the repository) .
 
 **Changelog**
+*** v.1.2.0 ***
+* Tested and fixed compatiblity with Elementor v.3.34.1
+* Replaced Gulp with more modern approach
+
 *** v.1.0.1 ***
 * Fixed deprecated elementor/widgets/widgets_registered and elementor/controls/controls_registered hooks and methods (Elementor ^ v3.5)
 
@@ -86,7 +90,7 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 
 *** v.0.7.0 ***
 * Added - support for WPML and Polylang for custom queries (Posts Grid, WC Product elements)
-* Added - Slider element with Elementor templates / custom content 
+* Added - Slider element with Elementor templates / custom content
 * Added - WC Categories menu element
 * Added custom post type/taxonomies to Posts grid element
 * Added - "Micemade Posts grid" element - added post meta ordering and toggling
@@ -129,7 +133,7 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 *** 0.6.4. ***
 * Added - new widget - "Micemade Instagram"
 * Tweak - added incremental delay per category item
-* Fix - "Micemade WC Categories" editor fixes (show animation on animation settings change) 
+* Fix - "Micemade WC Categories" editor fixes (show animation on animation settings change)
 
 *** 0.6.3. ***
 * Added - Additional options in "Micemade WC Single product" - product image as background
@@ -172,7 +176,7 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 *** 0.3.8. ***
 * Added - option for displaying product info as in catalog (simple) - in "Micemade WC Single Product"
 
-*** 0.3.7 *** 
+*** 0.3.7 ***
 * Added "Micemade Contact Form 7 Forms" element for displaying contact forms (required "Contact Form 7" plugin)
 * Added "Micemade MailChimp 4 WP Forms" element for displaying newsletter subscription forms (required "MailChimp 4 WP" plugin)
 * Added "Inner spacing" control in "Micemade WC Categories"
@@ -180,7 +184,7 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 * Tweak -  Changed registering of MM Elements elements - simpler method
 * Tweak - Refactored "Micemade Posts Grid" - added grid spacing control, rearranged title / meta / excerpt controls
 
-*** 0.3.6 *** 
+*** 0.3.6 ***
 * Added - spacing between product info elements un "Micemade WC Products Slider"
 * Added - Additional base style and hover image effect added to "Micemade WC Categories"
 * Tweak - Micemade elements grouped in separate "Micemade Elements" category, in editor sidebar
@@ -193,7 +197,7 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 *** 0.3.4 ***
 * Tweak -  removed css transition if class "parallax" is added to section/column
 * Fix - Micemade WC Categories errors when missing category
-* Fix - corrected Micemade WC products horizontal spacing 
+* Fix - corrected Micemade WC products horizontal spacing
 
 *** 0.3.3=
 * Fix - missing Mega menu if Micemade CHILD theme was activated
@@ -215,7 +219,7 @@ Time will tell. When we estimate plugin has enough added functionalities to Elem
 * Tweak - Replaced support for Adorn theme with support for Beautify theme
 
 *** 0.2.7 ***
-* Tweak - Single product elements css and settings 
+* Tweak - Single product elements css and settings
 
 *** 0.2.6 ***
 * Tweak - product info styling options on products slider element

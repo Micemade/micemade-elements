@@ -1,12 +1,17 @@
 <?php
-namespace Elementor;
+
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+use Elementor\Widget_Base;
 use Elementor\Controls_Stack;
-use Elementor\Core\Schemes\Typography;
+use Elementor\Controls_Manager;
+use Elementor\Repeater;
+use Elementor\Group_Control_Typography;
+use Elementor\Group_Control_Border;
+use Elementor\Group_Control_Background;
 
 class Micemade_Posts_Slider extends Widget_Base {
 
@@ -18,9 +23,10 @@ class Micemade_Posts_Slider extends Widget_Base {
 		if ( ! wp_script_is( 'micemade-slider-js', 'registered' ) ) {
 			wp_register_script( 'micemade-slider-js', MICEMADE_ELEMENTS_URL . 'assets/js/custom/handlers/slider.js', array( 'elementor-frontend' ), $today, true );
 		}
-		if ( ! wp_script_is( 'micemade-slider-js', 'enqueued' ) ) {
-			wp_enqueue_script( 'micemade-slider-js' );
-		}
+	}
+
+	public function get_script_depends() {
+		return [ 'micemade-slider-js' ];
 	}
 
 	public function get_name() {
@@ -135,7 +141,7 @@ class Micemade_Posts_Slider extends Widget_Base {
 		$this->add_control(
 			'custom_meta_note',
 			[
-				'type'            => \Elementor\Controls_Manager::RAW_HTML,
+				'type'            => Controls_Manager::RAW_HTML,
 				'raw'             => __( '<small>Add custom fields meta keys and edit settings bellow, under the "Custom meta" section. Only for advanced users. <a href="https://wordpress.org/support/article/custom-fields/" target="_blank">Learn more</a></small>', 'micemade-elements' ),
 				'content_classes' => 'your-class',
 				'condition'       => [
@@ -146,7 +152,7 @@ class Micemade_Posts_Slider extends Widget_Base {
 		$this->add_control(
 			'hr_cm',
 			[
-				'type'      => \Elementor\Controls_Manager::DIVIDER,
+				'type'      => Controls_Manager::DIVIDER,
 				'condition' => [
 					'custom_meta' => 'yes',
 				],
@@ -186,7 +192,7 @@ class Micemade_Posts_Slider extends Widget_Base {
 		);
 
 		$this->add_group_control(
-			\Elementor\Group_Control_Background::get_type(),
+			Group_Control_Background::get_type(),
 			[
 				'name'      => 'post_text_background_color',
 				'label'     => __( 'Post background', 'micemade-elements' ),
@@ -202,7 +208,7 @@ class Micemade_Posts_Slider extends Widget_Base {
 		);
 
 		$this->add_group_control(
-			\Elementor\Group_Control_Background::get_type(),
+			Group_Control_Background::get_type(),
 			[
 				'name'      => 'post_text_overlay_color',
 				'label'     => __( 'Post overlay', 'micemade-elements' ),
@@ -228,7 +234,7 @@ class Micemade_Posts_Slider extends Widget_Base {
 		);
 
 		$this->add_group_control(
-			\Elementor\Group_Control_Background::get_type(),
+			Group_Control_Background::get_type(),
 			[
 				'name'      => 'post_text_background_color_hover',
 				'label'     => __( 'Post background on hover', 'micemade-elements' ),
@@ -244,7 +250,7 @@ class Micemade_Posts_Slider extends Widget_Base {
 		);
 
 		$this->add_group_control(
-			\Elementor\Group_Control_Background::get_type(),
+			Group_Control_Background::get_type(),
 			[
 				'name'      => 'post_text_overlay_color_hover',
 				'label'     => __( 'Post overlay on hover', 'micemade-elements' ),
@@ -265,7 +271,7 @@ class Micemade_Posts_Slider extends Widget_Base {
 		$this->add_control(
 			'hr',
 			[
-				'type' => \Elementor\Controls_Manager::DIVIDER,
+				'type' => Controls_Manager::DIVIDER,
 			]
 		);
 
@@ -570,7 +576,6 @@ class Micemade_Posts_Slider extends Widget_Base {
 			[
 				'name'     => 'title_typography',
 				'label'    => __( 'Typography', 'micemade-elements' ),
-				'scheme'   => Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} .post-text h4',
 			]
 		);
@@ -684,7 +689,6 @@ class Micemade_Posts_Slider extends Widget_Base {
 			[
 				'name'      => 'meta_typography',
 				'label'     => __( 'Meta typography', 'micemade-elements' ),
-				'scheme'    => Typography::TYPOGRAPHY_4,
 				'selector'  => '{{WRAPPER}} .post-text .meta',
 				'condition' => [
 					'meta!' => '',
@@ -704,7 +708,7 @@ class Micemade_Posts_Slider extends Widget_Base {
 			]
 		);
 
-		$repeater = new \Elementor\Repeater();
+		$repeater = new Repeater();
 
 		$repeater->add_control(
 			'meta_sorter_label',
@@ -729,7 +733,7 @@ class Micemade_Posts_Slider extends Widget_Base {
 			'meta_ordering',
 			[
 				'label'        => __( 'Meta selection and ordering', 'micemade-elements' ),
-				'type'         => \Elementor\Controls_Manager::REPEATER,
+				'type'         => Controls_Manager::REPEATER,
 				'fields'       => $repeater->get_controls(),
 				'item_actions' => [
 					'duplicate' => false,
@@ -776,7 +780,7 @@ class Micemade_Posts_Slider extends Widget_Base {
 			[
 				'label'       => __( 'Custom meta keys', 'micemade-elements' ),
 				'label_block' => true,
-				'type'        => \Elementor\Controls_Manager::TEXT,
+				'type'        => Controls_Manager::TEXT,
 				//'default'     => __( 'Default title', 'micemade-elements' ),
 				'placeholder' => __( 'Separate meta keys with a comma (,)', 'micemade-elements' ),
 			]
@@ -784,13 +788,13 @@ class Micemade_Posts_Slider extends Widget_Base {
 		 */
 
 		// Repeater controls for custom meta keys.
-		$repeater_cm = new \Elementor\Repeater();
+		$repeater_cm = new Repeater();
 		$repeater_cm->add_control(
 			'cm_key',
 			[
 				'label'       => __( 'Custom meta field key', 'micemade-elements' ),
 				'label_block' => true,
-				'type'        => \Elementor\Controls_Manager::SELECT2,
+				'type'        => Controls_Manager::SELECT2,
 				'options'     => micemade_get_meta_keys(),
 				'multiple' => false,
 			]
@@ -812,7 +816,7 @@ class Micemade_Posts_Slider extends Widget_Base {
 			[
 				'label'       => __( 'Label', 'micemade-elements' ),
 				'label_block' => true,
-				'type'        => \Elementor\Controls_Manager::TEXT,
+				'type'        => Controls_Manager::TEXT,
 				'placeholder' => __( 'Add label for meta field here', 'micemade-elements' ),
 			]
 		);
@@ -821,7 +825,7 @@ class Micemade_Posts_Slider extends Widget_Base {
 			[
 				'label'       => __( 'Additional label after', 'micemade-elements' ),
 				'label_block' => true,
-				'type'        => \Elementor\Controls_Manager::TEXT,
+				'type'        => Controls_Manager::TEXT,
 				'placeholder' => __( 'Label after custom meta value.', 'micemade-elements' ),
 			]
 		);
@@ -829,7 +833,7 @@ class Micemade_Posts_Slider extends Widget_Base {
 			'cm_fields',
 			[
 				'label'       => __( 'Custom meta fields', 'micemade-elements' ),
-				'type'        => \Elementor\Controls_Manager::REPEATER,
+				'type'        => Controls_Manager::REPEATER,
 				'fields'      => $repeater_cm->get_controls(),
 				'item_actions' => [
 					'duplicate' => true,
@@ -864,7 +868,6 @@ class Micemade_Posts_Slider extends Widget_Base {
 			[
 				'name'     => 'custom_meta_typography',
 				'label'    => __( 'Custom meta typography', 'micemade-elements' ),
-				'scheme'   => Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} .post-text .custom-meta',
 			]
 		);
@@ -956,7 +959,6 @@ class Micemade_Posts_Slider extends Widget_Base {
 			[
 				'name'     => 'text_typography',
 				'label'    => __( 'Excerpt typography', 'micemade-elements' ),
-				'scheme'   => Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} .post-text p',
 
 			]
@@ -1048,7 +1050,7 @@ class Micemade_Posts_Slider extends Widget_Base {
 			]
 		);
 
-		$repeater_0 = new \Elementor\Repeater();
+		$repeater_0 = new Repeater();
 		$repeater_0->add_control(
 			'elm_sorter_label',
 			[
@@ -1061,7 +1063,7 @@ class Micemade_Posts_Slider extends Widget_Base {
 		$this->add_control(
 			'elm_ordering',
 			[
-				'type'         => \Elementor\Controls_Manager::REPEATER,
+				'type'         => Controls_Manager::REPEATER,
 				'fields'       => $repeater_0->get_controls(),
 				'item_actions' => [
 					'duplicate' => false,
@@ -1089,7 +1091,7 @@ class Micemade_Posts_Slider extends Widget_Base {
 		$this->add_control(
 			'hr_elm',
 			[
-				'type'      => \Elementor\Controls_Manager::DIVIDER,
+				'type'      => Controls_Manager::DIVIDER,
 			]
 		);
 		$this->end_controls_section();
@@ -1166,9 +1168,9 @@ class Micemade_Posts_Slider extends Widget_Base {
 
 			// Posts slider container.
 			?>
-			<div <?php $this->print_render_attribute_string( 'posts-slider-container' ); ?>>
+<div <?php $this->print_render_attribute_string( 'posts-slider-container' ); ?>>
 
-			<?php
+	<?php
 			echo '<div class="swiper-wrapper">';
 
 			foreach ( $posts as $post ) {

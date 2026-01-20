@@ -7,7 +7,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Elementor\Controls_Stack;
 use Elementor\Controls_Manager;
-use Elementor\Core\Schemes\Typography;
 use Elementor\Plugin;
 
 class Micemade_WC_Categories extends Widget_Base {
@@ -27,15 +26,9 @@ class Micemade_WC_Categories extends Widget_Base {
 		if ( ! wp_script_is( 'micemade-slider-js', 'registered' ) ) {
 			wp_register_script( 'micemade-slider-js', MICEMADE_ELEMENTS_URL . 'assets/js/custom/handlers/slider.js', array( 'elementor-frontend' ), $today, true );
 		}
-		if ( ! wp_script_is( 'micemade-slider-js', 'enqueued' ) ) {
-			wp_enqueue_script( 'micemade-slider-js' );
-		}
 
 		if ( ! wp_script_is( 'micemade-wc-cats', 'registered' ) ) {
 			wp_register_script( 'micemade-wc-cats', MICEMADE_ELEMENTS_URL . 'assets/js/custom/handlers/wc-categories.js', array( 'elementor-frontend' ), $today, true );
-		}
-		if ( ! wp_script_is( 'micemade-wc-cats', 'enqueued' ) ) {
-			wp_enqueue_script( 'micemade-wc-cats' );
 		}
 	}
 
@@ -1070,7 +1063,6 @@ class Micemade_WC_Categories extends Widget_Base {
 			array(
 				'name'     => 'title_typography',
 				'label'    => esc_html__( 'Title typography', 'micemade-elements' ),
-				'scheme'   => Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} .category__title',
 			)
 		);
@@ -1080,7 +1072,6 @@ class Micemade_WC_Categories extends Widget_Base {
 			array(
 				'name'      => 'filters_text_typography',
 				'label'     => esc_html__( 'Filters text typography', 'micemade-elements' ),
-				'scheme'    => Typography::TYPOGRAPHY_4,
 				'selector'  => '{{WRAPPER}} .category__add-query-text',
 				'separator' => 'before',
 				'condition' => array(
@@ -1094,7 +1085,6 @@ class Micemade_WC_Categories extends Widget_Base {
 			array(
 				'name'      => 'product_count_typography',
 				'label'     => esc_html__( 'Products count typography', 'micemade-elements' ),
-				'scheme'    => Typography::TYPOGRAPHY_4,
 				'selector'  => '{{WRAPPER}} .category__product-count',
 				'separator' => 'before',
 				'condition' => array(
@@ -1289,9 +1279,9 @@ class Micemade_WC_Categories extends Widget_Base {
 		}
 		// Categories holder.
 		?>
-		<div <?php $this->print_render_attribute_string( 'container' ); ?>>
+<div <?php $this->print_render_attribute_string( 'container' ); ?>>
 
-		<?php
+	<?php
 		echo ( 'slider' === $gr_or_sl ) ? '<div class="swiper-wrapper">' : '';
 
 		foreach ( $categories as $index => $cat ) {
@@ -1341,9 +1331,9 @@ class Micemade_WC_Categories extends Widget_Base {
 				)
 			);
 			?>
-			<a <?php $this->print_render_attribute_string( 'cat_item' . $count ); ?>>
+	<a <?php $this->print_render_attribute_string( 'cat_item' . $count ); ?>>
 
-			<?php
+		<?php
 				echo '<div class="category__inner-wrap">';
 
 					echo '<div class="category__overlay"></div>';

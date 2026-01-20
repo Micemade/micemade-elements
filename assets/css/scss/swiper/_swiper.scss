@@ -1,7 +1,7 @@
-@import "mixins";
-@import "core";
-@import "navigation";
-@import "effects";
-@import "zoom";
-@import "scrollbar";
-@import "preloader";
+@use "mixins" as *;
+@use "core" as *;
+@use "navigation" as *;
+@use "effects" as *;
+@use "zoom" as *;
+@use "scrollbar" as *;
+@use "preloader" as *;

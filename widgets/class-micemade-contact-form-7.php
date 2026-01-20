@@ -5,7 +5,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-use Elementor\Controls_Stack;
+use Elementor\Widget_Base;
+use Elementor\Controls_Manager;
 
 class Micemade_CF7_Forms extends Widget_Base {
 

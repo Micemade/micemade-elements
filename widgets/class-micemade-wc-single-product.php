@@ -6,7 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Elementor\Controls_Stack;
-use Elementor\Core\Schemes\Typography;
 
 class Micemade_WC_Single_Product extends Widget_Base {
 
@@ -510,7 +509,6 @@ class Micemade_WC_Single_Product extends Widget_Base {
 			array(
 				'name'     => 'title_typography',
 				'label'    => __( 'Typography', 'micemade-elements' ),
-				'scheme'   => Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} .entry-summary h3, {{WRAPPER}} .entry-summary h4',
 			)
 		);
@@ -542,7 +540,6 @@ class Micemade_WC_Single_Product extends Widget_Base {
 			array(
 				'name'     => 'price_typography',
 				'label'    => __( 'Typography', 'micemade-elements' ),
-				'scheme'   => Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} .entry-summary .woocommerce-Price-amount',
 			)
 		);
@@ -573,7 +570,6 @@ class Micemade_WC_Single_Product extends Widget_Base {
 			array(
 				'name'     => 'desc_typography',
 				'label'    => __( 'Typography', 'micemade-elements' ),
-				'scheme'   => Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} .entry-summary .woocommerce-product-details__short-description',
 			)
 		);
@@ -623,7 +619,7 @@ class Micemade_WC_Single_Product extends Widget_Base {
 		if ( ! empty( $product ) ) {
 			?>
 
-			<div class="woocommerce woocommerce-page micemade-elements_single-product">	
+			<div class="woocommerce woocommerce-page micemade-elements_single-product">
 
 			<?php
 			// $post = $product[0];

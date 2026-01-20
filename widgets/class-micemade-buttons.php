@@ -1,14 +1,15 @@
 <?php
-namespace Elementor;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-use Elementor\Controls_Stack;
-use Elementor\Core\Schemes\Typography;
-use Elementor\Core\Schemes\Color;
-use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
+use Elementor\Widget_Base;
+use Elementor\Controls_Manager;
+use Elementor\Group_Control_Typography;
+use Elementor\Group_Control_Border;
+use Elementor\Group_Control_Box_Shadow;
+use Elementor\Repeater;
 
 class Micemade_Buttons extends Widget_Base {
 
@@ -210,6 +211,7 @@ class Micemade_Buttons extends Widget_Base {
 
 		$this->end_controls_section();
 
+
 		$this->start_controls_section(
 			'section_style',
 			array(
@@ -286,7 +288,7 @@ class Micemade_Buttons extends Widget_Base {
 			'space_between',
 			array(
 				'label'     => __( 'Buttons Horizontal Spacing', 'micemade-elements' ),
-				'type'      => \Elementor\Controls_Manager::SLIDER,
+				'type'      => Controls_Manager::SLIDER,
 				'default'   => array(
 					'unit' => 'px',
 					'size' => 5,
@@ -311,7 +313,7 @@ class Micemade_Buttons extends Widget_Base {
 			'space_between_vert',
 			array(
 				'label'     => __( 'Buttons Vertical Spacing', 'micemade-elements' ),
-				'type'      => \Elementor\Controls_Manager::SLIDER,
+				'type'      => Controls_Manager::SLIDER,
 				'default'   => array(
 					'unit' => 'px',
 					'size' => 5,
@@ -333,7 +335,7 @@ class Micemade_Buttons extends Widget_Base {
 			'icon_size',
 			array(
 				'label'     => __( 'Icon size', 'micemade-elements' ),
-				'type'      => \Elementor\Controls_Manager::SLIDER,
+				'type'      => Controls_Manager::SLIDER,
 				'default'   => array(
 					'unit' => 'px',
 					'size' => 18,
@@ -355,7 +357,7 @@ class Micemade_Buttons extends Widget_Base {
 			'icon_spacing',
 			array(
 				'label'     => __( 'Icon Spacing', 'micemade-elements' ),
-				'type'      => \Elementor\Controls_Manager::SLIDER,
+				'type'      => Controls_Manager::SLIDER,
 				'default'   => array(
 					'unit' => 'px',
 					'size' => 5,
@@ -379,7 +381,7 @@ class Micemade_Buttons extends Widget_Base {
 			'icon_position',
 			array(
 				'label'                => __( 'Icon position', 'micemade-elements' ),
-				'type'                 => \Elementor\Controls_Manager::SELECT,
+				'type'                 => Controls_Manager::SELECT,
 				'options'              => array(
 					'before' => __( 'Before', 'micemade-elements' ),
 					'after'  => __( 'After', 'micemade-elements' ),
@@ -401,7 +403,6 @@ class Micemade_Buttons extends Widget_Base {
 			array(
 				'name'     => 'typography',
 				'label'    => __( 'Typography', 'micemade-elements' ),
-				'scheme'   => Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} a.micemade-button .button-text',
 			)
 		);
@@ -409,12 +410,10 @@ class Micemade_Buttons extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			array(
-				'name'        => 'border',
-				'label'       => __( 'Border', 'micemade-elements' ),
-				'placeholder' => '1px',
-				'default'     => '1px',
-				'selector'    => '{{WRAPPER}} .micemade-button',
-				'condition'   => array(
+				'name'      => 'border',
+				'label'     => __( 'Border', 'micemade-elements' ),
+				'selector'  => '{{WRAPPER}} .micemade-button',
+				'condition' => array(
 					'inherit!' => 'yes',
 				),
 			)
@@ -501,57 +500,57 @@ class Micemade_Buttons extends Widget_Base {
 		// Add animation class to all buttons.
 		?>
 
-		<div <?php $this->print_render_attribute_string( 'wrapper' ); ?>>
+<div <?php $this->print_render_attribute_string( 'wrapper' ); ?>>
 
+	<?php
+		$buttons = $settings['button_list'];
+		$this->add_render_attribute( 'icon', 'class', 'button-icon' );
+		$this->add_render_attribute( 'text', 'class', 'button-text' );
+		foreach ( $buttons as $index => $item ) {
+
+			$repeater_setting_key = $this->get_repeater_setting_key( 'text', 'button_list', $index );
+			$migration_allowed    = Icons_Manager::is_migration_allowed();
+
+			$link     = ! empty( $item['link']['url'] ) ? $item['link']['url'] : '#';
+			$link_key = 'link_' . $index;
+
+			// Add general class attribute.
+			$this->add_render_attribute( $link_key, 'class', 'micemade-button' );
+			// Add item specific class attribute.
+			$this->add_render_attribute( $link_key, 'class', 'elementor-repeater-item-' . $item['_id'] );
+			// Add style selectors if theme inheritance is on.
+			if ( $settings['inherit'] && $settings['style_selectors'] ) {
+				$this->add_render_attribute( $link_key, 'class', $settings['style_selectors'] );
+			}
+			// Add hover animation class.
+			if ( $settings['hover_animation'] ) {
+				$this->add_render_attribute( $link_key, 'class', 'elementor-animation-' . $settings['hover_animation'] );
+			}
+			// Add link attribute.
+			$this->add_render_attribute( $link_key, 'href', $link );
+			// Add target attribute.
+			if ( $item['link']['is_external'] ) {
+				$this->add_render_attribute( $link_key, 'target', '_blank' );
+			}
+			// Add nofollow attribute.
+			if ( $item['link']['nofollow'] ) {
+				$this->add_render_attribute( $link_key, 'rel', 'nofollow' );
+			}
+
+			// Migration to newer version of ICON(s) control.
+			// Add old default.
+			if ( ! isset( $item['icon'] ) && ! $migration_allowed ) {
+				$item['icon'] = isset( $fallback_defaults[ $index ] ) ? $fallback_defaults[ $index ] : 'fa fa-check';
+			}
+			$migrated = isset( $item['__fa4_migrated']['selected_icon'] );
+			$is_new   = ! isset( $item['icon'] ) && $migration_allowed;
+			?>
+	<a <?php $this->print_render_attribute_string( $link_key ); ?>>
+
+		<?php if ( ! empty( $item['icon'] ) || ( ! empty( $item['selected_icon']['value'] ) && $is_new ) ) { ?>
+
+		<span <?php $this->print_render_attribute_string( 'icon' ); ?>>
 			<?php
-			$buttons = $settings['button_list'];
-			$this->add_render_attribute( 'icon', 'class', 'button-icon' );
-			$this->add_render_attribute( 'text', 'class', 'button-text' );
-			foreach ( $buttons as $index => $item ) {
-
-				$repeater_setting_key = $this->get_repeater_setting_key( 'text', 'button_list', $index );
-				$migration_allowed    = Icons_Manager::is_migration_allowed();
-
-				$link     = ! empty( $item['link']['url'] ) ? $item['link']['url'] : '#';
-				$link_key = 'link_' . $index;
-
-				// Add general class attribute.
-				$this->add_render_attribute( $link_key, 'class', 'micemade-button' );
-				// Add item specific class attribute.
-				$this->add_render_attribute( $link_key, 'class', 'elementor-repeater-item-' . $item['_id'] );
-				// Add style selectors if theme inheritance is on.
-				if ( $settings['inherit'] && $settings['style_selectors'] ) {
-					$this->add_render_attribute( $link_key, 'class', $settings['style_selectors'] );
-				}
-				// Add hover animation class.
-				if ( $settings['hover_animation'] ) {
-					$this->add_render_attribute( $link_key, 'class', 'elementor-animation-' . $settings['hover_animation'] );
-				}
-				// Add link attribute.
-				$this->add_render_attribute( $link_key, 'href', $link );
-				// Add target attribute.
-				if ( $item['link']['is_external'] ) {
-					$this->add_render_attribute( $link_key, 'target', '_blank' );
-				}
-				// Add nofollow attribute.
-				if ( $item['link']['nofollow'] ) {
-					$this->add_render_attribute( $link_key, 'rel', 'nofollow' );
-				}
-
-				// Migration to newer version of ICON(s) control.
-				// Add old default.
-				if ( ! isset( $item['icon'] ) && ! $migration_allowed ) {
-					$item['icon'] = isset( $fallback_defaults[ $index ] ) ? $fallback_defaults[ $index ] : 'fa fa-check';
-				}
-				$migrated = isset( $item['__fa4_migrated']['selected_icon'] );
-				$is_new   = ! isset( $item['icon'] ) && $migration_allowed;
-				?>
-				<a <?php $this->print_render_attribute_string( $link_key ); ?> >
-
-				<?php if ( ! empty( $item['icon'] ) || ( ! empty( $item['selected_icon']['value'] ) && $is_new ) ) { ?>
-
-					<span <?php $this->print_render_attribute_string( 'icon' ); ?> >
-					<?php
 					if ( $is_new || $migrated ) {
 						Icons_Manager::render_icon( $item['selected_icon'], array( 'aria-hidden' => 'true' ) );
 					} else {
@@ -561,67 +560,55 @@ class Micemade_Buttons extends Widget_Base {
 				}
 				?>
 
-				<?php if ( $item['text'] ) { ?>
-					<span <?php $this->print_render_attribute_string( 'text' ); ?>>
-						<?php echo esc_html( $item['text'] ); ?>
-					</span>
-				<?php } ?>
+			<?php if ( $item['text'] ) { ?>
+			<span <?php $this->print_render_attribute_string( 'text' ); ?>>
+				<?php echo esc_html( $item['text'] ); ?>
+			</span>
+			<?php } ?>
 
-				<?php
+			<?php
 				echo '</a>';
 
 			} // end foreach.
 			?>
 
-		</div>
+</div>
 
-		<?php
+<?php
 	}
 
 	protected function content_template() {
 		?>
-		<#
-			var iconsHTML = {},
-				migrated = {};
-		#>
-		<div class="micemade-elements_buttons {{ settings.orientation }}">
-			<#
-			var theme_style_inherit = hover_anim = '';
-			if( settings.inherit && settings.style_selectors ) {
-				theme_style_inherit = settings.style_selectors;
-			}
-			if( settings.hover_animation ) {
-				hover_anim = 'elementor-animation-' + settings.hover_animation;
-			}
+<# var iconsHTML={}, migrated={}; #>
+	<div class="micemade-elements_buttons {{ settings.orientation }}">
+		<# var theme_style_inherit=hover_anim='' ; if( settings.inherit && settings.style_selectors ) {
+			theme_style_inherit=settings.style_selectors; } if( settings.hover_animation ) {
+			hover_anim='elementor-animation-' + settings.hover_animation; } if ( settings.button_list ) { _.each(
+			settings.button_list, function( item, index ) { #>
 
-			if ( settings.button_list ) {
-				_.each( settings.button_list, function( item, index ) { #>
-
-					<a class="micemade-button elementor-repeater-item-{{{ item._id }}} {{{ theme_style_inherit }}} {{{ hover_anim }}}"
-					<# if ( item.link && item.link.url ) { #>
-					href="{{ item.link.url }}"
-					<# } #>
+			<a class="micemade-button elementor-repeater-item-{{{ item._id }}} {{{ theme_style_inherit }}} {{{ hover_anim }}}"
+				<# if ( item.link && item.link.url ) { #>
+				href="{{ item.link.url }}"
+				<# } #>
 					>
-						<span class="button-icon">
-							<#
-								iconsHTML[ index ] = elementor.helpers.renderIcon( view, item.selected_icon, { 'aria-hidden': true }, 'i', 'object' );
-								migrated[ index ] = elementor.helpers.isIconMigrated( item, 'selected_icon' );
-								if ( iconsHTML[ index ] && iconsHTML[ index ].rendered && ( ! item.icon || migrated[ index ] ) ) { #>
-									{{{ iconsHTML[ index ].value }}}
-								<# } else { #>
-									<i class="{{ item.icon }}" aria-hidden="true"></i>
-								<# }
-							#>
-						</span>
-						<span class="button-text elementor-inline-editing" data-elementor-setting-key="button_list.{{{ index }}}.text">{{{ item.text }}}</span>
+					<span class="button-icon">
+						<# iconsHTML[ index ]=elementor.helpers.renderIcon( view, item.selected_icon, { 'aria-hidden' :
+							true }, 'i' , 'object' ); migrated[ index ]=elementor.helpers.isIconMigrated(
+							item, 'selected_icon' ); if ( iconsHTML[ index ] && iconsHTML[ index ].rendered && ( !
+							item.icon || migrated[ index ] ) ) { #>
+							{{{ iconsHTML[ index ].value }}}
+							<# } else { #>
+								<i class="{{ item.icon }}" aria-hidden="true"></i>
+								<# } #>
+					</span>
+					<span class="button-text elementor-inline-editing"
+						data-elementor-setting-key="button_list.{{{ index }}}.text">{{{ item.text }}}</span>
 
-					</a>
-				<#
-				} );
-			} #>
-		</div>
+			</a>
+			<# } ); } #>
+	</div>
 
-		<?php
+	<?php
 	}
 
 	public function on_import( $element ) {

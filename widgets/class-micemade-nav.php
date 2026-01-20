@@ -6,7 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Elementor\Controls_Stack;
-use Elementor\Core\Schemes\Typography;
 use Elementor\Core\Schemes\Color;
 
 class Micemade_Nav extends Widget_Base {
@@ -391,7 +390,6 @@ class Micemade_Nav extends Widget_Base {
 			array(
 				'name'      => 'main_items_typography',
 				'label'     => __( 'Items typography', 'micemade-elements' ),
-				'scheme'    => Typography::TYPOGRAPHY_1,
 				'separator' => 'before',
 				'selector'  => '{{WRAPPER}} ' . $this->selector . ' > .menu-item > .mme-navmenu-link',
 			)
@@ -701,7 +699,6 @@ class Micemade_Nav extends Widget_Base {
 			array(
 				'name'      => 'submenu_typography',
 				'label'     => __( 'Typography', 'micemade-elements' ),
-				'scheme'    => Typography::TYPOGRAPHY_4,
 				'exclude'   => array( 'line_height' ),
 				'selector'  => '{{WRAPPER}} .elementor-nav-menu--dropdown',
 				'separator' => 'before',

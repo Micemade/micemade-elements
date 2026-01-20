@@ -6,7 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Elementor\Controls_Stack;
-use Elementor\Core\Schemes\Typography;
 
 class Micemade_Header_Logo extends Widget_Base {
 
@@ -159,7 +158,6 @@ class Micemade_Header_Logo extends Widget_Base {
 			[
 				'name'      => 'typography',
 				'label'     => __( 'Typography', 'micemade-elements' ),
-				'scheme'    => Typography::TYPOGRAPHY_1,
 				'selector'  => '{{WRAPPER}} .micemade-elements_header-logo .logo-image.no-logo .site-title',
 				'condition' => [
 					'no_logo' => 'yes',
@@ -187,9 +185,9 @@ class Micemade_Header_Logo extends Widget_Base {
 
 			<?php // Render <h1> if on home/front page, else render <div>. ?>
 			<
-				<?php echo ( ( is_home() || is_front_page() ) ? 'h1 ' : 'div ' ); ?> 
-				<?php $this->print_render_attribute_string( 'logo-class' ); ?> 
-				<?php $this->print_render_attribute_string( 'logo-image' ); ?> 
+				<?php echo ( ( is_home() || is_front_page() ) ? 'h1 ' : 'div ' ); ?>
+				<?php $this->print_render_attribute_string( 'logo-class' ); ?>
+				<?php $this->print_render_attribute_string( 'logo-image' ); ?>
 			>
 
 			<span <?php $this->print_render_attribute_string( 'site-title' ); ?>>

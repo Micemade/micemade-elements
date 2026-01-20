@@ -1,3 +1,5 @@
+@use "mixins" as *;
+
 /* 3D Container */
 .swiper-container-3d {
     -webkit-perspective: 1200px;

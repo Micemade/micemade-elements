@@ -8,7 +8,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Elementor\Controls_Stack;
 use Elementor\Core\Schemes;
 use Elementor\Core\Settings\Manager;
-use Elementor\Core\Schemes\Typography;
 
 /**
  * Micemade Elements WC products slider.
@@ -27,9 +26,6 @@ class Micemade_WC_Products_Slider extends \Elementor\Widget_Base {
 
 		if ( ! wp_script_is( 'micemade-slider-js', 'registered' ) ) {
 			wp_register_script( 'micemade-slider-js', MICEMADE_ELEMENTS_URL . 'assets/js/custom/handlers/slider.js', array( 'elementor-frontend' ), $today, true );
-		}
-		if ( ! wp_script_is( 'micemade-slider-js', 'enqueued' ) ) {
-			wp_enqueue_script( 'micemade-slider-js' );
 		}
 	}
 
@@ -959,7 +955,6 @@ class Micemade_WC_Products_Slider extends \Elementor\Widget_Base {
 			array(
 				'name'     => 'title_typography',
 				'label'    => __( 'Typography', 'micemade-elements' ),
-				'scheme'   => Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} .post-text h4',
 			)
 		);
@@ -1049,7 +1044,6 @@ class Micemade_WC_Products_Slider extends \Elementor\Widget_Base {
 			array(
 				'name'      => 'text_typography',
 				'label'     => __( 'Short description typography', 'micemade-elements' ),
-				'scheme'    => Typography::TYPOGRAPHY_4,
 				'selector'  => '{{WRAPPER}} .post-text p',
 				'condition' => array(
 					'short_desc!' => '',

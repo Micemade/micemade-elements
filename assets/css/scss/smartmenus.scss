@@ -131,9 +131,9 @@
 	} 
 }
 
-@import 'smartmenus/sm-default-theme';
-@import 'smartmenus/sm-simple-theme';
-@import 'smartmenus/sm-mint-theme';
-@import 'smartmenus/sm-clean-theme';
-@import 'smartmenus/sm-blue-theme';
-@import 'smartmenus/mega-menu';
+@use 'smartmenus/sm-default-theme' as *;
+@use 'smartmenus/sm-simple-theme' as *;
+@use 'smartmenus/sm-mint-theme' as *;
+@use 'smartmenus/sm-clean-theme' as *;
+@use 'smartmenus/sm-blue-theme' as *;
+@use 'smartmenus/mega-menu' as *;
